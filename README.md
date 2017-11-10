@@ -9,7 +9,7 @@
 
 ## Setup
 
-If you care about training, goto step 1, else goto step 2.
+If you care about training, goto step 1; elif you care about making perturbation on existing dataset, goto step 2; elif you care about making prediction using pretrained model, goto step 3; else skim through all steps because all results have been uploaded.
 
 ### 1. Training
   First, train the model (a pretrained model is already given in the repo)
