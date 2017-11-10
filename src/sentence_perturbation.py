@@ -95,7 +95,8 @@ def perturb_noun_in_targ_file(src_path, targ_path):
 		for p in perturbed:
 			result_src.append(src[i])
 			result_targ.append(p)
-		print('perturbed {0} sentences'.format(i+1))
+		if (i+1)%100 == 0 or (i+1) == len(targ):
+			print('perturbed {0} sentences'.format(i+1))
 
 	src_output = '{0}.perturbed'.format(src_path)
 	with open(src_output, 'w+') as f:
