@@ -23,6 +23,7 @@ cmd:option('-output_file', 'pred.txt', [[Path to output the predictions (each li
 cmd:option('-word_dict', '', [[Path to source vocabulary (*.src.dict file)]])
 cmd:option('-label_dict', '', [[Path to source vocabulary (*.src.dict file)]])
 cmd:option('-gpuid',  -1, [[ID of the GPU to use (-1 = use CPU)]])
+cmd:option('-gpu_to_cpu', false, [[Whether to transform pretrained GPU model into CPU model]])
 opt = cmd:parse(arg)
 
 function idx2key(file)   
@@ -86,6 +87,9 @@ function main()
    end      
    print('loading ' .. opt.model .. '...')
    checkpoint = torch.load(opt.model)
+   if opt.gpu_to_cpu then
+    checkpoint = checkpoint:double()
+   end
    print('done!')
    model, model_opt = table.unpack(checkpoint)  
    -- load model and word2idx/idx2word dictionaries
@@ -126,7 +130,7 @@ function main()
      local sent2_l = sent2[i]:size(1)
      local word_vecs1 = word_vecs_enc1:forward(sent1[i]:view(1, sent1_l))
      local word_vecs2 = word_vecs_enc2:forward(sent2[i]:view(1, sent2_l))
-     
+
      set_size_to_pipeline(model_opt, {i}, 1, sent1_l, sent2_l, model_opt.word_vec_size, model_opt.hidden_size, all_layers)
      local pred = pipeline:forward({word_vecs1, word_vecs2})
      local _, pred_argmax = pred:max(2)
