@@ -36,7 +36,7 @@ If you care about training, goto step 1, else goto step 2.
   
   `th predict.lua -gpuid 1 -sent1_file ../data/snli_1.0/src-dev.txt.perturbed -sent2_file ../data/snli_1.0/targ-dev.txt.perturbed -word_dict ../data/snli_1.0.word.dict -label_dict ../data/snli_1.0.label.dict -output_file pred.txt -model model_100_local_parikh_final.t7`
   
-  The predicted labels will be stored in `src/pred.txt`.
+  The predicted labels will be stored in `src/pred.txt`. It's also uploaded.
   
 ## Trouble Shooting
   - In case no GPU is available, add option `-gpu_to_cpu true` in step 3
