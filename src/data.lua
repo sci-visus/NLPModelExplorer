@@ -35,7 +35,7 @@ function data:__init(opt, data_file, res_list)
    local json = require 'rapidjson'
 
    -- load synonym file
-   if res_list.synonym_file ~= nil and res_list.synonym_file ~= '' then
+   if res_list ~= nil and res_list.synonym_file ~= nil and res_list.synonym_file ~= '' then
       print('loading synonym file from '.. res_list.synonym_file)
       self.synonym = json.load(res_list.synonym_file)
       self.synonym = self.synonym['synonym']
@@ -63,7 +63,7 @@ function data:__init(opt, data_file, res_list)
    end
 
    -- load antonym file
-   if res_list.antonym_file ~= nil and res_list.antonym_file ~= '' then
+   if res_list ~= nil and res_list.antonym_file ~= nil and res_list.antonym_file ~= '' then
       print('loading antonym file from '.. res_list.antonym_file)
       self.antonym = json.load(res_list.antonym_file)
       self.antonym = self.antonym.antonym
@@ -91,7 +91,7 @@ function data:__init(opt, data_file, res_list)
    end
 
    -- load content file
-   if res_list.content_file ~= nil and res_list.content_file ~= '' then
+   if res_list ~= nil and res_list.content_file ~= nil and res_list.content_file ~= '' then
       print('loading content file from '.. res_list.content_file)
       --local f = io.open(content_file, 'r')
       --local s = f:read("*a")
@@ -116,7 +116,7 @@ function data:__init(opt, data_file, res_list)
    end
 
    -- load constraint file
-   if res_list.lemma_file ~= nil and res_list.lemma_file ~= '' then
+   if res_list ~= nil and res_list.lemma_file ~= nil and res_list.lemma_file ~= '' then
       print('loading constraint file from '.. res_list.lemma_file)
       --local f = io.open(constr_file, 'r')
       --local s = f:read("*a")

@@ -7,16 +7,8 @@ require 'data.lua'
 require 'encoder/proj_encoder.lua'
 require 'encoder/lstm_encoder.lua'
 require 'attention/local_attention.lua'
-require 'attention/labeled_local_attention.lua'
-require 'attention/labeled_local_mixed_attention.lua'
-require 'attention/local_hard_attention.lua'
-require 'attention/local_hard_soft_attention.lua'
 require 'classifier/local_classifier.lua'
-require 'classifier/labeled_local_classifier.lua'
-require 'classifier/local_hard_soft_classifier.lua'
 require 'loss/nll_loss.lua'
-require 'loss/structured_hinge_loss.lua'
-require 'models.lua'  -- remanent code
 require 'pipeline.lua'
 require 'utils.lua'
 
@@ -334,6 +326,7 @@ function main()
   print('loading data...')
 
   -- load resource config file first
+  all_resources = {}
   if opt.res_file ~= nil and opt.res_file ~= "" then
     local json = require 'rapidjson'
     all_resources = json.load(opt.res_file)
