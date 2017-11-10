@@ -17,7 +17,7 @@ If you care about training, goto step 1, else goto step 2.
   - luarocks install rnn
   - luarocks install cutorch (cuda device is required for training; it's not essential if only need to use the model)
   - install hdf5 module, following instructions here https://github.com/deepmind/torch-hdf5/blob/master/doc/usage.md
-  - goto src/ and run this command:
+  - goto `src/` and run this command:
   
     `th train.lua -gpuid 1 -data_file ../data/snli_1.0-train.hdf5 -val_data_file ../data/snli_1.0-val.hdf5 -test_data_file ../data/snli_1.0-test.hdf5 -pre_word_vecs ../data/glove.hdf5 -encoder proj -attention local -classifier local -loss nll -epochs 100 -savefile model_100_local_parikh | tee log_100_local_parikh.txt`
     
@@ -25,14 +25,14 @@ If you care about training, goto step 1, else goto step 2.
     
 ### 2. Sentence Perturbation
   The purpose of this section is to replace nouns in a sentence with synonyms and antonyms and observe how the model predict. Given premise and hypothesis, only hypothesis sentence will be perturbed while premise sentence will be duplicated (to make sure 1 premise and 1 hypothesis per example).
-  - Goto src/ and simply run this command:
+  - Goto `src/` and simply run this command:
   
     `python sentence_perturbation.py ../data/snli_1.0/src-dev.txt ../data/snli_1.0/targ-dev.txt`
     
     Then perturbed files are `../data/snli_1.0/src-dev.txt.perturbed` and `../data/snli_1.0/targ-dev.txt.perturbed` where `targ-dev.txt.perturbed` contains sentences with swapped nouns.
     
 ### 3. Prediction
-  Then we can use the pretrained model to make prediction on the perturbed dataset. Goto src/ and call
+  Then we can use the pretrained model to make prediction on the perturbed dataset. Goto `src/` and call
   
   `th predict.lua -gpuid 1 -sent1_file ../data/snli_1.0/src-dev.txt.perturbed -sent2_file ../data/snli_1.0/targ-dev.txt.perturbed -word_dict ../data/snli_1.0.word.dict -label_dict ../data/snli_1.0.label.dict -output_file pred.txt -model model_100_local_parikh_final.t7`
   
