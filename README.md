@@ -38,7 +38,7 @@ If you care about training, goto step 1, else goto step 2.
   
   The predicted labels will be stored in `pred.txt`.
   
-### Trouble Shooting
+## Trouble Shooting
   - In case no GPU is available, add option `-gpu_to_cpu true` in step 3
   
   
