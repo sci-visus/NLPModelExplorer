@@ -21,7 +21,7 @@ If you care about training and processing, goto step 1, else goto step 3.
     All required data files are in the repo. After 100 epoches training, the model and log will be saved into the paths specified.
     
 ### 2. Sentence Perturbation
-  The purpose of this section is to replace nouns in a sentence with synonyms and antonyms and observe how the model predict. Given premise and hypothesis, only hypothesis sentences will be perturbed while premise sentence will be duplicated.
+  The purpose of this section is to replace nouns in a sentence with synonyms and antonyms and observe how the model predict. Given premise and hypothesis, only hypothesis sentence will be perturbed while premise sentence will be duplicated (to make sure 1 premise and 1 hypothesis per example).
   - Simply run this command:
     `python sentence_perturbation.py ../data/snli_1.0/src-dev.txt ../data/snli_1.0/targ-dev.txt`
     Then perturbed files are `../data/snli_1.0/src-dev.txt.perturbed` and `../data/snli_1.0/targ-dev.txt.perturbed`
