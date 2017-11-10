@@ -2,7 +2,13 @@ require 'nn'
 require 'string'
 require 'hdf5'
 require 'nngraph'
-require 'models.lua'
+
+require 'encoder/proj_encoder.lua'
+require 'encoder/lstm_encoder.lua'
+require 'attention/local_attention.lua'
+require 'classifier/local_classifier.lua'
+require 'loss/nll_loss.lua'
+require 'pipeline.lua'
 
 stringx = require('pl.stringx')
 
@@ -59,6 +65,13 @@ function wordidx2sent(sent, idx2word)
    return table.concat(t, ' ')
 end
 
+-- utility function
+function get_layer(layer)
+  if layer.name ~= nil then
+    all_layers[layer.name] = layer
+  end
+end
+
 function main()
    -- some globals
    PAD = 1; UNK = 2; START = 3; END = 4
@@ -81,9 +94,9 @@ function main()
    end
    word_vecs_enc1 = model[1]
    word_vecs_enc2 = model[2]
-   sent_encoder = model[3]
+   pipeline = model[3]
    all_layers = {}
-   sent_encoder:apply(get_layer)
+   pipeline:apply(get_layer)
    idx2word = idx2key(opt.word_dict)
    word2idx = flip_table(idx2word)
    idx2label = idx2key(opt.label_dict)
@@ -113,9 +126,9 @@ function main()
      local sent2_l = sent2[i]:size(1)
      local word_vecs1 = word_vecs_enc1:forward(sent1[i]:view(1, sent1_l))
      local word_vecs2 = word_vecs_enc2:forward(sent2[i]:view(1, sent2_l))
-     set_size_encoder(1, sent1_l, sent2_l, model_opt.word_vec_size,
-		      model_opt.hidden_size, all_layers)
-     local pred = sent_encoder:forward({word_vecs1, word_vecs2})
+     
+     set_size_to_pipeline(model_opt, {i}, 1, sent1_l, sent2_l, model_opt.word_vec_size, model_opt.hidden_size, all_layers)
+     local pred = pipeline:forward({word_vecs1, word_vecs2})
      local _, pred_argmax = pred:max(2)
      local label_str = idx2label[pred_argmax[1][1]]
      print('PRED: ' .. label_str)
