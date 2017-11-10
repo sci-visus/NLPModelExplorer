@@ -116,10 +116,10 @@ function main()
    local sent1 = {}
    local sent2 = {}
    for line in sent1_file:lines() do
-     table.insert(sent1, sent2wordidx(line, word2idx))
+     table.insert(sent1, sent2wordidx(line:lower(), word2idx))
    end
    for line in sent2_file:lines() do
-     table.insert(sent2, sent2wordidx(line, word2idx))
+     table.insert(sent2, sent2wordidx(line:lower(), word2idx))
    end
    assert(#sent1 == #sent2, 'number of sentences in sent1_file and sent2_file do not match')
    for i = 1, # sent1 do
