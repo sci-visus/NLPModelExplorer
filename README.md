@@ -19,7 +19,7 @@ If you care about training and processing, goto step 1, else goto step 3.
   - install hdf5 module, following instructions here https://github.com/deepmind/torch-hdf5/blob/master/doc/usage.md
   - goto src/ and run this command:
     `th train.lua -gpuid 1 -data_file ../data/snli_1.0-train.hdf5 -val_data_file ../data/snli_1.0-val.hdf5 -test_data_file ../data/snli_1.0-test.hdf5 -pre_word_vecs ../data/glove.hdf5 -encoder proj -attention local -classifier local -loss nll -epochs 100 -savefile model_100_local_parikh | tee log_100_local_parikh.txt`
-    All required data files are in the repo. After 100 epoches training, the model and log will be saved into the paths specified.
+    All required data files are in the repo. After 100 epoches training, the model and log will be saved into the paths specified. The final model saved should have accuracy ~0.83.
     
 ### 2. Sentence Perturbation
   The purpose of this section is to replace nouns in a sentence with synonyms and antonyms and observe how the model predict. Given premise and hypothesis, only hypothesis sentence will be perturbed while premise sentence will be duplicated (to make sure 1 premise and 1 hypothesis per example).
