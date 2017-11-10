@@ -2,6 +2,7 @@
 
 ### First things first, here is a todo list:
 - Import AllenNLP's decomposable attention model. (This is important to make future work simpler) For now, this reimplementation works for the current purpose.
+- Filter perturbed sentences by killing tokens that are not in training set.
 
 ## Intro
 - The code was extensively modified from Harvard NLP's reimplimentation of Ankur Parikh's decomposable attention model https://github.com/harvardnlp/decomp-attn
