@@ -8,7 +8,11 @@ Intro
 
 Setup
 
-If you care about training and processing, goto step 1.
+If you care about training and processing, goto step 1, else goto step
 
-1. Install torch, following instructions in http://torch.ch/docs/getting-started.html.
-2. 
+### 1. Training
+  - Install torch, following instructions in http://torch.ch/docs/getting-started.html.
+  - luarocks install rnn
+  - luarocks install cutorch (cuda device is required for training; it's not essential if only need to use the model)
+  - install hdf5 module, following instructions here https://github.com/deepmind/torch-hdf5/blob/master/doc/usage.md
+  
