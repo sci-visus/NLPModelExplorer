@@ -29,7 +29,7 @@ If you care about training, goto step 1, else goto step 2.
   
     `python sentence_perturbation.py ../data/snli_1.0/src-dev.txt ../data/snli_1.0/targ-dev.txt`
     
-    Then perturbed files are `../data/snli_1.0/src-dev.txt.perturbed` and `../data/snli_1.0/targ-dev.txt.perturbed` where nouns in the `targ-dev.txt.perturbed` contains sentences with swapped nouns.
+    Then perturbed files are `../data/snli_1.0/src-dev.txt.perturbed` and `../data/snli_1.0/targ-dev.txt.perturbed` where `targ-dev.txt.perturbed` contains sentences with swapped nouns.
     
 ### 3. Prediction
   Then we can use the pretrained model to make prediction on the perturbed dataset. Goto src/ and call
