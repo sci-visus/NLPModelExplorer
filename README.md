@@ -46,6 +46,6 @@ else skim through all steps because all results have been uploaded
   The predicted labels will be stored in `src/pred.txt`. It's also uploaded.
   
 ## Trouble Shooting
-  - In case no GPU is available, add option `-gpu_to_cpu true` in step 3
+  - The uploaded model is cpu model. In case no GPU is available, add option `-gpu_to_cpu true` in step 3, and set `-gpuid -1`.
   
   
