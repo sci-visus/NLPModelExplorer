@@ -26,7 +26,7 @@ cmd:option('-gpuid',  -1, [[ID of the GPU to use (-1 = use CPU)]])
 cmd:option('-gpu_to_cpu', false, [[Whether to transform pretrained GPU model into CPU model]])
 opt = cmd:parse(arg)
 
-function idx2key(file)   
+function idx2key(file)
    local f = io.open(file,'r')
    local t = {}
    for line in f:lines() do
@@ -35,7 +35,7 @@ function idx2key(file)
 	 table.insert(c, w)
       end
       t[tonumber(c[2])] = c[1]
-   end   
+   end
    return t
 end
 
@@ -44,7 +44,7 @@ function flip_table(u)
    for key, value in pairs(u) do
       t[value] = key
    end
-   return t   
+   return t
 end
 
 function sent2wordidx(sent, word2idx, start_symbol)
@@ -52,7 +52,7 @@ function sent2wordidx(sent, word2idx, start_symbol)
    local u = {}
    table.insert(t, START)
    for word in sent:gmatch'([^%s]+)' do
-      local idx = word2idx[word] or UNK 
+      local idx = word2idx[word] or UNK
       table.insert(t, idx)
    end
    return torch.LongTensor(t)
@@ -61,7 +61,7 @@ end
 function wordidx2sent(sent, idx2word)
    local t = {}
    for i = 1, sent:size(1) do -- skip START and END
-     table.insert(t, idx2word[sent[i]])	 
+     table.insert(t, idx2word[sent[i]])
    end
    return table.concat(t, ' ')
 end
@@ -78,20 +78,20 @@ function main()
    PAD = 1; UNK = 2; START = 3; END = 4
    PAD_WORD = '<blank>'; UNK_WORD = '<unk>'; START_WORD = '<s>'; END_WORD = '</s>'
    assert(path.exists(opt.model), 'model does not exist')
-   
+
    -- parse input params
    opt = cmd:parse(arg)
    if opt.gpuid >= 0 then
       require 'cutorch'
       require 'cunn'
-   end      
+   end
    print('loading ' .. opt.model .. '...')
    checkpoint = torch.load(opt.model)
    if opt.gpu_to_cpu then
     checkpoint = checkpoint:double()
    end
    print('done!')
-   model, model_opt = table.unpack(checkpoint)  
+   model, model_opt = table.unpack(checkpoint)
    -- load model and word2idx/idx2word dictionaries
    for i = 1, #model do
       model[i]:evaluate()
@@ -124,8 +124,8 @@ function main()
    assert(#sent1 == #sent2, 'number of sentences in sent1_file and sent2_file do not match')
    for i = 1, # sent1 do
      print('----SENTENCE PAIR ' .. i .. '----')
-     print('SENT 1: ' .. wordidx2sent(sent1[i], idx2word))
-     print('SENT 2: ' .. wordidx2sent(sent2[i], idx2word))
+    --  print('SENT 1: ' .. wordidx2sent(sent1[i], idx2word))
+    --  print('SENT 2: ' .. wordidx2sent(sent2[i], idx2word))
      local sent1_l = sent1[i]:size(1)
      local sent2_l = sent2[i]:size(1)
      local word_vecs1 = word_vecs_enc1:forward(sent1[i]:view(1, sent1_l))
@@ -133,12 +133,16 @@ function main()
 
      set_size_to_pipeline(model_opt, {i}, 1, sent1_l, sent2_l, model_opt.word_vec_size, model_opt.hidden_size, all_layers)
      local pred = pipeline:forward({word_vecs1, word_vecs2})
+
      local _, pred_argmax = pred:max(2)
      local label_str = idx2label[pred_argmax[1][1]]
-     print('PRED: ' .. label_str)
-     out_file:write(label_str ..  '\n')     
+     local p = torch.exp(pred)
+     print(idx2label[1] .. ' ' .. p[1][1] .. ', ' .. idx2label[2] .. ' ' .. p[1][2] .. ", " .. idx2label[3] .. ' ' .. p[1][3])
+    --  print(p[1][1]+p[1][2]+p[1][3])
+     out_file:write(idx2label[1] .. ' ' .. p[1][1] .. ', ' .. idx2label[2] .. ' ' .. p[1][2] .. ", " .. idx2label[3] .. ' ' .. p[1][3] .. '\n')
+    --  out_file:write(label_str ..  '\n')
+    
    end
    out_file:close()
 end
 main()
-

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Text Entailment Visualizations</title>
+    <style>
+
+        body {
+            font: 10px sans-serif;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: grey;
+        }
+
+        svg {
+            background-color: steelblue;
+        }
+
+        .content {
+            fill: lightsteelblue;
+        }
+
+        .label {
+            fill: black;
+            font-size: small;
+            /*font-weight: bolder;*/
+        }
+        .trilabel {
+            fill: black;
+            font-size: large;
+            font-weight: bolder;
+        }
+
+    </style>
+</head>
+<body>
+
+<h2>Text Entailment Visualizations</h2>
+<svg width="800" height="500"></svg>
+
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="data.js"></script>
+<!-- <script src="data2.js"></script> -->
+<script>
+const margin = {top: 0, right: 0, bottom: 0, left: 0};
+
+  const svg = d3.select("svg");
+  const width = +svg.attr("width") - margin.left - margin.right;
+  const height = +svg.attr("height") - margin.top - margin.bottom;
+
+  // content area of your visualization (note: g elements do NOT have dimensions)
+  const vis = svg.append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // illustrate content area dimensions (makes container g element grow accordingly)
+  const rect = vis.append("rect")
+    .attr("class", "content")
+    .attr("width", width)
+    .attr("height", height)
+    .style('stroke', 'None');
+
+  // illustrate left/right margins
+  const xScale = d3.scaleLinear()
+    .domain([margin.left, margin.left + width])
+    .range([0, width]);
+  vis.append("g").call(d3.axisTop(xScale));
+
+  // illustrate top/bottom margins
+  const yScale = d3.scaleLinear()
+    .domain([margin.top, margin.top + height])
+    .range([0, height]);
+  vis.append("g").call(d3.axisLeft(yScale));
+
+  // Tip: name your selections and work with CSS classes
+  const label = vis.append("g")
+    .attr("class", "label");
+
+
+  var sIndex = 21;
+  // svg.append("foreignObject").append()
+  // console.log(sdata);
+  var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][0]];
+
+  var trianglePoints = xScale(30) + ' ' + yScale(30) + ', '
+                      + xScale(330) + ' ' + yScale(30) + ', '
+                      + xScale(180) + ' ' + yScale(260);
+
+  //entailment
+  const trilabel = vis.append("g");
+  trilabel.append('text')
+  .attr("class", "trilabel")
+  .attr("x", xScale(15))
+  .attr("y", yScale(20))
+  .text("entailment");
+
+  //neutral
+  trilabel.append('text')
+  .attr("class", "trilabel")
+  .attr("x", xScale(315))
+  .attr("y", yScale(20))
+  .text("neutral");
+
+  //contradiction
+  trilabel.append('text')
+  .attr("class", "trilabel")
+  .attr("x", xScale(155))
+  .attr("y", yScale(280))
+  .text("contradiction");
+
+  svg.append('polyline')
+      .attr('points', trianglePoints)
+      .style('fill', 'grey')
+      .style('stroke', 'None');
+
+
+  console.log(sdata[sIndex]["pred"]);
+
+  svg.selectAll("circle")
+  .data(sdata[sIndex]["pred"])
+  .enter()
+  .append("circle")
+  // .attr("class", "circle")
+  .attr("cx", d=>{return xScale(d["entailment"]*30+d["neutral"]*330+d["contradiction"]*180) } )
+  .attr("cy", d=>{return yScale(d["entailment"]*30+d["neutral"]*30+d["contradiction"]*260) })
+  .attr("r", (d,i)=>{if (i==0) return 6; else return 3;})
+  .style("fill", (d,i)=>{if (i==0) return 'red'; else return 'blue';})
+  .style("stroke", 'black')
+  .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
+  .on("mouseover", (d,i)=>{
+      var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][i]];
+      updateLabel(data);
+
+  });
+
+  updateLabel(data);
+
+  function updateLabel(data){
+      label.selectAll(".label").remove();
+      label.selectAll(".label")
+    .data(data)
+    .enter()
+    .append("text")
+    .attr("class", "label")
+    .text(d => d)
+    .attr("x", 10)
+    .attr("y", (d, i) => height * 0.8 + (i * 25))
+    .attr("text-anchor", "left");
+    }
+
+
+
+</script>
+
+</body>
+</html>

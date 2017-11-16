@@ -1,0 +1,10 @@
+class triangle {
+
+    constructor() {
+
+    }
+
+    draw() {
+
+    }
+}
