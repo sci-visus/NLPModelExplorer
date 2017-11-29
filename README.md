@@ -34,9 +34,9 @@ else skim through all steps because all results have been uploaded
   The purpose of this section is to replace nouns in a sentence with synonyms and antonyms and observe how the model predict. Given premise and hypothesis, only hypothesis sentence will be perturbed while premise sentence will be duplicated (to make sure 1 premise and 1 hypothesis per example).
   - Goto `src/` and simply run this command:
   
-    `python sentence_perturbation.py ../data/snli_1.0/src-dev.txt ../data/snli_1.0/targ-dev.txt`
+    `python sentence_perturbation.py ../data/snli_1.0/src-dev.txt ../data/snli_1.0/targ-dev.txt ../data/snli_1.0.word.dict`
     
-    Then perturbed files are `../data/snli_1.0/src-dev.txt.perturbed` and `../data/snli_1.0/targ-dev.txt.perturbed` where `targ-dev.txt.perturbed` contains sentences with swapped nouns.
+    The word dictionary file wil be used to filter out words that are not in training set. This perturbed files are `../data/snli_1.0/src-dev.txt.perturbed` and `../data/snli_1.0/targ-dev.txt.perturbed` where `targ-dev.txt.perturbed` contains sentences with swapped nouns.
     
 ### 3. Prediction
   Then we can use the pretrained model to make prediction on the perturbed dataset. Goto `src/` and call
