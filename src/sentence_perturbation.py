@@ -6,7 +6,7 @@ import copy
 
 lemmatizer = WordNetLemmatizer()
 
-def perturb_noun_in_sentence(s):
+def perturb_noun_in_sentence(s, train_tokens):
 	lemma_map = {}
 	pos_tags = nltk.pos_tag(nltk.word_tokenize(s))
 	nouns = [i if i[1].startswith("NN") else None for i in pos_tags]
@@ -35,12 +35,15 @@ def perturb_noun_in_sentence(s):
 			for s in synsets:
 				## add synonyms
 				## only add synonyms that has a single token (i.e. 	exclude '_')
-				lemma_map[lemma].extend([ln for ln in s.lemma_names() if '_' not in ln])
+				lemma_map[lemma].extend([ln.lower() for ln in s.lemma_names() if '_' not in ln])
 
 				## add antonyms
 				for syn_lemma in s.lemmas():
 					if syn_lemma.antonyms():
-						lemma_map[lemma].extend([ln.name() for ln in syn_lemma.antonyms()])
+						lemma_map[lemma].extend([ln.name().lower() for ln in syn_lemma.antonyms()])
+
+				## filter out words not in train dict
+				lemma_map[lemma] = [l for l in lemma_map[lemma] if l in train_tokens]
 
 				## make synonyms unique
 				lemma_map[lemma] = list(set(lemma_map[lemma]))
@@ -72,17 +75,25 @@ def perturb_noun_in_sentence(s):
 
 	return result_list
 
-
-def perturb_noun_in_targ_file(src_path, targ_path):
+def perturb_noun_in_targ_file(src_path, targ_path, train_dict):
 	results = []
 	src = []
 	targ = []
+	train_tokens = {}
 
 	with open(src_path, 'r+') as f:
 		src = f.readlines()
 
 	with open(targ_path, 'r+') as f:
 		targ = f.readlines()
+
+	# record all tokens in training set
+	with open(train_dict, 'r+') as f:
+		lines = f.readlines()
+		for l in lines:
+			toks = l.split(" ")
+			train_tokens[toks[0]] = 1
+
 
 	assert(len(src) == len(targ))
 	print('loaded {0} sentence pairs'.format(len(src)))
@@ -91,7 +102,7 @@ def perturb_noun_in_targ_file(src_path, targ_path):
 	result_targ = []
 
 	for i, l in enumerate(targ):
-		perturbed = perturb_noun_in_sentence(l)
+		perturbed = perturb_noun_in_sentence(l, train_tokens)
 		for p in perturbed:
 			result_src.append(src[i])
 			result_targ.append(p)
@@ -113,4 +124,5 @@ if __name__ == '__main__':
 	import sys
 	src_path = sys.argv[1]
 	targ_path = sys.argv[2]
-	perturb_noun_in_targ_file(src_path, targ_path)
+	train_dict = sys.argv[3]
+	perturb_noun_in_targ_file(src_path, targ_path, train_dict)
