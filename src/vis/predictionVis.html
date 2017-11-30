@@ -151,7 +151,7 @@ const margin = {top: 0, right: 0, bottom: 0, left: 0};
   updateData(sdata, 0);
 
   function updateData(sdata, sIndex){
-    var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][0]];
+    var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][0], sdata[sIndex]["targ"][0]];
 
     svg.selectAll("circle").remove();
       svg.selectAll("circle")
@@ -167,7 +167,7 @@ const margin = {top: 0, right: 0, bottom: 0, left: 0};
       .style("opacity", 0.7)
     //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
       .on("mouseover", (d,i)=>{
-          var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][i]];
+          var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][i], sdata[sIndex]["targ"][0]];
           updateLabel(data, i);
       });
       updateTargetList(sdata[sIndex]["targ"], sIndex);
@@ -188,13 +188,15 @@ const margin = {top: 0, right: 0, bottom: 0, left: 0};
       d3.select("#tList").html(htmlList);
       d3.select("#tList").html(htmlList).on('change', d=>{
           var index = Number(d3.select("#tList").node().value);
-          updateLabel([sdata[sIndex]["src"],sdata[sIndex]["targ"][index]], index);
+          updateLabel([sdata[sIndex]["src"],sdata[sIndex]["targ"][index], sdata[sIndex]["targ"][0]], index);
       });
   }
 
   function updateLabel(data, index){
-      var texthtml='<p class=\'label\'>' + data[0] + '</p>\n';
-      texthtml += '<p class=\'label\'>' + data[1] + '</p>';
+      var texthtml='<p class=\'label\'>' + "Source: "+ data[0] + '</p>\n';
+      if( data[2] != data[1])
+        texthtml += '<p class=\'label\'>' + "Perturbed (Target): "+ data[1] + '</p>';
+      texthtml += '<p class=\'label\'>' + "Target: "+ data[2] + '</p>\n';
       // console.log(texthtml);
       d3.select("#textPair").html(texthtml);
 
