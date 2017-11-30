@@ -179,12 +179,13 @@ const margin = {top: 0, right: 0, bottom: 0, left: 0};
       .attr("cx", d=>{return xScale(d["entailment"]*30+d["neutral"]*330+d["contradiction"]*180) } )
       .attr("cy", d=>{return yScale(d["entailment"]*30+d["neutral"]*30+d["contradiction"]*260) })
       .attr("r", (d,i)=>{if (i==0) return 6; else return 3;})
-      .style("fill", (d,i)=>{if (i==0) return 'red'; else return 'blue';})
+      .style("fill", (d,i)=>{if (i==0) return 'red'; else return 'white';})
       .style("stroke", 'black')
-      .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
+      .style("opacity", 0.7)
+    //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
       .on("mouseover", (d,i)=>{
           var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][i]];
-          updateLabel(data);
+          updateLabel(data, i);
       });
       updateTargetList(sdata[sIndex]["targ"], sIndex);
       updateLabel(data, 0);
@@ -216,7 +217,7 @@ const margin = {top: 0, right: 0, bottom: 0, left: 0};
 
       svg.selectAll("circle")
          .attr("r", 3)
-         .style("fill", "blue");
+         .style("fill", "white");
 
       svg.select("#circle"+index)
         .attr("r", 6)
