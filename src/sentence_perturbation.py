@@ -31,7 +31,7 @@ def perturb_noun_in_sentence(s, train_tokens):
 			synsets = wn.synsets(lemma)
 			if len(synsets) != 0:
 				lemma_map[lemma] = []
-	
+
 			for s in synsets:
 				## add synonyms
 				## only add synonyms that has a single token (i.e. 	exclude '_')
@@ -68,7 +68,7 @@ def perturb_noun_in_sentence(s, train_tokens):
 						target = pluralize(s)
 					elif pos == "NN" and singularize(s) != s:
 						target = singularize(s)
-	
+
 					target_list = copy.copy(orig_list)
 					target_list[i] = target
 					result_list.append(' '.join(target_list))
@@ -103,9 +103,17 @@ def perturb_noun_in_targ_file(src_path, targ_path, train_dict):
 
 	for i, l in enumerate(targ):
 		perturbed = perturb_noun_in_sentence(l, train_tokens)
+		#add original pair for each example
+		result_src.append(src[i])
+		result_targ.append(l[:-1])
 		for p in perturbed:
 			result_src.append(src[i])
 			result_targ.append(p)
+
+		#break symbol
+		result_src.append("-\n")
+		result_targ.append("-")
+
 		if (i+1)%100 == 0 or (i+1) == len(targ):
 			print('perturbed {0} sentences'.format(i+1))
 
