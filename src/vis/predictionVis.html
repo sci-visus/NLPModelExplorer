@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Text Entailment Visualizations</title>
+    <title>Text Entailment Prediction</title>
     <style>
 
         body {
@@ -22,23 +22,6 @@
             fill: black;
             font-size: large;
         }
-
-        /*#predContainer {
-          width: 40%;
-          height: 100%;
-          position: absolute;
-          top: 0;
-          left: 0;
-          background: #CCC;
-        }
-        #textContainer {
-          width: 60%;
-          height: 100%;
-          position: absolute;
-          top: 0;
-          left: 30%;
-        }*/
-
 
     </style>
     <script src="https://d3js.org/d3.v4.js"></script>
@@ -100,10 +83,10 @@ console.log(sdata);
 var htmlList = "";
 for (var i = 0; i < sdata.length; i++) {
     if (i === 0)
-        htmlList += "<option value=" + i + " selected>" + sdata[i].targ[0] +
+        htmlList += "<option value=" + i + " selected>" + sdata[i].src +
         "</option>";
     else
-        htmlList += "<option value=" + i + ">" + sdata[i].targ[0] +
+        htmlList += "<option value=" + i + ">" + sdata[i].src +
         "</option>";
 }
 
