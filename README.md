@@ -49,5 +49,5 @@ else skim through all steps because all results have been uploaded
   - The uploaded model is CPU model. Setting `-gpuid 1`, the model will be implicitly transformed into a GPU model on the first GPU device. In case no GPU is available, set `-gpuid -1` in step 3. Then the model will remain on CPU. The whole command line will thus be:
   
     `th predict.lua -gpuid -1 -sent1_file ../data/snli_1.0/src-dev.txt.perturbed -sent2_file ../data/snli_1.0/targ-dev.txt.perturbed -word_dict ../data/snli_1.0.word.dict -label_dict ../data/snli_1.0.label.dict -output_file pred.txt -model model_100_local_parikh_final.t7 | tee log_pred.txt`
-  
-  
+    
+  - To print attention, refer to the option `-ali_output`. For instance in step 3, add option `-ali_output att_dev`. A hdf5 which contains attention will be printed to `att_dev.hdf5`.
