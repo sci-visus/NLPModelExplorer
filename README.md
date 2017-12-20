@@ -50,4 +50,7 @@ else skim through all steps because all results have been uploaded
   
     `th predict.lua -gpuid -1 -sent1_file ../data/snli_1.0/src-dev.txt.perturbed -sent2_file ../data/snli_1.0/targ-dev.txt.perturbed -word_dict ../data/snli_1.0.word.dict -label_dict ../data/snli_1.0.label.dict -output_file pred.txt -model model_100_local_parikh_final.t7 | tee log_pred.txt`
     
-  - To print attention, refer to the option `-ali_output`. For instance in step 3, add option `-ali_output att_dev`. A hdf5 which contains attention will be printed to `att_dev.hdf5`.
+  - To print attention, refer to the option `-ali_output`. Note that this option does not work with predict.lua. In order to do so, run
+  
+    `th train.lua -gpuid 1 -mode eval -data_file ../data/snli_1.0-train.hdf5 -val_data_file ../data/snli_1.0-val.hdf5 -test_data_file ../data/snli_1.0-test.hdf5 -pre_word_vecs ../data/glove.hdf5 -encoder proj -attention local -classifier local -loss nll -epochs 1 -dropout 0 -load_model model_100_local_parikh_final.t7 -ali_output dev_ali -savefile model_tmp | tee log_dev_pred.txt`
+    This command will load the pretrained model and rebuild the network by inserting a printing layer. The printing layer prints out attention and affects nothing in the network.
