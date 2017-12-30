@@ -8,12 +8,14 @@
 from flask import Flask
 from hdanalysis.modules import *
 from hdanalysis.core import *
+import webbrowser
 
 class visModule:
     def init():
         self.app = Flask(__name__)
         # socketio = SocketIO(self.app)
         # pass
+        self.app.run(host='localhost',port=5000,debug=True)
 
     # an input pair ID is used as handle for the correspondence
     # between attention, prediction, and the input
@@ -26,3 +28,6 @@ class visModule:
     # called when the user change the prediction, the attention need to be updated
     def addGradientUpdateCallback(self, updateCallback):
         pass
+
+    def show(self):
+        webbrowser.open('http://google.co.kr', new=2)
