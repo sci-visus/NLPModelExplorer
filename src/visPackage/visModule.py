@@ -42,8 +42,21 @@ class textEntailVisModule:
     def index():
         return app.send_static_file('index.html')
 
-
+    @app.route('/views/<name>')
+    def views(name):
+        return {
+            'prediction_view': app.send_static_file('viewTemplates/template_view.mst'),
+            'attention_view': app.send_static_file('viewTemplates/template_view.mst')
+            'sentence_view': app.send_static_file('viewTemplates/template_view.mst')
+        }.get(name)
+        
     # only call when all setup is done
+    @socketio.on('message', namespace='/app')
+    def parsingMessage(msg):
+        # if registry:
+        # registry.parsingMessage(msg
+        pass
+
     def show(self):
         # delay
         # time.sleep(60)
