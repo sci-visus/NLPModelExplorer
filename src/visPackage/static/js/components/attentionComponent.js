@@ -1,4 +1,4 @@
-class attentionComponent {
+class attentionComponent extends baseComponent{
 
     constructor(div) {
 

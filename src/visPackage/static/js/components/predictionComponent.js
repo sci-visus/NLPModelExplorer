@@ -1,6 +1,6 @@
 //the triangle vis
 
-class predictionComponent {
+class predictionComponent extends baseComponent {
 
     constructor(div) {
 
