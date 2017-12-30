@@ -36,7 +36,7 @@ class textEntailVisModule:
     # called when the user change the prediction, the attention need to be
     # recomputed by python model
     def setGradientUpdateHook(self, callback):
-        pass
+        self.updateGradientByPredictionChange = callback;
 
     @app.route('/')
     def index():
@@ -49,7 +49,7 @@ class textEntailVisModule:
             'attention_view': app.send_static_file('viewTemplates/template_view.mst')
             'sentence_view': app.send_static_file('viewTemplates/template_view.mst')
         }.get(name)
-        
+
     # only call when all setup is done
     @socketio.on('message', namespace='/app')
     def parsingMessage(msg):
