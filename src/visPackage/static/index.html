@@ -1,4 +1,5 @@
-<!doctype html>
+<!DOCTYPE html>
+<html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link type="text/css" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
@@ -13,6 +14,7 @@
     <script type="text/javascript" src="../static/lib/goldenlayout.min.js"></script>
     <script type="text/javascript" src="../static/lib/socket.io.min.js"></script>
     <script type="text/javascript" src="../static/lib/mustache.min.js"></script>
+    <script type="text/javascript" src="../static/lib/uuidv1.js"></script>
 
     <script type="text/javascript" src="../static/components/baseComponent.js"></script>
     <script type="text/javascript" src="../static/components/predictionComponent.js"></script>
@@ -21,11 +23,10 @@
 </head>
 
 <body>
-    <div id="wrapper">
     <div id="layoutContainer"></div>
-    </div>
+</body>
 
-    <script>
+<script>
     var panelMetaInfo = {
       'Prediction': ['prediction_view', 'predictionComponent'],
       'Attention': ['attention_view','attentionComponent'],
@@ -130,6 +131,7 @@
     }
 
     appLayout.init()
+
     //handle whole window resize
     window.addEventListener('resize', function() {
       appLayout.updateSize();
@@ -139,6 +141,6 @@
       console.log("@@@@@@@@@@@ reset module on server @@@@@@@@@\n");
       $.get("/reset/", d=>console.log(d));
     };
-    </script>
-</body>
+</script>
+
 </html>

@@ -31,6 +31,10 @@ class baseComponent {
 
     }
 
+    resize() {
+
+    }
+
     _updateWidthHeight() {
         //resize width height
         //parent width, height

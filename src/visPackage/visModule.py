@@ -18,11 +18,11 @@ import time
 
 #global app for decorator access
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 class textEntailVisModule:
     def init(self):
-        self.socketio = SocketIO(app)
-        # pass
+        pass
         # self.app.run(host='localhost',port=5000,debug=True)
 
     # an input pair ID is used as handle for the correspondence
@@ -62,5 +62,5 @@ class textEntailVisModule:
         # time.sleep(60)
         url = 'http://localhost:5050'
         threading.Timer(1.25, lambda: webbrowser.open(url, new=1) ).start()
-        self.socketio.run(app, host='localhost',port=5050, debug=True)
+        socketio.run(app, host='localhost',port=5050, debug=True)
         # webbrowser.open('http://localhost:5000', new=2)
