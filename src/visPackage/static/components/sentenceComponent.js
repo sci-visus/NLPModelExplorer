@@ -1,5 +1,9 @@
-class sentenceComponent extends baseComponent {
+/*
 
+
+*/
+
+class sentenceComponent extends baseComponent {
     constructor(div) {
         super(div);
 
