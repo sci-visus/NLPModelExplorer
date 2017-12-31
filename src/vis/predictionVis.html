@@ -101,15 +101,12 @@ const margin = {top: 0, right: 0, bottom: 0, left: 0};
     .domain([margin.left, margin.left + width])
     .range([0, width]);
 
-  svg.append("g").call(d3.axisTop(xScale));
 
   // illustrate top/bottom margins
   const yScale = d3.scaleLinear()
     .domain([margin.top, margin.top + height])
     .range([0, height]);
-  svg.append("g").call(d3.axisLeft(yScale));
 
-  // Tip: name your selections and work with CSS classes
   const label = svg.append("g")
     .attr("class", "label");
 

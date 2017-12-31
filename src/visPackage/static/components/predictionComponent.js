@@ -8,57 +8,69 @@ class predictionComponent extends baseComponent {
     constructor(div) {
         super(div);
 
+        this.margin = {
+            top: 25,
+            right: 25,
+            bottom: 25,
+            left: 25
+        };
+
+        // this.draw();
     }
 
     draw() {
-        const xScale = d3.scaleLinear()
-            .domain([margin.left, margin.left + width])
-            .range([0, width]);
+        this._updateWidthHeight();
 
-        svg.append("g").call(d3.axisTop(xScale));
+        var svg = d3.select(this._div).select("svg");
+        // console.log(svg);
 
-        // illustrate top/bottom margins
-        const yScale = d3.scaleLinear()
-            .domain([margin.top, margin.top + height])
-            .range([0, height]);
-        svg.append("g").call(d3.axisLeft(yScale));
+        svg.attr("width", this.width);
+        svg.attr("height", this.height);
 
-        // Tip: name your selections and work with CSS classes
-        const label = svg.append("g")
-            .attr("class", "label");
+        // const xScale = d3.scaleLinear()
+        //     .domain([this.margin.left, this.width])
+        //     .range([0, this.width]);
+        //
+        // // illustrate top/bottom margins
+        // const yScale = d3.scaleLinear()
+        //     .domain([this.margin.top, this.height])
+        //     .range([0, this.height]);
 
-        var trianglePoints = xScale(30) + ' ' + yScale(30) + ', ' + xScale(
-            330) + ' ' + yScale(30) + ', ' + xScale(180) + ' ' + yScale(
-            260);
+        // const label = svg.append("g")
+        //     .attr("class", "label");
+
+        // var trianglePoints = xScale(30) + ' ' + yScale(30) + ', ' + xScale(
+        //     330) + ' ' + yScale(30) + ', ' + xScale(180) + ' ' + yScale(
+        //     260);
 
         //entailment
-        const trilabel = svg.append("g");
-        trilabel.append('text')
+        //112,0 0,194 224,194
+        // const trilabel = svg.append("g");
+        svg.append('text')
             .attr("class", "trilabel")
-            .attr("x", xScale(15))
-            .attr("y", yScale(20))
-            .text("entailment");
+            .attr("x", 112)
+            .attr("y", 0)
+            .text("Neutral");
 
         //neutral
-        trilabel.append('text')
+        svg.append('text')
             .attr("class", "trilabel")
-            .attr("x", xScale(315))
-            .attr("y", yScale(20))
-            .text("neutral");
+            .attr("x", 0)
+            .attr("y", 194)
+            .text("Contradiction");
 
         //contradiction
-        trilabel.append('text')
+        svg.append('text')
             .attr("class", "trilabel")
-            .attr("x", xScale(155))
-            .attr("y", yScale(280))
-            .text("contradiction");
+            .attr("x", 224)
+            .attr("y", 194)
+            .text("Entailment");
+        // updateData(sdata, 0);
+    }
 
-        // svg.append('polyline')
-        //     .attr('points', trianglePoints)
-        //     .style('fill', 'grey')
-        //     .style('stroke', 'None');
-
-        updateData(sdata, 0);
+    resize() {
+        // console.log("resize\n");
+        this.draw();
     }
 
 

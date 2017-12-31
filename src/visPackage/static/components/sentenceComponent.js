@@ -24,13 +24,13 @@ class sentenceComponent extends baseComponent {
         // console.log(texthtml);
         d3.select("#textPair").html(texthtml);
 
-        svg.selectAll("circle")
-            .attr("r", 3)
-            .style("fill", "white");
-
-        svg.select("#circle" + index)
-            .attr("r", 6)
-            .style("fill", "red");
+        // svg.selectAll("circle")
+        //     .attr("r", 3)
+        //     .style("fill", "white");
+        //
+        // svg.select("#circle" + index)
+        //     .attr("r", 6)
+        //     .style("fill", "red");
 
         //   label.selectAll(".label").remove();
         //   label.selectAll(".label")
