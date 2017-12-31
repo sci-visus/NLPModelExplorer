@@ -16,17 +16,21 @@ from flask_socketio import send, emit, socketio, SocketIO, join_room, leave_room
 import webbrowser, threading
 import time
 
-#global app for decorator access
+#global app/socketio for decorator access
 app = Flask(__name__)
 socketio = SocketIO(app)
 
 class textEntailVisModule:
-    def init(self):
-        pass
+    # def init(self):
+        # app = Flask(__name__)
+        # socketio = SocketIO(app)
         # self.app.run(host='localhost',port=5000,debug=True)
 
     # an input pair ID is used as handle for the correspondence
     # between attention, prediction, and the input
+    def addData(self, data):
+        self.data = data
+
     def addPredictions(self, predictions):
         pass
 
@@ -36,11 +40,21 @@ class textEntailVisModule:
     # called when the user change the prediction, the attention need to be
     # recomputed by python model
     def setGradientUpdateHook(self, callback):
-        self.updateGradientByPredictionChange = callback;
+        self.gradientUpdateHook = callback
 
+
+    def setSentenceModelEvaluationHook(self, callback):
+        self.sentenceModelEvaluationHook = callback
+
+
+    #################### server control ######################
     @app.route('/')
     def index():
         return app.send_static_file('index.html')
+
+    @app.route("/getData")
+    def queryData():
+        pass
 
     @app.route('/<name>')
     def views(name):
@@ -50,17 +64,17 @@ class textEntailVisModule:
             'sentence_view': app.send_static_file('viewTemplates/template_view.mst')
         }.get(name)
 
-    # only call when all setup is done
-    # @socketio.on('message', namespace='/app')
-    # def parsingMessage(msg):
-    #     # if registry:
-    #     # registry.parsingMessage(msg
-    #     pass
+    # envoke callback when the server is running
+    @socketio.on('message', namespace='/app')
+    def parsingMessage(msg):
+        # if registry:
+        # registry.parsingMessage(msg
+        pass
 
     def show(self):
         # delay
         # time.sleep(60)
         url = 'http://localhost:5050'
-        threading.Timer(1.25, lambda: webbrowser.open(url, new=0) ).start()
+        threading.Timer(2.0, lambda: webbrowser.open(url, new=0) ).start()
         socketio.run(app, host='localhost',port=5050, debug=True)
         # webbrowser.open('http://localhost:5000', new=2)
