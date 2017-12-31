@@ -1,0 +1,36 @@
+<div id='{{id}}' class="content">
+    <div id="predContainer">
+        <svg width="330" height="330">
+            <defs>
+              <linearGradient id="fadeA-1" gradientUnits="userSpaceOnUse" x1="30.000000" y1="330.000000" x2="30.000000" y2="30.000000">
+                <stop offset="0%" stop-color="#FF0000"/>
+                <stop offset="100%" stop-color="#000000" />
+              </linearGradient>
+              <linearGradient id="fadeB-1" gradientUnits="userSpaceOnUse" x1="330.000000" y1="30.00000" x2="135.000000" y2="15.000000">
+                <stop offset="0%" stop-color="#00FF00"/>
+                <stop offset="100%" stop-color="#000000" />
+              </linearGradient>
+              <linearGradient id="fadeC-1" gradientUnits="userSpaceOnUse" x1="180.000000" y1="260.00000" x2="15.000000" y2="15.000000">
+                <stop offset="0%" stop-color="#0000FF"/>
+                <stop offset="100%" stop-color="#000000" />
+              </linearGradient>
+
+              <!-- xScale(30) + ' ' + yScale(30) + ', '
+                                 + xScale(330) + ' ' + yScale(30) + ', '
+                                 + xScale(180) + ' ' + yScale(260); -->
+
+              <path id="pathA-1" d="M 30.000000,30.000000 L 330.000000,30.00000 180.000000,260.00000 Z" fill="url(#fadeA-1)"/>
+              <path id="pathB-1" d="M 30.000000,30.000000 L 330.000000,30.00000 180.000000,260.00000 Z" fill="url(#fadeB-1)"/>
+              <filter id="Default">
+                <feImage xlink:href="#pathA-1" result="layerA" x="0" y="0" />
+                <feImage xlink:href="#pathB-1" result="layerB" x="0" y="0" />
+                <feComposite in="layerA" in2="layerB" operator="arithmetic" k1="0" k2="1.0" k3="1.0" k4="0" result="temp"/>
+                <feComposite in="temp" in2="SourceGraphic"   operator="arithmetic" k1="0" k2="1.0" k3="1.0" k4="0"/>
+              </filter>
+            </defs>
+            <g stroke="none" stroke-width="0" shape-rendering="crispEdges" >
+              <path d="M 30.000000,30.000000 L 330.000000,30.00000 180.000000,260.00000 Z" fill="url(#fadeC-1)" filter="url(#Default)" />
+            </g>
+        </svg>
+    </div>
+</div>

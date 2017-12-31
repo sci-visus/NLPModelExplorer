@@ -3,21 +3,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link type="text/css" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
     <!-- <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css" /> -->
-    <link type="text/css" rel="stylesheet" href="../../static/css/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="../../static/css/goldenlayout-base.css" />
-    <link type="text/css" rel="stylesheet" href="../../static/css/goldenlayout-light-theme.css" />
+    <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="../static/css/goldenlayout-base.css" />
+    <link type="text/css" rel="stylesheet" href="../static/css/goldenlayout-light-theme.css" />
 
-    <script type="text/javascript" src="../../static/lib/d3.v3.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="../../static/lib/jquery.min.js"></script>
-    <script type="text/javascript" src="../../static/lib/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../static/lib/goldenlayout.min.js"></script>
-    <script type="text/javascript" src="../../static/lib/socket.io.min.js"></script>
-    <script type="text/javascript" src="../../static/lib/mustache.min.js"></script>
+    <script type="text/javascript" src="../static/lib/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/goldenlayout.min.js"></script>
+    <script type="text/javascript" src="../static/lib/socket.io.min.js"></script>
+    <script type="text/javascript" src="../static/lib/mustache.min.js"></script>
 
-    <script type="text/javascript" src="../../static/components/baseComponent.js"></script>
-    <script type="text/javascript" src="../../static/components/predictionComponent.js"></script>
-    <script type="text/javascript" src="../../static/components/sentenceComponent.js"></script>
-    <script type="text/javascript" src="../../static/components/attentionComponent.js"></script>
+    <script type="text/javascript" src="../static/components/baseComponent.js"></script>
+    <script type="text/javascript" src="../static/components/predictionComponent.js"></script>
+    <script type="text/javascript" src="../static/components/sentenceComponent.js"></script>
+    <script type="text/javascript" src="../static/components/attentionComponent.js"></script>
 </head>
 
 <body>
@@ -48,7 +48,7 @@
                   type: 'component',
                   componentName: 'Prediction',
                   componentState: {
-                    route: 'template_view',
+                    route: 'prediction_view',
                     name: 'predictionComponent'
                   }
                 },
@@ -56,8 +56,8 @@
                   type: 'component',
                   componentName: 'Attention',
                   componentState: {
-                    route: 'template_view',
-                    name: 'sentenceComponent'
+                    route: 'attention_view',
+                    name: 'AttentionComponent'
                   }
                 }
               ]
@@ -69,8 +69,8 @@
                   type: 'component',
                   componentName: 'Sentence',
                   componentState: {
-                    route: 'neighborhood_view',
-                    name: 'neighborhoodComponent'
+                    route: 'sentence_view',
+                    name: 'sentenceComponent'
                   }
                 }
               ]
@@ -94,7 +94,7 @@
         // console.log("container constructor:", componentState.name);
         // container.getElement().html( '<h2>' + componentState.name + '</h2>' );
 
-       $.get('/views/' + componentState.route,
+       $.get(componentState.route,
           function(template){
             // var uuid = guid();
             var uuid = uuidv1();
