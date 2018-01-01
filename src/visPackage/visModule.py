@@ -75,8 +75,11 @@ class textEntailVisModule:
         # delay
         # time.sleep(60)
 
-        # url = 'http://localhost:5050'
-        # threading.Timer(2.0, lambda: webbrowser.open(url, new=0) ).start()
+        url = 'http://localhost:5050'
+        threading.Timer(2.0, lambda: webbrowser.open(url, new=0) ).start()
 
         socketio.run(app, host='localhost',port=5050, debug=True)
         # webbrowser.open('http://localhost:5000', new=2)
+
+    def startServer(self):
+        socketio.run(app, host='localhost',port=5050, debug=True)

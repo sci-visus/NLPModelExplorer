@@ -21,7 +21,7 @@ class predictionComponent extends baseComponent {
     draw() {
         this._updateWidthHeight();
 
-        var svg = d3.select(this._div + "triangle");
+        this.svg = d3.select(this._div + "triangle");
 
         // const xScale = d3.scaleLinear()
         //     .domain([this.margin.left, this.width])
@@ -42,11 +42,11 @@ class predictionComponent extends baseComponent {
         //entailment
         //112,0 0,194 224,194
         // const trilabel = svg.append("g");
-        var label = svg.append("g");
+        var label = this.svg.append("g");
         label.append('text')
             // .attr("class", "trilabel")
-            .attr("x", 112 - 22)
-            .attr("y", 0)
+            .attr("x", 112 - 20)
+            .attr("y", -2)
             .text("Neutral");
 
         //neutral
@@ -64,18 +64,18 @@ class predictionComponent extends baseComponent {
             .text("Entailment");
         // updateData(sdata, 0);
 
-        svg.attr("width", this.pwidth)
+        this.svg.attr("width", this.pwidth)
             .attr("height", this.pheight)
             .attr("x", 0)
             .attr("y", 0);
     }
 
     resize() {
-        console.log("prediction-resize\n");
+        // console.log("prediction-resize\n");
         this.draw();
     }
 
-    updateData(sdata, sIndex) {
+    updateSelection(sdata, sIndex) {
         var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][0], sdata[
             sIndex]["targ"][0]];
 

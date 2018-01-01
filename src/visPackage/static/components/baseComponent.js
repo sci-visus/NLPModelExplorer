@@ -41,12 +41,12 @@ class baseComponent {
         this.pwidth = $(this._div).parent().parent().parent().width();
         this.pheight = $(this._div).parent().parent().parent().height();
         // console.log($(this._div));
-        console.log(this.pwidth, this.pheight);
+        // console.log(this.pwidth, this.pheight);
 
         //setup single plot data
         this.width = this.pwidth - this.margin.left - this.margin.right;
         this.height = this.pheight - this.margin.top - this.margin.bottom;
-        console.log(this.width, this.height);
+        // console.log(this.width, this.height);
     }
 
 }
