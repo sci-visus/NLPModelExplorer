@@ -15,17 +15,13 @@ class predictionComponent extends baseComponent {
             left: 25
         };
 
-        // this.draw();
+        this.draw();
     }
 
     draw() {
         this._updateWidthHeight();
 
-        var svg = d3.select(this._div).select("svg");
-        // console.log(svg);
-
-        svg.attr("width", this.width);
-        svg.attr("height", this.height);
+        var svg = d3.select(this._div + "triangle");
 
         // const xScale = d3.scaleLinear()
         //     .domain([this.margin.left, this.width])
@@ -46,33 +42,38 @@ class predictionComponent extends baseComponent {
         //entailment
         //112,0 0,194 224,194
         // const trilabel = svg.append("g");
-        svg.append('text')
-            .attr("class", "trilabel")
-            .attr("x", 112)
+        var label = svg.append("g");
+        label.append('text')
+            // .attr("class", "trilabel")
+            .attr("x", 112 - 22)
             .attr("y", 0)
             .text("Neutral");
 
         //neutral
-        svg.append('text')
-            .attr("class", "trilabel")
-            .attr("x", 0)
-            .attr("y", 194)
+        label.append('text')
+            // .attr("class", "trilabel")
+            .attr("x", 0 - 10)
+            .attr("y", 194 + 12)
             .text("Contradiction");
 
         //contradiction
-        svg.append('text')
-            .attr("class", "trilabel")
-            .attr("x", 224)
-            .attr("y", 194)
+        label.append('text')
+            // .attr("class", "trilabel")
+            .attr("x", 224 - 55)
+            .attr("y", 194 + 12)
             .text("Entailment");
         // updateData(sdata, 0);
+
+        svg.attr("width", this.pwidth)
+            .attr("height", this.pheight)
+            .attr("x", 0)
+            .attr("y", 0);
     }
 
     resize() {
-        // console.log("resize\n");
+        console.log("prediction-resize\n");
         this.draw();
     }
-
 
     updateData(sdata, sIndex) {
         var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][0], sdata[

@@ -96,8 +96,8 @@
        $.get(componentState.route,
           function(template){
             // var uuid = guid();
-            var uuid = uuidv1();
-            var data={id: "div_"+uuid};
+            var uuid = "div_"+uuidv1();
+            var data={id: uuid};
             var htmlComponent = Mustache.render(template, data);
             //create panel component
             var panel = container.getElement();
