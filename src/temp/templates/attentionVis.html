@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Text Entailment Prediction</title>
+   
+    <script src="https://d3js.org/d3.v4.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+</head>
+
+<body>
+
+	<div id='canvas'>
+	</div>
+
+</body>
+	<script>
+		let sentence1 = 'Two women are embracing while holding to go packages .';
+		let sentence2 = 'The sisters are hugging goodbye while holding to go packages after just eating lunch .';
+		let sent1 = sentence1.split(' ');
+		let sent2 = sentence2.split(' ');
+		let att_matrix = [];
+		
+		for(let i = 0; i < sent2.length; i++)
+			for(let j = 0; j < sent1.length;j++)
+				att_matrix.push(Math.random());
+		
+		function load_data(json, callback){
+		    $.ajax({
+		        url:'/_getData',
+		        type:'POST',
+		        contentType:'application/json',
+		        data:JSON.stringify(json),
+		        dataType:'json',
+		        success:function(para){
+		            callback(para.sen1, para.sen2, para.matrix);
+		        }
+		    });
+		}
+		
+		
+		function draw_Attention_matrix(sen1, sen2, matrix){
+			let col = sen1.length;
+			let row = sen2.length;
+			let rectw = 50, recth = 20;
+			let width = col * rectw;
+			let height = row * recth;
+			let X = 200, Y = 100, xpadding = 50, ypadding = 20;
+
+
+			canvas = d3.select('#canvas').append('svg').attr('width', width * 1.8).attr('height', height * 2);
+			canvas.append('g').selectAll('.cowlabeltext')
+				.data(sen1)
+				.enter()
+				.append('text')
+				.text(d=>{return d;})
+				.attr('x', (d, i)=>{
+					return X + i * xpadding + xpadding/2;
+				})
+				.attr('y', Y-5)
+				.attr("font-family", "sans-serif")
+                .attr("font-size", "10px")
+				.attr("text-anchor", "middle");
+			
+			canvas.append('g').selectAll('.rowlabeltext')
+				.data(sen2)
+				.enter()
+				.append('text')
+				.text(d=>{return d;})
+				.attr('x', X - xpadding)
+				.attr('y', (d, i)=>{
+					return Y + i  * ypadding + ypadding/2;
+				})
+				.attr("font-family", "sans-serif")
+                .attr("font-size", "10px")
+				.attr("dominant-baseline", "central");
+			
+			canvas.append('g').selectAll('.attentionMatrixRect')
+				.data(matrix)
+				.enter()
+				.append('rect')
+				.attr('x', (d, i)=>{
+					return X + (i+1) % col * rectw
+				})
+				.attr('y', (d, i)=>{
+					return Y + Math.floor(i / col) * recth;
+				})
+				.attr('width',rectw)
+				.attr('height',recth)
+				.style('stroke', 'black')
+				.style('stroke-width', '1px')
+				.style('fill',d=>{return d3.interpolateRdBu(1-d);});
+			
+			linearGradient = canvas.append('defs').append('linearGradient')
+				.attr('id','attention_heatmapg_gradient')
+				.attr('x1', '0%')
+				.attr('y1', '0%')
+				.attr('x2', '0%')
+				.attr('y2', '100%');
+			
+			for(let i = 0; i <= 10; i++){
+				linearGradient.append('stop')
+					.attr('offset', (i * 10) + '%')
+					.attr('stop-color', d3.interpolateRdBu(i/10));
+			}
+			linearGradient.append('stop')
+					.attr('offset', '100%')
+					.attr('stop-color', d3.interpolateRdBu(1));
+			canvas.append('rect')
+				.attr('x', X + (col + 1) * rectw)
+				.attr('y', Y )
+				.attr('width', 30)
+				.attr('height', row * recth)
+				.style('fill', 'url(#attention_heatmapg_gradient)')
+				
+		}
+
+		
+		load_data({'index':1}, draw_Attention_matrix);
+		
+	</script>
+
+</html>

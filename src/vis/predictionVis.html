@@ -40,19 +40,30 @@
             <stop offset="0%" stop-color="#FF0000"/>
             <stop offset="100%" stop-color="#000000" />
           </linearGradient>
+<<<<<<< HEAD
           <linearGradient id="fadeB-1" gradientUnits="userSpaceOnUse" x1="330.000000" y1="30.00000" x2="135.000000" y2="15.000000">
             <stop offset="0%" stop-color="#00FF00"/>
             <stop offset="100%" stop-color="#000000" />
           </linearGradient>
           <linearGradient id="fadeC-1" gradientUnits="userSpaceOnUse" x1="180.000000" y1="260.00000" x2="15.000000" y2="15.000000">
+=======
+          <linearGradient id="fadeB-1" gradientUnits="userSpaceOnUse" x1="330.000000" y1="30.00000" x2="135.000000" y2="30.000000">
+            <stop offset="0%" stop-color="#00FF00"/>
+            <stop offset="100%" stop-color="#000000" />
+          </linearGradient>
+          <linearGradient id="fadeC-1" gradientUnits="userSpaceOnUse" x1="180.000000" y1="260.00000" x2="30.000000" y2="30.000000">
+>>>>>>> 6c50306cea9db588286be98948fbeeeeb66e2c95
             <stop offset="0%" stop-color="#0000FF"/>
             <stop offset="100%" stop-color="#000000" />
           </linearGradient>
 
+<<<<<<< HEAD
           <!-- xScale(30) + ' ' + yScale(30) + ', '
                              + xScale(330) + ' ' + yScale(30) + ', '
                              + xScale(180) + ' ' + yScale(260); -->
 
+=======
+>>>>>>> 6c50306cea9db588286be98948fbeeeeb66e2c95
           <path id="pathA-1" d="M 30.000000,30.000000 L 330.000000,30.00000 180.000000,260.00000 Z" fill="url(#fadeA-1)"/>
           <path id="pathB-1" d="M 30.000000,30.000000 L 330.000000,30.00000 180.000000,260.00000 Z" fill="url(#fadeB-1)"/>
           <filter id="Default">
@@ -62,9 +73,15 @@
             <feComposite in="temp" in2="SourceGraphic"   operator="arithmetic" k1="0" k2="1.0" k3="1.0" k4="0"/>
           </filter>
         </defs>
+<<<<<<< HEAD
         <g stroke="none" stroke-width="0" shape-rendering="crispEdges" >
           <path d="M 30.000000,30.000000 L 330.000000,30.00000 180.000000,260.00000 Z" fill="url(#fadeC-1)" filter="url(#Default)" />
         </g>
+=======
+        <!-- <g stroke="none" stroke-width="0" shape-rendering="crispEdges" > -->
+        <path d="M 30.000000,30.000000 L 330.000000,30.00000 180.000000,260.00000 Z" fill="url(#fadeC-1)" filter="url(#Default)" />
+        <!-- </g> -->
+>>>>>>> 6c50306cea9db588286be98948fbeeeeb66e2c95
     </svg>
 </div>
 <div id = "textContainer">
@@ -105,15 +122,22 @@ const margin = {top: 0, right: 0, bottom: 0, left: 0};
     .domain([margin.left, margin.left + width])
     .range([0, width]);
 
+<<<<<<< HEAD
   svg.append("g").call(d3.axisTop(xScale));
+=======
+>>>>>>> 6c50306cea9db588286be98948fbeeeeb66e2c95
 
   // illustrate top/bottom margins
   const yScale = d3.scaleLinear()
     .domain([margin.top, margin.top + height])
     .range([0, height]);
+<<<<<<< HEAD
   svg.append("g").call(d3.axisLeft(yScale));
 
   // Tip: name your selections and work with CSS classes
+=======
+
+>>>>>>> 6c50306cea9db588286be98948fbeeeeb66e2c95
   const label = svg.append("g")
     .attr("class", "label");
 
