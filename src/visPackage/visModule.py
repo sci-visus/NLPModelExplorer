@@ -52,9 +52,10 @@ class textEntailVisModule:
     def index():
         return app.send_static_file('index.html')
 
-    @app.route("/getData")
-    def queryData():
-        pass
+    # @app.route("/getData", methods=['POST', 'GET'])
+    # def queryData():
+    #     requestJson = request.get_json()
+    #     return
 
     @app.route('/<name>')
     def views(name):
