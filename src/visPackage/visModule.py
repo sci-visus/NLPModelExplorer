@@ -12,7 +12,7 @@
 
 from flask import Flask
 from flask_socketio import send, emit, socketio, SocketIO, join_room, leave_room, close_room,disconnect
-
+from socketioManager import *
 import webbrowser, threading
 import time
 
@@ -70,6 +70,7 @@ class textEntailVisModule:
     def parsingMessage(msg):
         # if registry:
         # registry.parsingMessage(msg
+        socketioManager.receive(msg)
         pass
 
     def show(self):
