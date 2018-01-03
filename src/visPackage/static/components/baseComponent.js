@@ -12,6 +12,7 @@ class baseComponent {
     constructor(div) {
         this._divTag = div;
         this._div = '#' + div;
+        this.data = {};
 
         //default margin
         this.margin = {
@@ -22,18 +23,59 @@ class baseComponent {
         };
     }
 
-    getType() {
-
+    subscribeDatabyNames(names) {
+        if (!Array.isArray(names)) {
+            console.log("Error: input need to be a list of names\n")
+        }
+        for (var i = 0; i < names.length; i++) {
+            var msg = {
+                "type": "subscribeData",
+                "name": names[i],
+                "id": this._divTag
+            };
+            socket.emit('message', msg);
+        }
     }
 
-    getVisData() {
+    setData(name, data) {
+        var msg = {
+            "type": "setData",
+            "name": name,
+            "data": data
+        };
+        socket.emit('message', msg)
+    }
 
+    parseMessage(msg) {
+        // console.log("\nparse message in base class\n", msg);
+        switch (msg['type']) {
+            case 'data':
+                this.updateData(msg);
+                break;
+                // case 'functionReturn':
+                //     this.parseFunctionReturn(msg);
+                //     return;
+        }
+    }
+
+    updateData(msg) {
+        var name = msg["name"];
+        var data = msg["data"];
+        this.data[name] = data;
+        this.draw();
+    }
+
+    ////////// implemented by individual component ////////
+
+    draw() {
 
     }
 
     resize() {
 
     }
+
+    /////////// helper function //////////////
 
     _updateWidthHeight() {
         //resize width height
