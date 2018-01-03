@@ -70,7 +70,7 @@ class textEntailVisModule:
     def parsingMessage(msg):
         # if registry:
         # registry.parsingMessage(msg
-        socketioManager.receive(msg)
+        socketioManager.receiveFromClient(msg)
         pass
 
     def show(self):
