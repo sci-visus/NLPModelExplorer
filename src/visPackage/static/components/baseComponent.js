@@ -3,10 +3,10 @@
  - handle component wise communication
 
 */
-// var namespace = '/app'; //global namespace
-// //create a web socket connect to the server domain.
-// var socket = io.connect('http://' + document.domain + ':' + location.port +
-//     namespace);
+var namespace = '/app'; //global namespace
+//create a web socket connect to the server domain.
+var socket = io.connect('http://' + document.domain + ':' + location.port +
+    namespace);
 
 class baseComponent {
     constructor(div) {
