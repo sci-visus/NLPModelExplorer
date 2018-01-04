@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Text Entailment Prediction</title>
+   
+    <script src="https://d3js.org/d3.v4.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+</head>
+
+<body>
+	<div>
+		<div style='margin:50px;margin-left:200px;'>
+			<div>
+				<label> source</label>
+				<select id='source_sentences' style='width:200px'>
+					<option>data not load</option>
+				</select>
+			</div>
+			<div>	
+				<label>targ</label>
+				<select id='target_sentences' style='width:200px'>
+					<option>data not load</option>
+				</select>
+			</div>
+
+			<div>
+				<label id='result_label'> result:</label>
+			</div>
+		</div>
+		<div id='canvas'>
+		</div>
+</body>
+	
+	<script src='../static/attentionVis.js'></script>
+
+</html>

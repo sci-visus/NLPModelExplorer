@@ -7,7 +7,6 @@
 
  Data Model
  - data object is linked by object id, json format
-
 '''
 
 from flask import Flask
