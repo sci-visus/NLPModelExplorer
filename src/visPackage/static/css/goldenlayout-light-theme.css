@@ -4,7 +4,8 @@
 
 .lm_content{
 	background: #FFF;
-	border: 1px solid #ccc;
+	border: 1px solid #FFF;
+	/*border: 1px solid #ccc;*/
 }
 
 .lm_dragProxy .lm_content{
@@ -44,7 +45,7 @@
 }
 
 .lm_selected .lm_header{
-	background-color: #452500;
+	background-color: #fff;
 }
 
 .lm_maximised .lm_header{
@@ -52,7 +53,8 @@
 }
 
 .lm_header .lm_tab{
-	background: #fafafa;
+	background: #f4f4f4;
+	/*background: #fafafa;*/
 	color: #888;
 	font-size: 12px;
 	padding-bottom: 4px;
@@ -68,7 +70,7 @@
 .lm_tab.lm_active,
 .lm_tab:hover{
 	color: #777;
-	background: #e1e1e1;
+	background: #fff;
 }
 
 .lm_header .lm_tab.lm_active{
