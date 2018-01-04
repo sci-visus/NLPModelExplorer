@@ -52,7 +52,7 @@ class baseComponent {
             "data": data,
             "uid": this.uuid
         };
-        console.log(msg);
+        // console.log(msg);
         socket.emit('message', msg)
     }
 

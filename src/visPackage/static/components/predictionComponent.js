@@ -7,9 +7,9 @@ the triangle vis of the prediction result
 class predictionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        // this.subscribeDatabyNames(["predictionsHighlight", "predictions"]);
-        this.subscribeDatabyNames(["predictions"]);
-        this.subscribeDatabyNames(["predictionsHighlight"]);
+        this.subscribeDatabyNames(["predictionsHighlight", "predictions"]);
+        // this.subscribeDatabyNames(["predictions"]);
+        // this.subscribeDatabyNames(["predictionsHighlight"]);
 
         this.margin = {
             top: 25,

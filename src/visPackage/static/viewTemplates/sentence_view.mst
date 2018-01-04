@@ -1,4 +1,4 @@
-<div id='{{id}}' class="content">
+<div style="margin-top: 25px; margin-left:25px; width: 90%;" id='{{id}}'>
     <div class="form-group">
       <label>Source:</label>
       <input type="text" class="form-control" id="{{id}}src">

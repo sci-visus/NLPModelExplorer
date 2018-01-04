@@ -23,7 +23,7 @@ class socketioManager:
             self.subscribeData(msg["name"], msg["uid"])
 
     def sendToClient(self, uID, json):
-        print "send to client", uID
+        # print "send to client:", uID
         emit(uID, json, namespace = self.namespace, broadcast=True)
 
     def sendDataToClient(self, name, data, uID):
@@ -41,6 +41,7 @@ class socketioManager:
         #propagate data update
         if name in self.data2ID.keys():
             for id in self.data2ID[name]:
+                print "setData:", id
                 if id == uID:
                     continue
                 mappedData = dataMapper.Py2Js(data)
@@ -54,13 +55,13 @@ class socketioManager:
     def subscribeData(self, name, uID):
         # print name, uID
         if name in self.data2ID.keys():
-            self.data2ID[name].add(id)
+            self.data2ID[name].add(uID)
         else:
             self.data2ID[name] = Set()
-            self.data2ID[name].add(id)
+            self.data2ID[name].add(uID)
 
         #tigger data update if the subscribed data already exist
-        print "subscribeData:", self.data.keys()
+        # print "subscribeData:", self.data.keys()
         if name in self.data.keys():
             self.sendDataToClient(name, self.data[name], uID)
 
