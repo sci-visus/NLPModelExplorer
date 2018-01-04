@@ -110,3 +110,8 @@ table th,
 tr {
     text-align: center;
 }
+
+/*.svg-content {
+    display: inline-block;
+    position: relative;
+}*/

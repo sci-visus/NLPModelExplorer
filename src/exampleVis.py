@@ -35,6 +35,7 @@ data = [{
 modelVis = textEntailVisModule()
 modelVis.setData(data)
 
+# modelVis.callbackPredictionChange()
 #open browser for visualization
-# modelVis.show()
-modelVis.startServer()
+modelVis.show()
+# modelVis.startServer()
