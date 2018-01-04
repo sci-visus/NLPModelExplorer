@@ -1,0 +1,10 @@
+<div id='{{id}}' class="content">
+    <div class="form-group">
+      <label>Source:</label>
+      <input type="text" class="form-control" id="{{id}}src">
+    </div>
+    <div class="form-group">
+      <label>Target:</label>
+      <input type="text" class="form-control" id="{{id}}targ">
+    </div>
+</div>
