@@ -5,8 +5,11 @@ the triangle vis of the prediction result
 */
 
 class predictionComponent extends baseComponent {
-    constructor(div) {
-        super(div);
+    constructor(uuid) {
+        super(uuid);
+        // this.subscribeDatabyNames(["predictionsHighlight", "predictions"]);
+        this.subscribeDatabyNames(["predictions"]);
+        this.subscribeDatabyNames(["predictionsHighlight"]);
 
         this.margin = {
             top: 25,
@@ -18,10 +21,12 @@ class predictionComponent extends baseComponent {
         this.draw();
     }
 
+
     draw() {
+        // console.log(this.data);
         this._updateWidthHeight();
 
-        this.svg = d3.select(this._div + "triangle");
+        this.svg = d3.select(this.div + "triangle");
 
         // const xScale = d3.scaleLinear()
         //     .domain([this.margin.left, this.width])
@@ -40,8 +45,10 @@ class predictionComponent extends baseComponent {
         //     260);
 
         //entailment
+        //neutral, Contradiction, Entailment
         //112,0 0,194 224,194
         // const trilabel = svg.append("g");
+
         var label = this.svg.append("g");
         label.append('text')
             // .attr("class", "trilabel")
@@ -68,6 +75,8 @@ class predictionComponent extends baseComponent {
             .attr("height", this.pheight)
             .attr("x", 0)
             .attr("y", 0);
+
+        this.updateSelection();
     }
 
     resize() {
@@ -75,48 +84,56 @@ class predictionComponent extends baseComponent {
         this.draw();
     }
 
-    updateSelection(sdata, sIndex) {
-        var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"][0], sdata[
-            sIndex]["targ"][0]];
+    updateSelection() {
+        if (Object.keys(this.data).length !== 0) {
+            // console.log(this.data);
+            var data = this.data['predictions'];
+            var index = this.data['predictionsHighlight']
 
-        svg.selectAll("circle").remove();
-        svg.selectAll("circle")
-            .data(sdata[sIndex]["pred"])
-            .enter()
-            .append("circle")
-            .attr("id", (d, i) => {
-                return "circle" + i;
-            })
-            .attr("cx", d => {
-                return xScale(d["entailment"] * 30 + d["neutral"] * 330 +
-                    d[
-                        "contradiction"] * 180)
-            })
-            .attr("cy", d => {
-                return yScale(d["entailment"] * 30 + d["neutral"] * 30 +
-                    d[
-                        "contradiction"] * 260)
-            })
-            .attr("r", (d, i) => {
-                if (i == 0) return 6;
-                else return 3;
-            })
-            .style("fill", (d, i) => {
-                if (i == 0) return 'red';
-                else return 'white';
-            })
-            .style("stroke", 'black')
-            .style("opacity", 0.7)
-            //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
-            .on("mouseover", (d, i) => {
-                var data = [sdata[sIndex]["src"], sdata[sIndex]["targ"]
-                    [i],
-                    sdata[sIndex]["targ"][0]
-                ];
-                updateLabel(data, i);
-            });
-        updateTargetList(sdata[sIndex]["targ"], sIndex);
-        updateLabel(data, 0);
+            //neutral, Contradiction, Entailment
+            //(112,0) (0,194) (224,194)
+            if (data !== undefined) {
+                // console.log(data);
+                this.svg.selectAll("circle").remove();
+                this.svg.selectAll("circle")
+                    .data(data)
+                    .enter()
+                    .append("circle")
+                    .attr("id", (d, i) => {
+                        return "circle" + i;
+                    })
+                    .attr("cx", d => {
+                        return d["neutral"] * 112 + d["contradiction"] *
+                            0 +
+                            d["entailment"] * 224;
+                    })
+                    .attr("cy", d => {
+                        return d["neutral"] * 0 + d["contradiction"] *
+                            194 +
+                            d["entailment"] * 194;
+                    })
+                    .attr("r", (d, i) => {
+                        if (i == 0) return 6;
+                        else return 3;
+                    })
+                    .style("fill", (d, i) => {
+                        if (i == 0) return 'red';
+                        else return 'white';
+                    })
+                    .style("stroke", 'black')
+                    .style("opacity", 0.7)
+                    //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
+                    .on("mouseover", (d, i) => {
+                        this.updatePredictionIndex(i);
+                    });
+            }
+            // updateTargetList(sdata[sIndex]["targ"], sIndex);
+            // updateLabel(data, 0);
+        }
+    }
+
+    updatePredictionIndex(index) {
+
     }
 
     updateTargetList(data, sIndex) {

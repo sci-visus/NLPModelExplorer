@@ -11,29 +11,36 @@
 
 from flask import Flask
 from flask_socketio import send, emit, socketio, SocketIO, join_room, leave_room, close_room,disconnect
-
+from socketioManager import *
 import webbrowser, threading
 import time
 
 #global app/socketio for decorator access
 app = Flask(__name__)
 socketio = SocketIO(app)
+dataManager = socketioManager()
 
 class textEntailVisModule:
+    def __init__(self):
+        self.index = 0
+
     # def init(self):
         # app = Flask(__name__)
         # socketio = SocketIO(app)
         # self.app.run(host='localhost',port=5000,debug=True)
 
-    # an input pair ID is used as handle for the correspondence
+    # an sentence pair index (self.index) is used as handle for the correspondence
     # between attention, prediction, and the input
-    def addData(self, data):
+    def setData(self, data):
         self.data = data
+        dataManager.setData("predictions", self.data[self.index]['pred']);
+        dataManager.setData("predictionsHighlight", 0);
 
-    def addPredictions(self, predictions):
-        pass
+    def setPredictions(self, predictions):
+        dataManager.setData("predictions", predictions);
+        dataManager.setData("predictionsHighlight", 0);
 
-    def addAttention(self, att):
+    def setAttention(self, att):
         pass
 
     # called when the user change the prediction, the attention need to be
@@ -51,9 +58,10 @@ class textEntailVisModule:
     def index():
         return app.send_static_file('index.html')
 
-    @app.route("/getData")
-    def queryData():
-        pass
+    # @app.route("/getData", methods=['POST', 'GET'])
+    # def queryData():
+    #     requestJson = request.get_json()
+    #     return
 
     @app.route('/<name>')
     def views(name):
@@ -66,9 +74,7 @@ class textEntailVisModule:
     # envoke callback when the server is running
     @socketio.on('message', namespace='/app')
     def parsingMessage(msg):
-        # if registry:
-        # registry.parsingMessage(msg
-        pass
+        dataManager.receiveFromClient(msg)
 
     def show(self):
         # delay
