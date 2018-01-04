@@ -22,22 +22,26 @@ socketio = SocketIO(app)
 dataManager = socketioManager()
 
 class textEntailVisModule:
+    def __init__(self):
+        self.index = 0
+
     # def init(self):
         # app = Flask(__name__)
         # socketio = SocketIO(app)
         # self.app.run(host='localhost',port=5000,debug=True)
 
-    # an input pair ID is used as handle for the correspondence
+    # an sentence pair index (self.index) is used as handle for the correspondence
     # between attention, prediction, and the input
-    def addData(self, data):
+    def setData(self, data):
         self.data = data
-        dataManager.setData("predictions", data[0]['pred']);
-        dataManager.setData("predictionsHighlight", 1);
+        dataManager.setData("predictions", self.data[self.index]['pred']);
+        dataManager.setData("predictionsHighlight", 0);
 
-    def addPredictions(self, predictions):
-        pass
+    def setPredictions(self, predictions):
+        dataManager.setData("predictions", predictions);
+        dataManager.setData("predictionsHighlight", 0);
 
-    def addAttention(self, att):
+    def setAttention(self, att):
         pass
 
     # called when the user change the prediction, the attention need to be

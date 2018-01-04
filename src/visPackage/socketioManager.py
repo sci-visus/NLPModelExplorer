@@ -3,7 +3,7 @@ Send and receive data between server and client using SocketIO
 '''
 from sets import Set
 from flask_socketio import send, emit, socketio, SocketIO, join_room, leave_room, close_room,disconnect
-# import json
+import json
 import numpy as np
 
 class socketioManager:
@@ -14,6 +14,7 @@ class socketioManager:
 
     #receive from client
     def receiveFromClient(self, msg):
+        print msg
         #parse
         messageType = msg['type']
         if messageType == 'setData':
@@ -21,11 +22,13 @@ class socketioManager:
         elif messageType == 'subscribeData':
             self.subscribeData(msg["name"], msg["id"])
 
-    def sendToClient(self, json, uID):
+    def sendToClient(self, uID, json):
+        print "send to client", uID
         emit(uID, json, namespace = self.namespace, broadcast=True)
 
     def sendDataToClient(self, name, data, uID):
         mappedData = dataMapper.Py2Js(data)
+        # print "send to client:", data, " => ", mappedData
         if mappedData:
             msg = dict()
             msg['type'] = "data"
@@ -33,7 +36,7 @@ class socketioManager:
             msg['data'] = mappedData
             self.sendToClient(uID, msg)
 
-    def setData(self, name, data, uID=0):
+    def setData(self, name, data, uID = None):
         self.data[name] = data
         #propagate data update
         if name in self.data2ID.keys():
@@ -48,7 +51,9 @@ class socketioManager:
                     msg['data'] = mappedData
                     self.sendToClient(id, msg)
 
+
     def subscribeData(self, name, uID):
+        # print name, uID
         if name in self.data2ID.keys():
             self.data2ID[name].add(id)
         else:
@@ -84,5 +89,7 @@ class dataMapper:
         elif isinstance(data, np.ndarray):
             # print "@@@@@@@@ array signal @@@@@@@@\n", data
             returnData['data'] = data.tolist()
+        else:
+            returnData['data'] = json.dumps(data)
 
         return returnData

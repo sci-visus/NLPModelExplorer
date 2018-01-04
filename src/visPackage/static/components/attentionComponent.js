@@ -6,8 +6,8 @@ Matrix representation
 */
 
 class attentionComponent extends baseComponent {
-    constructor(div) {
-        super(div);
+    constructor(uuid) {
+        super(uuid);
 
     }
 

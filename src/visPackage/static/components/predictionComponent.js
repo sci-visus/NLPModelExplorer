@@ -5,8 +5,8 @@ the triangle vis of the prediction result
 */
 
 class predictionComponent extends baseComponent {
-    constructor(div) {
-        super(div);
+    constructor(uuid) {
+        super(uuid);
         this.subscribeDatabyNames(["predictionsHighlight", "predictions"])
 
         this.margin = {
@@ -21,10 +21,10 @@ class predictionComponent extends baseComponent {
 
 
     draw() {
-        console.log(this.data);
+        // console.log(this.data);
         this._updateWidthHeight();
 
-        this.svg = d3.select(this._div + "triangle");
+        this.svg = d3.select(this.div + "triangle");
 
         // const xScale = d3.scaleLinear()
         //     .domain([this.margin.left, this.width])

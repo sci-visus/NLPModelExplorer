@@ -1,6 +1,5 @@
 from visPackage import *
 
-
 data = [{
  "index":1,
  "src": "Two women are embracing while holding to go packages .\n",
@@ -32,13 +31,9 @@ data = [{
           {"entailment": 0.00031762037709425, "neutral": 0.9952506535388, "contradiction": 0.0044317260841019}]
 }]
 
-# print data[0]["pred"][0]["neutral"]
-# exit()
 
 modelVis = textEntailVisModule()
-
-# modelVis.init()
-modelVis.addData(data)
+modelVis.setData(data)
 
 #open browser for visualization
 # modelVis.show()

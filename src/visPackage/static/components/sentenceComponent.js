@@ -4,8 +4,8 @@
 */
 
 class sentenceComponent extends baseComponent {
-    constructor(div) {
-        super(div);
+    constructor(uuid) {
+        super(uuid);
     }
 
     draw() {

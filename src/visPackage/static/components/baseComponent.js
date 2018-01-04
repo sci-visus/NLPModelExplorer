@@ -8,11 +8,16 @@ var namespace = '/app'; //global namespace
 var socket = io.connect('http://' + document.domain + ':' + location.port +
     namespace);
 
+console.log(document.domain, location.port);
+
 class baseComponent {
-    constructor(div) {
-        this._divTag = div;
-        this._div = '#' + div;
+    constructor(uuid) {
+        this.uuid = uuid;
+        // console.log(this.uuid);
+        this.div = "#div_" + this.uuid;
         this.data = {};
+
+        socket.on(this.uuid, this.parseMessage.bind(this));
 
         //default margin
         this.margin = {
@@ -23,6 +28,11 @@ class baseComponent {
         };
     }
 
+    //return this.div without # selector
+    getDiv() {
+        return this.div.slice(1, this.div.length);
+    }
+
     subscribeDatabyNames(names) {
         if (!Array.isArray(names)) {
             console.log("Error: input need to be a list of names\n")
@@ -31,7 +41,7 @@ class baseComponent {
             var msg = {
                 "type": "subscribeData",
                 "name": names[i],
-                "id": this._divTag
+                "id": this.uuid
             };
             socket.emit('message', msg);
         }
@@ -42,7 +52,7 @@ class baseComponent {
             "type": "setData",
             "name": name,
             "data": data,
-            "id": this._divTag
+            "id": this.uuid
         };
         socket.emit('message', msg)
     }
@@ -79,7 +89,6 @@ class baseComponent {
     }
 
     /////////// helper function //////////////
-
     _updateWidthHeight() {
         //resize width height
         //parent width, height
