@@ -18,7 +18,7 @@ class predictionComponent extends baseComponent {
             left: 25
         };
 
-        this.draw();
+        // this.draw();
     }
 
 
@@ -133,7 +133,7 @@ class predictionComponent extends baseComponent {
     }
 
     updatePredictionIndex(index) {
-
+        this.setData("predictionsHighlight", index);
     }
 
     updateTargetList(data, sIndex) {

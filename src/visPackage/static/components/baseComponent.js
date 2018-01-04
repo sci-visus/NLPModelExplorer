@@ -38,7 +38,7 @@ class baseComponent {
             var msg = {
                 "type": "subscribeData",
                 "name": names[i],
-                "id": this.uuid
+                "uid": this.uuid
             };
             // console.log(msg);
             socket.emit('message', msg);
@@ -50,8 +50,9 @@ class baseComponent {
             "type": "setData",
             "name": name,
             "data": data,
-            "id": this.uuid
+            "uid": this.uuid
         };
+        console.log(msg);
         socket.emit('message', msg)
     }
 
@@ -74,7 +75,7 @@ class baseComponent {
         var data = msg["data"]["data"];
         this.data[name] = data;
         this.draw();
-        console.log(this.data);
+        // console.log(this.data);
     }
 
     ////////// implemented by individual component ////////

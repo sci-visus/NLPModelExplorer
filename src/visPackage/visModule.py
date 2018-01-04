@@ -36,6 +36,10 @@ class textEntailVisModule:
         self.data = data
         dataManager.setData("predictions", self.data[self.index]['pred']);
         dataManager.setData("predictionsHighlight", 0);
+        sentences = dict()
+        sentences['src'] = self.data[self.index]['src']
+        sentences['targ'] = self.data[self.index]['targ']
+        dataManager.setData("sentences", sentences)
 
     def setPredictions(self, predictions):
         dataManager.setData("predictions", predictions);
@@ -69,7 +73,7 @@ class textEntailVisModule:
         return {
             'prediction_view': app.send_static_file('viewTemplates/prediction_view.mst'),
             'attention_view': app.send_static_file('viewTemplates/template_view.mst'),
-            'sentence_view': app.send_static_file('viewTemplates/template_view.mst')
+            'sentence_view': app.send_static_file('viewTemplates/sentence_view.mst')
         }.get(name)
 
     # envoke callback when the server is running

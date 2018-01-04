@@ -18,9 +18,9 @@ class socketioManager:
         #parse
         messageType = msg['type']
         if messageType == 'setData':
-            self.setData(msg["name"], msg["data"], msg["id"])
+            self.setData(msg["name"], msg["data"], msg["uid"])
         elif messageType == 'subscribeData':
-            self.subscribeData(msg["name"], msg["id"])
+            self.subscribeData(msg["name"], msg["uid"])
 
     def sendToClient(self, uID, json):
         print "send to client", uID
