@@ -14,7 +14,7 @@ class baseComponent {
     constructor(uuid) {
         this.uuid = uuid;
         // console.log(this.uuid);
-        this.div = "#div_" + this.uuid;
+        this.div = "#" + this.uuid;
         this.data = {};
 
         socket.on(this.uuid, this.parseMessage.bind(this));
@@ -28,21 +28,19 @@ class baseComponent {
         };
     }
 
-    //return this.div without # selector
-    getDiv() {
-        return this.div.slice(1, this.div.length);
-    }
-
     subscribeDatabyNames(names) {
         if (!Array.isArray(names)) {
             console.log("Error: input need to be a list of names\n")
         }
+
         for (var i = 0; i < names.length; i++) {
+
             var msg = {
                 "type": "subscribeData",
                 "name": names[i],
                 "id": this.uuid
             };
+            // console.log(msg);
             socket.emit('message', msg);
         }
     }
@@ -58,7 +56,7 @@ class baseComponent {
     }
 
     parseMessage(msg) {
-        console.log(msg);
+        // console.log(msg);
 
         // console.log("\nparse message in base class\n", msg);
         switch (msg['type']) {
@@ -73,9 +71,10 @@ class baseComponent {
 
     updateData(msg) {
         var name = msg["name"];
-        var data = msg["data"];
+        var data = msg["data"]["data"];
         this.data[name] = data;
         this.draw();
+        console.log(this.data);
     }
 
     ////////// implemented by individual component ////////

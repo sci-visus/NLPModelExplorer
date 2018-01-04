@@ -51,7 +51,6 @@ class socketioManager:
                     msg['data'] = mappedData
                     self.sendToClient(id, msg)
 
-
     def subscribeData(self, name, uID):
         # print name, uID
         if name in self.data2ID.keys():
@@ -61,9 +60,9 @@ class socketioManager:
             self.data2ID[name].add(id)
 
         #tigger data update if the subscribed data already exist
+        print "subscribeData:", self.data.keys()
         if name in self.data.keys():
             self.sendDataToClient(name, self.data[name], uID)
-
 
     # def registerActionResponse(self, signal, callback):
     #     pass
@@ -90,6 +89,6 @@ class dataMapper:
             # print "@@@@@@@@ array signal @@@@@@@@\n", data
             returnData['data'] = data.tolist()
         else:
-            returnData['data'] = json.dumps(data)
+            returnData['data'] = data
 
         return returnData
