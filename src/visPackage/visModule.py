@@ -19,6 +19,7 @@ import time
 #global app/socketio for decorator access
 app = Flask(__name__)
 socketio = SocketIO(app)
+dataManager = socketioManager()
 
 class textEntailVisModule:
     # def init(self):
@@ -30,6 +31,8 @@ class textEntailVisModule:
     # between attention, prediction, and the input
     def addData(self, data):
         self.data = data
+        dataManager.setData("predictions", data[0]['pred']);
+        dataManager.setData("predictionsHighlight", 1);
 
     def addPredictions(self, predictions):
         pass
@@ -68,10 +71,7 @@ class textEntailVisModule:
     # envoke callback when the server is running
     @socketio.on('message', namespace='/app')
     def parsingMessage(msg):
-        # if registry:
-        # registry.parsingMessage(msg
-        socketioManager.receiveFromClient(msg)
-        pass
+        dataManager.receiveFromClient(msg)
 
     def show(self):
         # delay

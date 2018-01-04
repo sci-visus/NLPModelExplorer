@@ -41,12 +41,15 @@ class baseComponent {
         var msg = {
             "type": "setData",
             "name": name,
-            "data": data
+            "data": data,
+            "id": this._divTag
         };
         socket.emit('message', msg)
     }
 
     parseMessage(msg) {
+        console.log(msg);
+
         // console.log("\nparse message in base class\n", msg);
         switch (msg['type']) {
             case 'data':

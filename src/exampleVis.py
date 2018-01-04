@@ -2,7 +2,7 @@ from visPackage import *
 
 
 data = [{
- "id":1,
+ "index":1,
  "src": "Two women are embracing while holding to go packages .\n",
  "targ": ["The sisters are hugging goodbye while holding to go packages after just eating lunch .\n",
           "The ses are hugging goodbye while holding to go packages after just eating lunch .\n",
@@ -41,4 +41,5 @@ modelVis = textEntailVisModule()
 modelVis.addData(data)
 
 #open browser for visualization
-modelVis.show()
+# modelVis.show()
+modelVis.startServer()
