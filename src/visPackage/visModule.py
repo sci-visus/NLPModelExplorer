@@ -20,7 +20,45 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 dataManager = socketioManager()
 
-class textEntailVisModule:
+#################### server control ######################
+class visModule:
+    @app.route('/')
+    def index():
+        return app.send_static_file('index.html')
+
+    # @app.route("/getData", methods=['POST', 'GET'])
+    # def queryData():
+    #     requestJson = request.get_json()
+    #     return
+
+    @app.route('/<name>')
+    def views(name):
+        return {
+            'prediction_view': app.send_static_file('viewTemplates/prediction_view.mst'),
+            'attention_view': app.send_static_file('viewTemplates/template_view.mst'),
+            'sentence_view': app.send_static_file('viewTemplates/sentence_view.mst')
+        }.get(name)
+
+    # envoke callback when the server is running
+    @socketio.on('message', namespace='/app')
+    def parsingMessage(msg):
+        dataManager.receiveFromClient(msg)
+
+    def show(self):
+        # delay
+        # time.sleep(60)
+
+        url = 'http://localhost:5050'
+        threading.Timer(2.0, lambda: webbrowser.open(url, new=0) ).start()
+
+        socketio.run(app, host='localhost',port=5050, debug=True)
+        # webbrowser.open('http://localhost:5000', new=2)
+
+    def startServer(self):
+        socketio.run(app, host='localhost',port=5050, debug=True)
+
+############## specialized vis modules ################
+class textEntailVisModule(visModule):
     def __init__(self):
         self.index = 0
 
@@ -57,38 +95,11 @@ class textEntailVisModule:
         self.sentenceModelEvaluationHook = callback
 
 
-    #################### server control ######################
-    @app.route('/')
-    def index():
-        return app.send_static_file('index.html')
+class slabVisModule(visModule):
+    """visualize 1D slab of high-dimensional function"""
+    def __init__(self, arg):
+        super(visModule, self).__init__()
+        self.arg = arg
 
-    # @app.route("/getData", methods=['POST', 'GET'])
-    # def queryData():
-    #     requestJson = request.get_json()
-    #     return
-
-    @app.route('/<name>')
-    def views(name):
-        return {
-            'prediction_view': app.send_static_file('viewTemplates/prediction_view.mst'),
-            'attention_view': app.send_static_file('viewTemplates/template_view.mst'),
-            'sentence_view': app.send_static_file('viewTemplates/sentence_view.mst')
-        }.get(name)
-
-    # envoke callback when the server is running
-    @socketio.on('message', namespace='/app')
-    def parsingMessage(msg):
-        dataManager.receiveFromClient(msg)
-
-    def show(self):
-        # delay
-        # time.sleep(60)
-
-        url = 'http://localhost:5050'
-        threading.Timer(2.0, lambda: webbrowser.open(url, new=0) ).start()
-
-        socketio.run(app, host='localhost',port=5050, debug=True)
-        # webbrowser.open('http://localhost:5000', new=2)
-
-    def startServer(self):
-        socketio.run(app, host='localhost',port=5050, debug=True)
+    def hookModelEvaluator(evaluator):
+        self.evaluater = evaluator

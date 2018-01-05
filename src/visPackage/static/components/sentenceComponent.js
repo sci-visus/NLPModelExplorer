@@ -1,14 +1,11 @@
 /*
-
-
+Display sentences and apply perturbation to the sentences
 */
 
 class sentenceComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
         this.subscribeDatabyNames(["predictionsHighlight", "sentences"]);
-        // this.subscribeDatabyNames(["predictionsHighlight"]);
-        // this.subscribeDatabyNames(["sentences"]);
     }
 
     draw() {

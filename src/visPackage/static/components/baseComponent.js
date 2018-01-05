@@ -30,7 +30,8 @@ class baseComponent {
 
     subscribeDatabyNames(names) {
         if (!Array.isArray(names)) {
-            console.log("Error: input need to be a list of names\n")
+            console.log("Error: input need to be a list of names\n");
+            return;
         }
 
         for (var i = 0; i < names.length; i++) {

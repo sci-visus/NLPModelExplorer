@@ -8,8 +8,6 @@ class predictionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
         this.subscribeDatabyNames(["predictionsHighlight", "predictions"]);
-        // this.subscribeDatabyNames(["predictions"]);
-        // this.subscribeDatabyNames(["predictionsHighlight"]);
 
         this.margin = {
             top: 25,
@@ -17,32 +15,13 @@ class predictionComponent extends baseComponent {
             bottom: 25,
             left: 25
         };
-
-        // this.draw();
     }
 
 
     draw() {
         // console.log(this.data);
         this._updateWidthHeight();
-
         this.svg = d3.select(this.div + "triangle");
-
-        // const xScale = d3.scaleLinear()
-        //     .domain([this.margin.left, this.width])
-        //     .range([0, this.width]);
-        //
-        // // illustrate top/bottom margins
-        // const yScale = d3.scaleLinear()
-        //     .domain([this.margin.top, this.height])
-        //     .range([0, this.height]);
-
-        // const label = svg.append("g")
-        //     .attr("class", "label");
-
-        // var trianglePoints = xScale(30) + ' ' + yScale(30) + ', ' + xScale(
-        //     330) + ' ' + yScale(30) + ', ' + xScale(180) + ' ' + yScale(
-        //     260);
 
         //entailment
         //neutral, Contradiction, Entailment
