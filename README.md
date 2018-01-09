@@ -9,7 +9,7 @@
 - The code was extensively modified from Harvard NLP's reimplimentation of Ankur Parikh's decomposable attention model https://github.com/harvardnlp/decomp-attn
 
 ## Setup
-- Please install numpy, torch, h5py
+- Please install numpy, pytorch, h5py
 - For data files, please refer to those data in master branch
 
 ### 1. Training
