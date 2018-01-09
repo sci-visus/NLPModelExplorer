@@ -2,7 +2,7 @@
 
 ### This branch is a reimplementation of the master branch using Pytorch
 
-### First thins first, here is the TODO:
+### Fist thins fist, here is the TODO:
    - fit to visualization interface
 
 ## Intro
