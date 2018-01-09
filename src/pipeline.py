@@ -34,17 +34,11 @@ class Pipeline(torch.nn.Module):
 
 		if opt.attention == 'local':
 			self.attention = LocalAttention(opt, shared)
-		elif opt.attention == 'labeled_local':
-			self.attention = LabeledLocalAttention(opt, shared)
-		elif opt.attention == 'labeled_local_hard':
-			self.attention = LabeledLocalHardAttention(opt, shared)
 		else:
 			raise Exception('unrecognized attention: {0}'.format(opt.attention))
 
 		if opt.classifier == 'local':
 			self.classifier = LocalClassifier(opt, shared)
-		elif opt.classifier == 'labeled_local':
-			self.classifier = LabeledLocalClassifier(opt, shared)
 		else:
 			raise Exception('unrecognized classifier: {0}'.format(opt.classifier))
 
@@ -61,12 +55,14 @@ class Pipeline(torch.nn.Module):
 		self.attention.apply(self.weight_init_callback)
 		self.classifier.apply(self.weight_init_callback)
 
+
 	# init weight form a pretrained model
 	#	will recursively pass down network subgraphs accordingly
 	def init_weight_from(self, m):
 		self.encoder.init_weight_from(m.encoder)
 		self.attention.init_weight_from(m.attention)
 		self.classifier.init_weight_from(m.classifier)
+
 
 	def forward(self, sent1, sent2):
 		shared = self.shared
@@ -148,15 +144,16 @@ def overfit():
 	sys.path.insert(0, '../attention/')
 
 	opt = Holder()
-	opt.gpuid = 1
+	opt.gpuid = -1
 	opt.word_vec_size = 3
 	opt.hidden_size = 4
 	opt.dropout = 0.0
 	opt.num_att_labels = 1
 	opt.num_labels = 3
+	opt.constr = ''
 	opt.encoder = 'proj'
-	opt.attention = 'labeled_local_hard'
-	opt.classifier = 'labeled_local'
+	opt.attention = 'local'
+	opt.classifier = 'local'
 	opt.learning_rate = 0.05
 	opt.param_init = 0.01
 	shared = Holder()
