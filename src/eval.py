@@ -92,7 +92,13 @@ def main(args):
 
 	# build model
 	embeddings = WordVecLookup(opt)
-	pipeline = torch.load('{0}.pt'.format(opt.load_file))
+	pipeline = Pipeline(opt, shared)
+
+	# instead of directly using the pretrained model, copy parameters into a fresh new model
+	#	this allows post-training customization
+	print('initializing from pretrained model, might have warnings if code has been changed...')
+	pretrained = torch.load('{0}.pt'.format(opt.load_file))
+	pipeline.init_weight_from(pretrained)
 	if opt.gpuid != -1:
 		embeddings.cuda()
 		pipeline = pipeline.cuda()
