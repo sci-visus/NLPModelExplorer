@@ -38,6 +38,13 @@ class LocalAttention(torch.nn.Module):
 		self.hidden_size = opt.hidden_size
 
 
+	def init_weight_from(a):
+		for i in [1,4]:
+			self.f[i].weight.data.copy_(a.f[i].weight.data)
+			if self.f[i].bias is not None and a.f[i].bias is not None:
+				self.f[i].bias.data.copy_(a.f[i].bias.data)
+
+
 	def forward(self, sent1, sent2):
 		self.update_context()
 

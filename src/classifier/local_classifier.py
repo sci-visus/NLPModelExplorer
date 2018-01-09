@@ -46,6 +46,18 @@ class LocalClassifier(torch.nn.Module):
 			nn.Linear(opt.hidden_size, opt.num_labels),
 			nn.LogSoftmax(1))
 
+	def init_weight_from(c):
+		for i in [1,4]:
+			self.g[i].weight.data.copy_(c.g[i].weight.data)
+			if self.g[i].bias is not None and c.g[i].bias is not None:
+				self.g[i].bias.data.copy_(c.g[i].bias.data)
+
+		for i in [1,4,6]:
+			self.h[i].weight.data.copy_(c.h[i].weight.data)
+			if self.h[i].bias is not None and c.h[i].bias is not None:
+				self.h[i].bias.data.copy_(c.h[i].bias.data)
+
+
 	def forward(self, sent1, sent2, att1, att2):
 		self.update_context()
 
