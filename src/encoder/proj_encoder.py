@@ -28,7 +28,7 @@ class ProjEncoder(torch.nn.Module):
 		self.dropout = opt.dropout
 		self.shared = shared
 
-	def init_weight_from(e):
+	def init_weight_from(self, e):
 		self.proj.weight.data.copy_(e.proj.weight.data)
 		if self.proj.bias is not None and e.proj.bias is not None:
 			self.proj.bias.data.copy_(e.proj.bias.data)

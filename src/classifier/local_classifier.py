@@ -46,7 +46,7 @@ class LocalClassifier(torch.nn.Module):
 			nn.Linear(opt.hidden_size, opt.num_labels),
 			nn.LogSoftmax(1))
 
-	def init_weight_from(c):
+	def init_weight_from(self, c):
 		for i in [1,4]:
 			self.g[i].weight.data.copy_(c.g[i].weight.data)
 			if self.g[i].bias is not None and c.g[i].bias is not None:

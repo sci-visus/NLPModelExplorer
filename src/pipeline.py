@@ -58,11 +58,11 @@ class Pipeline(torch.nn.Module):
 
 	# init weight form a pretrained model
 	#	will recursively pass down network subgraphs accordingly
-	def init_weight_from(m):
+	def init_weight_from(self, m):
 		self.encoder.init_weight_from(m.encoder)
 		self.attention.init_weight_from(m.attention)
 		self.classifier.init_weight_from(m.classifier)
-		
+
 
 	def forward(self, sent1, sent2):
 		shared = self.shared
