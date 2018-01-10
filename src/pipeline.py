@@ -11,10 +11,7 @@ from join_table import *
 from holder import *
 from proj_encoder import *
 from local_attention import *
-from labeled_local_attention import *
-from labeled_local_hard_attention import *
 from local_classifier import *
-from labeled_local_classifier import *
 from torch.autograd import Variable
 import numpy as np
 from optimizer import *
