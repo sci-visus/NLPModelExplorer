@@ -1,4 +1,6 @@
 from visPackage import *
+from modelInterface import *
+from sentenceGenerator import *
 
 data = [{
  "index":1,
@@ -32,8 +34,13 @@ data = [{
 }]
 
 
+model = modelInterface(data="../data/snli_1.0-val.hdf5", wordVec="../data/glove.hdf5", model="local_200_parikh")
+gen = sentenceGenerator()
+
 modelVis = textEntailVisModule()
 modelVis.setData(data)
+modelVis.setPredictionHook(model.predict)
+modelVis.setSentencePerturbationHook(gen.perturb_noun_in_sentence)
 
 # modelVis.callbackPredictionChange()
 #open browser for visualization
