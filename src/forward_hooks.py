@@ -65,6 +65,10 @@ def print_att_soft2(opt, shared, m):
 # this register all hooks defined
 #	hooks are called according to opt.forward_hooks (a list of function names)
 def run_forward_hooks(opt, shared, m):
+	if opt.forward_hooks == '':
+		return
+
+		
 	hooks = {}
 	hooks['print_att_soft1'] = print_att_soft1
 	hooks['print_att_soft2'] = print_att_soft2
