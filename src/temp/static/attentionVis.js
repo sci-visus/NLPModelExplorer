@@ -52,12 +52,22 @@ function draw_Attention_matrix(para){
 	let rectw = 60, recth = 30;
 	let width = col * rectw;
 	let height = row * recth;
-	let X = 200, Y = 100, xpadding = 50, ypadding = 20;
+	let X = 800, Y = 400, xpadding = 50, ypadding = 20;
 	let colorscale = d3.interpolateRdBu;//d3.scaleLinear().domain([1, 0]).range(['white', 'red']);//
 
+	//clean canvas
 	$('#canvas').html('');
 
-	canvas = d3.select('#canvas').append('svg').attr('width', width * 1.8).attr('height', height * 2);
+	canvas = d3.select('#canvas').append('svg').attr('width', 3000).attr('height', 3000);
+	
+	
+	//draw top targ sentence parser tree
+	draw_sen_parser_tree(canvas.append('g'), X, 50, para.sen1_tree, true); 
+	draw_sen_parser_tree(canvas.append('g'), 50, Y, para.sen2_tree, false);
+	
+	
+	
+	//draw heatmap
 	canvas.append('g').selectAll('.collabeltext')
 		.data(sen2)
 		.enter()
@@ -115,6 +125,7 @@ function draw_Attention_matrix(para){
 	linearGradient.append('stop')
 			.attr('offset', '100%')
 			.attr('stop-color', colorscale(1));
+			
 	canvas.append('rect')
 		.attr('x', X + (col + 1) * rectw)
 		.attr('y', Y )
@@ -124,6 +135,100 @@ function draw_Attention_matrix(para){
 	
 	$('#result_label').html('result:'+para.label)
 		
+}
+
+function draw_sen_parser_tree(canvas, x, y, tree, isTarg){
+	
+	//check whether is middle node of leaf of tree
+	if(typeof(tree) == 'string'){
+		let w = 60,
+		    h = 30;
+		canvas.selectAll('.treenode').data([tree]).enter().append('rect')
+			.attr('x', x)
+			.attr('y', y)
+			.attr('rx', 5)
+			.attr('ry', 5)
+			.attr('width', w)
+			.attr('height', h)
+			.style('fill', 'white')
+			.style("stroke", 'gray')
+			.style("stroke-width", 1);
+		canvas.selectAll('.treenode_text').data([tree]).enter().append('text')
+			.text(d=>{return d;})
+			.attr('x', d=>{return x + w/2})
+			.attr('y', y + h/2)
+		        .attr("text-anchor", "middle")
+		        .attr("dominant-baseline", "central")
+		        .style('font-size', 8);
+		return isTarg?w:30;
+	}
+	else{
+		//next level tree
+		let key = Object.keys(tree);
+		if(isTarg){
+			let w = 0,
+			h = 20;
+			//check whether current node is leave of middle node
+			for(let i = 0; i < tree[key].length; i++)
+				w += draw_sen_parser_tree(canvas.append('g'), x + w, y + h, tree[key][i], isTarg);
+			
+			canvas.selectAll('.treenode').data([key]).enter().append('rect')
+				.attr('x', (d, i)=>{return x + i * w;})
+				.attr('y', y)
+				.attr('rx', 5)
+				.attr('ry', 5)
+				.attr('width', w)
+				.attr('height', h)
+				.style('fill', 'white')
+				.style("stroke", 'gray')
+				.style("stroke-width", 1);
+			
+			canvas.selectAll('.treenode_text').data([key]).enter().append('text')
+				.text(d=>{return d;})
+				.attr('x', (d, i)=>{return x + w/2})
+				.attr('y', y + h/2)
+		        	.attr("text-anchor", "middle")
+		        	.attr("dominant-baseline", "central")
+		        	.style('font-size', 8);
+			return w;
+		}else{
+			let h = 0,
+			w = 60;
+			for(let i = 0; i < tree[key].length; i++){
+				//check whether current node is leave of middle node
+				h += draw_sen_parser_tree(canvas.append('g'), x + 60, y + h, tree[key][i], isTarg);
+			
+			}
+			canvas.selectAll('.treenode').data([key]).enter().append('rect')
+				.attr('x', (d, i)=>{return x + i * w;})
+				.attr('y', y)
+				.attr('rx', 5)
+				.attr('ry', 5)
+				.attr('width', w)
+				.attr('height', h)
+				.style('fill', 'white')
+				.style("stroke", 'gray')
+				.style("stroke-width", 1);
+		
+			canvas.selectAll('.treenode_text').data([key]).enter().append('text')
+				.text(d=>{return d;})
+				.attr('x', (d, i)=>{return x + w/2})
+				.attr('y', y + h/2)
+	        		.attr("text-anchor", "middle")
+	        		.attr("dominant-baseline", "central")
+	        		.style('font-size', 8);
+			return h;
+		}
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
 }
 
 function bindingEvent(){
@@ -148,7 +253,6 @@ function bindingEvent(){
 		load_data({'index':index, 'sen1':sen1, 'sen2':sen2}, draw_Attention_matrix);
 	});
 }
-
 
 bindingEvent();
 load_sentences(init_vis)

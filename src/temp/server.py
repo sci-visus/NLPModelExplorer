@@ -38,19 +38,27 @@ def getData():
     sen2 = rjson['sen2']
     index = str(rjson['index'])
 
+    #get prediction label 
     label = '../../data/snli_1.0/label-dev.txt'
     with open(label) as f:
         labels = f.readlines()
 
-    file = h5py.File('../dev_ali.hdf5', 'r')
+    #get attention matrix
+    file = h5py.File('../val_att.hdf5', 'r')    
     matrix = []
     for item in file[index]:
-        print item
         matrix.extend(item.tolist())
 
-    print file[index]
+    #get sentence parse tree
+    src_sen_tree = json.load(open('../../data/snli_1.0/src-dev.json'))
+    targ_sen_tree = json.load(open('../../data/snli_1.0/targ-dev.json'))
 
-    result = {'sen1':sen1.strip().split(' '), 'sen2': sen2.strip().split(' '), 'matrix':matrix, 'label':labels[int(index)]}
+    result = {'sen1':sen1.strip().split(' ')}
+    result['sen1_tree'] = targ_sen_tree[index] 
+    result['sen2'] = sen2.strip().split(' ') 
+    result['sen2_tree'] = src_sen_tree[index]
+    result['matrix'] = matrix
+    result['label'] = labels[int(index)]
     return json.dumps(result)
 
 if __name__ == '__main__':
