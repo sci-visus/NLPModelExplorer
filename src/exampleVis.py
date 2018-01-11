@@ -36,6 +36,7 @@ data = [{
 
 model = modelInterface(data="../data/snli_1.0-val.hdf5", wordVec="../data/glove.hdf5", model="local_200_parikh")
 gen = sentenceGenerator()
+exit()
 
 modelVis = textEntailVisModule()
 modelVis.setData(data)
