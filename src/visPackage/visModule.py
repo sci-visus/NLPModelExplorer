@@ -90,9 +90,11 @@ class textEntailVisModule(visModule):
     def setGradientUpdateHook(self, callback):
         self.gradientUpdateHook = callback
 
-
-    def setSentenceModelEvaluationHook(self, callback):
-        self.sentenceModelEvaluationHook = callback
+    def setSentencePerturbationHook(self, callback):
+        self.sentencePerturbationHook = callback
+        
+    def setPredictionHook(self, callback):
+        self.predictionHook = callback
 
 
 class slabVisModule(visModule):
