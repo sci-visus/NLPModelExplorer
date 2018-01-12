@@ -65,7 +65,7 @@ class predictionComponent extends baseComponent {
 
     updateSelection() {
         if (Object.keys(this.data).length !== 0) {
-            // console.log(this.data);
+            console.log(this.data);
             var data = this.data['predictions'];
             var index = this.data['predictionsHighlight']
 

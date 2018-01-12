@@ -8,7 +8,7 @@ var namespace = '/app'; //global namespace
 var socket = io.connect('http://' + document.domain + ':' + location.port +
     namespace);
 
-console.log(document.domain, location.port);
+// console.log(document.domain, location.port);
 
 class baseComponent {
     constructor(uuid) {

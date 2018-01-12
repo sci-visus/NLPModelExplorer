@@ -42,7 +42,7 @@ class visModule:
     # envoke callback when the server is running
     @socketio.on('message', namespace='/app')
     def parsingMessage(msg):
-        dataManager.receiveFromClient(msg)
+        return dataManager.receiveFromClient(msg)
 
     def show(self):
         # delay
@@ -92,7 +92,7 @@ class textEntailVisModule(visModule):
 
     def setSentencePerturbationHook(self, callback):
         self.sentencePerturbationHook = callback
-        
+
     def setPredictionHook(self, callback):
         self.predictionHook = callback
 

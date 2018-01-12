@@ -34,16 +34,18 @@ data = [{
 }]
 
 
-model = modelInterface(data="../data/snli_1.0-val.hdf5", wordVec="../data/glove.hdf5", model="local_200_parikh")
+# model = modelInterface(data="../data/snli_1.0-val.hdf5", wordVec="../data/glove.hdf5", model="local_200_parikh")
 gen = sentenceGenerator()
-exit()
+# ps = gen.perturbSentence("A woman eat an apple.")
+# print ps
+# exit()
 
 modelVis = textEntailVisModule()
 modelVis.setData(data)
-modelVis.setPredictionHook(model.predict)
-modelVis.setSentencePerturbationHook(gen.perturb_noun_in_sentence)
+# modelVis.setPredictionHook(model.predict)
+# modelVis.setSentencePerturbationHook(gen.perturb_noun_in_sentence)
 
 # modelVis.callbackPredictionChange()
 #open browser for visualization
-# modelVis.show()
-modelVis.startServer()
+modelVis.show()
+# modelVis.startServer()
