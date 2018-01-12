@@ -89,9 +89,10 @@ class modelInterface:
 
     	# loading data
     	data = Data(opt, opt.data)
-        print data
+        # print data
     	acc, loss = evaluate(opt, shared, embeddings, pipeline, data)
     	print('Val: {0:.4f}, Loss: {0:.4f}'.format(acc, loss))
+        exit()
 
     #evaluate model
     def predict(sentencePair):

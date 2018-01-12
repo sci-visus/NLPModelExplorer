@@ -20,7 +20,7 @@
 ### 2. Evaluation
   `python eval.py --gpuid -1 --data ../data/snli_1.0-val.hdf5 --word_vecs ../data/glove.hdf5 --encoder proj --attention local --classifier local --dropout 0.0 --load_file local_200_parikh`
   
-   Using the pretrained model to do evaluation on val set. Expect to see `Val: 0.8335, Loss: 0.8335`
+   Using the pretrained model to do evaluation on val set. Expect to see `Val: 0.8335, Loss: 0.4407`
    
   
 ### 3. Attention Printing
