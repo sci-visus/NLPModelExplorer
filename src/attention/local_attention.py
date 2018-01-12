@@ -37,7 +37,6 @@ class LocalAttention(torch.nn.Module):
 		self.dropout = opt.dropout
 		self.hidden_size = opt.hidden_size
 
-
 	def init_weight_from(self, a):
 		for i in [1,4]:
 			self.f[i].weight.data.copy_(a.f[i].weight.data)
@@ -73,6 +72,7 @@ class LocalAttention(torch.nn.Module):
 		self.score_view2.dims = (batch_l * sent_l2, sent_l1)
 		self.score_unview1.dims = (batch_l, sent_l1, sent_l2)
 		self.score_unview2.dims = (batch_l, sent_l2, sent_l1)
+
 
 
 

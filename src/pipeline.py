@@ -52,14 +52,13 @@ class Pipeline(torch.nn.Module):
 		self.attention.apply(self.weight_init_callback)
 		self.classifier.apply(self.weight_init_callback)
 
-
 	# init weight form a pretrained model
 	#	will recursively pass down network subgraphs accordingly
 	def init_weight_from(self, m):
 		self.encoder.init_weight_from(m.encoder)
 		self.attention.init_weight_from(m.attention)
 		self.classifier.init_weight_from(m.classifier)
-
+		
 
 	def forward(self, sent1, sent2):
 		shared = self.shared
@@ -71,86 +70,27 @@ class Pipeline(torch.nn.Module):
 
 
 	# call this explicitly
-	def update_context(self, batch_ex_idx, batch_l, sent_l1, sent_l2):
+	def update_context(self, batch_ex_idx, batch_l, sent_l1, sent_l2, res_map=None):
 		self.shared.batch_ex_idx = batch_ex_idx
 		self.shared.batch_l = batch_l
 		self.shared.sent_l1 = sent_l1
 		self.shared.sent_l2 = sent_l2
+		self.shared.res_map = res_map
 
-
-def profile():
-	sys.path.insert(0, '../attention/')
-
-	opt = Holder()
-	opt.word_vec_size = 3
-	opt.hidden_size = 4
-	opt.dropout = 0.0
-	opt.num_labels = 3
-	opt.encoder = 'proj'
-	opt.attention = 'local'
-	opt.classifier = 'local'
-	opt.learning_rate = 0.05
-	opt.param_init = 0.01
-	shared = Holder()
-	shared.batch_l = 2
-	shared.sent_l1 = 5
-	shared.sent_l2 = 8
-	shared.input1 = Variable(torch.randn(shared.batch_l, shared.sent_l1, opt.word_vec_size), True)
-	shared.input2 = Variable(torch.randn(shared.batch_l, shared.sent_l2, opt.word_vec_size), True)
-	gold = Variable(torch.from_numpy(np.random.randint(opt.num_labels, size=shared.batch_l)), False)
-
-	# build network
-	m = Pipeline(opt, shared)
-	m.init_weight()
-	criterion = torch.nn.NLLLoss(size_average=False)
-	optim = Adagrad(m, opt)
-
-	# update batch info
-	shared.batch_l = 2
-	shared.sent_l1 = 5
-	shared.sent_l2 = 8
-
-	# run network
-	shared.out = m(shared.input1, shared.input2)
-	loss = criterion(shared.out, gold)
-	print(shared.out)
-	print(loss)
-	print(m)
-	for i, p in enumerate(m.parameters()):
-		print(p.data)
-
-	print(m.state_dict())
-
-	assert(False)
-
-
-	for i in xrange(300):
-		print('epoch: {0}'.format(i+1))
-
-		shared.out = m(shared.input1, shared.input2)
-		loss = criterion(shared.out, gold)
-		print('y\': {0}'.format(shared.out.exp()))
-		print('y*: {0}'.format(gold))
-		print('loss: {0}'.format(loss))
-
-		m.zero_grad()
-		loss.backward()
-		optim.step(shared)
 
 def overfit():
 	sys.path.insert(0, '../attention/')
 
 	opt = Holder()
-	opt.gpuid = -1
+	opt.gpuid = 1
 	opt.word_vec_size = 3
 	opt.hidden_size = 4
 	opt.dropout = 0.0
 	opt.num_att_labels = 1
 	opt.num_labels = 3
-	opt.constr = ''
 	opt.encoder = 'proj'
-	opt.attention = 'local'
-	opt.classifier = 'local'
+	opt.attention = 'labeled_local_hard'
+	opt.classifier = 'labeled_local'
 	opt.learning_rate = 0.05
 	opt.param_init = 0.01
 	shared = Holder()
