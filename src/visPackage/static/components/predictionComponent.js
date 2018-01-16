@@ -15,8 +15,9 @@ class predictionComponent extends baseComponent {
             bottom: 25,
             left: 25
         };
-    }
 
+        this.draw();
+    }
 
     draw() {
         // console.log(this.data);
@@ -33,21 +34,27 @@ class predictionComponent extends baseComponent {
             // .attr("class", "trilabel")
             .attr("x", 112 - 20)
             .attr("y", -2)
-            .text("Neutral");
+            .text("Neutral")
+            .style("font-size", "14px")
+            .style("fill", "grey");
 
         //neutral
         label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 0 - 10)
             .attr("y", 194 + 12)
-            .text("Contradiction");
+            .text("Contradiction")
+            .style("font-size", "14px")
+            .style("fill", "grey");
 
         //contradiction
         label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 224 - 55)
             .attr("y", 194 + 12)
-            .text("Entailment");
+            .text("Entailment")
+            .style("font-size", "14px")
+            .style("fill", "grey");
         // updateData(sdata, 0);
 
         this.svg.attr("width", this.pwidth)

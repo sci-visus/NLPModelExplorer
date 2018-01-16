@@ -9,7 +9,7 @@
                 <label class="input-group-text" for="inputGroupSelect01">Examples</label>
             </div>
 
-            <select id="{{id}}selectTarg" class="custom-select">
+            <select id="{{id}}selectExample" class="custom-select">
             </select>
         </div>
 

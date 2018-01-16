@@ -5,7 +5,9 @@ Display sentences and apply perturbation to the sentences
 class sentenceComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["predictionsHighlight", "currentPair"]);
+        this.subscribeDatabyNames(["predictionsHighlight", "sentenceList",
+            "currentPair"
+        ]);
 
         //setup UI
         d3.select(this.div + "perturbTarget").on("click", this.perturbTarget
@@ -15,17 +17,41 @@ class sentenceComponent extends baseComponent {
     }
 
     draw() {
-
         if (this.data["sentenceList"] !== undefined) {
-            // d3.selet()
+            // console.log("sentenceList:", this.data["sentenceList"]);
+
+            d3.select(this.div + "selectExample")
+                .on("change", this.onChangeOriginalPair.bind(this));
+            var options = d3.select(this.div + "selectExample")
+                .selectAll('option')
+                .data(this.data["sentenceList"]).enter()
+                .append('option')
+                .text(function(d) {
+                    return d["index"] + "-" + d["src"] + "/" + d["targ"];
+                })
+                .property("value", (d, i) => i);
         }
 
         //update currentPair display
         if (this.data["currentPair"] !== undefined) {
             var currentPair = this.data['currentPair'];
-            d3.select(this.div + "src").property("value", currentPair[0]);
-            d3.select(this.div + "targ").property("value", currentPair[1]);
+            this.updateDisplayedPair(currentPair);
         }
+    }
+
+    onChangeOriginalPair() {
+        var index = Number(d3.select(this.div + "selectExample").property(
+            'value'));
+        // console.log(index);
+        var currentPair = [this.data["sentenceList"][index]["src"],
+            this.data["sentenceList"][index]["targ"]
+        ];
+        this.updateDisplayedPair(currentPair);
+    }
+
+    updateDisplayedPair(pair) {
+        d3.select(this.div + "src").property("value", pair[0]);
+        d3.select(this.div + "targ").property("value", pair[1]);
     }
 
     parseFunctionReturn(msg) {

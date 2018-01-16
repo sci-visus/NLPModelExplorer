@@ -29,5 +29,5 @@ modelVis.setSentencePerturbationHook(gen.perturbSentence)
 
 # modelVis.callbackPredictionChange()
 #open browser for visualization
-modelVis.show()
-# modelVis.startServer()
+# modelVis.show()
+modelVis.startServer()
