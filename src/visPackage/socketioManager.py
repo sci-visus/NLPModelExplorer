@@ -12,19 +12,41 @@ class socketioManager:
         self.data = dict()
         self.namespace = "/app"
 
+    def setObject(self, bindedObject):
+        self.object = bindedObject
+
+    def callFunc(self, funcName, params):
+        func = getattr(self.object,funcName)
+        #params is a dict for storing function parameters
+        return func(**params)
+
     #receive from client
     def receiveFromClient(self, msg):
         print msg
+        uid = msg["uid"]
         #parse
         messageType = msg['type']
         if messageType == 'setData':
-            self.setData(msg["name"], msg["data"], msg["uid"])
+            self.setData(msg["name"], msg["data"], uid)
         elif messageType == 'subscribeData':
-            self.subscribeData(msg["name"], msg["uid"])
+            self.subscribeData(msg["name"], uid)
+        elif messageType == "call":
+            returnVal = self.callFunc(msg["func"], msg["params"])
+            self.sendFuncReturn(msg["func"], returnVal, uid)
 
     def sendToClient(self, uID, json):
         # print "send to client:", uID
         emit(uID, json, namespace = self.namespace, broadcast=True)
+
+    def sendFuncReturn(self, func, data, uID):
+        mappedData = dataMapper.Py2Js(data)
+        # print "send to client:", data, " => ", mappedData
+        if mappedData:
+            msg = dict()
+            msg['type'] = "funcReturn"
+            msg['func'] = func
+            msg['data'] = mappedData
+            self.sendToClient(uID, msg)
 
     def sendDataToClient(self, name, data, uID):
         mappedData = dataMapper.Py2Js(data)
@@ -51,6 +73,9 @@ class socketioManager:
                     msg['name'] = name
                     msg['data'] = mappedData
                     self.sendToClient(id, msg)
+
+    def getData(self, name):
+        return self.data[name]
 
     def subscribeData(self, name, uID):
         # print name, uID

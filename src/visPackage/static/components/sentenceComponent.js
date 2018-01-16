@@ -5,52 +5,61 @@ Display sentences and apply perturbation to the sentences
 class sentenceComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["predictionsHighlight", "sentences"]);
+        this.subscribeDatabyNames(["predictionsHighlight", "currentPair"]);
+
+        //setup UI
+        d3.select(this.div + "perturbTarget").on("click", this.perturbTarget
+            .bind(this));
+        d3.select(this.div + "perturbSource").on("click", this.perturbSource
+            .bind(this));
     }
 
     draw() {
-        if (this.data["sentences"] !== undefined && this.data[
-                "predictionsHighlight"] !== undefined) {
-            var data = this.data['sentences'];
-            var index = Number(this.data["predictionsHighlight"]);
-            d3.select(this.div + "src").node().value = data["src"];
-            // console.log(d3.select(this.div + "src"));
-            d3.select(this.div + "targ").property("value", data["targ"][
-                index
-            ]);
+
+        if (this.data["sentenceList"] !== undefined) {
+            // d3.selet()
+        }
+
+        //update currentPair display
+        if (this.data["currentPair"] !== undefined) {
+            var currentPair = this.data['currentPair'];
+            d3.select(this.div + "src").property("value", currentPair[0]);
+            d3.select(this.div + "targ").property("value", currentPair[1]);
         }
     }
 
-    updateLabel(data, index) {
-        var texthtml = '<p class=\'label\'>' + "Source: " + data[0] +
-            '</p>\n';
-        if (data[2] != data[1])
-            texthtml += '<p class=\'label\'>' +
-            "Perturbed (Target): " +
-            data[1] +
-            '</p>';
-        texthtml += '<p class=\'label\'>' + "Target: " + data[2] +
-            '</p>\n';
-        // console.log(texthtml);
-        // d3.select("#textPair").html(texthtml);
+    parseFunctionReturn(msg) {
+        switch (msg['func']) {
+            case 'perturbSentence':
+                this.updatePerturbedSentences(msg["data"]);
+                break;
+                // case 'functionReturn':
+                //     this.parseFunctionReturn(msg);
+                //     return;
+        }
 
-        // svg.selectAll("circle")
-        //     .attr("r", 3)
-        //     .style("fill", "white");
-        //
-        // svg.select("#circle" + index)
-        //     .attr("r", 6)
-        //     .style("fill", "red");
-
-        //   label.selectAll(".label").remove();
-        //   label.selectAll(".label")
-        // .data(data)
-        // .enter()
-        // .append("text")
-        // .attr("class", "label")
-        // .text(d => d)
-        // .attr("x", 10)
-        // .attr("y", (d, i) => height * 0.8 + (i * 25))
-        // .attr("text-anchor", "left");
     }
+
+    updatePerturbedSentences(sentences) {
+        console.log(sentences);
+    }
+
+    perturbSource() {
+        console.log("perturb source\n");
+        if (this.data["currentPair"] !== undefined) {
+            this.callFunc("perturbSentence", {
+                "sentence": this.data["currentPair"][0]
+            });
+        }
+    }
+
+    perturbTarget() {
+        if (this.data["currentPair"] !== undefined) {
+            this.callFunc("perturbSentence", {
+                "sentence": this.data["currentPair"][1]
+            });
+        }
+    }
+
+
 }

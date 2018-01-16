@@ -22,6 +22,9 @@ dataManager = socketioManager()
 
 #################### server control ######################
 class visModule:
+    def __init__(self):
+        dataManager.setObject(self)
+
     @app.route('/')
     def index():
         return app.send_static_file('index.html')
@@ -58,9 +61,21 @@ class visModule:
         socketio.run(app, host='localhost',port=5050, debug=True)
 
 ############## specialized vis modules ################
+
+'''
+data organization structure
+    - sentenceList (list of pairs)
+    - currentPair (the current selected pair)
+    - allPairs (all current perturbed pairs)
+    - perturbedSource
+    - perturbedTarget
+    - prediction
+    - allPairsPrediction
+'''
 class textEntailVisModule(visModule):
     def __init__(self):
         self.index = 0
+        dataManager.setObject(self)
 
     # def init(self):
         # app = Flask(__name__)
@@ -69,18 +84,28 @@ class textEntailVisModule(visModule):
 
     # an sentence pair index (self.index) is used as handle for the correspondence
     # between attention, prediction, and the input
-    def setData(self, data):
-        self.data = data
-        dataManager.setData("predictions", self.data[self.index]['pred']);
-        dataManager.setData("predictionsHighlight", 0);
-        sentences = dict()
-        sentences['src'] = self.data[self.index]['src']
-        sentences['targ'] = self.data[self.index]['targ']
-        dataManager.setData("sentences", sentences)
+    def setSentenceExample(self, data):
+        sentenceList = []
+        for pair in data:
+            # dataManager.setData("predictions", self.data[self.index]['pred']);
+            # dataManager.setData("predictionsHighlight", 0);
+            sentence = dict()
+            sentence['index'] = pair['index']
+            sentence['src'] = pair['src']
+            sentence['targ'] = pair['targ']
+            sentenceList.append(sentence)
+        dataManager.setData("sentenceList", sentenceList)
+        dataManager.setData("currentPair", [data[0]['src'],data[0]['targ']])
 
     def setPredictions(self, predictions):
         dataManager.setData("predictions", predictions);
         dataManager.setData("predictionsHighlight", 0);
+
+    def setPerturbedSource(self, sentences):
+        dataManager.setData("perturbedSource", sentences)
+
+    def setPerturbedSource(self, sentences):
+        dataManager.setData("perturbedTarget", sentences)
 
     def setAttention(self, att):
         pass
@@ -96,12 +121,18 @@ class textEntailVisModule(visModule):
     def setPredictionHook(self, callback):
         self.predictionHook = callback
 
+    def predict(self):
+        sentencePair = dataManager.getData("currentPair")
+        predictionResult = self.predictionHook(sentencePair)
+        dataManager.setData("prediction", predictionResult)
 
-class slabVisModule(visModule):
-    """visualize 1D slab of high-dimensional function"""
-    def __init__(self, arg):
-        super(visModule, self).__init__()
-        self.arg = arg
+    def predictAll(self):
+        allPairs = dataManager.getData("allPairs")
+        predictionResults = []
+        for pair in allPairs:
+            predictionResult = self.predictionHook(pair)
+            predictionResults.append(predictionResult)
+        dataManager.setData("allPairsPrediction", predictionResults)
 
-    def hookModelEvaluator(evaluator):
-        self.evaluater = evaluator
+    def perturbSentence(self, sentence):
+        return self.sentencePerturbationHook(sentence)

@@ -1,4 +1,4 @@
-<div style="margin-top: 25px; margin-left:25px; width: 90%;" id='{{id}}'>
+<div style="margin-top: 25px; margin-left:25px; margin-right:25px" id='{{id}}'>
 
     <div class="form-group">
 
@@ -12,53 +12,40 @@
             <select id="{{id}}selectTarg" class="custom-select">
             </select>
         </div>
-        <p>
-
-
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <button class="btn btn-secondary" type="button">Perturb Source</button>
+                <label class="input-group-text">Source</label>
             </div>
-            <input type="text" class="form-control" placeholder="Source" aria-label="" aria-describedby="basic-addon1">
+            <input type="text" id="{{id}}src" class="form-control" placeholder="Source" aria-label="" aria-describedby="basic-addon1">
+
+            <div class="input-group-append">
+                <button class="btn btn-secondary" id="{{id}}perturbSource">Perturb</button>
+            </div>
+
             <div class="input-group-append">
                 <select id="{{id}}selectSource" class="custom-select">
-                    <option selected>Perturbed ...</option>
+                    <option selected> ... </option>
                 </select>
             </div>
         </div>
 
-            <!-- <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">Options</label>
-                </div>
-                <select id="{{id}}selectSource" class="custom-select">
-                </select>
-            </div> -->
-
-
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <button class="btn btn-secondary" type="button">Perturb Target</button>
+                <label class="input-group-text">Target</label>
             </div>
-            <input type="text" class="form-control" placeholder="Target" aria-label="" aria-describedby="basic-addon1">
+
+            <input type="text" id="{{id}}targ" class="form-control" placeholder="Target" aria-label="" aria-describedby="basic-addon1">
+
             <div class="input-group-append">
-                <select id="{{id}}selectSource" class="custom-select">
-                    <option selected>Perturbed ...</option>
+                <button class="btn btn-secondary" id="{{id}}perturbTarget">Perturb</button>
+            </div>
+            <div class="input-group-append">
+                <select id="{{id}}selectTarget" class="custom-select">
+                    <option selected> ... </option>
                 </select>
             </div>
         </div>
-
-            <!-- <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">Options</label>
-                </div>
-
-                <select id="{{id}}selectTarg" class="custom-select">
-                </select>
-            </div> -->
-
-
     </div>
 
 </div>

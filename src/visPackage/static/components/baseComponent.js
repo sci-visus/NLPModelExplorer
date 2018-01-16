@@ -46,6 +46,16 @@ class baseComponent {
         }
     }
 
+    callFunc(funcName, params) {
+        var msg = {
+            "type": "call",
+            "func": funcName,
+            "params": params,
+            "uid": this.uuid
+        };
+        socket.emit('message', msg);
+    }
+
     setData(name, data) {
         var msg = {
             "type": "setData",
@@ -54,7 +64,7 @@ class baseComponent {
             "uid": this.uuid
         };
         // console.log(msg);
-        socket.emit('message', msg)
+        socket.emit('message', msg);
     }
 
     parseMessage(msg) {
@@ -68,7 +78,14 @@ class baseComponent {
                 // case 'functionReturn':
                 //     this.parseFunctionReturn(msg);
                 //     return;
+            case 'funcReturn':
+                this.parseFunctionReturn(msg);
+                break;
         }
+    }
+
+    parseFunctionReturn(msg) {
+
     }
 
     updateData(msg) {
