@@ -1,10 +1,55 @@
 <div style="margin-top: 25px; margin-left:25px; width: 90%;" id='{{id}}'>
+
     <div class="form-group">
-      <label>Source:</label>
-      <input type="text" class="form-control" id="{{id}}src">
+
+        <div class="input-group mb-3">
+            <button class="btn btn-primary mr-2">Predict Current</button>
+
+            <button class="btn btn-primary mr-2">Predict All</button>
+            <div class="input-group-prepend ">
+                <label class="input-group-text" for="inputGroupSelect01">Examples</label>
+            </div>
+
+            <select id="{{id}}selectTarg" class="custom-select">
+            </select>
+        </div>
+        <p>
+
+
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="button">Perturb</button>
+                </div>
+                <input type="text" class="form-control" placeholder="Source" aria-label="" aria-describedby="basic-addon1">
+            </div>
+
+            <!-- <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                </div>
+                <select id="{{id}}selectSource" class="custom-select">
+                </select>
+            </div> -->
+
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="button">Perturb</button>
+                </div>
+                <input type="text" class="form-control" placeholder="Target" aria-label="" aria-describedby="basic-addon1">
+            </div>
+
+            <!-- <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                </div>
+
+                <select id="{{id}}selectTarg" class="custom-select">
+                </select>
+            </div> -->
+
+
     </div>
-    <div class="form-group">
-      <label>Target:</label>
-      <input type="text" class="form-control" id="{{id}}targ">
-    </div>
+
 </div>
