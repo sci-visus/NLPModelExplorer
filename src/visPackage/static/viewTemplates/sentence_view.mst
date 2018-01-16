@@ -3,9 +3,8 @@
     <div class="form-group">
 
         <div class="input-group mb-3">
-            <button class="btn btn-primary mr-2">Predict Current</button>
-
-            <button class="btn btn-primary mr-2">Predict All</button>
+            <button class="btn btn-primary mr-2" id="{{id}}Predict">Predict</button>
+            <button class="btn btn-primary mr-2" id="{{id}}PredictAll">Predict All</button>
             <div class="input-group-prepend ">
                 <label class="input-group-text" for="inputGroupSelect01">Examples</label>
             </div>
@@ -17,12 +16,17 @@
 
 
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary" type="button">Perturb</button>
-                </div>
-                <input type="text" class="form-control" placeholder="Source" aria-label="" aria-describedby="basic-addon1">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-secondary" type="button">Perturb Source</button>
             </div>
+            <input type="text" class="form-control" placeholder="Source" aria-label="" aria-describedby="basic-addon1">
+            <div class="input-group-append">
+                <select id="{{id}}selectSource" class="custom-select">
+                    <option selected>Perturbed ...</option>
+                </select>
+            </div>
+        </div>
 
             <!-- <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -33,12 +37,17 @@
             </div> -->
 
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary" type="button">Perturb</button>
-                </div>
-                <input type="text" class="form-control" placeholder="Target" aria-label="" aria-describedby="basic-addon1">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-secondary" type="button">Perturb Target</button>
             </div>
+            <input type="text" class="form-control" placeholder="Target" aria-label="" aria-describedby="basic-addon1">
+            <div class="input-group-append">
+                <select id="{{id}}selectSource" class="custom-select">
+                    <option selected>Perturbed ...</option>
+                </select>
+            </div>
+        </div>
 
             <!-- <div class="input-group mb-3">
                 <div class="input-group-prepend">
