@@ -1,3 +1,7 @@
+let attention_src_filter_node = [],
+    attention_targ_filter_node = [],
+    attention_para = null;
+
 function load_data(json, callback){
 	$.ajax({
 		url:'/_getData',
@@ -43,9 +47,11 @@ function init_vis(para){
 }
 
 function draw_Attention_matrix(para){
+	
+	attention_para = para;
 	let matrix = para.matrix,
-		sen1 = para.sen1.concat('\\n'),
-		sen2 = para.sen2.concat('\\n');
+		sen1 = [''].concat(para.sen1),
+		sen2 = [''].concat(para.sen2);
 
 	let row = sen1.length;
 	let col = sen2.length;
@@ -62,13 +68,13 @@ function draw_Attention_matrix(para){
 	
 	
 	//draw top targ sentence parser tree
-	draw_sen_parser_tree(canvas.append('g'), X, 50, para.sen1_tree, true); 
-	draw_sen_parser_tree(canvas.append('g'), 50, Y, para.sen2_tree, false);
+	draw_sen_parser_tree(canvas.append('g'), X + rectw, 50, para.sen1_tree.ROOT[0], true, 1); 
+	draw_sen_parser_tree(canvas.append('g'), 50, Y + recth, para.sen2_tree.ROOT[0], false, 1);
 	
 	
 	
 	//draw heatmap
-	canvas.append('g').selectAll('.collabeltext')
+	/*canvas.append('g').selectAll('.collabeltext')
 		.data(sen2)
 		.enter()
 		.append('text')
@@ -79,9 +85,9 @@ function draw_Attention_matrix(para){
 		.attr('y', Y-5)
 		.attr("font-family", "sans-serif")
 		.attr("font-size", "14px")
-		.attr("text-anchor", "middle");
+		.attr("text-anchor", "middle");*/
 	
-	canvas.append('g').selectAll('.rowlabeltext')
+	/*canvas.append('g').selectAll('.rowlabeltext')
 		.data(sen1)
 		.enter()
 		.append('text')
@@ -92,7 +98,7 @@ function draw_Attention_matrix(para){
 		})
 		.attr("font-family", "sans-serif")
 		.attr("font-size", "14px")
-		.attr("dominant-baseline", "central");
+		.attr("dominant-baseline", "central");*/
 	
 	canvas.append('g').selectAll('.attentionMatrixRect')
 		.data(matrix)
@@ -133,11 +139,13 @@ function draw_Attention_matrix(para){
 		.attr('height', row * recth)
 		.style('fill', 'url(#attention_heatmapg_gradient)');
 	
-	$('#result_label').html('result:'+para.label)
+	$('#result_label').html('result:'+para.label);
 		
 }
 
-function draw_sen_parser_tree(canvas, x, y, tree, isTarg){
+function draw_sen_parser_tree(canvas, x, y, tree, isTarg, depth){
+	//next level tree
+	let key = Object.keys(tree);
 	
 	//check whether is middle node of leaf of tree
 	if(typeof(tree) == 'string'){
@@ -163,14 +171,19 @@ function draw_sen_parser_tree(canvas, x, y, tree, isTarg){
 		return isTarg?w:30;
 	}
 	else{
-		//next level tree
-		let key = Object.keys(tree);
+		//render the tree in hierachical or horizontal
 		if(isTarg){
 			let w = 0,
-			h = 20;
-			//check whether current node is leave of middle node
-			for(let i = 0; i < tree[key].length; i++)
-				w += draw_sen_parser_tree(canvas.append('g'), x + w, y + h, tree[key][i], isTarg);
+			h = 20,
+			flag = attention_src_filter_node.indexOf(key+depth) == -1;
+			
+			if(flag){
+				//check whether current node is leave of middle node
+				for(let i = 0; i < tree[key].length; i++)
+					w += draw_sen_parser_tree(canvas.append('g'), x + w, y + h, tree[key][i], isTarg, depth+1);
+			}else{
+				w = 60;
+			}
 			
 			canvas.selectAll('.treenode').data([key]).enter().append('rect')
 				.attr('x', (d, i)=>{return x + i * w;})
@@ -179,12 +192,22 @@ function draw_sen_parser_tree(canvas, x, y, tree, isTarg){
 				.attr('ry', 5)
 				.attr('width', w)
 				.attr('height', h)
-				.style('fill', 'white')
+				.style('fill', flag?'white':'steelblue')
 				.style("stroke", 'gray')
-				.style("stroke-width", 1);
+				.style("stroke-width", 1)
+				.on('click', d=>{
+					//TODO: check whether the node in the filter_node and re-render the view
+					let index = attention_src_filter_node.indexOf(d+depth)
+					if(index >-1){
+						attention_src_filter_node.splice(index, 1);
+					}else{
+						attention_src_filter_node.push(d+depth);
+					}
+					update();
+				});
 			
 			canvas.selectAll('.treenode_text').data([key]).enter().append('text')
-				.text(d=>{return d;})
+				.text(d=>{return d[0];})
 				.attr('x', (d, i)=>{return x + w/2})
 				.attr('y', y + h/2)
 		        	.attr("text-anchor", "middle")
@@ -193,11 +216,16 @@ function draw_sen_parser_tree(canvas, x, y, tree, isTarg){
 			return w;
 		}else{
 			let h = 0,
-			w = 60;
-			for(let i = 0; i < tree[key].length; i++){
-				//check whether current node is leave of middle node
-				h += draw_sen_parser_tree(canvas.append('g'), x + 60, y + h, tree[key][i], isTarg);
-			
+			w = 60,
+			flag = attention_targ_filter_node.indexOf(key+depth) == -1;
+			if(flag){
+				for(let i = 0; i < tree[key].length; i++){
+					//check whether current node is leave of middle node
+					h += draw_sen_parser_tree(canvas.append('g'), x + 60, y + h, tree[key][i], isTarg, depth+1);
+				}
+			}
+			else{
+				h = 30;
 			}
 			canvas.selectAll('.treenode').data([key]).enter().append('rect')
 				.attr('x', (d, i)=>{return x + i * w;})
@@ -206,9 +234,19 @@ function draw_sen_parser_tree(canvas, x, y, tree, isTarg){
 				.attr('ry', 5)
 				.attr('width', w)
 				.attr('height', h)
-				.style('fill', 'white')
+				.style('fill', flag?'white':'steelblue')
 				.style("stroke", 'gray')
-				.style("stroke-width", 1);
+				.style("stroke-width", 1)
+				.on('click', d=>{
+					//TODO: check whether the node in the filter_node and re-render the view
+					let index = attention_targ_filter_node.indexOf(d+depth)
+					if(index >-1){
+						attention_targ_filter_node.splice(index, 1);
+					}else{
+						attention_targ_filter_node.push(d+depth);
+					}
+					update();
+				});
 		
 			canvas.selectAll('.treenode_text').data([key]).enter().append('text')
 				.text(d=>{return d;})
@@ -219,12 +257,80 @@ function draw_sen_parser_tree(canvas, x, y, tree, isTarg){
 	        		.style('font-size', 8);
 			return h;
 		}
+	}
+}
+
+//update the visualization base on current tree structure.
+function update(){
+	matrixAggregation();
+	//draw_Attention_matrix(attention_para);
+}
+
+
+function getAggregateIndexs(tree, filter_set, isAggregate, index, aggregateindex, depth){
+	let key = Object.keys(tree);
+	
+	if(typeof(tree) == 'string'){
+		index[0]++;
+		if(isAggregate)
+			aggregateindex.push(index[0]);
+	}else{
+		//aggregate all nodes under this node.
+		if(filter_set.indexOf(key+depth) > -1 && !isAggregate){
+			isAggregate = true;
+			let indexs = []
+			for(let i = 0; i < tree[key].length; i++){
+				getAggregateIndexs(tree[key][i], filter_set, isAggregate, index, indexs, depth+1);
+			}
+			if(indexs.length > 1)
+				aggregateindex.push(d3.extent(indexs));
+		}
+		else{
+			for(let i = 0; i < tree[key].length; i++){
+				getAggregateIndexs(tree[key][i], filter_set, isAggregate, index, aggregateindex, depth+1);
+			}
+		}
+	}
+}
+
+function matrixAggregation(){
+	let col_filter_index = [],
+	row_filter_index = [];
+	
+	getAggregateIndexs(attention_para.sen1_tree.ROOT[0], attention_src_filter_node, false, [-1], col_filter_index, 1);
+	getAggregateIndexs(attention_para.sen2_tree.ROOT[0], attention_targ_filter_node, false, [-1], row_filter_index, 1);
+	
+	let matrix = [],
+	row = attention_para.sen1.length + 1,
+	col = attention_para.sen2.length + 1;
+	
+	//aggregate col
+	for(let i = 0; i < attention_para.matrix.length; i++){
+		let index = i % col,
+		flag = false;
 		
-		
-		
+		for(let j = 0; j < col_filter_index.length; j++){
+			if(index==col_filter_index[j][0]){
+				let l = col_filter_index[j][1] - col_filter_index[j][0];
+				matrix.push(d3.max(attention_para.matrix.slice(i, l)));
+				i += l;
+				flag = true;
+				break;
+			}
+		}
+		//no aggregate element
+		if(!flag)
+			matrix.push(attention_para.matrix[i]);
 		
 	}
 	
+	//aggregate row
+	for(let i = 0; i < matrix.length; i++){
+		
+	}
+	
+	attention_para.matrix = matrix;
+	draw_Attention_matrix(attention_para)
 	
 	
 	
