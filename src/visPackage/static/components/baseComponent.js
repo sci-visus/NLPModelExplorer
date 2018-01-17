@@ -46,7 +46,7 @@ class baseComponent {
         }
     }
 
-    callFunc(funcName, params) {
+    callFunc(funcName, params = {}) {
         var msg = {
             "type": "call",
             "func": funcName,
@@ -57,6 +57,7 @@ class baseComponent {
     }
 
     setData(name, data) {
+        this.data[name] = data;
         var msg = {
             "type": "setData",
             "name": name,
