@@ -17,12 +17,26 @@ class sentenceComponent extends baseComponent {
             .bind(this));
         d3.select(this.div + "perturbSource").on("click", this.perturbSource
             .bind(this));
+
+
+        d3.select(this.div + "Predict").on("click", d => {
+            this.callFunc("predict");
+        });
+        d3.select(this.div + "PredictAll").on("click", d => {
+            //produce all combinations
+            this.callFunc("predictAll");
+        });
+
+        //update data when currentPair changes
+        d3.select(this.div + "src").on("change", this.onUpdateCurrentPair.bind(
+            this));
+        d3.select(this.div + "targ").on("change", this.onUpdateCurrentPair.bind(
+            this));
     }
 
     draw() {
         if (this.data["sentenceList"] !== undefined) {
             // console.log("sentenceList:", this.data["sentenceList"]);
-
             d3.select(this.div + "selectExample")
                 .on("change", this.onChangeOriginalPair.bind(this));
             var options = d3.select(this.div + "selectExample")
@@ -38,7 +52,8 @@ class sentenceComponent extends baseComponent {
         //update currentPair display
         if (this.data["currentPair"] !== undefined) {
             var currentPair = this.data['currentPair'];
-            this.updateDisplayedPair(currentPair);
+            d3.select(this.div + "src").property("value", currentPair[0]);
+            d3.select(this.div + "targ").property("value", currentPair[1]);
         }
     }
 
@@ -50,16 +65,24 @@ class sentenceComponent extends baseComponent {
             this.data["sentenceList"][index]["targ"]
         ];
         this.data["currentPair"] = currentPair;
-        this.updateDisplayedPair(currentPair);
+        d3.select(this.div + "src").property("value", currentPair[0]);
+        d3.select(this.div + "targ").property("value", currentPair[1]);
 
         //update rest of the views
         this.setData("currentPair", currentPair);
     }
 
-    updateDisplayedPair(pair) {
-        d3.select(this.div + "src").property("value", pair[0]);
-        d3.select(this.div + "targ").property("value", pair[1]);
+    onUpdateCurrentPair() {
+        var currentPair = [d3.select(this.div + "src").property("value"),
+            d3.select(this.div + "targ").property("value")
+        ];
+        this.setData("currentPair", currentPair);
     }
+
+    // updateDisplayedPair(pair) {
+    //     d3.select(this.div + "src").property("value", pair[0]);
+    //     d3.select(this.div + "targ").property("value", pair[1]);
+    // }
 
     parseFunctionReturn(msg) {
         switch (msg['func']) {
@@ -70,7 +93,6 @@ class sentenceComponent extends baseComponent {
                 //     this.parseFunctionReturn(msg);
                 //     return;
         }
-
     }
 
     updatePerturbedSentences(sentences) {
@@ -125,8 +147,6 @@ class sentenceComponent extends baseComponent {
             d3.select(selector)
                 .append("div")
                 .attr("class", "dropdown-menu");
-            // .attr("id", this.div + "dropdown");
-
         }
 
         //cleanup
@@ -154,6 +174,8 @@ class sentenceComponent extends baseComponent {
         // </div>
     }
 
+    ////////////////////// helper /////////////////////
+
     colorSentenceDiff(origin, perturbed) {
         var originList = origin.split(" ");
         var perturbedList = perturbed.split(" ");
@@ -163,7 +185,7 @@ class sentenceComponent extends baseComponent {
                 var word = perturbedList[i];
                 if (word !== originList[i] && word !== ".") {
                     // console.log(word, "-", originList[i]);
-                    word = "<span style=\"background:#00BFFF\">" + word +
+                    word = "<span style=\"background:#87CEFA\">" + word +
                         "</span>";
                 }
                 word += " "

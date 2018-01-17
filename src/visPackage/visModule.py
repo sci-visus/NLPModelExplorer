@@ -66,7 +66,8 @@ class visModule:
 data organization structure
     - sentenceList (list of pairs)
     - currentPair (the current selected pair)
-    - allPairs (all current perturbed pairs)
+    - allSourcePairs (all source pairs)
+    - allTargetPairs (all target pairs)
     - perturbedSource
     - perturbedTarget
     - prediction
