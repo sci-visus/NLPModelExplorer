@@ -9,6 +9,9 @@ class sentenceComponent extends baseComponent {
             "currentPair"
         ]);
 
+        this.isPerturbTarget = false;
+        this.isPerturbSource = false;
+
         //setup UI
         d3.select(this.div + "perturbTarget").on("click", this.perturbTarget
             .bind(this));
@@ -46,7 +49,11 @@ class sentenceComponent extends baseComponent {
         var currentPair = [this.data["sentenceList"][index]["src"],
             this.data["sentenceList"][index]["targ"]
         ];
+        this.data["currentPair"] = currentPair;
         this.updateDisplayedPair(currentPair);
+
+        //update rest of the views
+        this.setData("currentPair", currentPair);
     }
 
     updateDisplayedPair(pair) {
@@ -57,7 +64,7 @@ class sentenceComponent extends baseComponent {
     parseFunctionReturn(msg) {
         switch (msg['func']) {
             case 'perturbSentence':
-                this.updatePerturbedSentences(msg["data"]);
+                this.updatePerturbedSentences(msg["data"]["data"]);
                 break;
                 // case 'functionReturn':
                 //     this.parseFunctionReturn(msg);
@@ -67,12 +74,26 @@ class sentenceComponent extends baseComponent {
     }
 
     updatePerturbedSentences(sentences) {
-        console.log(sentences);
+        if (this.isPerturbSource) {
+            this.addDropdown(this.div + "srcInput", sentences, this.div +
+                "src");
+            this.isPerturbSource = false;
+        }
+
+        if (this.isPerturbTarget) {
+            this.addDropdown(this.div + "targInput", sentences, this.div +
+                "targ");
+            this.isPerturbTarget = false;
+        }
+
+        // console.log(sentences);
     }
 
     perturbSource() {
-        console.log("perturb source\n");
+        // console.log("perturb source\n");
+        // this.addDropdown(this.div + "srcInput");
         if (this.data["currentPair"] !== undefined) {
+            this.isPerturbSource = true;
             this.callFunc("perturbSentence", {
                 "sentence": this.data["currentPair"][0]
             });
@@ -81,11 +102,77 @@ class sentenceComponent extends baseComponent {
 
     perturbTarget() {
         if (this.data["currentPair"] !== undefined) {
+            this.isPerturbTarget = true;
             this.callFunc("perturbSentence", {
                 "sentence": this.data["currentPair"][1]
             });
         }
     }
 
+    addDropdown(selector, sentences, labelSelector) {
+        // console.log(sentences[0]);
+        if (d3.select(selector).select(".dropdown-toggle").empty()) {
+            // console.log("add Button");
+            d3.select(selector).append("button")
+                .attr("class",
+                    "btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                )
+                .attr("data-toggle", "dropdown")
+                .attr("aria-haspopup", "true")
+                .attr("aria-expanded", "false")
+                .append("span")
+                .attr("class", "sr-only");
+            d3.select(selector)
+                .append("div")
+                .attr("class", "dropdown-menu");
+            // .attr("id", this.div + "dropdown");
 
+        }
+
+        //cleanup
+        // console.log(menu);
+        var menu = d3.select(selector).select(".dropdown-menu");
+
+        menu.selectAll(".dropdown-item").remove();
+        menu.selectAll(".dropdown-item")
+            .data(sentences)
+            .enter()
+            .append("a")
+            .attr("class", "dropdown-item")
+            .html(d => this.colorSentenceDiff(sentences[0], d))
+            .on("click", (d, i) => {
+                //update sentence edit box
+                d3.select(labelSelector).property("value", d);
+            });
+
+        /////////////////// reference /////////////////
+        // <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        //   <span class="sr-only">Toggle Dropdown</span>
+        // </button>
+        // <div class="dropdown-menu" id="{{id}}selectTarget">
+        //   <a class="dropdown-item" href="#">Action</a>
+        // </div>
+    }
+
+    colorSentenceDiff(origin, perturbed) {
+        var originList = origin.split(" ");
+        var perturbedList = perturbed.split(" ");
+        if (originList.length === perturbedList.length) {
+            var outputStr = "";
+            for (var i = 0; i < originList.length; i++) {
+                var word = perturbedList[i];
+                if (word !== originList[i] && word !== ".") {
+                    // console.log(word, "-", originList[i]);
+                    word = "<span style=\"background:#00BFFF\">" + word +
+                        "</span>";
+                }
+                word += " "
+
+                outputStr += word;
+            }
+            // <span style="color:#FF0000">some text</span>
+            return outputStr;
+        }
+        return perturbed;
+    }
 }

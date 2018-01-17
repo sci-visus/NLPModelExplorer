@@ -19,14 +19,8 @@
             </div>
             <input type="text" id="{{id}}src" class="form-control" placeholder="Source" aria-label="" aria-describedby="basic-addon1">
 
-            <div class="input-group-append">
-                <button class="btn btn-secondary" id="{{id}}perturbSource">Perturb</button>
-            </div>
-
-            <div class="input-group-append">
-                <select id="{{id}}selectSource" class="custom-select">
-                    <option selected> ... </option>
-                </select>
+            <div class="input-group-append" id="{{id}}srcInput">
+                <button type="button" id="{{id}}perturbSource" class="btn btn-outline-secondary">Perturb</button>
             </div>
         </div>
 
@@ -37,14 +31,10 @@
 
             <input type="text" id="{{id}}targ" class="form-control" placeholder="Target" aria-label="" aria-describedby="basic-addon1">
 
-            <div class="input-group-append">
-                <button class="btn btn-secondary" id="{{id}}perturbTarget">Perturb</button>
+            <div class="input-group-append" id="{{id}}targInput">
+                <button type="button" id="{{id}}perturbTarget" class="btn btn-outline-secondary">Perturb</button>
             </div>
-            <div class="input-group-append">
-                <select id="{{id}}selectTarget" class="custom-select">
-                    <option selected> ... </option>
-                </select>
-            </div>
+
         </div>
     </div>
 

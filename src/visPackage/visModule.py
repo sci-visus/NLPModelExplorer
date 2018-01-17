@@ -95,7 +95,7 @@ class textEntailVisModule(visModule):
             sentence['targ'] = pair['targ']
             sentenceList.append(sentence)
         dataManager.setData("sentenceList", sentenceList)
-        dataManager.setData("currentPair", [data[0]['src'],data[0]['targ']])
+        dataManager.setData("currentPair", [data[0]['src'], data[0]['targ']])
 
     def setPredictions(self, predictions):
         dataManager.setData("predictions", predictions);
@@ -135,4 +135,5 @@ class textEntailVisModule(visModule):
         dataManager.setData("allPairsPrediction", predictionResults)
 
     def perturbSentence(self, sentence):
-        return self.sentencePerturbationHook(sentence)
+        perturbed = self.sentencePerturbationHook(sentence)
+        return [sentence] + perturbed
