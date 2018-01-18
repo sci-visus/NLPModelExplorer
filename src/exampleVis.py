@@ -24,7 +24,7 @@ def randomPredict(pair):
     pred["entailment"] = rnum[2]
     return pred
 
-# model = modelInterface(data="../data/snli_1.0-val.hdf5", wordVec="../data/glove.hdf5", model="local_200_parikh")
+# model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/glove.hdf5", model="local_200_parikh")
 gen = sentenceGenerator()
 # ps = gen.perturbSentence("A woman eat an apple.")
 # print ps

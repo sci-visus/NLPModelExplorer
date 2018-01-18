@@ -28,10 +28,10 @@ from eval import pick_label, evaluate
 
 class modelInterface:
     #setup model
-    def __init__(self, data, wordVec, model, encoder="proj", attention="local",
+    def __init__(self, wordDict, wordVec, model, encoder="proj", attention="local",
                 classifier="local", dropout=0.0):
         # import argparse
-    	# build model
+        # build model
         '''
             Namespace(att_output='',
             attention='local',
@@ -57,7 +57,7 @@ class modelInterface:
         opt.attention='local'
         opt.classifier='local'
         opt.constr=''
-        opt.data = data
+        opt.data = '../data/snli_1.0-val.hdf5' #validation dataset
         opt.dropout = dropout
         opt.encoder = encoder
         opt.fix_word_vecs=1
@@ -71,32 +71,53 @@ class modelInterface:
         opt.seed=3435
         opt.word_vec_size=300
         opt.word_vecs=wordVec
+        self.wordDictName = wordDict
+        #read the wordDict
 
         #evaluate
-
         shared = Holder()
-    	embeddings = WordVecLookup(opt)
-    	pipeline = Pipeline(opt, shared)
-    	pretrained = torch.load('{0}.pt'.format(opt.load_file))
+        embeddings = WordVecLookup(opt)
+        self.embeddings = embeddings
+        pipeline = Pipeline(opt, shared)
+        pretrained = torch.load('{0}.pt'.format(opt.load_file))
 
-    	# instead of directly using the pretrained model, copy parameters into a fresh new model
-    	#	this allows post-training customization
-    	print('initializing from pretrained model, might have warnings if code has been changed...')
-    	pipeline.init_weight_from(pretrained)
-    	if opt.gpuid != -1:
-    		embeddings.cuda()
-    		pipeline = pipeline.cuda()
+        # instead of directly using the pretrained model, copy parameters into a fresh new model
+        #	this allows post-training customization
+        print('initializing from pretrained model, might have warnings if code has been changed...')
+        pipeline.init_weight_from(pretrained)
+        if opt.gpuid != -1:
+            embeddings.cuda()
+            pipeline = pipeline.cuda()
 
-    	# loading data
-    	data = Data(opt, opt.data)
+        # loading data
+        data = Data(opt, opt.data)
         # print data
-    	acc, loss = evaluate(opt, shared, embeddings, pipeline, data)
-    	print('Val: {0:.4f}, Loss: {0:.4f}'.format(acc, loss))
-        exit()
+        acc, loss = evaluate(opt, shared, embeddings, pipeline, data)
+        print('Val: {0:.4f}, Loss: {0:.4f}'.format(acc, loss))
+        # exit()
+
+    def mapToToken(self, sentence):
+        token = [1,2]
+        return token
 
     #evaluate model
-    def predict(sentencePair):
-        p = [0.1, 0.3, 0.6]
+    def predict(self, sentencePair):
+        #map to token
+        sourceSen = sentencePair[0]
+        targetSen = sentencePair[1]
+        source = self.mapToToken(sourceSen)
+        target = self.mapToToken(targetSen)
+
+        wv_idx1 = Variable(source, requires_grad=False)
+        wv_idx2 = Variable(target, requires_grad=False)
+
+        word_vecs1 = embeddings(wv_idx1)
+        word_vecs2 = embeddings(wv_idx2)
+
+        y_dist = m.forward(word_vecs1, word_vecs2)
+        print "prediction result:", y_dist
+
+        p = np.log(y_dist)
         pred = dict()
         pred["entail"] = p[0]
         pred["neutral"] = p[1]
