@@ -33,26 +33,62 @@ class sentenceComponent extends baseComponent {
     }
 
     draw() {
+        //add to sentence list
         if (this.data["sentenceList"] !== undefined) {
-            // console.log("sentenceList:", this.data["sentenceList"]);
-            d3.select(this.div + "selectExample")
-                .on("change", this.onChangeOriginalPair.bind(this));
-            var options = d3.select(this.div + "selectExample")
-                .selectAll('option')
-                .data(this.data["sentenceList"]).enter()
-                .append('option')
-                .text(function(d) {
-                    return d["index"] + "-" + d["src"] + "/" + d["targ"];
-                })
-                .property("value", (d, i) => i);
+            this.onReceiveSentenceList();
         }
-
         //update currentPair display
         if (this.data["currentPair"] !== undefined) {
-            var currentPair = this.data['currentPair'];
-            d3.select(this.div + "src").property("value", currentPair[0]);
-            d3.select(this.div + "targ").property("value", currentPair[1]);
+            this.onReceiveCurrentPair();
         }
+    }
+
+    parseDataUpdate(msg) {
+        super.parseDataUpdate(msg);
+
+        switch (msg['name']) {
+            case "sentenceList":
+                this.onReceiveSentenceList();
+                break;
+            case "currentPair":
+                // console.log(msg, this.data["currentPair"]);
+                this.onReceiveCurrentPair();
+                break;
+        }
+    }
+
+    parseFunctionReturn(msg) {
+        switch (msg['func']) {
+            case 'perturbSentence':
+                this.updatePerturbedSentences(msg["data"]["data"]);
+                break;
+                // case 'functionReturn':
+                //     this.parseFunctionReturn(msg);
+                //     return;
+        }
+    }
+
+
+    /////////////////// event handler /////////////////////
+    onReceiveSentenceList() {
+        // console.log("sentenceList:", this.data["sentenceList"]);
+        d3.select(this.div + "selectExample")
+            .on("change", this.onChangeOriginalPair.bind(this));
+        var options = d3.select(this.div + "selectExample")
+            .selectAll('option')
+            .data(this.data["sentenceList"]).enter()
+            .append('option')
+            .text(function(d) {
+                return d["index"] + "-" + d["src"] + "/" + d["targ"];
+            })
+            .property("value", (d, i) => i);
+    }
+
+    onReceiveCurrentPair() {
+        var currentPair = this.data['currentPair'];
+        // console.log("----------", currentPair);
+        d3.select(this.div + "src").property("value", currentPair[0]);
+        d3.select(this.div + "targ").property("value", currentPair[1]);
     }
 
     onChangeOriginalPair() {
@@ -75,22 +111,6 @@ class sentenceComponent extends baseComponent {
             d3.select(this.div + "targ").property("value")
         ];
         this.setData("currentPair", currentPair);
-    }
-
-    // updateDisplayedPair(pair) {
-    //     d3.select(this.div + "src").property("value", pair[0]);
-    //     d3.select(this.div + "targ").property("value", pair[1]);
-    // }
-
-    parseFunctionReturn(msg) {
-        switch (msg['func']) {
-            case 'perturbSentence':
-                this.updatePerturbedSentences(msg["data"]["data"]);
-                break;
-                // case 'functionReturn':
-                //     this.parseFunctionReturn(msg);
-                //     return;
-        }
     }
 
     updatePerturbedSentences(sentences) {

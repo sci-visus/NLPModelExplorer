@@ -92,12 +92,13 @@ class textEntailVisModule(visModule):
         for pair in data:
             # dataManager.setData("predictions", self.data[self.index]['pred']);
             # dataManager.setData("predictionsHighlight", 0);
-            sentence = dict()
-            sentence['index'] = pair['index']
-            sentence['src'] = pair['src']
-            sentence['targ'] = pair['targ']
-            sentenceList.append(sentence)
+            # sentence = dict()
+            # sentence['index'] = pair['index']
+            # sentence['src'] = pair['src']
+            # sentence['targ'] = pair['targ']
+            sentenceList.append(pair)
         dataManager.setData("sentenceList", sentenceList)
+        # print data[0]
         dataManager.setData("currentPair", [data[0]['src'], data[0]['targ']])
 
     def setPredictions(self, predictions):

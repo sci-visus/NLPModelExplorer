@@ -72,7 +72,7 @@ class baseComponent {
         // console.log("\nparse message in base class\n", msg);
         switch (msg['type']) {
             case 'data':
-                this.updateData(msg);
+                this.parseDataUpdate(msg);
                 break;
                 // case 'functionReturn':
                 //     this.parseFunctionReturn(msg);
@@ -87,12 +87,15 @@ class baseComponent {
 
     }
 
+    parseDataUpdate(msg) {
+        this.updateData(msg);
+    }
+
     updateData(msg) {
         var name = msg["name"];
         var data = msg["data"]["data"];
         this.data[name] = data;
-        this.draw();
-        // console.log(this.data);
+
     }
 
     ////////// implemented by individual component ////////
