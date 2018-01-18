@@ -15,7 +15,16 @@ exampleData = [{
 ]
 
 
-# model = modelInterface(data="../data/snli_1.0-val.hdf5", wordVec="../data/glove.hdf5", model="local_200_parikh")
+def randomPredict(pair):
+    rnum = np.random.random(3)
+    rnum = rnum/np.sum(rnum)
+    pred = dict()
+    pred["neutral"] = rnum[0]
+    pred["contradiction"] = rnum[1]
+    pred["entailment"] = rnum[2]
+    return pred
+
+# model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/glove.hdf5", model="local_200_parikh")
 gen = sentenceGenerator()
 # ps = gen.perturbSentence("A woman eat an apple.")
 # print ps
@@ -25,6 +34,7 @@ modelVis = textEntailVisModule()
 modelVis.setSentenceExample(exampleData)
 # modelVis.setData(initData)
 # modelVis.setPredictionHook(model.predict)
+modelVis.setPredictionHook(randomPredict)
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
 
 # modelVis.callbackPredictionChange()

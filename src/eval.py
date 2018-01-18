@@ -54,6 +54,7 @@ def evaluate(opt, shared, wv, m, data):
 
 	for i in xrange(data.size()):
 		data_name, source, target, batch_ex_idx, batch_l, source_l, target_l, label = data[i]
+		print "source, target: ", source, target
 
 		wv_idx1 = Variable(source, requires_grad=False)
 		wv_idx2 = Variable(target, requires_grad=False)
