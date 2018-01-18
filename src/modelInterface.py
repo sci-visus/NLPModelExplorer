@@ -71,39 +71,47 @@ class modelInterface:
         opt.seed=3435
         opt.word_vec_size=300
         opt.word_vecs=wordVec
-        
+
         #read the wordDict
-        self.train_tokens = {}
+        self.tokenMap = {}
         with open(wordDict, 'r+') as f:
             lines = f.readlines()
             for l in lines:
                 toks = l.split(" ")
-                self.train_tokens[toks[0]] = 1
+                self.tokenMap[toks[0]] = int(toks[1])
 
         #evaluate
-        shared = Holder()
+        self.shared = Holder()
         embeddings = WordVecLookup(opt)
         self.embeddings = embeddings
-        pipeline = Pipeline(opt, shared)
+        self.pipeline = Pipeline(opt, self.shared)
         pretrained = torch.load('{0}.pt'.format(opt.load_file))
 
         # instead of directly using the pretrained model, copy parameters into a fresh new model
         #	this allows post-training customization
         print('initializing from pretrained model, might have warnings if code has been changed...')
-        pipeline.init_weight_from(pretrained)
+        self.pipeline.init_weight_from(pretrained)
+
         if opt.gpuid != -1:
-            embeddings.cuda()
-            pipeline = pipeline.cuda()
+            self.embeddings.cuda()
+            self.pipeline = self.pipeline.cuda()
 
         # loading data
-        data = Data(opt, opt.data)
+        # data = Data(opt, opt.data)
         # print data
-        acc, loss = evaluate(opt, shared, embeddings, pipeline, data)
-        print('Val: {0:.4f}, Loss: {0:.4f}'.format(acc, loss))
+        # acc, loss = evaluate(opt, shared, embeddings, pipeline, data)
+        # print('Val: {0:.4f}, Loss: {0:.4f}'.format(acc, loss))
         # exit()
 
     def mapToToken(self, sentence):
-        token = [1,2]
+        tokenList = []
+        sentence = sentence.rstrip().split(" ")
+        for word in sentence:
+            tokenList.append(self.tokenMap[word.lower()])
+        #1XN array
+        # print tokenList
+        token = torch.from_numpy(np.asarray(tokenList).reshape(1, len(tokenList)))
+        print token
         return token
 
     #evaluate model
@@ -116,16 +124,30 @@ class modelInterface:
 
         wv_idx1 = Variable(source, requires_grad=False)
         wv_idx2 = Variable(target, requires_grad=False)
+        # Variable(torch.from_numpy(indices).cuda(), requires_grad=False)
 
-        word_vecs1 = embeddings(wv_idx1)
-        word_vecs2 = embeddings(wv_idx2)
+        word_vecs1 = self.embeddings(wv_idx1)
+        word_vecs2 = self.embeddings(wv_idx2)
 
-        y_dist = m.forward(word_vecs1, word_vecs2)
+        # update network parameters
+        # self.pipeline.update_context(0, 1, len(source), len(target))
+
+        y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
         print "prediction result:", y_dist
 
-        p = np.log(y_dist)
-        pred = dict()
-        pred["entail"] = p[0]
-        pred["neutral"] = p[1]
-        pred["contradict"] = p[2]
+        p = y_dist.exp()
+        # pred = dict()
+        pred = p.tolist()
+        # pred["entail"] = p[0]
+        # pred["neutral"] = p[1]
+        # pred["contradict"] = p[2]
         return pred
+
+    def attention(self, att_name="att_soft1"):
+        #get the current attention, this seems to be reading attention from file
+        batch_att = getattr(self.shared, att_name)
+        print('printing {0} for {1} examples...'.format(att_name, self.shared.batch_l))
+        for i in xrange(self.shared.batch_l):
+            ex_id = self.shared.batch_ex_idx[i]
+            att = batch_att.data[i, :, :]
+            print att

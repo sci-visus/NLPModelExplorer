@@ -84,7 +84,7 @@ class predictionComponent extends baseComponent {
         // this.draw();
     }
 
-    onUpdatePredict() {
+    onUpdatePrediction() {
         var data = [];
         data.push(this.data['prediction']);
         this.updatePredictDisplay(data);
