@@ -4,7 +4,7 @@ attention_para = null;
 
 
 let rectw = 40, 
-recth = 15,
+recth = 20,
 canvas = d3.select('#canvas').append('svg').attr('width', 3000).attr('height', 3000);
 
 
@@ -241,6 +241,8 @@ function Render(para){
 	draw_sentence_tree(tree_width+rectw, y , para.sen1_tree.ROOT[0], true, 1, tree_width, tree_height);
 	draw_sentence_tree(x, tree_height+recth, para.sen2_tree.ROOT[0], false, 1, tree_width, tree_height);
 	draw_attention_matrix(tree_width, tree_height, matrix, row, col);
+	
+	$('#result_label').html('result:'+para.label);
 }
 
 //aggregate matrix data base on current filter node
