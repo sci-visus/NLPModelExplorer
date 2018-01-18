@@ -71,8 +71,14 @@ class modelInterface:
         opt.seed=3435
         opt.word_vec_size=300
         opt.word_vecs=wordVec
-        self.wordDictName = wordDict
+        
         #read the wordDict
+        self.train_tokens = {}
+        with open(wordDict, 'r+') as f:
+            lines = f.readlines()
+            for l in lines:
+                toks = l.split(" ")
+                self.train_tokens[toks[0]] = 1
 
         #evaluate
         shared = Holder()

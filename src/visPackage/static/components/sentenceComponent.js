@@ -5,9 +5,7 @@ Display sentences and apply perturbation to the sentences
 class sentenceComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["predictionsHighlight", "sentenceList",
-            "currentPair"
-        ]);
+        this.subscribeDatabyNames(["sentenceList", "currentPair"]);
 
         this.isPerturbTarget = false;
         this.isPerturbSource = false;
@@ -97,12 +95,14 @@ class sentenceComponent extends baseComponent {
 
     updatePerturbedSentences(sentences) {
         if (this.isPerturbSource) {
+            this.setData("allSourcePairs", sentences);
             this.addDropdown(this.div + "srcInput", sentences, this.div +
                 "src");
             this.isPerturbSource = false;
         }
 
         if (this.isPerturbTarget) {
+            this.setData("allTargetPairs", sentences);
             this.addDropdown(this.div + "targInput", sentences, this.div +
                 "targ");
             this.isPerturbTarget = false;

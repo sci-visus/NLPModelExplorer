@@ -7,7 +7,9 @@ the triangle vis of the prediction result
 class predictionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["predictionsHighlight", "prediction"]);
+        this.subscribeDatabyNames(["allSourcePairs", "allTargetPairs",
+            "prediction", "allPairsPrediction"
+        ]);
 
         this.margin = {
             top: 25,
@@ -63,7 +65,6 @@ class predictionComponent extends baseComponent {
             .attr("y", 0);
 
         this.updateSelection();
-        console.log(this.data['prediction']);
     }
 
     resize() {
@@ -72,9 +73,22 @@ class predictionComponent extends baseComponent {
     }
 
     updateSelection() {
-        if (Object.keys(this.data).length !== 0) {
-            console.log(this.data);
-            var data = [this.data['prediction']];
+        if (this.data['prediction'] !== undefined || this.data[
+                "allPairsPrediction"] !== undefined) {
+            // console.log(this.data);
+            var data = [];
+            if (this.data["allPairsPrediction"] !== undefined) {
+                var allPairsPrediction = this.data["allPairsPrediction"];
+                console.log(allPairsPrediction);
+                for (var i = 0; i < allPairsPrediction.length; i++)
+                    for (var j = 0; j < allPairsPrediction[i].length; j++) {
+                        if (i >= j) {
+                            data.push(allPairsPrediction[i][j].concat([i, j]));
+                        }
+                    }
+            } else {
+                data.push(this.data['prediction']);
+            }
             // var index = this.data['predictionsHighlight']
 
             //neutral, Contradiction, Entailment
@@ -90,14 +104,14 @@ class predictionComponent extends baseComponent {
                         return "circle" + i;
                     })
                     .attr("cx", d => {
-                        return d["neutral"] * 112 + d["contradiction"] *
+                        return d[0] * 112 + d[1] *
                             0 +
-                            d["entailment"] * 224;
+                            d[2] * 224;
                     })
                     .attr("cy", d => {
-                        return d["neutral"] * 0 + d["contradiction"] *
+                        return d[0] * 0 + d[1] *
                             194 +
-                            d["entailment"] * 194;
+                            d[2] * 194;
                     })
                     .attr("r", (d, i) => {
                         if (i == 0) return 6;
@@ -111,15 +125,14 @@ class predictionComponent extends baseComponent {
                     .style("opacity", 0.7)
                     //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
                     .on("mouseover", (d, i) => {
-                        this.updatePredictionIndex(i);
+                        var source = this.data["allSourcePairs"][d[3]];
+                        var target = this.data["allTargetPairs"][d[4]];
+                        this.setData("currentPair", [
+                            source,
+                            target
+                        ]);
                     });
             }
-            // updateTargetList(sdata[sIndex]["targ"], sIndex);
-            // updateLabel(data, 0);
         }
-    }
-
-    updatePredictionIndex(index) {
-        // this.setData("predictionsHighlight", index);
     }
 }
