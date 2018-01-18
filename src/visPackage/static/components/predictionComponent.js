@@ -7,7 +7,7 @@ the triangle vis of the prediction result
 class predictionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["predictionsHighlight", "predictions"]);
+        this.subscribeDatabyNames(["predictionsHighlight", "prediction"]);
 
         this.margin = {
             top: 25,
@@ -63,6 +63,7 @@ class predictionComponent extends baseComponent {
             .attr("y", 0);
 
         this.updateSelection();
+        console.log(this.data['prediction']);
     }
 
     resize() {
@@ -73,13 +74,13 @@ class predictionComponent extends baseComponent {
     updateSelection() {
         if (Object.keys(this.data).length !== 0) {
             console.log(this.data);
-            var data = this.data['predictions'];
-            var index = this.data['predictionsHighlight']
+            var data = [this.data['prediction']];
+            // var index = this.data['predictionsHighlight']
 
             //neutral, Contradiction, Entailment
             //(112,0) (0,194) (224,194)
             if (data !== undefined) {
-                // console.log(data);
+                console.log(data);
                 this.svg.selectAll("circle").remove();
                 this.svg.selectAll("circle")
                     .data(data)
@@ -103,7 +104,7 @@ class predictionComponent extends baseComponent {
                         else return 3;
                     })
                     .style("fill", (d, i) => {
-                        if (i == 0) return 'red';
+                        if (i == 0) return 'grey';
                         else return 'white';
                     })
                     .style("stroke", 'black')
@@ -119,29 +120,6 @@ class predictionComponent extends baseComponent {
     }
 
     updatePredictionIndex(index) {
-        this.setData("predictionsHighlight", index);
-    }
-
-    updateTargetList(data, sIndex) {
-        var htmlList = '';
-        for (var i = 0; i < data.length; i++) {
-            if (i === 0)
-                htmlList += "<option value=" + i + " selected>" + data[i] +
-                "</option>";
-            else
-                htmlList += "<option value=" + i + ">" + data[i] +
-                "</option>";
-        }
-
-        // console.log(texthtml);
-        d3.select("#tList").html(htmlList);
-        d3.select("#tList").html(htmlList).on('change', d => {
-            var index = Number(d3.select("#tList").node().value);
-            updateLabel([sdata[sIndex]["src"], sdata[sIndex]["targ"]
-                [
-                    index
-                ], sdata[sIndex]["targ"][0]
-            ], index);
-        });
+        // this.setData("predictionsHighlight", index);
     }
 }
