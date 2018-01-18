@@ -46,7 +46,7 @@ function init_vis(para){
 	load_data({'index':0, 'sen1':s_sens[0], 'sen2':t_sens[0]}, draw_Attention_matrix);
 }
 
-function draw_Attention_matrix(para){
+function draw_Attention_matrix(matrix, row, col){
 	
 	attention_para = para;
 	let matrix = para.matrix,
@@ -64,7 +64,7 @@ function draw_Attention_matrix(para){
 	//clean canvas
 	$('#canvas').html('');
 
-	canvas = d3.select('#canvas').append('svg').attr('width', 3000).attr('height', 3000);
+	
 	
 	
 	//draw top targ sentence parser tree
@@ -196,7 +196,6 @@ function draw_sen_parser_tree(canvas, x, y, tree, isTarg, depth){
 				.style("stroke", 'gray')
 				.style("stroke-width", 1)
 				.on('click', d=>{
-					//TODO: check whether the node in the filter_node and re-render the view
 					let index = attention_src_filter_node.indexOf(d+depth)
 					if(index >-1){
 						attention_src_filter_node.splice(index, 1);
@@ -304,6 +303,10 @@ function matrixAggregation(){
 	row = attention_para.sen1.length + 1,
 	col = attention_para.sen2.length + 1;
 	
+	
+	console.log(col_filter_index);
+	console.log(row_filter_index);
+	
 	//aggregate col
 	for(let i = 0; i < attention_para.matrix.length; i++){
 		let index = i % col,
@@ -312,7 +315,7 @@ function matrixAggregation(){
 		for(let j = 0; j < col_filter_index.length; j++){
 			if(index==col_filter_index[j][0]){
 				let l = col_filter_index[j][1] - col_filter_index[j][0];
-				matrix.push(d3.max(attention_para.matrix.slice(i, l)));
+				matrix.push(d3.max(attention_para.matrix.slice(i, l+1)));
 				i += l;
 				flag = true;
 				break;
