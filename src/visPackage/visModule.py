@@ -27,6 +27,7 @@ class visModule:
 
     @app.route('/')
     def index():
+        # dataManager.clear()
         return app.send_static_file('index.html')
 
     # @app.route("/getData", methods=['POST', 'GET'])
@@ -66,12 +67,13 @@ class visModule:
 data organization structure
     - sentenceList (list of pairs)
     - currentPair (the current selected pair)
-    - allSourcePairs (all source pairs)
-    - allTargetPairs (all target pairs)
+    - allSourcePairs (all source pairs including the oringal)
+    - allTargetPairs (all target pairs including the oringal)
+    - allPairsPrediction (a matrix record the predict for all combination of pairs)
     - perturbedSource
     - perturbedTarget
-    - prediction
-    - allPairsPrediction
+    - prediction (the current prediction)
+    - predictionsHighlight (use the index to update currentPair display)
 '''
 class textEntailVisModule(visModule):
     def __init__(self):
@@ -90,12 +92,13 @@ class textEntailVisModule(visModule):
         for pair in data:
             # dataManager.setData("predictions", self.data[self.index]['pred']);
             # dataManager.setData("predictionsHighlight", 0);
-            sentence = dict()
-            sentence['index'] = pair['index']
-            sentence['src'] = pair['src']
-            sentence['targ'] = pair['targ']
-            sentenceList.append(sentence)
+            # sentence = dict()
+            # sentence['index'] = pair['index']
+            # sentence['src'] = pair['src']
+            # sentence['targ'] = pair['targ']
+            sentenceList.append(pair)
         dataManager.setData("sentenceList", sentenceList)
+        # print data[0]
         dataManager.setData("currentPair", [data[0]['src'], data[0]['targ']])
 
     def setPredictions(self, predictions):
@@ -128,12 +131,21 @@ class textEntailVisModule(visModule):
         dataManager.setData("prediction", predictionResult)
 
     def predictAll(self):
-        allPairs = dataManager.getData("allPairs")
-        predictionResults = []
-        for pair in allPairs:
-            predictionResult = self.predictionHook(pair)
-            predictionResults.append(predictionResult)
-        dataManager.setData("allPairsPrediction", predictionResults)
+        allSourcePairs = dataManager.getData("allSourcePairs")
+        allTargetPairs = dataManager.getData("allTargetPairs")
+        print "original s, t:"
+        print allSourcePairs[0]
+        print allTargetPairs[0]
+
+        allPairsPrediction = np.zeros( (len(allSourcePairs), len(allTargetPairs), 3) )
+        for i, source in enumerate(allSourcePairs):
+            for j, target in enumerate(allTargetPairs):
+                if i>=j:
+                    predResult = self.predictionHook([source, target])
+                    allPairsPrediction[i,j,:] = predResult
+                    allPairsPrediction[j,i,:] = predResult
+        # print allPairsPrediction
+        dataManager.setData("allPairsPrediction", allPairsPrediction)
 
     def perturbSentence(self, sentence):
         perturbed = self.sentencePerturbationHook(sentence)

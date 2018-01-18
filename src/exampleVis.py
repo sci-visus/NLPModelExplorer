@@ -18,11 +18,11 @@ exampleData = [{
 def randomPredict(pair):
     rnum = np.random.random(3)
     rnum = rnum/np.sum(rnum)
-    pred = dict()
-    pred["neutral"] = rnum[0]
-    pred["contradiction"] = rnum[1]
-    pred["entailment"] = rnum[2]
-    return pred
+    # pred = dict()
+    # pred["neutral"] = rnum[0]
+    # pred["contradiction"] = rnum[1]
+    # pred["entailment"] = rnum[2]
+    return rnum
 
 # model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/glove.hdf5", model="local_200_parikh")
 gen = sentenceGenerator()

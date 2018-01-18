@@ -12,6 +12,10 @@ class socketioManager:
         self.data = dict()
         self.namespace = "/app"
 
+    def clear(self):
+        self.data2ID = dict()
+        self.data = dict()
+
     def setObject(self, bindedObject):
         self.object = bindedObject
 
@@ -22,7 +26,7 @@ class socketioManager:
 
     #receive from client
     def receiveFromClient(self, msg):
-        print msg
+        # print msg
         uid = msg["uid"]
         #parse
         messageType = msg['type']
@@ -35,7 +39,7 @@ class socketioManager:
             self.sendFuncReturn(msg["func"], returnVal, uid)
 
     def sendToClient(self, uID, json):
-        # print "send to client:", uID
+        # print "send to client:", uID, json
         emit(uID, json, namespace = self.namespace, broadcast=True)
 
     def sendFuncReturn(self, func, data, uID):
@@ -63,7 +67,7 @@ class socketioManager:
         #propagate data update
         if name in self.data2ID.keys():
             for id in self.data2ID[name]:
-                print "setData:", id
+                # print "setData:", id
                 if id == uID:
                     continue
                 mappedData = dataMapper.Py2Js(data)
@@ -114,6 +118,7 @@ class dataMapper:
         elif isinstance(data, np.ndarray):
             # print "@@@@@@@@ array signal @@@@@@@@\n", data
             returnData['data'] = data.tolist()
+            # print returnData['data']
         else:
             returnData['data'] = data
 
