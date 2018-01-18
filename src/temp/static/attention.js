@@ -3,8 +3,8 @@ attention_targ_filter_node = [],
 attention_para = null;
 
 
-let rectw = 45, 
-recth = 20,
+let rectw = 40, 
+recth = 15,
 canvas = d3.select('#canvas').append('svg').attr('width', 3000).attr('height', 3000);
 
 
@@ -82,10 +82,22 @@ function draw_attention_matrix(x, y, matrix, row, col){
 	.attr('y', y)
 	.attr('width', 30)
 	.attr('height', row * recth)
-	.style('fill', 'url(#attention_heatmap_gradient)')	
+	.style('fill', 'url(#attention_heatmap_gradient)');
+	
+	//render color bar text
+	canvas.selectAll('.colorscalebartext').append('g').data([1, 0]).enter()
+	.append('text')
+	.attr('x', x + (col + 1) * rectw + rectw/2)	
+	.attr('y', (d,i)=>{
+		return i==0 ? y - recth: y + recth * (row + 1); 
+	})
+	.text(d=>{return d;})
+	.attr('text-anchor', 'middle')
+	.attr('dominant-baseline', 'central')
+	.style('font-size', 12);
 }
 
-function draw_sentence_tree(x, y, node, hOrv, depth){
+function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0){
 	
 	//whether the current node is leaf
 	if(typeof(node) == 'string'){
@@ -103,11 +115,11 @@ function draw_sentence_tree(x, y, node, hOrv, depth){
 		
 		canvas.selectAll('.treenode_text').data([node]).enter().append('text')
 		.text(d=>{return d;})
-		.attr('x', d=>{return x + rectw/2})
-		.attr('y', y + recth /2)
+		.attr('x', d=>{return hOrv?x + rectw/2:tree_width-rectw/2;})
+		.attr('y', hOrv?tree_height-recth/2:y + recth /2)
 		.attr('text-anchor', 'middle')
 		.attr('dominant-baseline', 'central')
-		.style('font-size', 12);
+		.style('font-size', 10);
 		
 		return hOrv?rectw:recth;//true is horizontal false is vertical
 	}
@@ -121,7 +133,7 @@ function draw_sentence_tree(x, y, node, hOrv, depth){
 			
 			if(flag){
 				for(let i = 0; i < node[key].length; i++)
-					w += draw_sentence_tree(x + w, y+recth, node[key][i], hOrv, depth+1);
+					w += draw_sentence_tree(x + w, y+recth, node[key][i], hOrv, depth+1, tree_width, tree_height);
 			}
 			//node
 			canvas.selectAll('.treenode').data([key]).enter().append('rect')
@@ -163,7 +175,7 @@ function draw_sentence_tree(x, y, node, hOrv, depth){
 			
 			if(flag){
 				for(let i = 0; i < node[key].length; i++){
-					h += draw_sentence_tree(x + rectw, y + h, node[key][i], hOrv, depth+1);
+					h += draw_sentence_tree(x + rectw, y + h, node[key][i], hOrv, depth+1, tree_width, tree_height);
 				}
 			}
 			
@@ -222,9 +234,13 @@ function Render(para){
 	
 	src_tree_height = getTreeHeight(para.sen1_tree.ROOT[0], attention_src_filter_node, 1);
 	targ_tree_height = getTreeHeight(para.sen2_tree.ROOT[0], attention_targ_filter_node, 1);
-	draw_sentence_tree(x + (targ_tree_height + 1) * rectw, y , para.sen1_tree.ROOT[0], true, 1);
-	draw_sentence_tree(x, y + (src_tree_height + 1) * recth, para.sen2_tree.ROOT[0], false, 1);
-	draw_attention_matrix(x + targ_tree_height * rectw, y + src_tree_height * recth, matrix, row, col);
+	
+	let tree_width = x + (targ_tree_height) * rectw,
+	tree_height = y + (src_tree_height) * recth;
+	
+	draw_sentence_tree(tree_width+rectw, y , para.sen1_tree.ROOT[0], true, 1, tree_width, tree_height);
+	draw_sentence_tree(x, tree_height+recth, para.sen2_tree.ROOT[0], false, 1, tree_width, tree_height);
+	draw_attention_matrix(tree_width, tree_height, matrix, row, col);
 }
 
 //aggregate matrix data base on current filter node
@@ -341,7 +357,6 @@ function getTreeHeight(node, filter_set, depth){
 		}
 	}
 }
-
 
 
 function bindingEvent(){
