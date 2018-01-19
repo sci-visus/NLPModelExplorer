@@ -1,5 +1,5 @@
 from visPackage import *
-from modelInterface import *
+# from modelInterface import *
 from sentenceGenerator import *
 
 exampleData = [{
@@ -50,5 +50,9 @@ modelVis.setSentencePerturbationHook(gen.perturbSentence)
 
 # modelVis.callbackPredictionChange()
 #open browser for visualization
+# modelVis.startServer()
+# model.train()
+# modelVis.closeServer()
+
 modelVis.show()
 # modelVis.startServer()

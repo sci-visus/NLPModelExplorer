@@ -46,12 +46,13 @@ class visModule:
         return dataManager.receiveFromClient(msg)
 
     def show(self):
-        url = 'http://localhost:5050'
-        threading.Timer(1.5, lambda: webbrowser.open(url, new=0) ).start()
+        # url = 'http://localhost:5050'
+        # threading.Timer(1.5, lambda: webbrowser.open(url, new=0) ).start()
+        #
+        # eventlet.wsgi.server(eventlet.listen(('localhost', 5050)), fApp)
 
-        eventlet.wsgi.server(eventlet.listen(('localhost', 5050)), fApp)
         # deploy as an eventlet WSGI server
-        # sio.start_background_task(self.startServer)
+        sio.start_background_task(self.startServer)
 
     # @staticmethod
     def startServer(self):
