@@ -10,15 +10,16 @@
 '''
 
 from flask import Flask
-from flask_socketio import send, emit, socketio, SocketIO, join_room, leave_room, close_room,disconnect
+import socketio
+import eventlet
 from socketioManager import *
 import webbrowser, threading
 import time
 
-#global app/socketio for decorator access
 app = Flask(__name__)
-socketio = SocketIO(app)
-dataManager = socketioManager()
+sio = socketio.Server()
+fApp = socketio.Middleware(sio, app)
+dataManager = socketioManager(sio)
 
 #################### server control ######################
 class visModule:
@@ -30,11 +31,6 @@ class visModule:
         # dataManager.clear()
         return app.send_static_file('index.html')
 
-    # @app.route("/getData", methods=['POST', 'GET'])
-    # def queryData():
-    #     requestJson = request.get_json()
-    #     return
-
     @app.route('/<name>')
     def views(name):
         return {
@@ -44,22 +40,23 @@ class visModule:
         }.get(name)
 
     # envoke callback when the server is running
-    @socketio.on('message', namespace='/app')
-    def parsingMessage(msg):
+    @sio.on('message', namespace='/app')
+    def parsingMessage(sid, msg):
+        # print sid, msg
         return dataManager.receiveFromClient(msg)
 
     def show(self):
-        # delay
-        # time.sleep(60)
-
         url = 'http://localhost:5050'
-        threading.Timer(2.0, lambda: webbrowser.open(url, new=0) ).start()
+        threading.Timer(1.5, lambda: webbrowser.open(url, new=0) ).start()
 
-        socketio.run(app, host='localhost',port=5050, debug=True)
-        # webbrowser.open('http://localhost:5000', new=2)
+        eventlet.wsgi.server(eventlet.listen(('localhost', 5050)), fApp)
+        # deploy as an eventlet WSGI server
+        # sio.start_background_task(self.startServer)
 
+    # @staticmethod
     def startServer(self):
-        socketio.run(app, host='localhost',port=5050, debug=True)
+        eventlet.wsgi.server(eventlet.listen(('localhost', 5050)), fApp)
+        # socketio.run(app, host='localhost',port=5050, debug=True)
 
 ############## specialized vis modules ################
 

@@ -86,7 +86,7 @@ class predictionComponent extends baseComponent {
 
     onUpdatePrediction() {
         var data = [];
-        data.push(this.data['prediction']);
+        data.push(this.data['prediction'].concat([0, 0]));
         this.updatePredictDisplay(data);
     }
 
@@ -139,12 +139,14 @@ class predictionComponent extends baseComponent {
                 .style("opacity", 0.7)
                 //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
                 .on("mouseover", (d, i) => {
-                    var source = this.data["allSourcePairs"][d[3]];
-                    var target = this.data["allTargetPairs"][d[4]];
-                    this.setData("currentPair", [
-                        source,
-                        target
-                    ]);
+                    if (this.data["allSourcePairs"] !== undefined) {
+                        var source = this.data["allSourcePairs"][d[3]];
+                        var target = this.data["allTargetPairs"][d[4]];
+                        this.setData("currentPair", [
+                            source,
+                            target
+                        ]);
+                    }
                 });
         }
 

@@ -24,12 +24,12 @@ def randomPredict(pair):
     # pred["entailment"] = rnum[2]
     return rnum
 
-model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/glove.hdf5", model="local_200_parikh")
+# model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/glove.hdf5", model="local_200_parikh")
 
 ################ test model interface #################
-print model.predict([exampleData[0]["src"], exampleData[0]["targ"]])
+# print model.predict([exampleData[0]["src"], exampleData[0]["targ"]])
 # print model.attention()
-exit()
+# exit()
 #######################################################
 
 gen = sentenceGenerator()
@@ -42,14 +42,13 @@ gen = sentenceGenerator()
 modelVis = textEntailVisModule()
 modelVis.setSentenceExample(exampleData)
 
-# modelVis.setData(initData)
-modelVis.setPredictionHook(model.predict)
-modelVis.setAttentionHook(model.attention)
+# modelVis.setPredictionHook(model.predict)
+# modelVis.setAttentionHook(model.attention)
 
-# modelVis.setPredictionHook(randomPredict)
+modelVis.setPredictionHook(randomPredict)
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
 
 # modelVis.callbackPredictionChange()
 #open browser for visualization
-# modelVis.show()
-modelVis.startServer()
+modelVis.show()
+# modelVis.startServer()

@@ -2,15 +2,16 @@
 Send and receive data between server and client using SocketIO
 '''
 from sets import Set
-from flask_socketio import send, emit, socketio, SocketIO, join_room, leave_room, close_room,disconnect
+import socketio
 import json
 import numpy as np
 
 class socketioManager:
-    def __init__(self):
+    def __init__(self, sio):
         self.data2ID = dict()
         self.data = dict()
         self.namespace = "/app"
+        self.sio = sio
 
     def clear(self):
         self.data2ID = dict()
@@ -40,7 +41,8 @@ class socketioManager:
 
     def sendToClient(self, uID, json):
         # print "send to client:", uID, json
-        emit(uID, json, namespace = self.namespace, broadcast=True)
+        self.sio.emit(uID, json, namespace = self.namespace, broadcast=True)
+        # emit(uID, json, namespace = self.namespace)
 
     def sendFuncReturn(self, func, data, uID):
         mappedData = dataMapper.Py2Js(data)
