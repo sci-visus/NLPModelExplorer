@@ -3,8 +3,8 @@ attention_targ_filter_node = [],
 attention_para = null;
 
 
-let rectw = 40, 
-recth = 20,
+let rectw = 50, 
+recth = 30,
 canvas = d3.select('#canvas').append('svg').attr('width', 3000).attr('height', 3000);
 
 
@@ -87,14 +87,14 @@ function draw_attention_matrix(x, y, matrix, row, col){
 	//render color bar text
 	canvas.selectAll('.colorscalebartext').append('g').data([1, 0]).enter()
 	.append('text')
-	.attr('x', x + (col + 1) * rectw + rectw/2)	
+	.attr('x', x + (col + 2) * rectw)	
 	.attr('y', (d,i)=>{
-		return i==0 ? y - recth: y + recth * (row + 1); 
+		return i==0 ? y: y + recth * row ; 
 	})
 	.text(d=>{return d;})
 	.attr('text-anchor', 'middle')
 	.attr('dominant-baseline', 'central')
-	.style('font-size', 12);
+	.style('font-size', 14);
 }
 
 function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0){
@@ -103,12 +103,12 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 	if(typeof(node) == 'string'){
 		//render node
 		canvas.selectAll('.treenode').data([node]).enter().append('rect')
-		.attr('x', x)
-		.attr('y', y)
+		.attr('x', d=>{return hOrv?x:tree_width - rectw;})
+		.attr('y', hOrv?tree_height - recth:y)
 		.attr('rx', 5)
 		.attr('ry', 5)
 		.attr('width', rectw)
-		.attr('heigth', recth)
+		.attr('height', recth)
 		.style('fill','white')
 		.style('stroke','gray')
 		.style('stroke-width', 1);
@@ -119,30 +119,62 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 		.attr('y', hOrv?tree_height-recth/2:y + recth /2)
 		.attr('text-anchor', 'middle')
 		.attr('dominant-baseline', 'central')
-		.style('font-size', 10);
+		.style('font-size', 12);
 		
 		return hOrv?rectw:recth;//true is horizontal false is vertical
 	}
 	else{
 		let key = Object.keys(node);
+		
+		var lineFunction = d3.line()
+    	    	.x(function(d) { return d[0]; })
+    	    	.y(function(d) { return d[1]; });
+		
 		//horizontal tree
 		if(hOrv){
 			//whether current node is filtered
 			let flag = attention_src_filter_node.indexOf(key+depth) == -1,
 			w = flag?0:rectw;//if the node is filter, stop draw the child node and w set 60
 			
+			//draw child node
+			let child_position = [];
+			//node is not filtered
 			if(flag){
-				for(let i = 0; i < node[key].length; i++)
-					w += draw_sentence_tree(x + w, y+recth, node[key][i], hOrv, depth+1, tree_width, tree_height);
+				for(let i = 0; i < node[key].length; i++){
+					sub_w = draw_sentence_tree(x + w, y+recth, node[key][i], hOrv, depth+1, tree_width, tree_height);
+					if(typeof(node[key][i]) == 'string')
+						child_position.push([x + w + sub_w/2, tree_height-recth]);
+					else
+						child_position.push([x + w + sub_w/2, y+recth]);
+					w += sub_w;
+				}
+				
+				
 			}
-			//node
-			canvas.selectAll('.treenode').data([key]).enter().append('rect')
-			.attr('x', (d, i)=>{return x + i * w})
-			.attr('y', y)
-			.attr('rx', 5)
-			.attr('ry', 5)
-			.attr('width', w)
-			.attr('height', recth)
+			//node is filtered
+			else{
+				//TODO:get the representitive node and plot it
+				
+			}
+			
+			//TODO: generate the path between parents node and child node
+			for(let i = 0; i < child_position.length; i++){
+				let path = []
+				path.push([x+w/2, y+recth/2]);
+				path.push(child_position[i]);
+				
+				canvas.append('path')
+				.attr("d", lineFunction(path))
+				.attr("stroke", "steelblue")
+				.attr("stroke-width", 2)
+				.attr("fill", "none");
+			}
+			
+			//draw node
+			canvas.selectAll('.treenode').data([key]).enter().append('circle')
+			.attr('cx', (d, i)=>{return x + w/2})
+			.attr('cy', y+recth/2)
+			.attr('r', recth/2)
 			.style('fill', flag?'white':'steelblue')
 			.style('stroke', 'gray')
 			.style('stroke-width', 1)
@@ -163,7 +195,8 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 			.attr('y', y + recth / 2)
 	        	.attr("text-anchor", "middle")
 	        	.attr("dominant-baseline", "central")
-	        	.style('font-size', 12);
+	        	.style('font-size', 12)
+			.style('pointer-events', 'none');;
 			
 			//return the horizontal space this node take
 			return w;
@@ -172,24 +205,47 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 			//whether current node is filtered
 			let flag = attention_targ_filter_node.indexOf(key+depth) == -1,
 			h = flag?0:recth;//if the node is filter, stop draw the child node and h set 30
+			let child_position = [];
 			
+			//node is not filtered
 			if(flag){
 				for(let i = 0; i < node[key].length; i++){
-					h += draw_sentence_tree(x + rectw, y + h, node[key][i], hOrv, depth+1, tree_width, tree_height);
+					sub_h = draw_sentence_tree(x + rectw, y + h, node[key][i], hOrv, depth+1, tree_width, tree_height);
+					
+					if(typeof(node[key][i]) == 'string')
+						child_position.push([tree_width-rectw, y + sub_h/2 + h]);
+					else
+						child_position.push([x + rectw + 10, y + sub_h/2 + h]);
+					
+					h += sub_h;
+				}
+				
+				//TODO: generate the path between parents node and child node
+				for(let i = 0; i < child_position.length; i++){
+					let path = []
+					path.push([x + rectw/2, y + h/2]);
+					path.push(child_position[i]);
+					
+					canvas.append('path')
+					.attr("d", lineFunction(path))
+					.attr("stroke", "steelblue")
+					.attr("stroke-width", 2)
+					.attr("fill", "none");
 				}
 			}
-			
+			//node is filtered
+			else{
+				//TODO:get the representitive node and plot it
+			}
 			//node
-			canvas.selectAll('.treenode').data([key]).enter().append('rect')
-			.attr('x', (d, i)=>{return x + i * rectw;})
-			.attr('y', y)
-			.attr('rx', 5)
-			.attr('ry', 5)
-			.attr('width', rectw)
-			.attr('height', h)
+			
+			canvas.selectAll('.treenode').data([key]).enter().append('circle')
+			.attr('cx', (d, i)=>{return x + rectw/2})
+			.attr('cy', y+h/2)
+			.attr('r', recth/2)
 			.style('fill', flag?'white':'steelblue')
-			.style("stroke", 'gray')
-			.style("stroke-width", 1)
+			.style('stroke', 'gray')
+			.style('stroke-width', 1)
 			.on('click', d=>{
 				let index = attention_targ_filter_node.indexOf(d+depth)
 				if(index >-1){
@@ -206,7 +262,8 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 			.attr('y', y + h/2)
         		.attr("text-anchor", "middle")
         		.attr("dominant-baseline", "central")
-        		.style('font-size', 12);
+        		.style('font-size', 12)
+			.style('pointer-events', 'none');
 			
 			return h;
 		}
@@ -258,6 +315,7 @@ function matrixAggregation(){
 	col = attention_para.sen2.length + 1;
 	
 	//aggreate col
+	//aggregate strategy: take the col with cell has maximum value
 	for(let i = 0; i < attention_para.matrix.length; i++){
 		let index =  i % col,
 		flag = false;
