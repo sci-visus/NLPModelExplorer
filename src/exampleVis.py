@@ -1,18 +1,6 @@
 from visPackage import *
-# from modelInterface import *
+from modelInterface import *
 from sentenceGenerator import *
-
-exampleData = [{
-    "index":0,
-    "src": "Two women are embracing while holding to go packages .\n",
-    "targ": "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n"
-},{
-    "index":1,
-    "src": "Two young children in blue jerseys , one with the number \
-    9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
-    "targ": "Two kids in numbered jerseys wash their hands .\n"
-}
-]
 
 
 def randomPredict(pair):
@@ -24,11 +12,11 @@ def randomPredict(pair):
     # pred["entailment"] = rnum[2]
     return rnum
 
-# model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/glove.hdf5", model="local_200_parikh")
+model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/glove.hdf5", model="local_200_parikh")
 
 ################ test model interface #################
-# print model.predict([exampleData[0]["src"], exampleData[0]["targ"]])
-# print model.attention()
+# model.predict([exampleData[0]["src"], exampleData[0]["targ"]])
+# model.attention()
 # exit()
 #######################################################
 
@@ -40,12 +28,10 @@ gen = sentenceGenerator()
 #######################################################
 
 modelVis = textEntailVisModule()
-modelVis.setSentenceExample(exampleData)
+# modelVis.setSentenceExample(exampleData)
 
-# modelVis.setPredictionHook(model.predict)
-# modelVis.setAttentionHook(model.attention)
-
-modelVis.setPredictionHook(randomPredict)
+modelVis.setPredictionHook(model.predict)
+modelVis.setAttentionHook(model.attention)
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
 
 # modelVis.callbackPredictionChange()

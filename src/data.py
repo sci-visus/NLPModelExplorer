@@ -69,7 +69,7 @@ class Data():
 
 
 if __name__ == '__main__':
-	sample_data = '../learnlab/data/snli_1.0-val.hdf5'
+	sample_data = '../data/snli_1.0-val.hdf5'
 	from holder import *
 	opt = Holder()
 	opt.gpuid = -1

@@ -78,9 +78,3 @@ if __name__ == '__main__':
 	# run network
 	rs = encoder(shared.input1, shared.input2)
 	print(rs)
-
-
-
-
-
-	

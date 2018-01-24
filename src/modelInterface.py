@@ -109,9 +109,10 @@ class modelInterface:
         for word in sentence:
             tokenList.append(self.tokenMap[word.lower()])
         #1XN array
+        tokenList.append(self.tokenMap["<s>"])
         # print tokenList
         token = torch.from_numpy(np.asarray(tokenList).reshape(1, len(tokenList)))
-        print token
+        # print token
         return token
 
     #evaluate model
@@ -130,14 +131,15 @@ class modelInterface:
         word_vecs2 = self.embeddings(wv_idx2)
 
         # update network parameters
-        # self.pipeline.update_context(0, 1, len(source), len(target))
+        # print source.shape[1], target.shape[1]
+        self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
 
         y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
-        print "prediction result:", y_dist
 
         p = y_dist.exp()
+        print "prediction result:", p
         # pred = dict()
-        pred = p.tolist()
+        pred = p.data.numpy()
         # pred["entail"] = p[0]
         # pred["neutral"] = p[1]
         # pred["contradict"] = p[2]
@@ -146,8 +148,8 @@ class modelInterface:
     def attention(self, att_name="att_soft1"):
         #get the current attention, this seems to be reading attention from file
         batch_att = getattr(self.shared, att_name)
-        print('printing {0} for {1} examples...'.format(att_name, self.shared.batch_l))
-        for i in xrange(self.shared.batch_l):
-            ex_id = self.shared.batch_ex_idx[i]
-            att = batch_att.data[i, :, :]
-            print att
+        # print('printing {0} for {1} examples...'.format(att_name, self.shared.batch_l))
+        # for i in xrange(self.shared.batch_l):
+        #     ex_id = self.shared.batch_ex_idx[i]
+        att = batch_att.data[0, :, :]
+        return att.numpy()

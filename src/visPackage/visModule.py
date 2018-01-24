@@ -21,6 +21,18 @@ sio = socketio.Server()
 fApp = socketio.Middleware(sio, app)
 dataManager = socketioManager(sio)
 
+exampleData = [{
+    "index":0,
+    "src": "Two women are embracing while holding to go packages .\n",
+    "targ": "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n"
+},{
+    "index":1,
+    "src": "Two young children in blue jerseys , one with the number \
+    9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
+    "targ": "Two kids in numbered jerseys wash their hands .\n"
+}
+]
+
 #################### server control ######################
 class visModule:
     def __init__(self):
@@ -28,7 +40,9 @@ class visModule:
 
     @app.route('/')
     def index():
-        # dataManager.clear()
+        dataManager.clear()
+        dataManager.setData("sentenceList", exampleData)
+        dataManager.setData("currentPair", [exampleData[0]['src'], exampleData[0]['targ']])
         return app.send_static_file('index.html')
 
     @app.route('/<name>')
@@ -46,13 +60,13 @@ class visModule:
         return dataManager.receiveFromClient(msg)
 
     def show(self):
-        # url = 'http://localhost:5050'
-        # threading.Timer(1.5, lambda: webbrowser.open(url, new=0) ).start()
+        url = 'http://localhost:5050'
+        threading.Timer(1.5, lambda: webbrowser.open(url, new=0) ).start()
         #
-        # eventlet.wsgi.server(eventlet.listen(('localhost', 5050)), fApp)
+        eventlet.wsgi.server(eventlet.listen(('localhost', 5050)), fApp)
 
         # deploy as an eventlet WSGI server
-        sio.start_background_task(self.startServer)
+        # sio.start_background_task(self.startServer)
 
     # @staticmethod
     def startServer(self):
@@ -123,25 +137,35 @@ class textEntailVisModule(visModule):
     def setPredictionHook(self, callback):
         self.predictionHook = callback
 
+    def setAttentionHook(self, callback):
+        self.attentionHook = callback
+
     def predict(self):
         sentencePair = dataManager.getData("currentPair")
         predictionResult = self.predictionHook(sentencePair)
         dataManager.setData("prediction", predictionResult)
 
     def predictAll(self):
-        allSourcePairs = dataManager.getData("allSourcePairs")
-        allTargetPairs = dataManager.getData("allTargetPairs")
-        print "original s, t:"
-        print allSourcePairs[0]
-        print allTargetPairs[0]
+        allSourcePairs = None
+        allTargetPairs = None
+        if dataManager.getData("allSourcePairs") is not None:
+            allSourcePairs = dataManager.getData("allSourcePairs")
+        else:
+            allSourcePairs = [dataManager.getData("currentPair")[0]]
+        if dataManager.getData("allTargetPairs") is not None:
+            allTargetPairs = dataManager.getData("allTargetPairs")
+        else:
+            allTargetPairs = [dataManager.getData("currentPair")[1]]
+        # print "original s, t:"
+        print allSourcePairs, allTargetPairs
 
         allPairsPrediction = np.zeros( (len(allSourcePairs), len(allTargetPairs), 3) )
         for i, source in enumerate(allSourcePairs):
             for j, target in enumerate(allTargetPairs):
-                if i>=j:
+                # if i>=j:
                     predResult = self.predictionHook([source, target])
                     allPairsPrediction[i,j,:] = predResult
-                    allPairsPrediction[j,i,:] = predResult
+                    # allPairsPrediction[j,i,:] = predResult
         # print allPairsPrediction
         dataManager.setData("allPairsPrediction", allPairsPrediction)
 
