@@ -107,6 +107,7 @@ class predictionComponent extends baseComponent {
     updatePredictDisplay(data) {
         // console.log(this.data);
         //neutral, Contradiction, Entailment
+        //Entailment, neutral, contradiction
         //(112,0) (0,194) (224,194)
         if (data !== undefined) {
             // console.log(data);
@@ -119,14 +120,14 @@ class predictionComponent extends baseComponent {
                     return "circle" + i;
                 })
                 .attr("cx", d => {
-                    return d[0] * 112 + d[1] *
+                    return d[1] * 112 + d[2] *
                         0 +
-                        d[2] * 224;
+                        d[0] * 224;
                 })
                 .attr("cy", d => {
-                    return d[0] * 0 + d[1] *
+                    return d[1] * 0 + d[2] *
                         194 +
-                        d[2] * 194;
+                        d[0] * 194;
                 })
                 .attr("r", (d, i) => {
                     if (i == 0) return 6;
