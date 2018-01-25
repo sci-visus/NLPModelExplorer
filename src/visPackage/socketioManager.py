@@ -81,7 +81,10 @@ class socketioManager:
                     self.sendToClient(id, msg)
 
     def getData(self, name):
-        return self.data[name]
+        if name in self.data.keys():
+            return self.data[name]
+        else:
+            return None
 
     def subscribeData(self, name, uID):
         # print name, uID
