@@ -1,12 +1,15 @@
-let attention_src_filter_node = [],
-attention_targ_filter_node = [],
-attention_para = null;
+let attention_src_filter_node = [];
+let attention_targ_filter_node = [];
+let aggregation_src = {}
+let aggregation_targ = {}
+
+let attention_para = null;
 
 
-let rectw = 50, 
-recth = 30,
-canvas = d3.select('#canvas').append('svg').attr('width', 3000).attr('height', 3000);
-
+let rectw = 50;
+let recth = 30;
+let canvas = d3.select('#canvas').append('svg').attr('width', 3000).attr('height', 3000);
+let div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
 
 
 bindingEvent();
@@ -121,7 +124,7 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 		.attr('dominant-baseline', 'central')
 		.style('font-size', 12);
 		
-		return hOrv?rectw:recth;//true is horizontal false is vertical
+		return hOrv?{'w':rectw,'key':node}:{'h':recth,'key':node};//true is horizontal false is vertical
 	}
 	else{
 		let key = Object.keys(node);
@@ -133,28 +136,34 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 		//horizontal tree
 		if(hOrv){
 			//whether current node is filtered
-			let flag = attention_src_filter_node.indexOf(key+depth) == -1,
+			let flag = attention_src_filter_node.indexOf(key + depth) == -1,
 			w = flag?0:rectw;//if the node is filter, stop draw the child node and w set 60
 			
 			//draw child node
 			let child_position = [];
+			let cur_t={'w':w, 'key':''};
+			let id = depth
 			//node is not filtered
 			if(flag){
 				for(let i = 0; i < node[key].length; i++){
-					sub_w = draw_sentence_tree(x + w, y+recth, node[key][i], hOrv, depth+1, tree_width, tree_height);
+					sub_t = draw_sentence_tree(x + w, y+recth, node[key][i], hOrv, ++depth, tree_width, tree_height);
 					if(typeof(node[key][i]) == 'string')
-						child_position.push([x + w + sub_w/2, tree_height-recth]);
+						child_position.push([x + w + sub_t.w/2, tree_height-recth]);
 					else
-						child_position.push([x + w + sub_w/2, y+recth]);
-					w += sub_w;
+						child_position.push([x + w + sub_t.w/2, y+recth]);
+					w += sub_t.w;
+					cur_t.key += sub_t.key+' ';
 				}
-				
-				
+				cur_t.w = w;
 			}
 			//node is filtered
 			else{
-				//TODO:get the representitive node and plot it
-				
+				//TODO:get the representitive leaf and plot it
+				let rs = getRepresentative_leaf(node, hOrv);
+				cur_t.key = rs.rep;
+				draw_sentence_tree(x, y+recth, rs.key, hOrv, depth, tree_width, tree_height);
+				child_position.push([x + rectw/2, tree_height - recth]);
+				//depth += count_tree_nodes(node);
 			}
 			
 			//TODO: generate the path between parents node and child node
@@ -171,19 +180,37 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 			}
 			
 			//draw node
-			canvas.selectAll('.treenode').data([key]).enter().append('circle')
+			canvas.selectAll('.treenode').data([[key, cur_t.key, id]]).enter().append('circle')
 			.attr('cx', (d, i)=>{return x + w/2})
 			.attr('cy', y+recth/2)
 			.attr('r', recth/2)
 			.style('fill', flag?'white':'steelblue')
 			.style('stroke', 'gray')
 			.style('stroke-width', 1)
+			.on('mouseover', d=>{
+				if(!flag){
+					div.transition()
+			                .duration(200)
+			                .style("opacity", .9);
+			              	div.html(d[1])
+			                .style("left", (d3.event.pageX) + "px")
+			                .style("top", (d3.event.pageY - 28) + "px");
+			              
+				}
+			})
+			.on('mouseout', d=>{
+		       	 	div.transition()
+		                .duration(500)
+		                .style("opacity", 0);
+			})
 			.on('click', d=>{
-				let index = attention_src_filter_node.indexOf(d+depth);
+				let index = attention_src_filter_node.indexOf(d[0]+d[2]);
 				if(index > -1){
 					attention_src_filter_node.splice(index,1);
+					delete aggregation_src[d[0]+d[2]];
 				}else{
-					attention_src_filter_node.push(d+depth);
+					attention_src_filter_node.push(d[0]+d[2]);
+					aggregation_src[d[0]+d[2]] = d[1];
 				}
 				update();
 			});
@@ -199,59 +226,86 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 			.style('pointer-events', 'none');;
 			
 			//return the horizontal space this node take
-			return w;
+			return cur_t;
 		}
 		else{
 			//whether current node is filtered
 			let flag = attention_targ_filter_node.indexOf(key+depth) == -1,
 			h = flag?0:recth;//if the node is filter, stop draw the child node and h set 30
 			let child_position = [];
+			let cur_t={'h':h, 'key':''};
+			let id = depth;
 			
 			//node is not filtered
 			if(flag){
 				for(let i = 0; i < node[key].length; i++){
-					sub_h = draw_sentence_tree(x + rectw, y + h, node[key][i], hOrv, depth+1, tree_width, tree_height);
+					sub_t = draw_sentence_tree(x + rectw, y + h, node[key][i], hOrv, ++depth, tree_width, tree_height);
 					
 					if(typeof(node[key][i]) == 'string')
-						child_position.push([tree_width-rectw, y + sub_h/2 + h]);
+						child_position.push([tree_width-rectw, y + sub_t.h/2 + h]);
 					else
-						child_position.push([x + rectw + 10, y + sub_h/2 + h]);
+						child_position.push([x + rectw + 10, y + sub_t.h/2 + h]);
 					
-					h += sub_h;
+					h += sub_t.h;
+					cur_t.key += sub_t.key+' ';
 				}
-				
-				//TODO: generate the path between parents node and child node
-				for(let i = 0; i < child_position.length; i++){
-					let path = []
-					path.push([x + rectw/2, y + h/2]);
-					path.push(child_position[i]);
-					
-					canvas.append('path')
-					.attr("d", lineFunction(path))
-					.attr("stroke", "steelblue")
-					.attr("stroke-width", 2)
-					.attr("fill", "none");
-				}
+				cur_t.h = h;
 			}
 			//node is filtered
 			else{
-				//TODO:get the representitive node and plot it
+				//TODO:get the representitive leaf and plot it
+				let rs = getRepresentative_leaf(node, hOrv);
+				cur_t.key = rs.rep;
+				draw_sentence_tree(x + rectw, y, rs.key, hOrv, depth, tree_width, tree_height);
+				child_position.push([tree_width-rectw, y+recth/2]);
+				//depth += count_tree_nodes(node);
+			}
+			
+			//TODO: generate the path between parents node and child node
+			for(let i = 0; i < child_position.length; i++){
+				let path = []
+				path.push([x + rectw/2, y + h/2]);
+				path.push(child_position[i]);
+				
+				canvas.append('path')
+				.attr("d", lineFunction(path))
+				.attr("stroke", "steelblue")
+				.attr("stroke-width", 2)
+				.attr("fill", "none");
 			}
 			//node
-			
-			canvas.selectAll('.treenode').data([key]).enter().append('circle')
+			canvas.selectAll('.treenode').data([[key, cur_t.key, id]]).enter().append('circle')
 			.attr('cx', (d, i)=>{return x + rectw/2})
 			.attr('cy', y+h/2)
 			.attr('r', recth/2)
 			.style('fill', flag?'white':'steelblue')
 			.style('stroke', 'gray')
 			.style('stroke-width', 1)
+			.on('mouseover', d=>{
+				if(!flag){
+					div.transition()
+			                .duration(200)
+			                .style("opacity", .9);
+			              	div.html(d[1])
+			                .style("left", (d3.event.pageX) + "px")
+			                .style("top", (d3.event.pageY - 28) + "px");
+			              
+				}
+			})
+			.on('mouseout', d=>{
+		       	 	div.transition()
+		                .duration(500)
+		                .style("opacity", 0);
+			})
 			.on('click', d=>{
-				let index = attention_targ_filter_node.indexOf(d+depth)
+				let index = attention_targ_filter_node.indexOf(d[0]+d[2])
 				if(index >-1){
+					
 					attention_targ_filter_node.splice(index, 1);
+					delete aggregation_targ[d[0]+d[2]];
 				}else{
-					attention_targ_filter_node.push(d+depth);
+					attention_targ_filter_node.push(d[0]+d[2]);
+					aggregation_targ[d[0]+d[2]] = d[1];
 				}
 				update();
 			});
@@ -265,7 +319,7 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
         		.style('font-size', 12)
 			.style('pointer-events', 'none');
 			
-			return h;
+			return cur_t;
 		}
 	}
 	
@@ -287,16 +341,16 @@ function Render(para){
 	let x = 10,
 	y = 10;
 	
-	[matrix, row, col] = matrixAggregation();
-	
+	//[matrix, row, col] = matrixAggregation();
+	[matrix, row, col] = [attention_para.matrix, attention_para.sen1.length+1, attention_para.sen2.length+1];
 	src_tree_height = getTreeHeight(para.sen1_tree.ROOT[0], attention_src_filter_node, 1);
 	targ_tree_height = getTreeHeight(para.sen2_tree.ROOT[0], attention_targ_filter_node, 1);
 	
 	let tree_width = x + (targ_tree_height) * rectw,
 	tree_height = y + (src_tree_height) * recth;
 	
-	draw_sentence_tree(tree_width+rectw, y , para.sen1_tree.ROOT[0], true, 1, tree_width, tree_height);
-	draw_sentence_tree(x, tree_height+recth, para.sen2_tree.ROOT[0], false, 1, tree_width, tree_height);
+	draw_sentence_tree(tree_width+rectw, y, para.sen1_tree.ROOT[0], true, 1, tree_width, tree_height);
+	draw_sentence_tree(x, tree_height+recth, para.sen2_tree.ROOT[0], false, 1,tree_width, tree_height);
 	draw_attention_matrix(tree_width, tree_height, matrix, row, col);
 	
 	$('#result_label').html('result:'+para.label);
@@ -307,8 +361,25 @@ function matrixAggregation(){
 	let col_filter_index = [],
 	row_filter_index = [];
 	
-	getAggregateIndexs(attention_para.sen1_tree.ROOT[0], attention_src_filter_node, false, [-1], col_filter_index, 1);
-	getAggregateIndexs(attention_para.sen2_tree.ROOT[0], attention_targ_filter_node, false, [-1], row_filter_index, 1);
+	//aggregation_targ col
+	for(key in aggregation_targ){
+		words = aggregation_targ[key].trim().split(' ');
+		words.forEach(d=>{
+			col_filter_index.push(attention_para.sen2.indexOf(d)+1)
+		});
+	}
+	
+	//aggregation_src row
+	for(key in aggregation_src){
+		words = aggregation_src[key].trim().split(' ');
+		words.forEach(d=>{
+			row_filter_index.push(attention_para.sen1.indexOf(d)+1)
+		});
+	}
+	
+	
+	//getAggregateIndexs(attention_para.sen1_tree.ROOT[0], attention_src_filter_node, false, [-1], col_filter_index, 1);
+	//getAggregateIndexs(attention_para.sen2_tree.ROOT[0], attention_targ_filter_node, false, [-1], row_filter_index, 1);
 	
 	let matrix1 = [],
 	row = attention_para.sen1.length + 1,
@@ -418,6 +489,69 @@ function getTreeHeight(node, filter_set, depth){
 	}
 }
 
+//TODO:get representitive node of the tree
+function getRepresentative_leaf(node, hOrv){
+	
+	let leaves = tree_leaf(node);
+	let index = 0;
+	let col = attention_para.sen2.length + 1;
+	let row = attention_para.sen1.length + 1;
+	let maxvalue = -1;//all value are positive
+	let maxindex = -1;
+	let key ='';
+	let rep ='';
+	for(let i = 0; i < leaves.length; i++){
+		if(hOrv){
+			index = attention_para.sen2.indexOf(leaves[i]) + 1;//skip the first null char
+			for(let r = 0; r < row; r++){
+				if(maxvalue < attention_para.matrix[index + r * col]){
+					maxvalue = attention_para.matrix[index + r * col];
+					maxindex = index;
+				}
+			}
+			key = attention_para.sen2[maxindex-1];
+		}
+		else{
+			index = attention_para.sen1.indexOf(leaves[i]) + 1;//skip the first null char
+			for(let c = 0; c < col; c++){
+				if(maxvalue < attention_para.matrix[index * col + c]){
+					maxvalue = attention_para.matrix[index * col + c];
+					maxindex = index;
+				}
+			}
+			key = attention_para.sen1[maxindex-1];
+		}
+		rep += leaves[i]+' ';
+	}
+	
+	return {'key':key, 'rep':rep};
+}
+
+function tree_leaf(node){
+	if(typeof(node) == 'string'){
+		return [node];
+	}else{
+		let key = Object.keys(node);
+		let leaves = [];
+		for(let i = 0; i < node[key].length; i++){
+			leaves = leaves.concat(tree_leaf(node[key][i]));
+		}
+		return leaves;
+	}
+}
+
+function count_tree_nodes(node){
+	if(typeof(node) == 'string'){
+		return 1;
+	}else{
+		let key = Object.keys(node);
+		let count = 1;
+		for(let i = 0; i < node[key].length; i++){
+			count += count_tree_nodes(tree_leaf(node[key][i]));
+		}
+		return count;
+	}
+}
 
 function bindingEvent(){
 	//source change event setup
