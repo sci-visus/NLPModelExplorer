@@ -85,9 +85,10 @@ class predictionComponent extends baseComponent {
     }
 
     onUpdatePrediction() {
-        var data = [];
-        data.push(this.data['prediction'].concat([0, 0]));
-        this.updatePredictDisplay(data);
+        var prediction = this.data['prediction'][0];
+        prediction.concat([0, 0])
+        console.log(prediction);
+        this.updatePredictDisplay([prediction]);
     }
 
     onUpdateAllPairPrediction() {
