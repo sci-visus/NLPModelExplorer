@@ -88,7 +88,7 @@ data organization structure
     - predictionsHighlight (use the index to update currentPair display)
 '''
 class textEntailVisModule(visModule):
-    def __init__(self):
+    def __init__(self, componentList=["prediction", "sentence", "attention"]):
         self.index = 0
         dataManager.setObject(self)
 

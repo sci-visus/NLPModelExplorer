@@ -26,10 +26,9 @@ gen = sentenceGenerator()
 # print ps
 # exit()
 #######################################################
+visComponentList = ["prediction", "sentence", "attention", "evaluation"]
 
-modelVis = textEntailVisModule()
-# modelVis.setSentenceExample(exampleData)
-
+modelVis = textEntailVisModule(visComponentList)
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
