@@ -18,6 +18,8 @@ class sentenceComponent extends baseComponent {
 
 
         d3.select(this.div + "Predict").on("click", d => {
+            //update currentPair
+            this.onUpdateCurrentPair();
             this.callFunc("predict");
         });
         d3.select(this.div + "PredictAll").on("click", d => {
