@@ -25,6 +25,7 @@ from embeddings import *
 from data import *
 from forward_hooks import *
 from eval import pick_label, evaluate
+from itertools import izip
 
 class modelInterface:
     #setup model
@@ -96,11 +97,7 @@ class modelInterface:
             self.embeddings.cuda()
             self.pipeline = self.pipeline.cuda()
 
-        # loading data
-        # data = Data(opt, opt.data)
-        # print data
-        # acc, loss = evaluate(opt, shared, embeddings, pipeline, data)
-        # print('Val: {0:.4f}, Loss: {0:.4f}'.format(acc, loss))
+        self.opt = opt
         # exit()
 
     def mapToToken(self, sentence):
@@ -116,6 +113,33 @@ class modelInterface:
         return token
 
     #evaluate model
+
+    def evaluateTestData(self, srcName, targName, groundTruthName):
+        #load src, targ file
+                # loading data
+        data = Data(self.opt, self.opt.data)
+        acc, loss, predictionValue, groundTruthlabel = evaluate(self.opt, self.shared, self.embeddings, self.pipeline, data)
+        # print('Val: {0:.4f}, Loss: {0:.4f}'.format(acc, loss))
+
+        # predLabel = []
+        i = 0
+        with open(srcName) as src, open(targName) as targ, open(groundTruthName) as label:
+            for ssen, tsen, predLabel in izip(src, targ, label):
+                # print ssen, tsen, predLabel
+                # predLabel.append(label)
+                print groundTruthlabel[i], np.argmax(np.array(predictionValue[i])), predLabel
+                i += 1
+
+
+
+    def batchPredict(self, sentencePairs):
+
+        #convert sentence to batchFormat
+        for pair in sentencePairs:
+            source = self.mapToToken(pair[0])
+            target = self.mapToToken(pair[1])
+
+
     def predict(self, sentencePair):
         #map to token
         sourceSen = sentencePair[0]
