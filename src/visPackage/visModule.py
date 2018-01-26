@@ -50,7 +50,8 @@ class visModule:
         return {
             'prediction_view': app.send_static_file('viewTemplates/prediction_view.mst'),
             'attention_view': app.send_static_file('viewTemplates/template_view.mst'),
-            'sentence_view': app.send_static_file('viewTemplates/sentence_view.mst')
+            'sentence_view': app.send_static_file('viewTemplates/sentence_view.mst'),
+            'evaluation_view': app.send_static_file('viewTemplates/template_view.mst')
         }.get(name)
 
     # envoke callback when the server is running
@@ -113,19 +114,6 @@ class textEntailVisModule(visModule):
         # print data[0]
         dataManager.setData("currentPair", [data[0]['src'], data[0]['targ']])
 
-    def setPredictions(self, predictions):
-        dataManager.setData("predictions", predictions);
-        dataManager.setData("predictionsHighlight", 0);
-
-    def setPerturbedSource(self, sentences):
-        dataManager.setData("perturbedSource", sentences)
-
-    def setPerturbedSource(self, sentences):
-        dataManager.setData("perturbedTarget", sentences)
-
-    def setAttention(self, att):
-        pass
-
     # called when the user change the prediction, the attention need to be
     # recomputed by python model
     def setGradientUpdateHook(self, callback):
@@ -144,6 +132,8 @@ class textEntailVisModule(visModule):
         sentencePair = dataManager.getData("currentPair")
         predictionResult = self.predictionHook(sentencePair)
         dataManager.setData("prediction", predictionResult)
+        attentionMatrix = self.attentionHook()
+        dataManager.setData("attention", attentionMatrix)
 
     def predictAll(self):
         allSourcePairs = None

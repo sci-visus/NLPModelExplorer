@@ -7,6 +7,8 @@ the triangle vis of the prediction result
 class predictionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
+
+        //subscribe to data
         this.subscribeDatabyNames(["allSourcePairs", "allTargetPairs",
             "prediction", "allPairsPrediction"
         ]);
@@ -86,8 +88,8 @@ class predictionComponent extends baseComponent {
 
     onUpdatePrediction() {
         var prediction = this.data['prediction'][0];
-        prediction.concat([0, 0])
-        console.log(prediction);
+        prediction.concat([0, 0]);
+        // console.log(prediction);
         this.updatePredictDisplay([prediction]);
     }
 

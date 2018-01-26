@@ -1,14 +1,16 @@
 var panelMetaInfo = {
     'Prediction': ['prediction_view', 'predictionComponent'],
     'Attention': ['attention_view', 'attentionComponent'],
-    'Sentence': ['sentence_view', 'sentenceComponent']
+    'Sentence': ['sentence_view', 'sentenceComponent'],
+    'Evaluation': ['evaluation_view', 'evaluationComponent']
 };
 
 //for lookup component class on-the-fly
 var objectMap = {
     predictionComponent: predictionComponent,
     attentionComponent: attentionComponent,
-    sentenceComponent: sentenceComponent
+    sentenceComponent: sentenceComponent,
+    evaluationComponent: evaluationComponent
 };
 
 var config = {
