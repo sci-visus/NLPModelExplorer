@@ -18,8 +18,6 @@ class sentenceComponent extends baseComponent {
 
 
         d3.select(this.div + "Predict").on("click", d => {
-            //update currentPair
-            this.onUpdateCurrentPair();
             this.callFunc("predict");
         });
         d3.select(this.div + "PredictAll").on("click", d => {
@@ -113,7 +111,7 @@ class sentenceComponent extends baseComponent {
         var currentPair = [d3.select(this.div + "src").property("value"),
             d3.select(this.div + "targ").property("value")
         ];
-        // console.log(currentPair);
+        console.log(currentPair);
         this.setData("currentPair", currentPair);
     }
 
@@ -187,6 +185,7 @@ class sentenceComponent extends baseComponent {
             .on("click", (d, i) => {
                 //update sentence edit box
                 d3.select(labelSelector).property("value", d);
+                this.onUpdateCurrentPair();
             });
 
         /////////////////// reference /////////////////
