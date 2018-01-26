@@ -16,11 +16,10 @@ model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/g
 
 
 ################ test model interface #################
-model.evaluateTestData("../data/snli_1.0/src-test.txt", "../data/snli_1.0/targ-test.txt", "../data/snli_1.0/label-test.txt")
-
+# model.evaluateTestData("../data/snli_1.0/src-test.txt", "../data/snli_1.0/targ-test.txt", "../data/snli_1.0/label-test.txt")
 # model.predict([exampleData[0]["src"], exampleData[0]["targ"]])
 # model.attention()
-exit()
+# exit()
 #######################################################
 
 gen = sentenceGenerator()
