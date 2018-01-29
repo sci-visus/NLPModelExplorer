@@ -15,7 +15,7 @@
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <label class="input-group-text">Source</label>
+                <label class="input-group-text">Premise</label>
             </div>
             <input type="text" id="{{id}}src" class="form-control" placeholder="Source" aria-label="" aria-describedby="basic-addon1">
 
@@ -26,7 +26,7 @@
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <label class="input-group-text">Target</label>
+                <label class="input-group-text">Hypothesis</label>
             </div>
 
             <input type="text" id="{{id}}targ" class="form-control" placeholder="Target" aria-label="" aria-describedby="basic-addon1">

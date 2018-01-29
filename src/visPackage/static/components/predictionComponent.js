@@ -7,6 +7,8 @@ the triangle vis of the prediction result
 class predictionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
+
+        //subscribe to data
         this.subscribeDatabyNames(["allSourcePairs", "allTargetPairs",
             "prediction", "allPairsPrediction"
         ]);
@@ -85,9 +87,10 @@ class predictionComponent extends baseComponent {
     }
 
     onUpdatePrediction() {
-        var data = [];
-        data.push(this.data['prediction'].concat([0, 0]));
-        this.updatePredictDisplay(data);
+        var prediction = this.data['prediction'][0];
+        prediction.concat([0, 0]);
+        // console.log(prediction);
+        this.updatePredictDisplay([prediction]);
     }
 
     onUpdateAllPairPrediction() {
@@ -106,6 +109,7 @@ class predictionComponent extends baseComponent {
     updatePredictDisplay(data) {
         // console.log(this.data);
         //neutral, Contradiction, Entailment
+        //Entailment, neutral, contradiction
         //(112,0) (0,194) (224,194)
         if (data !== undefined) {
             // console.log(data);
@@ -118,14 +122,14 @@ class predictionComponent extends baseComponent {
                     return "circle" + i;
                 })
                 .attr("cx", d => {
-                    return d[0] * 112 + d[1] *
+                    return d[1] * 112 + d[2] *
                         0 +
-                        d[2] * 224;
+                        d[0] * 224;
                 })
                 .attr("cy", d => {
-                    return d[0] * 0 + d[1] *
+                    return d[1] * 0 + d[2] *
                         194 +
-                        d[2] * 194;
+                        d[0] * 194;
                 })
                 .attr("r", (d, i) => {
                     if (i == 0) return 6;

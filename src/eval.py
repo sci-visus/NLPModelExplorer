@@ -52,9 +52,12 @@ def evaluate(opt, shared, wv, m, data):
 	if opt.gpuid != -1:
 		criterion = criterion.cuda()
 
+	predictionValue = []
+	groundTruthLabel = []
+	# number of batches
 	for i in xrange(data.size()):
 		data_name, source, target, batch_ex_idx, batch_l, source_l, target_l, label = data[i]
-		print "source, target: ", source, target
+		# print "source, target: ", source, target
 
 		wv_idx1 = Variable(source, requires_grad=False)
 		wv_idx2 = Variable(target, requires_grad=False)
@@ -70,6 +73,17 @@ def evaluate(opt, shared, wv, m, data):
 
 		# forward pass
 		y_dist = m.forward(word_vecs1, word_vecs2)
+		# print y_dist.exp(), y_gold
+		pred = y_dist.exp().data.numpy()
+		# print pred.tolist(), pred.shape
+		if pred.shape[0] == 1:
+			predictionValue.append(pred.tolist())
+		else:
+			predictionValue += pred.tolist()
+
+		predLabel = label.numpy()
+		groundTruthLabel += predLabel.tolist()
+
 		loss = criterion(y_dist, y_gold)
 		total_loss += loss.data[0]
 
@@ -79,9 +93,11 @@ def evaluate(opt, shared, wv, m, data):
 
 	acc = float(num_correct) / num_sents
 	avg_loss = total_loss / num_sents
+	print "total sentence count:", num_sents
+	print "total prediction count:", len(predictionValue)
+	print "total groundTruthLabel count:", len(groundTruthLabel)
 
-	return (acc, avg_loss)
-
+	return (acc, avg_loss, predictionValue, groundTruthLabel)
 
 
 def main(args):
@@ -107,7 +123,8 @@ def main(args):
 
 	# loading data
 	res_files = None if opt.res == '' else opt.res.split(',')
-	data = Data(opt, opt.data, res_files)
+	data = Data(opt, opt.data)
+	# data = Data(opt, opt.data, res_files)
 	acc, avg_loss = evaluate(opt, shared, embeddings, pipeline, data)
 	print('Val: {0:.4f}, Loss: {1:.4f}'.format(acc, avg_loss))
 

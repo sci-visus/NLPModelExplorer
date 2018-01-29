@@ -98,6 +98,7 @@ class sentenceComponent extends baseComponent {
         var currentPair = [this.data["sentenceList"][index]["src"],
             this.data["sentenceList"][index]["targ"]
         ];
+        // console.log(currentPair);
         this.data["currentPair"] = currentPair;
         d3.select(this.div + "src").property("value", currentPair[0]);
         d3.select(this.div + "targ").property("value", currentPair[1]);
@@ -110,9 +111,11 @@ class sentenceComponent extends baseComponent {
         var currentPair = [d3.select(this.div + "src").property("value"),
             d3.select(this.div + "targ").property("value")
         ];
+        console.log(currentPair);
         this.setData("currentPair", currentPair);
     }
 
+    //FIXME: the flag will create async bug
     updatePerturbedSentences(sentences) {
         if (this.isPerturbSource) {
             this.setData("allSourcePairs", sentences);
@@ -127,7 +130,6 @@ class sentenceComponent extends baseComponent {
                 "targ");
             this.isPerturbTarget = false;
         }
-
         // console.log(sentences);
     }
 
@@ -183,6 +185,7 @@ class sentenceComponent extends baseComponent {
             .on("click", (d, i) => {
                 //update sentence edit box
                 d3.select(labelSelector).property("value", d);
+                this.onUpdateCurrentPair();
             });
 
         /////////////////// reference /////////////////
