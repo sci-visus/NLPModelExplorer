@@ -35,7 +35,7 @@ function INIT(para){
 	});
 	$('#target_sentences').html(target_string_buffer);
 	
-	load_data({'index':0, 'sen1':s_sens[0], 'sen2':t_sens[0]}, resetData);
+	load_data({'index':0, 'source':s_sens[0], 'target':t_sens[0]}, resetData);
 }
 
 function draw_attention_matrix(x, y, matrix, row, col){
@@ -99,6 +99,8 @@ function draw_attention_matrix(x, y, matrix, row, col){
 	.attr('dominant-baseline', 'central')
 	.style('font-size', 14);
 }
+
+
 
 function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0){
 	
@@ -326,6 +328,46 @@ function draw_sentence_tree(x, y, node, hOrv, depth, tree_width=0, tree_height=0
 	
 }
 
+function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
+	
+	//location of text
+	let text_loc = {};
+	
+	
+	for(let i = 0; i < sen.length; i++){
+		if(horv=='h'){
+			text_loc[sen[i]+i] = {'x': x + i * rectw, 'y': y};
+		}else if(horv=='v'){
+			text_loc[sen[i]+i] = {'x': x, 'y': y + recth * i};
+		}else{
+			throw Error('unknow confi. in draw_dep_tree');
+		}
+	}
+	
+	
+	//text
+	canvas.selectAll('.dep_tree_word').data(sen).enter()
+	.append('text')
+	.text(function(d){return d;})
+	.attr('x', function(d, i){return text_loc[d+i].x;})
+	.attr('y', function(d, i){return text_loc[d+i].y;})
+	.attr('text-anchor', 'middle')
+	.attr('dominant-baseline', 'central')
+	.style('font-size', 12);
+	
+	//path
+	
+	
+	//component rect
+	
+	
+	//component text
+	
+	
+}
+
+
+
 function resetData(para){
 	attention_para = para;
 	update();
@@ -338,20 +380,17 @@ function update(){
 function Render(para){
 	//clean panel
 	canvas.html('');
-	let x = 10,
-	y = 10;
+	let x = 200,
+	y = 200;
 	
-	//[matrix, row, col] = matrixAggregation();
-	[matrix, row, col] = [attention_para.matrix, attention_para.sen1.length+1, attention_para.sen2.length+1];
-	src_tree_height = getTreeHeight(para.sen1_tree.ROOT[0], attention_src_filter_node, 1);
-	targ_tree_height = getTreeHeight(para.sen2_tree.ROOT[0], attention_targ_filter_node, 1);
 	
-	let tree_width = x + (targ_tree_height) * rectw,
-	tree_height = y + (src_tree_height) * recth;
+	draw_dep_tree(x + rectw * 2.5, y, para.target, para.target_tree, 'h')
+	draw_dep_tree(x, y + recth * 2.5, para.source, para.source_tree, 'v')
 	
-	draw_sentence_tree(tree_width+rectw, y, para.sen1_tree.ROOT[0], true, 1, tree_width, tree_height);
-	draw_sentence_tree(x, tree_height+recth, para.sen2_tree.ROOT[0], false, 1,tree_width, tree_height);
-	draw_attention_matrix(tree_width, tree_height, matrix, row, col);
+	let col = para.target.length + 1;//first row is null
+	let row = para.source.length + 1;//first col is null
+	
+	draw_attention_matrix(x + rectw, y + recth, para.matrix, row, col);
 	
 	$('#result_label').html('result:'+para.label);
 }
@@ -562,7 +601,7 @@ function bindingEvent(){
 		$('#target_sentences').prop('selectedIndex', index);
 		let	sen2 = $('#target_sentences').val();
 		
-		load_data({'index':index, 'sen1':sen1, 'sen2':sen2}, resetData);
+		load_data({'index':index, 'source':sen1, 'target':sen2}, resetData);
 	});
 
 	//target change event setup
@@ -574,7 +613,7 @@ function bindingEvent(){
 		let sen1 = $('#source_sentences').val();
 
 		
-		load_data({'index':index, 'sen1':sen1, 'sen2':sen2}, resetData);
+		load_data({'index':index, 'source':sen1, 'target':sen2}, resetData);
 	});
 }
 
