@@ -363,7 +363,18 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	})
 	.attr('text-anchor', 'middle')
 	.attr('dominant-baseline', 'central')
-	.style('font-size', 12);
+	.style('font-size', 12)
+	.on('mouseover', function(d, i){
+		d3.selectAll('.'+d+'_'+i+'_path').style("stroke-dasharray", "").style('stroke','orange');
+		d3.selectAll('.'+d+'_'+i+'_rect').style('stroke', 'orange');
+	})
+	.on('mouseout', function(d, i){
+		d3.selectAll('.'+d+'_'+i+'_path').style("stroke-dasharray", "4,4").style('stroke','steelblue');
+		d3.selectAll('.'+d+'_'+i+'_rect').style('stroke', 'gray');
+	})
+	.on('click', function(d, i){
+		
+	});
 	
 	//path
 	canvas.append("svg:defs")
@@ -416,13 +427,14 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	})
 	.attr('class', function(d, i){
 		let word = sen[d[0]];
-		return word+d[0];
+		return word+'_'+d[0]+'_path';
 	})
 	.attr("fill", "none")
 	.attr("stroke", "steelblue")
       	.attr("stroke-linejoin", "round")
       	.attr("stroke-linecap", "round")
       	.attr("stroke-width", 1.5)
+	.style("stroke-dasharray", "4,4")
 	.style("marker-end", "url(#arrow)");
 	
 	
@@ -453,7 +465,7 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	})
 	.attr('class', function(d, i){
 		let word = sen[d[0]];
-		return word+d[0];
+		return word+'_'+d[0]+'_rect';
 	})
 	.attr('font-size', 8)
 	.attr('fill', 'white')
@@ -487,7 +499,7 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	})
 	.attr('class', function(d, i){
 		let word = sen[d[0]];
-		return word+d[0];
+		return word+'_'+d[0]+'_text';
 	})
 	.attr('font-size', 10)
         .attr("text-anchor", "middle")
