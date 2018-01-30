@@ -336,9 +336,9 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	
 	for(let i = 0; i < sen.length; i++){
 		if(horv=='h'){
-			text_loc[sen[i]+i] = {'x': x + i * rectw, 'y': y};
+			text_loc[sen[i]+i] = {'x': x + i * rectw, 'y': y - 10};
 		}else if(horv=='v'){
-			text_loc[sen[i]+i] = {'x': x, 'y': y + recth * i};
+			text_loc[sen[i]+i] = {'x': x - rectw, 'y': y + recth * i};
 		}else{
 			throw Error('unknow confi. in draw_dep_tree');
 		}
@@ -349,8 +349,18 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	canvas.selectAll('.dep_tree_word').data(sen).enter()
 	.append('text')
 	.text(function(d){return d;})
-	.attr('x', function(d, i){return text_loc[d+i].x;})
-	.attr('y', function(d, i){return text_loc[d+i].y;})
+	.attr('x', function(d, i){
+		if(horv == 'h')
+			return text_loc[d+i].x;
+		else
+			return text_loc[d+i].x + rectw;
+	})
+	.attr('y', function(d, i){
+		if(horv == 'h')
+			return text_loc[d+i].y + 10;
+		else 
+			return text_loc[d+i].y;
+	})
 	.attr('text-anchor', 'middle')
 	.attr('dominant-baseline', 'central')
 	.style('font-size', 12);
@@ -359,13 +369,14 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	canvas.append("svg:defs")
 	.append("svg:marker")
 	.attr("id", "arrow")	
-	.attr("refX", 6)
-	.attr("refY", 6)
+	.attr('viewBox',  '0 0 10 10')
+	.attr("refX", 1)
+	.attr("refY", 5)
 	.attr("markerWidth", 6)
 	.attr("markerHeight", 6)
 	.attr("orient", "auto")
 	.append("svg:path")
-	.attr("d", "M2,2 L2,11 L10,6 L2,2")
+	.attr("d", "M 0 0 L 10 5 L 0 10 z")
 	.style('fill', 'steelblue');
 	
 	
@@ -395,9 +406,9 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 			//first point
 			data.push(text_loc[word1]);
 			//second point
-			data.push({'x':text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 15 , 'y':text_loc[word1].y * 5/6+ text_loc[word2].y * 1/6});
+			data.push({'x':text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 20 , 'y':text_loc[word1].y * 5/6+ text_loc[word2].y * 1/6});
 			//third point
-			data.push({'x':text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 15 , 'y':text_loc[word1].y * 1/6 + text_loc[word2].y * 5/6});
+			data.push({'x':text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 20 , 'y':text_loc[word1].y * 1/6 + text_loc[word2].y * 5/6});
 			//fourth point
 			data.push(text_loc[word2]);
 		}
@@ -429,7 +440,7 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 		if(horv == 'h'){
 			return (text_loc[word1].x + text_loc[word2].x)/2 - rectw/4;
 		}else{
-			return text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 15 - rectw/4
+			return text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 20 - rectw/4
 		}
 	})
 	.attr('y', function(d, i){
@@ -463,7 +474,7 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 		if(horv == 'h'){
 			return (text_loc[word1].x + text_loc[word2].x)/2;
 		}else{
-			return text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 15
+			return text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 20
 		}
 	})
 	.attr('y', function(d,i){
@@ -499,7 +510,7 @@ function update(){
 function Render(para){
 	//clean panel
 	canvas.html('');
-	let x = 200,
+	let x = 400,
 	y = 200;
 	
 	
