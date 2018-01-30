@@ -1,8 +1,6 @@
 from flask import Flask ,render_template,request,json,jsonify
-from tool import getDependencyTree
 import numpy as np
 import h5py
-
 
 
 app = Flask(__name__)
@@ -36,8 +34,8 @@ def getSentences():
 def getData():
     
     rjson = request.get_json()
-    source = rjson['source']
-    target = rjson['target']
+    sen1 = rjson['sen1']
+    sen2 = rjson['sen2']
     index = str(rjson['index'])
 
     #get prediction label 
@@ -52,13 +50,13 @@ def getData():
         matrix.extend(item.tolist())
 
     #get sentence parse tree
-    src_sen_tree = getDependencyTree(source)
-    targ_sen_tree = getDependencyTree(target)
+    src_sen_tree = json.load(open('../../data/snli_1.0/src-dev.json'))
+    targ_sen_tree = json.load(open('../../data/snli_1.0/targ-dev.json'))
 
-    result = {'source':source.strip().split(' ')}
-    result['source_tree'] = src_sen_tree
-    result['target'] = target.strip().split(' ') 
-    result['target_tree'] = targ_sen_tree
+    result = {'sen1':sen1.strip().split(' ')}
+    result['sen1_tree'] = targ_sen_tree[index] 
+    result['sen2'] = sen2.strip().split(' ') 
+    result['sen2_tree'] = src_sen_tree[index]
     result['matrix'] = matrix
     result['label'] = labels[int(index)]
     return json.dumps(result)

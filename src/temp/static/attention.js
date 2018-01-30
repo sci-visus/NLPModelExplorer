@@ -356,6 +356,16 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	.style('font-size', 12);
 	
 	//path
+	let lineFunction = d3.svg.line()
+	.x(function(d){ return d.x;})
+	.y(function(d){ return d.y;})
+	..curve(d3.curveBasis);
+	
+	canvas.selectAll('.dep_tree_dep_path').data(sen_dep_tree).enter()
+	.append('path')
+	.attr('d', function(d, i){
+		
+	});
 	
 	
 	//component rect
