@@ -2,6 +2,9 @@ var panelMetaInfo = {
     'Prediction': ['prediction_view', 'predictionComponent'],
     'Attention': ['attention_view', 'attentionComponent'],
     'Sentence': ['sentence_view', 'sentenceComponent'],
+    "AttentionSentence": ['attentionSentence_view',
+        'attentionSentenceComponent'
+    ],
     'Evaluation': ['evaluation_view', 'evaluationComponent']
 };
 
@@ -9,6 +12,7 @@ var panelMetaInfo = {
 var objectMap = {
     predictionComponent: predictionComponent,
     attentionComponent: attentionComponent,
+    attentionSentenceComponent: attentionSentenceComponent,
     sentenceComponent: sentenceComponent,
     evaluationComponent: evaluationComponent
 };
@@ -39,21 +43,33 @@ var config = {
                 }
             }]
         }, {
-            type: 'component',
-            componentName: 'Sentence',
-            componentState: {
-                route: 'sentence_view',
-                name: 'sentenceComponent'
-            }
+            type: 'row',
+            content: [{
+                type: 'component',
+                componentName: 'Sentence',
+                componentState: {
+                    route: 'sentence_view',
+                    name: 'sentenceComponent'
+                }
+            }, {
+                type: 'component',
+                componentName: 'AttentionSentence',
+                componentState: {
+                    route: 'attentionSentence_view',
+                    name: 'attentionSentenceComponent'
+                }
+            }]
         }]
     }]
+
 };
 
 
 
 function registerComponent(appLayout, name) {
     //register factory callback
-    appLayout.registerComponent(name, function(container, componentState) {
+    appLayout.registerComponent(name, function(container,
+        componentState) {
         // console.log("loading -- ", componentState);
         //popout test
         // console.log("container constructor:", componentState.name);
@@ -66,14 +82,16 @@ function registerComponent(appLayout, name) {
                 var data = {
                     id: uuid
                 };
-                var htmlComponent = Mustache.render(template,
+                var htmlComponent = Mustache.render(
+                    template,
                     data);
                 //create panel component
                 var panel = container.getElement();
                 panel.html(htmlComponent)
                     // var panel = new window[componentState.name](uuid);
                     //storge the object with panel
-                var component = new objectMap[componentState.name]
+                var component = new objectMap[
+                        componentState.name]
                     (
                         uuid);
                 panel.data("component", component);

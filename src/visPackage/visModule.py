@@ -50,6 +50,7 @@ class visModule:
         return {
             'prediction_view': app.send_static_file('viewTemplates/prediction_view.mst'),
             'attention_view': app.send_static_file('viewTemplates/template_view.mst'),
+            'attentionSentence_view': app.send_static_file('viewTemplates/attentionSentence_view.mst'),
             'sentence_view': app.send_static_file('viewTemplates/sentence_view.mst'),
             'evaluation_view': app.send_static_file('viewTemplates/template_view.mst')
         }.get(name)

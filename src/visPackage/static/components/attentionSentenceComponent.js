@@ -47,42 +47,61 @@ class attentionSentenceComponent extends baseComponent {
             var attList = [];
             for (var i = 0; i < attMatrix.length; i++)
                 for (var j = 0; j < attMatrix[i].length; j++) {
-                    attList.push([i, j, attattMatrix[i][j]]);
+                    attList.push([i, j, attMatrix[i][j]]);
                 }
 
             // console.log(srcAtt, targAtt);
 
             //sentence position
-            this.computeWordPosition(pair[0], pair[1]);
+            this.computeWordPosition(pair[0].match(/\S+/g),
+                pair[1].match(/\S+/g));
 
             //sentence mask
 
             //word location
             var d3line = d3.svg.line()
                 .x(function(d) {
-                    return d.x;
+                    return d[0];
                 })
                 .y(function(d) {
-                    return d.y;
+                    return d[1];
                 })
                 .interpolate("linear");
 
-            this.svg = d3.select(this.div).append("svg");
+            this.svg = d3.select(this.div).append("svg")
+                .attr("width", this.width)
+                .attr("height", this.height);
+
             this.svg.selectAll(".attConnect")
                 .data(attList)
                 .enter()
                 .append("path")
                 .attr("d", d => {
-                    var lineData = [this.srcPos[d[0]], this.height / 3 *
-                        i
-                    ]
+                    var lineData = [
+                        [this.srcPos[d[0]],
+                            this.height / 3 * 1
+                        ],
+
+                        [this.targPos[d[1]],
+                            this.height / 3 * 2
+
+                        ]
+                    ];
+                    // console.log(d, lineData);
                     return d3line(lineData);
                 })
+                .attr("class", "attConnect")
+                .style("stroke-width", d => d[2] * 5)
+                .style("stroke", "blue")
+                .style("fill", "none");
 
         }
     }
 
     computeWordPosition(src, targ) {
+        src.push("\<s\>");
+        targ.push("\<s\>");
+        console.log(src, targ);
         this.srcPos = src.map((d, i) => {
             return this.width / (src.length + 1) * i
         });
