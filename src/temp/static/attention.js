@@ -1,9 +1,13 @@
 let attention_src_filter_node = [];
 let attention_targ_filter_node = [];
-let aggregation_src = {}
-let aggregation_targ = {}
+let aggregation_src = {};
+let aggregation_targ = {};
 
 let attention_para = null;
+
+let filter_index_h = {};
+let filter_index_v = {};
+
 
 
 let rectw = 50;
@@ -333,7 +337,6 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	//location of text
 	let text_loc = {};
 	
-	
 	for(let i = 0; i < sen.length; i++){
 		if(horv=='h'){
 			text_loc[sen[i]+i] = {'x': x + i * rectw, 'y': y - 10};
@@ -343,7 +346,6 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 			throw Error('unknow confi. in draw_dep_tree');
 		}
 	}
-	
 	
 	//text
 	canvas.selectAll('.dep_tree_word').data(sen).enter()
@@ -373,7 +375,12 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 		d3.selectAll('.'+d+'_'+i+'_rect').style('stroke', 'gray');
 	})
 	.on('click', function(d, i){
-		
+		if(horv == 'h'){
+			
+		}
+		else{
+			
+		}
 	});
 	
 	//path
@@ -389,8 +396,6 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	.append("svg:path")
 	.attr("d", "M 0 0 L 10 5 L 0 10 z")
 	.style('fill', 'steelblue');
-	
-	
 	
 	let lineFunction = d3.line()
 	.x(function(d){ return d.x;})
@@ -436,7 +441,6 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
       	.attr("stroke-width", 1.5)
 	.style("stroke-dasharray", "4,4")
 	.style("marker-end", "url(#arrow)");
-	
 	
 	//component rect
 	canvas.selectAll('.dep_tree_rel_text').data(sen_dep_tree).enter()
@@ -525,16 +529,93 @@ function Render(para){
 	let x = 400,
 	y = 200;
 	
+	para.target.unshift('');
+	para.source.unshift('');
 	
-	draw_dep_tree(x + rectw * 2.5, y, para.target, para.target_tree, 'h')
-	draw_dep_tree(x, y + recth * 2.5, para.source, para.source_tree, 'v')
+	//horizontal tree
+	if(filter_index_h.length > 0){
+		tar = filter(filter_index_h, para.target, para.target_tree);
+		draw_dep_tree(x + rectw * 1.5, y, tar.sen, tar.dep, 'h');
+	}else{
+		draw_dep_tree(x + rectw * 1.5, y, para.target, para.target_tree, 'h');
+	}
 	
-	let col = para.target.length + 1;//first row is null
-	let row = para.source.length + 1;//first col is null
+	//vertical tree
+	if(filter_index_v.length > 0){
+		src = filter(filter_index_v, para.source, para.source_tree);
+		draw_dep_tree(x + rectw * 1.5, y, src.sen, src.dep, 'h');
+	}else{
+		draw_dep_tree(x, y + recth * 1.5, para.source, para.source_tree, 'v');
+	}
+	
+	let col = para.target.length;//first row is null
+	let row = para.source.length;//first col is null
 	
 	draw_attention_matrix(x + rectw, y + recth, para.matrix, row, col);
 	
 	$('#result_label').html('result:'+para.label);
+}
+
+
+function filter(filter_set, sen, sen_dep){
+	
+	let childs = [];
+	let rs_sen = [];
+	let rs_dep = [];
+	
+	for(let i = 0; i < filter_set.length; i++){
+		childs = childs.concat(getChild(filter_set[i], sen_dep));
+	}
+	
+	let childs_set = new Set(childs);
+	let loc_map = {};
+	let map_index = 0;
+	//filter sentence's word
+	for(let i = 0; i < sen.length; i++){
+		if(childs_set.has(sen[i])){
+			rs_sen.push(sen[i]);
+			loc_map[map_index] = i;
+			map_index++;
+		}
+	}
+	
+	let full_set = new Set(childs.concat(filter_set));
+	//filter sentence depdency
+	for(let i = 0; i < sen_dep.length; i++){
+		if(!full_set.has(sen_dep[i][0])){
+			rs_dep.push(sen_dep[i]);
+		}
+	}
+	
+	//reset the depdency index
+	for(let i = 0; i < rs_dep.length; i++){
+		rs_dep[i][0] = map_index[rs_dep[i][0]];
+		rs_dep[i][1] = map_index[rs_dep[i][1]];
+	}
+	
+	
+	return {'sen':rs_sen, 'dep':rs_dep};
+	
+}
+
+function getChild(index, sen_dep){
+	
+	//filter dependency tree
+	let child = [];
+	let filter = new Set();
+	filter.add(index);
+	
+	let l = filter.size;
+	do{
+		for(let i = 0; i < sen_dep.length; i++){
+			if(filter.has(sen_dep[i][0]) && !(filter.has(sen_dep[i][2]))){
+				filter.add(sen_dep[i][2]);
+				child.push(sen_dep[i][2]);
+			}
+		}
+	}while(filter.size != l);
+	
+	return child;
 }
 
 //aggregate matrix data base on current filter node
