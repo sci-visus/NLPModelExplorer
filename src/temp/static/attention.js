@@ -356,22 +356,131 @@ function draw_dep_tree(x, y, sen, sen_dep_tree, horv){
 	.style('font-size', 12);
 	
 	//path
-	let lineFunction = d3.svg.line()
+	canvas.append("svg:defs")
+	.append("svg:marker")
+	.attr("id", "arrow")	
+	.attr("refX", 6)
+	.attr("refY", 6)
+	.attr("markerWidth", 6)
+	.attr("markerHeight", 6)
+	.attr("orient", "auto")
+	.append("svg:path")
+	.attr("d", "M2,2 L2,11 L10,6 L2,2")
+	.style('fill', 'steelblue');
+	
+	
+	
+	let lineFunction = d3.line()
 	.x(function(d){ return d.x;})
 	.y(function(d){ return d.y;})
-	..curve(d3.curveBasis);
+	.curve(d3.curveLinear);
 	
 	canvas.selectAll('.dep_tree_dep_path').data(sen_dep_tree).enter()
 	.append('path')
 	.attr('d', function(d, i){
+		let data = [],
+		word1 = sen[d[0]]+d[0],
+		word2 = sen[d[2]]+d[2];
 		
-	});
+		if(horv == 'h'){
+			//first point
+			data.push(text_loc[word1]);
+			//second point
+			data.push({'x': text_loc[word1].x * 5/6 + text_loc[word2].x * 1/6, 'y':text_loc[word1].y - Math.abs(text_loc[word1].x - text_loc[word2].x)/rectw * 15});
+			//third point
+			data.push({'x': text_loc[word1].x * 1/6 + text_loc[word2].x * 5/6, 'y':text_loc[word1].y - Math.abs(text_loc[word1].x - text_loc[word2].x)/rectw * 15});
+			//third point
+			data.push(text_loc[word2]);
+		}else{
+			//first point
+			data.push(text_loc[word1]);
+			//second point
+			data.push({'x':text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 15 , 'y':text_loc[word1].y * 5/6+ text_loc[word2].y * 1/6});
+			//third point
+			data.push({'x':text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 15 , 'y':text_loc[word1].y * 1/6 + text_loc[word2].y * 5/6});
+			//fourth point
+			data.push(text_loc[word2]);
+		}
+		return lineFunction(data);
+	})
+	.attr('class', function(d, i){
+		let word = sen[d[0]];
+		return word+d[0];
+	})
+	.attr("fill", "none")
+	.attr("stroke", "steelblue")
+      	.attr("stroke-linejoin", "round")
+      	.attr("stroke-linecap", "round")
+      	.attr("stroke-width", 1.5)
+	.style("marker-end", "url(#arrow)");
 	
 	
 	//component rect
+	canvas.selectAll('.dep_tree_rel_text').data(sen_dep_tree).enter()
+	.append('rect')
+	.attr('width', rectw/2)
+	.attr('height', recth/2)
+	.attr('rx', 2)
+	.attr('ry', 2)
+	.attr('x', function(d, i){
+		let word1 = sen[d[0]]+d[0],
+		word2 = sen[d[2]]+d[2];
+		
+		if(horv == 'h'){
+			return (text_loc[word1].x + text_loc[word2].x)/2 - rectw/4;
+		}else{
+			return text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 15 - rectw/4
+		}
+	})
+	.attr('y', function(d, i){
+		let word1 = sen[d[0]]+d[0],
+		word2 = sen[d[2]]+d[2];
+		if(horv=='h')
+			return text_loc[word1].y - Math.abs(text_loc[word1].x - text_loc[word2].x)/rectw * 15 - recth/4;
+		else
+			return (text_loc[word1].y + text_loc[word2].y)/2 - recth/4;
+	})
+	.attr('class', function(d, i){
+		let word = sen[d[0]];
+		return word+d[0];
+	})
+	.attr('font-size', 8)
+	.attr('fill', 'white')
+	.style('stroke', 'gray')
+	.style('stroke-width', '1px');
 	
 	
 	//component text
+	canvas.selectAll('.dep_tree_rel_text').data(sen_dep_tree).enter()
+	.append('text')
+	.text(function(d){return d[1]})
+	.attr('width', rectw/2)
+	.attr('height', recth/2)
+	.attr('x', function(d,i){
+		let word1 = sen[d[0]]+d[0],
+		word2 = sen[d[2]]+d[2];
+		
+		if(horv == 'h'){
+			return (text_loc[word1].x + text_loc[word2].x)/2;
+		}else{
+			return text_loc[word1].x - Math.abs(text_loc[word1].y - text_loc[word2].y)/recth * 15
+		}
+	})
+	.attr('y', function(d,i){
+		let word1 = sen[d[0]]+d[0],
+		word2 = sen[d[2]]+d[2];
+		if(horv == 'h')
+			return text_loc[word1].y - Math.abs(text_loc[word1].x - text_loc[word2].x)/rectw * 15;
+		else
+			return (text_loc[word1].y + text_loc[word2].y)/2; 
+	})
+	.attr('class', function(d, i){
+		let word = sen[d[0]];
+		return word+d[0];
+	})
+	.attr('font-size', 10)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central");
 	
 	
 }
