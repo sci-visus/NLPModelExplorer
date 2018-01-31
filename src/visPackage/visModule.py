@@ -135,8 +135,8 @@ class textEntailVisModule(visModule):
     #get sentence parse tree
     def parseSentence(self, sentence):
         if self.parserHook:
-            sen_tree = self.parserHook(sentence)
-            return {"depTree": sen_tree, "sentence":sentence}
+            depTree = self.parserHook(sentence)
+            return {"depTree": depTree, "sentence":sentence}
 
     def predict(self):
         sentencePair = dataManager.getData("currentPair")

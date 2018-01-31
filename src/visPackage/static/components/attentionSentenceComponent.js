@@ -17,6 +17,7 @@ class attentionSentenceComponent extends baseComponent {
             left: 20
         };
 
+
         this.draw();
     }
 
@@ -82,6 +83,10 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("width", this.width)
                 .attr("height", this.height);
 
+            this.srcDepTree = new dependencyTreePlot(this.svg);
+            this.srcDepTree.setCollapseHandle(this.redraw.bind(
+                this));
+
             this.svg.selectAll(".attConnect")
                 .data(attList)
                 .enter()
@@ -110,8 +115,12 @@ class attentionSentenceComponent extends baseComponent {
             this.svg.selectAll(".sourceWord")
                 .data(this.srcWords)
                 .enter()
-                .append("rect");
-
+                .append("rect")
+                .attr("x", this.srcPos[d[0]])
+                .attr("y", this.height / 3 * 0.5)
+                .attr("width", this.width / (this.srcPos.length + 1))
+                .attr("height", this.height / 3 * 0.5)
+                .style("fill", "grey");
         }
     }
 
