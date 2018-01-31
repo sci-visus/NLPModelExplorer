@@ -51,10 +51,20 @@ class attentionSentenceComponent extends baseComponent {
                 }
 
             // console.log(srcAtt, targAtt);
+            //parse the sentence
+            this.callFunc("parseSentence", {
+                "sentence": pair[0]
+            });
+            this.callFunc("parseSentence", {
+                "sentence": pair[1]
+            });
 
             //sentence position
             this.computeWordPosition(pair[0].match(/\S+/g),
                 pair[1].match(/\S+/g));
+            this.srcWords = pair[0].match(/\S+/g).push("\<s\>");
+            this.targWords = pair[1].match(/\S+/g).push("\<s\>");
+            console.log(this.srcWords, this.targWords);
 
             //sentence mask
 
@@ -78,13 +88,14 @@ class attentionSentenceComponent extends baseComponent {
                 .append("path")
                 .attr("d", d => {
                     var lineData = [
-                        [this.srcPos[d[0]],
+                        [
+                            this.srcPos[d[0]],
                             this.height / 3 * 1
                         ],
 
-                        [this.targPos[d[1]],
+                        [
+                            this.targPos[d[1]],
                             this.height / 3 * 2
-
                         ]
                     ];
                     // console.log(d, lineData);
@@ -93,7 +104,13 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("class", "attConnect")
                 .style("stroke-width", d => d[2] * 5)
                 .style("stroke", "blue")
+                .style("opacity", d => 0.1 + d[2])
                 .style("fill", "none");
+            //drawing sentence
+            this.svg.selectAll(".sourceWord")
+                .data(this.srcWords)
+                .enter()
+                .append("rect");
 
         }
     }
@@ -101,6 +118,7 @@ class attentionSentenceComponent extends baseComponent {
     computeWordPosition(src, targ) {
         src.push("\<s\>");
         targ.push("\<s\>");
+
         console.log(src, targ);
         this.srcPos = src.map((d, i) => {
             return this.width / (src.length + 1) * i
@@ -123,6 +141,22 @@ class attentionSentenceComponent extends baseComponent {
                 //if attention is updated, redraw attention
                 this.draw();
                 break;
+        }
+    }
+
+    parseFunctionReturn(msg) {
+        switch (msg["func"]) {
+            case "parseSentence":
+                this.handleParsedSentence(msg["data"]);
+        }
+    }
+
+    /////////////// handler /////////////////
+    handleParsedSentence(parseResult) {
+        console.log(parseResult);
+        if (parseResult["sentence"] == this.data["currentPair"][0]) {
+            //draw structure
+
         }
     }
 }

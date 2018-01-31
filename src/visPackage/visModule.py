@@ -129,6 +129,15 @@ class textEntailVisModule(visModule):
     def setAttentionHook(self, callback):
         self.attentionHook = callback
 
+    def setSentenceParserHook(self, callback):
+        self.parserHook = callback
+
+    #get sentence parse tree
+    def parseSentence(self, sentence):
+        if self.parserHook:
+            sen_tree = self.parserHook(sentence)
+            return {"depTree": sen_tree, "sentence":sentence}
+
     def predict(self):
         sentencePair = dataManager.getData("currentPair")
         predictionResult = self.predictionHook(sentencePair)

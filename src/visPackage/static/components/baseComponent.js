@@ -112,9 +112,8 @@ class baseComponent {
     _updateWidthHeight() {
         //resize width height
         //parent width, height
-        this.pwidth = $(this._div).parent().parent().parent().width();
-        this.pheight = $(this._div).parent().parent().parent().height();
-        // console.log($(this._div));
+        this.pwidth = $(this.div).parent().parent().parent().width();
+        this.pheight = $(this.div).parent().parent().parent().height();
         // console.log(this.pwidth, this.pheight);
 
         //setup single plot data
