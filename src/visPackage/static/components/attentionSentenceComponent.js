@@ -11,12 +11,11 @@ class attentionSentenceComponent extends baseComponent {
         this.subscribeDatabyNames(["attention", "currentPair"]);
 
         this.margin = {
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20
+            top: 15,
+            right: 15,
+            bottom: 15,
+            left: 15
         };
-
 
         this.draw();
     }
@@ -25,11 +24,14 @@ class attentionSentenceComponent extends baseComponent {
         this._updateWidthHeight();
 
         if (this.data["attention"] !== undefined) {
+            //clear all
+            if (this.svg)
+                this.svg.selectAll().remove();
             //draw your stuff here
             //the dimension of the panel is this.width, this.height
             //the attention is store at this.data["attention"]
-            console.log("attention:", this.data["attention"]);
-            console.log("currentPair:", this.data["currentPair"]);
+            // console.log("attention:", this.data["attention"]);
+            // console.log("currentPair:", this.data["currentPair"]);
 
             var pair = this.data["currentPair"];
             //draw attention
@@ -45,10 +47,10 @@ class attentionSentenceComponent extends baseComponent {
                 return sum;
             });
 
-            var attList = [];
+            this.attList = [];
             for (var i = 0; i < attMatrix.length; i++)
                 for (var j = 0; j < attMatrix[i].length; j++) {
-                    attList.push([i, j, attMatrix[i][j]]);
+                    this.attList.push([i, j, attMatrix[i][j]]);
                 }
 
             // console.log(srcAtt, targAtt);
@@ -60,80 +62,128 @@ class attentionSentenceComponent extends baseComponent {
                 "sentence": pair[1]
             });
 
+            this.srcWords = pair[0].match(/\S+/g);
+            this.srcWords.push("\<s\>");
+            this.targWords = pair[1].match(/\S+/g);
+            this.targWords.push("\<s\>");
+
             //sentence position
-            this.computeWordPosition(pair[0].match(/\S+/g),
-                pair[1].match(/\S+/g));
-            this.srcWords = pair[0].match(/\S+/g).push("\<s\>");
-            this.targWords = pair[1].match(/\S+/g).push("\<s\>");
+            this.computeWordPosition(this.srcWords, this.targWords);
             console.log(this.srcWords, this.targWords);
+            console.log(this.srcPos, this.targPos);
 
             //sentence mask
 
             //word location
-            var d3line = d3.svg.line()
-                .x(function(d) {
-                    return d[0];
-                })
-                .y(function(d) {
-                    return d[1];
-                })
-                .interpolate("linear");
 
             this.svg = d3.select(this.div).append("svg")
-                .attr("width", this.width)
-                .attr("height", this.height);
+                .attr("width", this.pwidth)
+                .attr("height", this.pheight)
+                .append("g")
+                .attr("transform", "translate(" + this.margin.left + "," +
+                    this.margin.top + ")");
 
-            this.srcDepTree = new dependencyTreePlot(this.svg);
-            this.srcDepTree.setCollapseHandle(this.redraw.bind(
-                this));
-
-            this.svg.selectAll(".attConnect")
-                .data(attList)
-                .enter()
-                .append("path")
-                .attr("d", d => {
-                    var lineData = [
-                        [
-                            this.srcPos[d[0]],
-                            this.height / 3 * 1
-                        ],
-
-                        [
-                            this.targPos[d[1]],
-                            this.height / 3 * 2
-                        ]
-                    ];
-                    // console.log(d, lineData);
-                    return d3line(lineData);
-                })
-                .attr("class", "attConnect")
-                .style("stroke-width", d => d[2] * 5)
-                .style("stroke", "blue")
-                .style("opacity", d => 0.1 + d[2])
-                .style("fill", "none");
+            this.drawConnection();
             //drawing sentence
-            this.svg.selectAll(".sourceWord")
+            // console.log(this.srcWords);
+            var srcWidth = this.width / (this.srcPos.length + 1);
+            var targWidth = this.width / (this.targPos.length + 1);
+            console.log(srcWidth, targWidth);
+
+            //////// drawing rect ///////////
+            this.svg.selectAll(".sourceRect")
                 .data(this.srcWords)
                 .enter()
                 .append("rect")
-                .attr("x", this.srcPos[d[0]])
+                .attr("x", (d, i) => this.srcPos[i] - srcWidth / 2.0)
                 .attr("y", this.height / 3 * 0.5)
-                .attr("width", this.width / (this.srcPos.length + 1))
+                .attr("width", srcWidth)
                 .attr("height", this.height / 3 * 0.5)
-                .style("fill", "grey");
+                .attr("class", "sourceRect")
+                .style("fill", "#87CEFA")
+                .style("opacity", (d, i) => srcAtt[i] * 0.5);
+
+            this.svg.selectAll(".targRect")
+                .data(this.targWords)
+                .enter()
+                .append("rect")
+                .attr("x", (d, i) => this.targPos[i] - targWidth / 2.0)
+                .attr("y", this.height / 3 * 2.0)
+                .attr("width", targWidth)
+                .attr("height", this.height / 3 * 0.5)
+                .attr("class", "targRect")
+                .style("fill", "#87CEFA")
+                .style("opacity", (d, i) => targAtt[i] * 0.5)
+
+            //////// drawing text ///////////
+            this.svg.selectAll(".srcWords")
+                .data(this.srcWords)
+                .enter()
+                .append("text")
+                .text(d => d)
+                .attr("x", (d, i) => this.srcPos[i])
+                .attr("y", this.height / 3 * 0.75)
+                .style("font-size", 13)
+                .style("writing-mode", "tb")
+                .style("alignment-baseline", "middle")
+                .style("text-anchor", "middle");
+            //////// drawing text ///////////
+            this.svg.selectAll(".targWords")
+                .data(this.targWords)
+                .enter()
+                .append("text")
+                .text(d => d)
+                .attr("x", (d, i) => this.targPos[i])
+                .attr("y", this.height / 3 * 2.25)
+                .style("font-size", 13)
+                .style("writing-mode", "tb")
+                .style("alignment-baseline", "middle")
+                .style("text-anchor", "middle");
         }
     }
 
-    computeWordPosition(src, targ) {
-        src.push("\<s\>");
-        targ.push("\<s\>");
+    drawConnection() {
+        var d3line = d3.svg.line()
+            .x(function(d) {
+                return d[0];
+            })
+            .y(function(d) {
+                return d[1];
+            })
+            .interpolate("linear");
 
-        console.log(src, targ);
+        this.svg.selectAll(".attConnect")
+            .data(this.attList)
+            .enter()
+            .append("path")
+            .attr("d", d => {
+                var lineData = [
+                    [
+                        this.srcPos[d[0]],
+                        this.height / 3 * 1
+                    ],
+                    [
+                        this.targPos[d[1]],
+                        this.height / 3 * 2
+                    ]
+                ];
+                // console.log(d, lineData);
+                return d3line(lineData);
+            })
+            .attr("class", "attConnect")
+            .style("stroke-width", d => d[2] * 5)
+            .style("stroke", "#87CEFA")
+            .style("opacity", d => 0.1 + d[2])
+            .style("fill", "none");
+    }
+
+    computeWordPosition(src, targ) {
+        // console.log(src, targ);
         this.srcPos = src.map((d, i) => {
-            return this.width / (src.length + 1) * i
+            return this.width / (src.length + 1) * (i + 0.5)
         });
         this.targPos = targ.map((d, i) => {
-            return this.width / (targ.length + 1) * i
+            return this.width / (targ.length + 1) * (i + 0.5)
         });
     }
 
@@ -165,7 +215,8 @@ class attentionSentenceComponent extends baseComponent {
         console.log(parseResult);
         if (parseResult["sentence"] == this.data["currentPair"][0]) {
             //draw structure
-
+            // this.srcDepTree = new dependencyTreePlot(this.svg);
+            // this.srcDepTree.setCollapseHandle(this.redraw.bind(this));
         }
     }
 }

@@ -1,7 +1,7 @@
 
-<div style="margin-top: 25px; margin-left:25px; margin-right:25px" id='{{id}}'>
-    <label>Weight Threshold</label>
-    <input type="range" min="1" max="100" value="50" class="slider" id="{{id}}weightThreshold">
+<div id='{{id}}'>
+    <!--label>Weight Threshold</label-->
+    <!--input type="range" min="1" max="100" value="50" class="slider" id="{{id}}weightThreshold"->
     <div id='{{id}}'>
     </div>
 </div>
