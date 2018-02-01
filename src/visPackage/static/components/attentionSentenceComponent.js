@@ -26,7 +26,7 @@ class attentionSentenceComponent extends baseComponent {
         if (this.data["attention"] !== undefined) {
             //clear all
             if (this.svg)
-                this.svg.selectAll().remove();
+                this.svg.selectAll("*").remove();
             //draw your stuff here
             //the dimension of the panel is this.width, this.height
             //the attention is store at this.data["attention"]
@@ -38,7 +38,10 @@ class attentionSentenceComponent extends baseComponent {
             var attMatrix = this.data["attention"];
             // console.log(attMatrix);
 
+            // var srcAtt = attMatrix.map(d => d.reduce((a, b) => Math.max(a,
+            //     b)));
             var srcAtt = attMatrix.map(d => d.reduce((a, b) => a + b));
+
             var targAtt = attMatrix[0].map((d, i) => {
                 // console.log(d, i);
                 var sum = 0;
@@ -63,32 +66,47 @@ class attentionSentenceComponent extends baseComponent {
             });
 
             this.srcWords = pair[0].match(/\S+/g);
-            this.srcWords.push("\<s\>");
+            this.srcWords.push(
+                "\<s\>");
             this.targWords = pair[1].match(/\S+/g);
-            this.targWords.push("\<s\>");
+            this
+                .targWords.push("\<s\>");
 
             //sentence position
             this.computeWordPosition(this.srcWords, this.targWords);
-            console.log(this.srcWords, this.targWords);
-            console.log(this.srcPos, this.targPos);
+            console
+                .log(this.srcWords, this.targWords);
+            console.log(this.srcPos,
+                this.targPos);
 
             //sentence mask
 
             //word location
 
-            this.svg = d3.select(this.div).append("svg")
-                .attr("width", this.pwidth)
-                .attr("height", this.pheight)
-                .append("g")
-                .attr("transform", "translate(" + this.margin.left + "," +
-                    this.margin.top + ")");
+            if (this.svg) {
+                this.svg.attr("width", this.pwidth)
+                    .attr("height", this.pheight)
+                    .append("g")
+                    .attr("transform", "translate(" + this.margin.left +
+                        "," +
+                        this.margin.top + ")");
 
+            } else {
+                this.svg = d3.select(this.div).append("svg")
+                    .attr("width", this.pwidth)
+                    .attr("height", this.pheight)
+                    .append("g")
+                    .attr("transform", "translate(" + this.margin.left +
+                        "," +
+                        this.margin.top + ")");
+            }
             this.drawConnection();
             //drawing sentence
             // console.log(this.srcWords);
             var srcWidth = this.width / (this.srcPos.length + 1);
             var targWidth = this.width / (this.targPos.length + 1);
-            console.log(srcWidth, targWidth);
+            console
+                .log(srcWidth, targWidth);
 
             //////// drawing rect ///////////
             this.svg.selectAll(".sourceRect")
@@ -183,7 +201,8 @@ class attentionSentenceComponent extends baseComponent {
             return this.width / (src.length + 1) * (i + 0.5)
         });
         this.targPos = targ.map((d, i) => {
-            return this.width / (targ.length + 1) * (i + 0.5)
+            return this.width / (targ.length + 1) * (i +
+                0.5)
         });
     }
 
