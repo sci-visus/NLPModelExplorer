@@ -21,6 +21,12 @@ class attentionSentenceComponent extends baseComponent {
         this.srcMaskSet = new Set();
         this.targMaskSet = new Set();
 
+        //filter the visualization by modify the mask set
+        // this.srcMaskSet.add("to");
+        // this.srcMaskSet.add("go");
+        // this.srcMaskSet.add("packages");
+        // this.targMaskSet.add("to");
+
         this.draw();
     }
 
@@ -58,7 +64,10 @@ class attentionSentenceComponent extends baseComponent {
                 }
 
             // console.log(srcAtt, targAtt);
-            this.generateSrcTargWords(pair);
+
+            var src = this.sen2words(pair[0]);
+            var targ = this.sen2words(pair[1]);
+            this.collapSrcTarg(src, targ, srcAtt, targAtt);
 
             //sentence position
             this.computeWordPosition(this.srcWords, this.targWords);
@@ -95,7 +104,7 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("height", this.height / 3 * 0.5)
                 .attr("class", "sourceRect")
                 .style("fill", "#87CEFA")
-                .style("opacity", (d, i) => srcAtt[i] * 0.5);
+                .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
 
             this.svg.selectAll(".targRect")
                 .data(this.targWords)
@@ -107,7 +116,7 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("height", this.height / 3 * 0.5)
                 .attr("class", "targRect")
                 .style("fill", "#87CEFA")
-                .style("opacity", (d, i) => targAtt[i] * 0.5)
+                .style("opacity", (d, i) => this.targAtt[i] * 0.5)
 
             //////// drawing text ///////////
             this.svg.selectAll(".srcWords")
@@ -152,19 +161,25 @@ class attentionSentenceComponent extends baseComponent {
             .enter()
             .append("path")
             .attr("d", d => {
-                console.log(d);
-                var lineData = [
-                    [
-                        this.srcPos[d[0]],
-                        this.height / 3 * 1
-                    ],
-                    [
-                        this.targPos[d[1]],
-                        this.height / 3 * 2
-                    ]
-                ];
-                // console.log(d, lineData);
-                return d3line(lineData);
+                // console.log(d);
+                let mappedSrcIndex = this.srcCollapMap[d[0]];
+                let mappedTargIndex = this.targCollapMap[d[1]];
+
+                if (mappedSrcIndex && mappedTargIndex) {
+
+                    var lineData = [
+                        [
+                            this.srcPos[mappedSrcIndex],
+                            this.height / 3 * 1
+                        ],
+                        [
+                            this.targPos[mappedTargIndex],
+                            this.height / 3 * 2
+                        ]
+                    ];
+                    // console.log(d, lineData);
+                    return d3line(lineData);
+                }
             })
             .attr("class", "attConnect")
             .style("stroke-width", d => d[2] * 5)
@@ -228,17 +243,21 @@ class attentionSentenceComponent extends baseComponent {
 
     ///////////// helper //////////////
 
-    generateSrcTargWords(pair) {
-        // console.log(pair)
-        var src = this.sen2words(pair[0]);
-        var targ = this.sen2words(pair[1]);
-
+    collapSrcTarg(src, targ, srcAtt, targAtt) {
         //save the original files
         this.originSrcWords = src;
         this.originTargWords = targ;
 
         this.srcWords = this.collapSenBySet(src, this.srcMaskSet);
         this.targWords = this.collapSenBySet(targ, this.targMaskSet);
+
+        this.srcAtt = this.collapSenAttBySet(src, srcAtt, this.srcMaskSet);
+        this.targAtt = this.collapSenAttBySet(targ, targAtt, this.targMaskSet);
+
+        this.srcCollapMap = this.generateIndexMap(src, this.srcWords)
+        this.targCollapMap = this.generateIndexMap(targ, this.targWords)
+
+        console.log(this.srcCollapMap, this.targCollapMap);
     }
 
     sen2words(sen) {
@@ -256,6 +275,15 @@ class attentionSentenceComponent extends baseComponent {
         return collapWords;
     }
 
+    collapSenAttBySet(words, att, maskSet) {
+        var collapAtt = [];
+        for (var i = 0; i < words.length; i++) {
+            if (!maskSet.has(words[i]))
+                collapAtt.push(att[i]);
+        }
+        return collapAtt;
+    }
+
     /*
     generate index from collapsed sentence to the original sentence
     */
@@ -264,8 +292,10 @@ class attentionSentenceComponent extends baseComponent {
         var map = []
         for (var i = 0; i < originSen.length; i++) {
             if (originSen[i] == collapSen[j]) {
-                map.push(i);
+                map.push(j);
                 j += 1;
+            } else {
+                map.push(undefined);
             }
         }
         return map
