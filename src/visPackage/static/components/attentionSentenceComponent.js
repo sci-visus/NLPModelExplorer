@@ -65,10 +65,7 @@ class attentionSentenceComponent extends baseComponent {
             // console.log(this.srcWords, this.targWords);
             // console.log(this.srcPos, this.targPos);
 
-            //sentence mask
-
-            //word location
-
+            //create svg
             this.svg = d3.select(this.div).append("svg")
                 .attr("width", this.width)
                 .attr("height", this.height)
@@ -76,12 +73,16 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("transform", "translate(" + this.margin.left + "," +
                     this.margin.top + ")");
 
-            this.drawConnection();
             //drawing sentence
             // console.log(this.srcWords);
             var srcWidth = this.width / (this.srcWords.length + 1);
             var targWidth = this.width / (this.targWords.length + 1);
             // console.log(srcWidth, targWidth);
+
+
+
+            //////// drawing line ///////////
+            this.drawConnection();
 
             //////// drawing rect ///////////
             this.svg.selectAll(".sourceRect")
@@ -120,15 +121,6 @@ class attentionSentenceComponent extends baseComponent {
                 .style("writing-mode", this.checkOrientation.bind(this))
                 // .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle");
-            // .each(this.getFontSize)
-            // .style("font-size", function(d) {
-            //     var bbox = this.getBBox();
-            //     var cbbox = this.parentNode.getBBox();
-            //     console.log(cbbox);
-            //     var scale = Math.min(cbbox.height / bbox.width,
-            //         cbbox.width / bbox.height);
-            //     return scale + "px";
-            // });
 
             //////// drawing text ///////////
             this.svg.selectAll(".targWords")
@@ -146,20 +138,21 @@ class attentionSentenceComponent extends baseComponent {
     }
 
     drawConnection() {
-        var d3line = d3.svg.line()
+        var d3line = d3.line()
             .x(function(d) {
                 return d[0];
             })
             .y(function(d) {
                 return d[1];
-            })
-            .interpolate("linear");
+            });
+        // .curve("d3.curveLinear");
 
         this.svg.selectAll(".attConnect")
             .data(this.attList)
             .enter()
             .append("path")
             .attr("d", d => {
+                console.log(d);
                 var lineData = [
                     [
                         this.srcPos[d[0]],
@@ -206,12 +199,12 @@ class attentionSentenceComponent extends baseComponent {
             case "currentPair":
                 var pair = msg["data"]["data"];
                 //parse the sentence
-                this.callFunc("parseSentence", {
-                    "sentence": pair[0]
-                });
-                this.callFunc("parseSentence", {
-                    "sentence": pair[1]
-                });
+                // this.callFunc("parseSentence", {
+                //     "sentence": pair[0]
+                // });
+                // this.callFunc("parseSentence", {
+                //     "sentence": pair[1]
+                // });
                 break;
         }
     }
@@ -246,20 +239,6 @@ class attentionSentenceComponent extends baseComponent {
 
         this.srcWords = this.collapSenBySet(src, this.srcMaskSet);
         this.targWords = this.collapSenBySet(targ, this.targMaskSet);
-
-        // this.srcWords = [];
-        // for (var i = 0; i < src.length; i++) {
-        //     if (!this.srcMaskSet.has(src[i]))
-        //         this.srcWords.push(src[i]);
-        // }
-        //
-        //
-        // this.targWords = [];
-        // for (var i = 0; i < targ.length; i++) {
-        //     if (!this.targMaskSet.has(targ[i]))
-        //         this.targWords.push(targ[i]);
-        // }
-        // console.log(this.srcWords, this.targWords);
     }
 
     sen2words(sen) {
@@ -276,10 +255,6 @@ class attentionSentenceComponent extends baseComponent {
         }
         return collapWords;
     }
-
-    // generateWords(sen){
-    //
-    // }
 
     /*
     generate index from collapsed sentence to the original sentence
