@@ -131,7 +131,6 @@ class modelInterface:
                 i += 1
 
 
-
     def batchPredict(self, sentencePairs):
 
         #convert sentence to batchFormat
@@ -161,7 +160,7 @@ class modelInterface:
         y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
 
         p = y_dist.exp()
-        print "prediction result:", p
+        # print "prediction result:", p
         # pred = dict()
         pred = p.data.numpy()
         # pred["entail"] = p[0]

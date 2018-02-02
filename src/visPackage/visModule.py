@@ -78,7 +78,7 @@ class visModule:
 
 '''
 data organization structure
-    - sentenceList (list of pairs)
+    - sentenceList (list of example pairs)
     - currentPair (the current selected pair)
     - allSourcePairs (all source pairs including the oringal)
     - allTargetPairs (all target pairs including the oringal)
@@ -156,7 +156,9 @@ class textEntailVisModule(visModule):
         else:
             allTargetPairs = [dataManager.getData("currentPair")[1]]
         # print "original s, t:"
-        print allSourcePairs, allTargetPairs
+        # print allSourcePairs, allTargetPairs
+        if len(allSourcePairs) == 0 and len(allTargetPairs):
+            return
 
         allPairsPrediction = np.zeros( (len(allSourcePairs), len(allTargetPairs), 3) )
         for i, source in enumerate(allSourcePairs):

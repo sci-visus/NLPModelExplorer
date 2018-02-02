@@ -30,6 +30,14 @@ class attentionSentenceComponent extends baseComponent {
         this.draw();
     }
 
+    updateMask(srcList, targList) {
+        this.srcMaskSet.clear();
+        this.targMaskSet.clear();
+        srcList.map(d => this.srcMaskSet.add(d));
+        targList.map(d => this.targMaskSet.add(d));
+        this.draw();
+    }
+
     draw() {
         this._updateWidthHeight();
 
