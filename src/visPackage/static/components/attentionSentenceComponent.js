@@ -17,6 +17,10 @@ class attentionSentenceComponent extends baseComponent {
             left: 15
         };
 
+        //init member
+        this.srcMaskSet = new Set();
+        this.targMaskSet = new Set();
+
         this.draw();
     }
 
@@ -54,10 +58,7 @@ class attentionSentenceComponent extends baseComponent {
                 }
 
             // console.log(srcAtt, targAtt);
-            this.srcWords = pair[0].match(/\S+/g);
-            this.srcWords.unshift("\<s\>");
-            this.targWords = pair[1].match(/\S+/g);
-            this.targWords.unshift("\<s\>");
+            this.generateSrcTargWords(pair);
 
             //sentence position
             this.computeWordPosition(this.srcWords, this.targWords);
@@ -233,6 +234,67 @@ class attentionSentenceComponent extends baseComponent {
     }
 
     ///////////// helper //////////////
+
+    generateSrcTargWords(pair) {
+        // console.log(pair)
+        var src = this.sen2words(pair[0]);
+        var targ = this.sen2words(pair[1]);
+
+        //save the original files
+        this.originSrcWords = src;
+        this.originTargWords = targ;
+
+        this.srcWords = this.collapSenBySet(src, this.srcMaskSet);
+        this.targWords = this.collapSenBySet(targ, this.targMaskSet);
+
+        // this.srcWords = [];
+        // for (var i = 0; i < src.length; i++) {
+        //     if (!this.srcMaskSet.has(src[i]))
+        //         this.srcWords.push(src[i]);
+        // }
+        //
+        //
+        // this.targWords = [];
+        // for (var i = 0; i < targ.length; i++) {
+        //     if (!this.targMaskSet.has(targ[i]))
+        //         this.targWords.push(targ[i]);
+        // }
+        // console.log(this.srcWords, this.targWords);
+    }
+
+    sen2words(sen) {
+        var words = sen.match(/\S+/g);
+        words.unshift("\<s\>");
+        return words
+    }
+
+    collapSenBySet(words, maskSet) {
+        var collapWords = [];
+        for (var i = 0; i < words.length; i++) {
+            if (!maskSet.has(words[i]))
+                collapWords.push(words[i]);
+        }
+        return collapWords;
+    }
+
+    // generateWords(sen){
+    //
+    // }
+
+    /*
+    generate index from collapsed sentence to the original sentence
+    */
+    generateIndexMap(originSen, collapSen) {
+        var j = 0;
+        var map = []
+        for (var i = 0; i < originSen.length; i++) {
+            if (originSen[i] == collapSen[j]) {
+                map.push(i);
+                j += 1;
+            }
+        }
+        return map
+    }
 
     checkFontSize(d) {
         var cbbox = this.svg.select(".targRect").node().getBBox();
