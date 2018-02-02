@@ -27,8 +27,7 @@ exampleData = [{
     "targ": "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n"
 },{
     "index":1,
-    "src": "Two young children in blue jerseys , one with the number \
-    9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
+    "src": "Two young children in blue jerseys , one with the number 9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
     "targ": "Two kids in numbered jerseys wash their hands .\n"
 }
 ]
