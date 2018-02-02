@@ -8,7 +8,7 @@ Matrix representation of attention
 class attentionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["attention"]);
+        this.subscribeDatabyNames(["attention", "currentPair"]);
 
         this.margin = {
             top: 25,
@@ -16,10 +16,6 @@ class attentionComponent extends baseComponent {
             bottom: 25,
             left: 25
         };
-	
-	this.rectw = 50;
-	
-	this.recth = 30;
 
         this.draw();
     }
@@ -31,12 +27,73 @@ class attentionComponent extends baseComponent {
             //draw your stuff here
             //the dimension of the panel is this.width, this.height
             //the attention is store at this.data["attention"]
-		//TODO: I need sentence, and dependency tree of the sentence
-            console.log("attention:", this.data["attention"]);
+	    //TODO: I need sentence, and dependency tree of the sentence
+            //console.log("attention:", this.data["attention"]);
 	    
-	    let h_sen = this.data['attention'].targ_sen,
-	    v_sen = this.data['attention'].src_sen,
-	    matrix = this.data['attention'].matrix;
+	    //clear all
+	    if(this.svg)
+		    d3.select(this.div).html('');
+	    
+	    let pair = this.data['currentPair'];
+	    
+	    //draw attention
+	    let attMatrix = this.data['attention'];
+	    
+	    
+	    //data
+    	    this.attList = [];
+	    for(let i = 0; i < attMatrix.length; i++)
+		    for(let j = 0; j < attMatrix[i].length; j++){
+		    	this.attList.push(attMatrix[i][j])
+		    }
+		    
+	    this.srcWords = pair[0].match(/\S+/g);
+	    this.srcWords = ["\<s\>"].concat(this.srcWords);
+	    this.targWords = pair[1].match(/\S+/g);
+	    this.targWords = ["\<s\>"].concat(this.targWords);    
+		    
+            
+            //sentence position
+            this.computeWordPosition(this.srcWords, this.targWords);
+	    
+	    //init svg
+	    this.svg = d3.select(this.div).append("svg")
+            .attr("width", this.pwidth)
+            .attr("height", this.pheight)
+            .append("g")
+            .attr("transform", "translate(" + this.margin.left + "," +
+            	this.margin.top + ")");
+		
+	    //Draw src text
+	    this.svg.selectAll('.attentionComponent_srcwords')
+	    	.data(this.srcWords)
+		.enter()
+		.append('text')
+		.text(d => d)
+		.attr('x', (d, i) => this.srcPos[i])
+		.attr("y", this.margin.top)
+		.style("font-size", 10)
+                .style("alignment-baseline", "middle")
+                .style("text-anchor", "middle");
+		
+	    //Draw targ text
+	    this.svg.selectAll('.attentionCompoentn_targwords')
+		.data(this.targWords)
+		.enter()
+		.append('text')
+		.text(d=>d)
+		.attr('x', this.margin.left)
+		.attr("y", (d, i) => this.targPos[i])
+		.style("alignment-baseline", "middle")
+		.style("font-size", 10)
+                .style("text-anchor", "middle");
+		
+	
+	
+	
+	    //sentence position
+	    
+	
         }
     }
 	
@@ -48,6 +105,16 @@ class attentionComponent extends baseComponent {
     	
     }
 
+    computeWordPosition(src, targ) {
+        // console.log(src, targ);
+        this.srcPos = src.map((d, i) => {
+            return this.width / (src.length + 1) * (i + 2)
+        });
+	
+        this.targPos = targ.map((d, i) => {
+		return this.height / (targ.length + 1) * (i + 0.5) + this.margin.top;
+        });
+    }
 
 
     resize() {
