@@ -202,6 +202,16 @@ class attentionSentenceComponent extends baseComponent {
                 //if attention is updated, redraw attention
                 this.draw();
                 break;
+            case "currentPair":
+                var pair = msg["data"]["data"];
+                //parse the sentence
+                this.callFunc("parseSentence", {
+                    "sentence": pair[0]
+                });
+                this.callFunc("parseSentence", {
+                    "sentence": pair[1]
+                });
+                break;
         }
     }
 
@@ -219,30 +229,20 @@ class attentionSentenceComponent extends baseComponent {
             //draw structure
             // this.srcDepTree = new dependencyTreePlot(this.svg);
             // this.srcDepTree.setCollapseHandle(this.redraw.bind(this));
-            var pair = msg["data"]["data"];
-            //parse the sentence
-            this.callFunc("parseSentence", {
-                "sentence": pair[0]
-            });
-            this.callFunc("parseSentence", {
-                "sentence": pair[1]
-            });
         }
     }
 
     ///////////// helper //////////////
 
     checkFontSize(d) {
-        var cbbox = this.svg.select(".targRect").node()
-            .getBBox();
-        console.log(cbbox);
+        var cbbox = this.svg.select(".targRect").node().getBBox();
+        // console.log(cbbox);
         return 14;
     }
 
     checkOrientation(d) {
-        var cbbox = this.svg.select(".targRect").node()
-            .getBBox();
-        console.log(cbbox);
+        var cbbox = this.svg.select(".targRect").node().getBBox();
+        // console.log(cbbox);
         if (cbbox.height > cbbox.width)
             return "vertical-rl";
         else
