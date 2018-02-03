@@ -103,6 +103,8 @@ class predictionComponent extends baseComponent {
                     data.push(allPairsPrediction[i][j].concat([i, j]));
                 }
             }
+
+        console.log(data);
         this.updatePredictDisplay(data);
     }
 

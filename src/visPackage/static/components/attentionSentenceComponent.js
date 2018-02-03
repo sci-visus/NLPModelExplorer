@@ -17,6 +17,24 @@ class attentionSentenceComponent extends baseComponent {
             left: 15
         };
 
+        //init member
+        this.srcMaskSet = new Set();
+        this.targMaskSet = new Set();
+
+        //filter the visualization by modify the mask set
+        // this.srcMaskSet.add("to");
+        // this.srcMaskSet.add("go");
+        // this.srcMaskSet.add("packages");
+        // this.targMaskSet.add("to");
+
+        this.draw();
+    }
+
+    updateMask(srcList, targList) {
+        this.srcMaskSet.clear();
+        this.targMaskSet.clear();
+        srcList.map(d => this.srcMaskSet.add(d));
+        targList.map(d => this.targMaskSet.add(d));
         this.draw();
     }
 
@@ -54,20 +72,17 @@ class attentionSentenceComponent extends baseComponent {
                 }
 
             // console.log(srcAtt, targAtt);
-            this.srcWords = pair[0].match(/\S+/g);
-            this.srcWords.unshift("\<s\>");
-            this.targWords = pair[1].match(/\S+/g);
-            this.targWords.unshift("\<s\>");
+
+            var src = this.sen2words(pair[0]);
+            var targ = this.sen2words(pair[1]);
+            this.collapSrcTarg(src, targ, srcAtt, targAtt);
 
             //sentence position
             this.computeWordPosition(this.srcWords, this.targWords);
             // console.log(this.srcWords, this.targWords);
             // console.log(this.srcPos, this.targPos);
 
-            //sentence mask
-
-            //word location
-
+            //create svg
             this.svg = d3.select(this.div).append("svg")
                 .attr("width", this.width)
                 .attr("height", this.height)
@@ -75,12 +90,16 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("transform", "translate(" + this.margin.left + "," +
                     this.margin.top + ")");
 
-            this.drawConnection();
             //drawing sentence
             // console.log(this.srcWords);
             var srcWidth = this.width / (this.srcWords.length + 1);
             var targWidth = this.width / (this.targWords.length + 1);
             // console.log(srcWidth, targWidth);
+
+
+
+            //////// drawing line ///////////
+            this.drawConnection();
 
             //////// drawing rect ///////////
             this.svg.selectAll(".sourceRect")
@@ -93,7 +112,7 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("height", this.height / 3 * 0.5)
                 .attr("class", "sourceRect")
                 .style("fill", "#87CEFA")
-                .style("opacity", (d, i) => srcAtt[i] * 0.5);
+                .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
 
             this.svg.selectAll(".targRect")
                 .data(this.targWords)
@@ -105,7 +124,7 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("height", this.height / 3 * 0.5)
                 .attr("class", "targRect")
                 .style("fill", "#87CEFA")
-                .style("opacity", (d, i) => targAtt[i] * 0.5)
+                .style("opacity", (d, i) => this.targAtt[i] * 0.5)
 
             //////// drawing text ///////////
             this.svg.selectAll(".srcWords")
@@ -119,15 +138,6 @@ class attentionSentenceComponent extends baseComponent {
                 .style("writing-mode", this.checkOrientation.bind(this))
                 // .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle");
-            // .each(this.getFontSize)
-            // .style("font-size", function(d) {
-            //     var bbox = this.getBBox();
-            //     var cbbox = this.parentNode.getBBox();
-            //     console.log(cbbox);
-            //     var scale = Math.min(cbbox.height / bbox.width,
-            //         cbbox.width / bbox.height);
-            //     return scale + "px";
-            // });
 
             //////// drawing text ///////////
             this.svg.selectAll(".targWords")
@@ -145,32 +155,39 @@ class attentionSentenceComponent extends baseComponent {
     }
 
     drawConnection() {
-        var d3line = d3.svg.line()
+        var d3line = d3.line()
             .x(function(d) {
                 return d[0];
             })
             .y(function(d) {
                 return d[1];
-            })
-            .interpolate("linear");
+            });
+        // .curve("d3.curveLinear");
 
         this.svg.selectAll(".attConnect")
             .data(this.attList)
             .enter()
             .append("path")
             .attr("d", d => {
-                var lineData = [
-                    [
-                        this.srcPos[d[0]],
-                        this.height / 3 * 1
-                    ],
-                    [
-                        this.targPos[d[1]],
-                        this.height / 3 * 2
-                    ]
-                ];
-                // console.log(d, lineData);
-                return d3line(lineData);
+                // console.log(d);
+                let mappedSrcIndex = this.srcCollapMap[d[0]];
+                let mappedTargIndex = this.targCollapMap[d[1]];
+
+                if (mappedSrcIndex && mappedTargIndex) {
+
+                    var lineData = [
+                        [
+                            this.srcPos[mappedSrcIndex],
+                            this.height / 3 * 1
+                        ],
+                        [
+                            this.targPos[mappedTargIndex],
+                            this.height / 3 * 2
+                        ]
+                    ];
+                    // console.log(d, lineData);
+                    return d3line(lineData);
+                }
             })
             .attr("class", "attConnect")
             .style("stroke-width", d => d[2] * 5)
@@ -205,12 +222,12 @@ class attentionSentenceComponent extends baseComponent {
             case "currentPair":
                 var pair = msg["data"]["data"];
                 //parse the sentence
-                this.callFunc("parseSentence", {
-                    "sentence": pair[0]
-                });
-                this.callFunc("parseSentence", {
-                    "sentence": pair[1]
-                });
+                // this.callFunc("parseSentence", {
+                //     "sentence": pair[0]
+                // });
+                // this.callFunc("parseSentence", {
+                //     "sentence": pair[1]
+                // });
                 break;
         }
     }
@@ -233,6 +250,64 @@ class attentionSentenceComponent extends baseComponent {
     }
 
     ///////////// helper //////////////
+
+    collapSrcTarg(src, targ, srcAtt, targAtt) {
+        //save the original files
+        this.originSrcWords = src;
+        this.originTargWords = targ;
+
+        this.srcWords = this.collapSenBySet(src, this.srcMaskSet);
+        this.targWords = this.collapSenBySet(targ, this.targMaskSet);
+
+        this.srcAtt = this.collapSenAttBySet(src, srcAtt, this.srcMaskSet);
+        this.targAtt = this.collapSenAttBySet(targ, targAtt, this.targMaskSet);
+
+        this.srcCollapMap = this.generateIndexMap(src, this.srcWords)
+        this.targCollapMap = this.generateIndexMap(targ, this.targWords)
+
+        console.log(this.srcCollapMap, this.targCollapMap);
+    }
+
+    sen2words(sen) {
+        var words = sen.match(/\S+/g);
+        words.unshift("\<s\>");
+        return words
+    }
+
+    collapSenBySet(words, maskSet) {
+        var collapWords = [];
+        for (var i = 0; i < words.length; i++) {
+            if (!maskSet.has(words[i]))
+                collapWords.push(words[i]);
+        }
+        return collapWords;
+    }
+
+    collapSenAttBySet(words, att, maskSet) {
+        var collapAtt = [];
+        for (var i = 0; i < words.length; i++) {
+            if (!maskSet.has(words[i]))
+                collapAtt.push(att[i]);
+        }
+        return collapAtt;
+    }
+
+    /*
+    generate index from collapsed sentence to the original sentence
+    */
+    generateIndexMap(originSen, collapSen) {
+        var j = 0;
+        var map = []
+        for (var i = 0; i < originSen.length; i++) {
+            if (originSen[i] == collapSen[j]) {
+                map.push(j);
+                j += 1;
+            } else {
+                map.push(undefined);
+            }
+        }
+        return map
+    }
 
     checkFontSize(d) {
         var cbbox = this.svg.select(".targRect").node().getBBox();

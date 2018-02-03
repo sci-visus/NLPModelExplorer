@@ -27,8 +27,7 @@ exampleData = [{
     "targ": "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n"
 },{
     "index":1,
-    "src": "Two young children in blue jerseys , one with the number \
-    9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
+    "src": "Two young children in blue jerseys , one with the number 9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
     "targ": "Two kids in numbered jerseys wash their hands .\n"
 }
 ]
@@ -79,7 +78,7 @@ class visModule:
 
 '''
 data organization structure
-    - sentenceList (list of pairs)
+    - sentenceList (list of example pairs)
     - currentPair (the current selected pair)
     - allSourcePairs (all source pairs including the oringal)
     - allTargetPairs (all target pairs including the oringal)
@@ -157,7 +156,9 @@ class textEntailVisModule(visModule):
         else:
             allTargetPairs = [dataManager.getData("currentPair")[1]]
         # print "original s, t:"
-        print allSourcePairs, allTargetPairs
+        # print allSourcePairs, allTargetPairs
+        if len(allSourcePairs) == 0 and len(allTargetPairs):
+            return
 
         allPairsPrediction = np.zeros( (len(allSourcePairs), len(allTargetPairs), 3) )
         for i, source in enumerate(allSourcePairs):

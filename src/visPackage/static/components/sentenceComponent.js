@@ -7,9 +7,6 @@ class sentenceComponent extends baseComponent {
         super(uuid);
         this.subscribeDatabyNames(["sentenceList", "currentPair"]);
 
-        this.isPerturbTarget = false;
-        this.isPerturbSource = false;
-
         //setup UI
         d3.select(this.div + "perturbTarget").on("click", this.perturbTarget
             .bind(this));
@@ -60,7 +57,8 @@ class sentenceComponent extends baseComponent {
     parseFunctionReturn(msg) {
         switch (msg['func']) {
             case 'perturbSentence':
-                this.updatePerturbedSentences(msg["data"]["data"]);
+                this.updatePerturbedSentences(msg["data"]["data"], msg[
+                    "data"]);
                 break;
                 // case 'functionReturn':
                 //     this.parseFunctionReturn(msg);
@@ -105,6 +103,12 @@ class sentenceComponent extends baseComponent {
 
         //update rest of the views
         this.setData("currentPair", currentPair);
+
+        this.clearDropdown(this.div + "srcInput");
+        this.clearDropdown(this.div + "targInput");
+
+        this.setData("allSourcePairs", [currentPair[0]]);
+        this.setData("allTargetPairs", [currentPair[1]]);
     }
 
     onUpdateCurrentPair() {
@@ -115,27 +119,19 @@ class sentenceComponent extends baseComponent {
         this.setData("currentPair", currentPair);
     }
 
-    //FIXME: the flag will create async bug
     updatePerturbedSentences(sentences) {
-        if (this.isPerturbSource) {
+        if (this.data["currentPair"][0] == sentences[0]) {
             this.setData("allSourcePairs", sentences);
             this.addDropdown(this.div + "srcInput", sentences, this.div +
                 "src");
-            this.isPerturbSource = false;
-        }
-
-        if (this.isPerturbTarget) {
+        } else if (this.data["currentPair"][1] == sentences[0]) {
             this.setData("allTargetPairs", sentences);
             this.addDropdown(this.div + "targInput", sentences, this.div +
                 "targ");
-            this.isPerturbTarget = false;
         }
-        // console.log(sentences);
     }
 
     perturbSource() {
-        // console.log("perturb source\n");
-        // this.addDropdown(this.div + "srcInput");
         if (this.data["currentPair"] !== undefined) {
             this.isPerturbSource = true;
             this.callFunc("perturbSentence", {
@@ -151,6 +147,12 @@ class sentenceComponent extends baseComponent {
                 "sentence": this.data["currentPair"][1]
             });
         }
+    }
+
+    clearDropdown(selector) {
+        d3.select(selector).select(".dropdown-toggle").remove();
+        d3.select(selector).select(".dropdown-menu")
+            .selectAll(".dropdown-item").remove();
     }
 
     addDropdown(selector, sentences, labelSelector) {
