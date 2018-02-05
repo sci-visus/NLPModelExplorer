@@ -41,6 +41,7 @@ class attentionSentenceComponent extends baseComponent {
     draw() {
         this._updateWidthHeight();
 
+
         if (this.data["attention"] !== undefined) {
             //clear all
             if (!d3.select(this.div).select("svg").empty())
@@ -94,22 +95,26 @@ class attentionSentenceComponent extends baseComponent {
             // console.log(this.srcWords);
             var srcWidth = this.width / (this.srcWords.length + 1);
             var targWidth = this.width / (this.targWords.length + 1);
+            this.rectHeight = this.height / 3.0 * 0.5;
             // console.log(srcWidth, targWidth);
 
+            ///////////////////// draw dependency tree //////////////////
+            this.src_dep = new dependencyTreePlot(this.svg, 'h-top',
+                this.srcPos, this.srcDepTreeData, this.width, this
+                .height);
 
-
-            //////// drawing line ///////////
+            ///////////////////// drawing line //////////////////////
             this.drawConnection();
 
-            //////// drawing rect ///////////
+            ///////////////////// drawing rect //////////////////////
             this.svg.selectAll(".sourceRect")
                 .data(this.srcWords)
                 .enter()
                 .append("rect")
-                .attr("x", (d, i) => this.srcPos[i] - srcWidth / 2.0)
-                .attr("y", this.height / 3 * 0.5)
+                .attr("x", (d, i) => this.srcPos[i].x - srcWidth / 2.0)
+                .attr("y", (d, i) => this.srcPos[i].y)
                 .attr("width", srcWidth)
-                .attr("height", this.height / 3 * 0.5)
+                .attr("height", this.rectHeight)
                 .attr("class", "sourceRect")
                 .style("fill", "#87CEFA")
                 .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
@@ -118,35 +123,35 @@ class attentionSentenceComponent extends baseComponent {
                 .data(this.targWords)
                 .enter()
                 .append("rect")
-                .attr("x", (d, i) => this.targPos[i] - targWidth / 2.0)
-                .attr("y", this.height / 3 * 2.0)
+                .attr("x", (d, i) => this.targPos[i].x - targWidth / 2.0)
+                .attr("y", (d, i) => this.targPos[i].y - this.rectHeight)
                 .attr("width", targWidth)
-                .attr("height", this.height / 3 * 0.5)
+                .attr("height", this.rectHeight)
                 .attr("class", "targRect")
                 .style("fill", "#87CEFA")
                 .style("opacity", (d, i) => this.targAtt[i] * 0.5)
 
-            //////// drawing text ///////////
+            ///////////////////// drawing text ////////////////////
             this.svg.selectAll(".srcWords")
                 .data(this.srcWords)
                 .enter()
                 .append("text")
                 .text(d => d)
-                .attr("x", (d, i) => this.srcPos[i])
-                .attr("y", this.height / 3 * 0.75)
+                .attr("x", (d, i) => this.srcPos[i].x)
+                .attr("y", (d, i) => this.srcPos[i].y + this.rectHeight *
+                    0.5)
                 .style("font-size", this.checkFontSize.bind(this))
                 .style("writing-mode", this.checkOrientation.bind(this))
-                // .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle");
 
-            //////// drawing text ///////////
             this.svg.selectAll(".targWords")
                 .data(this.targWords)
                 .enter()
                 .append("text")
                 .text(d => d)
-                .attr("x", (d, i) => this.targPos[i])
-                .attr("y", this.height / 3 * 2.25)
+                .attr("x", (d, i) => this.targPos[i].x)
+                .attr("y", (d, i) => this.targPos[i].y - this.rectHeight *
+                    0.5)
                 .style("font-size", this.checkFontSize.bind(this))
                 .style("writing-mode", this.checkOrientation.bind(this))
                 .style("alignment-baseline", "middle")
@@ -177,12 +182,14 @@ class attentionSentenceComponent extends baseComponent {
 
                     var lineData = [
                         [
-                            this.srcPos[mappedSrcIndex],
-                            this.height / 3 * 1
+                            this.srcPos[mappedSrcIndex].x,
+                            this.srcPos[mappedSrcIndex].y +
+                            this.rectHeight
                         ],
                         [
-                            this.targPos[mappedTargIndex],
-                            this.height / 3 * 2
+                            this.targPos[mappedTargIndex].x,
+                            this.targPos[mappedSrcIndex].y -
+                            this.rectHeight
                         ]
                     ];
                     // console.log(d, lineData);
@@ -199,10 +206,16 @@ class attentionSentenceComponent extends baseComponent {
     computeWordPosition(src, targ) {
         // console.log(src, targ);
         this.srcPos = src.map((d, i) => {
-            return this.width / (src.length + 1) * (i + 1)
+            return {
+                'x': this.width / (src.length + 1) * (i + 1),
+                'y': this.height / 3 * 0.5
+            };
         });
         this.targPos = targ.map((d, i) => {
-            return this.width / (targ.length + 1) * (i + 1)
+            return {
+                'x': this.width / (targ.length + 1) * (i + 1),
+                'y': this.height / 3 * 2.5
+            };
         });
     }
 
@@ -222,12 +235,12 @@ class attentionSentenceComponent extends baseComponent {
             case "currentPair":
                 var pair = msg["data"]["data"];
                 //parse the sentence
-                // this.callFunc("parseSentence", {
-                //     "sentence": pair[0]
-                // });
-                // this.callFunc("parseSentence", {
-                //     "sentence": pair[1]
-                // });
+                this.callFunc("parseSentence", {
+                    "sentence": pair[0]
+                });
+                this.callFunc("parseSentence", {
+                    "sentence": pair[1]
+                });
                 break;
         }
     }
@@ -235,17 +248,24 @@ class attentionSentenceComponent extends baseComponent {
     parseFunctionReturn(msg) {
         switch (msg["func"]) {
             case "parseSentence":
-                this.handleParsedSentence(msg["data"]);
+                this.handleParsedSentence(msg["data"]["data"]);
         }
     }
 
     /////////////// handler /////////////////
     handleParsedSentence(parseResult) {
-        console.log(parseResult);
+        // console.log(parseResult);
         if (parseResult["sentence"] == this.data["currentPair"][0]) {
             //draw structure
-            // this.srcDepTree = new dependencyTreePlot(this.svg);
+            this.srcDepTreeData = parseResult["depTree"];
+            // define dependencyTreePlot
+
+
             // this.srcDepTree.setCollapseHandle(this.redraw.bind(this));
+        } else if (parseResult["sentence"] == this.data["currentPair"][1]) {
+            this.targDepTreeData = parseResult["depTree"];
+            // this.targ_dep = new dependencyTreePlot(this.svg, 'h-top', this.targPos,
+            //     this.targDepTreeData, this.width, this.height);
         }
     }
 
@@ -265,7 +285,7 @@ class attentionSentenceComponent extends baseComponent {
         this.srcCollapMap = this.generateIndexMap(src, this.srcWords)
         this.targCollapMap = this.generateIndexMap(targ, this.targWords)
 
-        console.log(this.srcCollapMap, this.targCollapMap);
+        // console.log(this.srcCollapMap, this.targCollapMap);
     }
 
     sen2words(sen) {
