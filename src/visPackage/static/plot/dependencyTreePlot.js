@@ -31,9 +31,20 @@ class dependencyTreePlot {
         this.callback(this.sentenceMask); //[1,0,0,1]
     }
 
+    //i: index of word in sentence
+    collapse(i){
+	    if(this.collapseIndex)
+		    this.collapseIndex = new Set();
+	    if(this.collapseIndex.has(i)){
+		    this.collapseIndex.delete(i);
+	    }else{
+		    this.collapseIndex.add(i);
+	    }
+		 
+    }
+
     //draw the dependency tree over sentence
     draw() {
-    	
 	//arrow
         this.svg.append("svg:defs")
         .append("svg:marker")
@@ -77,29 +88,7 @@ class dependencyTreePlot {
 
         //component rect
 	let text_loc = this.textLocation();
-	
-	//text background rect
-        /*this.svg.selectAll('.dep_tree_rel_rect').data(text_loc).enter()
-    	.append('rect')
-    	.attr('width', this.text_box_width)
-    	.attr('height', this.text_box_height)
-    	.attr('rx', 2)
-    	.attr('ry', 2)
-    	.attr('x', function(d, i) {
-        	return d.x;
-    	})
-    	.attr('y', function(d, i) {
-        	return d.y;
-    	})
-    	.attr('class', function(d, i) {
-                //let word = sen[d[0]];
-                //return word + '_' + d[0] + '_rect';
-    	})
-    	.attr('font-size', 8)
-    	.attr('fill', 'white')
-    	.style('stroke', 'gray')
-    	.style('stroke-width', '1px');*/
-	
+		
         //component text
         this.svg.selectAll('.dep_tree_rel_text').data(text_loc)
 	.enter()
@@ -115,13 +104,10 @@ class dependencyTreePlot {
     	})
     	.attr('font-size', 8)
     	.attr("text-anchor", "middle")
-    	.attr("dominant-baseline", "central");
-	
-	
-
-        
+    	.attr("dominant-baseline", "central");   
     }
     
+    //get text pos
     textLocation(){
 	let data = [];
     	for(let i = 0; i < this.dep_triples.length; i++){
@@ -130,11 +116,14 @@ class dependencyTreePlot {
 	        word2_loc = this.pos[d[2]],
 		item = {'text':d[1]};
 
-		 
 	        if (this.orientation == 'h-top') {
 			item['x'] = (word1_loc.x + word2_loc.x) / 2;
 			item['y'] = word1_loc.y - Math.abs(d[0] - d[2]) * this.text_box_height - this.text_box_height * 1.5;
 	        } 
+		else if(this.orientation == 'h-bottom'){
+			item['x'] = (word1_loc.x + word2_loc.x) / 2;
+			item['y'] = word1_loc.y + Math.abs(d[0] - d[2]) * this.text_box_height + this.text_box_height * 1.5;
+		}
 		else if(this.orientation == 'v-left') {
 			item['x'] = word1_loc.x - Math.abs(d[0] - d[2]) * this.text_box_width - this.text_box_width * 1.5;
 	        	item['y'] = (word1_loc.y + word2_loc.y) / 2;
@@ -144,6 +133,7 @@ class dependencyTreePlot {
 	return data;
     }
 
+    //get path pos
     pathLocation(){
 	    let data = [];
 	    
@@ -175,6 +165,28 @@ class dependencyTreePlot {
 				'y':word2_loc.y - this.text_box_height * 1.5
                	 	});
        	   	}
+		else if(this.orientation == 'h-bottom'){
+                	//first point
+                	item.push({
+                		'x':word1_loc.x,
+				'y':word1_loc.y + this.text_box_height * 1.5
+                	});
+                	//second point
+                	item.push({
+                		'x': word1_loc.x * 5 / 6 + word2_loc.x * 1 / 6,
+				'y': word1_loc.y + Math.abs(d[0]-d[2]) * this.text_box_height + this.text_box_height * 1.5
+               	 	});
+                	//third point
+               	 	item.push({
+               		 	'x': word1_loc.x * 1 / 6 + word2_loc.x * 5 / 6,
+                    	        'y': word1_loc.y + Math.abs(d[0]-d[2]) * this.text_box_height + this.text_box_height * 1.5
+                	});
+                	//fourth point
+               	 	item.push({
+               	 		'x':word2_loc.x,
+				'y':word2_loc.y + this.text_box_height * 1.5
+               	 	});
+		}
 		else if(this.orientation == 'v-left') {
                 	//first point
                 	item.push({
