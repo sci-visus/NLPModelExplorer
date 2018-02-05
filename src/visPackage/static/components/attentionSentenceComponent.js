@@ -188,7 +188,7 @@ class attentionSentenceComponent extends baseComponent {
                         ],
                         [
                             this.targPos[mappedTargIndex].x,
-                            this.targPos[mappedSrcIndex].y -
+                            this.targPos[mappedTargIndex].y -
                             this.rectHeight
                         ]
                     ];

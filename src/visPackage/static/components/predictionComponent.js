@@ -83,7 +83,7 @@ class predictionComponent extends baseComponent {
 
     resize() {
         // console.log("prediction-resize\n");
-        // this.draw();
+        this.draw();
     }
 
     onUpdatePrediction() {
