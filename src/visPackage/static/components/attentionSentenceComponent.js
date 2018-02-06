@@ -99,10 +99,13 @@ class attentionSentenceComponent extends baseComponent {
             // console.log(srcWidth, targWidth);
 
             ///////////////////// draw dependency tree //////////////////
-            this.src_dep = new dependencyTreePlot(this.svg, 'h-top',
+            this.src_dep = new dependencyTreePlot(this.svg, 'h-top', this.srcWords,
                 this.srcPos, this.srcDepTreeData, this.width, this
                 .height);
 
+            this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom', this.targWords,
+                this.targPos, this.targDepTreeData, this.width, this
+                .height);
             ///////////////////// drawing line //////////////////////
             this.drawConnection();
 
@@ -270,7 +273,6 @@ class attentionSentenceComponent extends baseComponent {
     }
 
     ///////////// helper //////////////
-
     collapSrcTarg(src, targ, srcAtt, targAtt) {
         //save the original files
         this.originSrcWords = src;
