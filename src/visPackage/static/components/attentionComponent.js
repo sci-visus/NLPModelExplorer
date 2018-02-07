@@ -36,7 +36,7 @@ class attentionComponent extends baseComponent {
 	    //attention matrix
 	    let attMatrix = this.data['attention'];
 	    
-	      	//init svg
+	     //init svg
 	     this.svg = d3.select(this.div).append("svg")
 	     .attr("width", this.pwidth)
 	     .attr("height", this.pheight)
@@ -75,7 +75,7 @@ class attentionComponent extends baseComponent {
 		
 	    //Draw targ text
 	    //text
-	    this.targ_dep = new dependencyTreePlot(this.svg, 'h-top',this.targPos, this.data['targ_depTree'], this.width, this.height);
+	    this.targ_dep = new dependencyTreePlot(this.svg, 'h-top', this.targWords, this.targPos, this.data['targ_depTree'], this.width, this.height);
 	    this.svg.selectAll('.attentionComponent_targWords')
     	    .data(this.targWords)
 	    .enter()
@@ -88,11 +88,13 @@ class attentionComponent extends baseComponent {
 	    })
             .style("font-size", 10)
             .style("alignment-baseline", "middle")
-            .style("text-anchor", "middle");
-	    
+            .style("text-anchor", "middle")
+	    .on('click', (d, i)=>{
+		    this.targ_dep.collapse(i);
+	    });
 		
 	    //Draw src text
-	    this.src_dep = new dependencyTreePlot(this.svg, 'v-left', this.srcPos, this.data['src_depTree'], this.width, this.height);
+	    this.src_dep = new dependencyTreePlot(this.svg, 'v-left', this.srcWords, this.srcPos, this.data['src_depTree'], this.width, this.height);
 	    this.svg.selectAll('.attentionCompoentn_srcWords')
 	    .data(this.srcWords)
 	    .enter()
@@ -102,7 +104,10 @@ class attentionComponent extends baseComponent {
 	    .attr("y", (d, i) => this.srcPos[i].y)
 	    .style("alignment-baseline", "middle")
 	    .style("font-size", 10)
-            .style("text-anchor", "middle");
+            .style("text-anchor", "middle")
+	    .on('click', (d, i)=>{
+		    this.src_dep.collapse(i);
+	    });
 	    
 	    //Draw color scale bar
 	    let linearGradient = this.svg.append('defs').append('linearGradient')
@@ -154,9 +159,7 @@ class attentionComponent extends baseComponent {
             .style("text-anchor", "middle");
         }
     }
-    
-    
-    
+ 
     computeWordPosition(src, targ) {  
         // console.log(src, targ);
         this.srcPos = this.srcWords.map((d, i) => {
