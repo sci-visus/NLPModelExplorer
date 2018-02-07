@@ -11,30 +11,28 @@ class attentionSentenceComponent extends baseComponent {
         this.subscribeDatabyNames(["attention", "currentPair"]);
 
         this.margin = {
-            top: 15,
-            right: 15,
-            bottom: 15,
+            top: 5,
+            right: 10,
+            bottom: 5,
             left: 15
         };
 
         //init member
-        this.srcMaskSet = new Set();
-        this.targMaskSet = new Set();
+        this.srcIndexMaskSet = new Set();
+        this.targIndexMaskSet = new Set();
 
-        //filter the visualization by modify the mask set
-        // this.srcMaskSet.add("to");
-        // this.srcMaskSet.add("go");
-        // this.srcMaskSet.add("packages");
-        // this.targMaskSet.add("to");
+        this.startRange = 0.6;
+        this.endRange = 2.3;
 
         this.draw();
     }
 
     updateMask(srcList, targList) {
-        this.srcMaskSet.clear();
-        this.targMaskSet.clear();
-        srcList.map(d => this.srcMaskSet.add(d));
-        targList.map(d => this.targMaskSet.add(d));
+        // collapse
+        this.srcIndexMaskSet.clear();
+        this.targIndexMaskSet.clear();
+        srcList.map(d => this.srcIndexMaskSet.add(d));
+        targList.map(d => this.targIndexMaskSet.add(d));
         this.draw();
     }
 
@@ -78,6 +76,13 @@ class attentionSentenceComponent extends baseComponent {
             var targ = this.sen2words(pair[1]);
             this.collapSrcTarg(src, targ, srcAtt, targAtt);
 
+            //drawing sentence
+            // console.log(this.srcWords);
+            var srcWidth = this.width / (this.srcWords.length + 1);
+            var targWidth = this.width / (this.targWords.length + 1);
+            this.rectHeight = this.height / 3.0 * 0.5;
+            // console.log(srcWidth, targWidth);
+
             //sentence position
             this.computeWordPosition(this.srcWords, this.targWords);
             // console.log(this.srcWords, this.targWords);
@@ -91,19 +96,37 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("transform", "translate(" + this.margin.left + "," +
                     this.margin.top + ")");
 
-            //drawing sentence
-            // console.log(this.srcWords);
-            var srcWidth = this.width / (this.srcWords.length + 1);
-            var targWidth = this.width / (this.targWords.length + 1);
-            this.rectHeight = this.height / 3.0 * 0.5;
-            // console.log(srcWidth, targWidth);
+            this.svg.append("text")
+                .attr("x", 2)
+                .attr("y", this.startRange / 3 * this.height + this.rectHeight /
+                    2.0)
+                .attr("font-family", "sans-serif")
+                .attr("font-size", 15)
+                .attr("fill", "black")
+                .text("Premise")
+                .style("writing-mode", "vertical-rl")
+                .style("alignment-baseline", "middle")
+                .style("text-anchor", "middle");
+
+            this.svg.append("text")
+                .attr("x", 2)
+                .attr("y", this.endRange / 3 * this.height - this.rectHeight /
+                    2.0)
+                .attr("font-family", "sans-serif")
+                .attr("font-size", 15)
+                .attr("fill", "black")
+                .text("Hypothesis")
+                .style("writing-mode", "vertical-rl")
+                .style("alignment-baseline", "middle")
+                .style("text-anchor", "middle");
 
             ///////////////////// draw dependency tree //////////////////
             this.src_dep = new dependencyTreePlot(this.svg, 'h-top', this.srcWords,
                 this.srcPos, this.srcDepTreeData, this.width, this
                 .height);
 
-            this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom', this.targWords,
+            this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom',
+                this.targWords,
                 this.targPos, this.targDepTreeData, this.width, this
                 .height);
             ///////////////////// drawing line //////////////////////
@@ -211,13 +234,13 @@ class attentionSentenceComponent extends baseComponent {
         this.srcPos = src.map((d, i) => {
             return {
                 'x': this.width / (src.length + 1) * (i + 1),
-                'y': this.height / 3 * 0.5
+                'y': this.height / 3 * this.startRange
             };
         });
         this.targPos = targ.map((d, i) => {
             return {
                 'x': this.width / (targ.length + 1) * (i + 1),
-                'y': this.height / 3 * 2.5
+                'y': this.height / 3 * this.endRange
             };
         });
     }
@@ -262,8 +285,6 @@ class attentionSentenceComponent extends baseComponent {
             //draw structure
             this.srcDepTreeData = parseResult["depTree"];
             // define dependencyTreePlot
-
-
             // this.srcDepTree.setCollapseHandle(this.redraw.bind(this));
         } else if (parseResult["sentence"] == this.data["currentPair"][1]) {
             this.targDepTreeData = parseResult["depTree"];
@@ -278,11 +299,11 @@ class attentionSentenceComponent extends baseComponent {
         this.originSrcWords = src;
         this.originTargWords = targ;
 
-        this.srcWords = this.collapSenBySet(src, this.srcMaskSet);
-        this.targWords = this.collapSenBySet(targ, this.targMaskSet);
+        this.srcWords = this.collapSenBySet(src, this.srcIndexMaskSet);
+        this.targWords = this.collapSenBySet(targ, this.targIndexMaskSet);
 
-        this.srcAtt = this.collapSenAttBySet(src, srcAtt, this.srcMaskSet);
-        this.targAtt = this.collapSenAttBySet(targ, targAtt, this.targMaskSet);
+        this.srcAtt = this.collapSenAttBySet(srcAtt, this.srcIndexMaskSet);
+        this.targAtt = this.collapSenAttBySet(targAtt, this.targIndexMaskSet);
 
         this.srcCollapMap = this.generateIndexMap(src, this.srcWords)
         this.targCollapMap = this.generateIndexMap(targ, this.targWords)
@@ -299,16 +320,16 @@ class attentionSentenceComponent extends baseComponent {
     collapSenBySet(words, maskSet) {
         var collapWords = [];
         for (var i = 0; i < words.length; i++) {
-            if (!maskSet.has(words[i]))
+            if (!maskSet.has(i))
                 collapWords.push(words[i]);
         }
         return collapWords;
     }
 
-    collapSenAttBySet(words, att, maskSet) {
+    collapSenAttBySet(att, maskSet) {
         var collapAtt = [];
-        for (var i = 0; i < words.length; i++) {
-            if (!maskSet.has(words[i]))
+        for (var i = 0; i < att.length; i++) {
+            if (!maskSet.has(i))
                 collapAtt.push(att[i]);
         }
         return collapAtt;
