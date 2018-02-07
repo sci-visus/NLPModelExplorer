@@ -96,6 +96,33 @@ class LocalClassifier(torch.nn.Module):
 		if hasattr(m, 'bias'):
 			print('{0} bias {1}'.format(classname, m.bias))
 
+	def get_param_dict(self, root):
+		is_cuda = self.opt.gpuid != -1
+		param_dict = {}
+		for i in [1,4]:
+			param_dict['{0}.g[{1}].weight'.format(root, i)] = torch2np(self.g[i].weight.data, is_cuda)
+			if self.g[i].bias is not None:
+				param_dict['{0}.g[{1}].bias'.format(root, i)] = torch2np(self.g[i].bias.data, is_cuda)
+
+		for i in [1,4,6]:
+			param_dict['{0}.h[{1}].weight'.format(root, i)] = torch2np(self.h[i].weight.data, is_cuda)
+			if self.h[i].bias is not None:
+				param_dict['{0}.h[{1}].bias'.format(root, i)] = torch2np(self.h[i].bias.data, is_cuda)
+		return param_dict
+
+
+	def set_param_dict(self, param_dict, root):
+		for i in [1,4]:
+			self.g[i].weight.data.copy_(torch.from_numpy(param_dict['{0}.g[{1}].weight'.format(root, i)][:]))
+			if self.g[i].bias is not None:
+				self.g[i].bias.data.copy_(torch.from_numpy(param_dict['{0}.g[{1}].bias'.format(root, i)][:]))
+
+		for i in [1,4,6]:
+			self.h[i].weight.data.copy_(torch.from_numpy(param_dict['{0}.h[{1}].weight'.format(root, i)][:]))
+			if self.h[i].bias is not None:
+				self.h[i].bias.data.copy_(torch.from_numpy(param_dict['{0}.h[{1}].bias'.format(root, i)][:]))
+
+
 if __name__ == '__main__':
 	sys.path.insert(0, '../attention/')
 	from torch.autograd import Variable

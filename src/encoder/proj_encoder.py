@@ -52,6 +52,19 @@ class ProjEncoder(torch.nn.Module):
 		self.input_proj_unview1.dims = (batch_l, sent_l1, hidden_size)
 		self.input_proj_unview2.dims = (batch_l, sent_l2, hidden_size)
 
+	def get_param_dict(self, root):
+		is_cuda = self.opt.gpuid != -1
+		param_dict = {}
+		param_dict['{0}.proj.weight'.format(root)] = torch2np(self.proj.weight.data, is_cuda)
+		if self.proj.bias is not None:
+			param_dict['{0}.bias'.format(root)] = torch2np(self.proj.bias.data, is_cuda)
+		return param_dict
+
+	def set_param_dict(self, param_dict, root):
+		self.proj.weight.data.copy_(torch.from_numpy(param_dict['{0}.proj.weight'.format(root)][:]))
+		if self.proj.bias is not None:
+			self.proj.bias.data.copy_(torch.from_numpy(param_dict['{0}.proj.bias'.format(root)][:]))
+
 
 if __name__ == '__main__':
 	from torch.autograd import Variable

@@ -37,6 +37,7 @@ parser.add_argument('--constr', help="The list of constraints to use in hard att
 #parser.add_argument('--percent', help="The percent of training data to use", type=float, default=1.0)
 parser.add_argument('--epochs', help="The number of epoches for training", type=int, default=100)
 # TODO, param_init of uniform dist or normal dist???
+parser.add_argument('--param_init_type', help="The type of parameter initialization", default='uniform')
 parser.add_argument('--param_init', help="The scale of the normal distribution from which weights are initialized", type=float, default=0.01)
 parser.add_argument('--learning_rate', help="The learning rate for training", type=float, default=0.05)
 parser.add_argument('--word_vecs', help="The path to word embeddings", default = "")
@@ -138,18 +139,11 @@ def train(opt, shared, wv, m, optim, train_data, valid_data):
 
 		if val_acc > best_val_perf:
 			best_val_perf = val_acc
-			print('saving model to {0}.pt'.format(opt.save_file))
-			torch.save(m, '{0}.pt'.format(opt.save_file))
-			# TODO, need to save opt
+			print('saving model to {0}'.format(opt.save_file))
+			param_dict = m.get_param_dict()
+			save_param_dict(param_dict, '{0}.hdf5'.format(opt.save_file))
 		else:
 			print('skip saving model for perf <= {0:.4f}'.format(best_val_perf))
-
-	# after training is done, reload the best perf model and save it as cpu model
-	if opt.gpuid != -1:
-		print('converting gpu model to cpu model...')
-		cpu_model = torch.load('{0}.pt'.format(opt.save_file), map_location={'cuda:{0}'.format(opt.gpuid): 'cpu'})
-		print('saving model to {0}.pt'.format(opt.save_file))
-		torch.save(cpu_model, '{0}.pt'.format(opt.save_file))
 
 
 

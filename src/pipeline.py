@@ -39,18 +39,19 @@ class Pipeline(torch.nn.Module):
 		else:
 			raise Exception('unrecognized classifier: {0}'.format(opt.classifier))
 
-	def weight_init_callback(self, m):
-		classname = m.__class__.__name__
-		if hasattr(m, 'weight'):
-			m.weight.data.copy_(torch.randn(m.weight.data.shape)).mul_(self.opt.param_init)
-
-		if hasattr(m, 'bias') and m.bias is not None:
-			m.bias.data.copy_(torch.randn(m.bias.data.shape)).mul_(self.opt.param_init)
-
 	def init_weight(self):
-		self.encoder.apply(self.weight_init_callback)
-		self.attention.apply(self.weight_init_callback)
-		self.classifier.apply(self.weight_init_callback)
+		if self.opt.param_init_type == 'xavier_uniform':
+			for n, p in self.named_parameters():
+				if 'weight' in n:
+					nn.init.xavier_uniform(p)
+				elif 'bias' in n:
+					nn.init.constant(p, 0)
+		elif self.opt.param_init_type == 'uniform':
+			for n, p in self.named_parameters():
+				if 'weight' in n:
+					p.data.copy_(torch.randn(p.data.shape)).mul_(self.opt.param_init)
+				elif 'bias' in n:
+					p.data.copy_(torch.randn(p.data.shape)).mul_(self.opt.param_init)
 
 	# init weight form a pretrained model
 	#	will recursively pass down network subgraphs accordingly
@@ -66,6 +67,10 @@ class Pipeline(torch.nn.Module):
 		shared.att1, shared.att2 = self.attention(shared.input_enc1, shared.input_enc2)
 		shared.out = self.classifier(shared.input_enc1, shared.input_enc2, shared.att1, shared.att2)
 
+		# if there is any fwd pass hooks, execute them
+		if hasattr(self.opt, 'forward_hooks') and self.opt.forward_hooks != '':
+			run_forward_hooks(self.opt, self.shared, self)
+
 		return shared.out
 
 
@@ -76,6 +81,18 @@ class Pipeline(torch.nn.Module):
 		self.shared.sent_l1 = sent_l1
 		self.shared.sent_l2 = sent_l2
 		self.shared.res_map = res_map
+
+	def get_param_dict(self):
+		param_dict = {}
+		param_dict.update(self.encoder.get_param_dict('encoder'))
+		param_dict.update(self.attention.get_param_dict('attention'))
+		param_dict.update(self.classifier.get_param_dict('classifier'))
+		return param_dict
+
+	def set_param_dict(self, param_dict):
+		self.encoder.set_param_dict(param_dict, 'encoder')
+		self.attention.set_param_dict(param_dict, 'attention')
+		self.classifier.set_param_dict(param_dict, 'classifier')
 
 
 def overfit():

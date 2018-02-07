@@ -15,6 +15,7 @@ from holder import *
 from optimizer import *
 from embeddings import *
 from data import *
+from util import *
 
 parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
@@ -74,14 +75,14 @@ def evaluate(opt, shared, wv, m, data):
 		# forward pass
 		y_dist = m.forward(word_vecs1, word_vecs2)
 		# print y_dist.exp(), y_gold
-		pred = y_dist.exp().data.numpy()
+		pred = y_dist.exp().data.cpu().numpy() if opt.gpuid != -1 else y_dist.exp().data.numpy()
 		# print pred.tolist(), pred.shape
 		if pred.shape[0] == 1:
 			predictionValue.append(pred.tolist())
 		else:
 			predictionValue += pred.tolist()
 
-		predLabel = label.numpy()
+		predLabel = label.cpu().numpy() if opt.gpuid != -1 else label.numpy()
 		groundTruthLabel += predLabel.tolist()
 
 		loss = criterion(y_dist, y_gold)
@@ -115,8 +116,8 @@ def main(args):
 
 	# initialize
 	print('initializing model from {0}'.format(opt.load_file))
-	pretrained = torch.load('{0}.pt'.format(opt.load_file))
-	pipeline.init_weight_from(pretrained)
+	param_dict = load_param_dict('{0}.hdf5'.format(opt.load_file))
+	pipeline.set_param_dict(param_dict)
 	if opt.gpuid != -1:
 		embeddings.cuda()
 		pipeline = pipeline.cuda()
@@ -125,7 +126,7 @@ def main(args):
 	res_files = None if opt.res == '' else opt.res.split(',')
 	data = Data(opt, opt.data)
 	# data = Data(opt, opt.data, res_files)
-	acc, avg_loss = evaluate(opt, shared, embeddings, pipeline, data)
+	acc, avg_loss, _, _ = evaluate(opt, shared, embeddings, pipeline, data)
 	print('Val: {0:.4f}, Loss: {1:.4f}'.format(acc, avg_loss))
 
 

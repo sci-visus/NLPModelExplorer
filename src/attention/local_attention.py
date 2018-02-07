@@ -72,8 +72,22 @@ class LocalAttention(torch.nn.Module):
 		self.score_view2.dims = (batch_l * sent_l2, sent_l1)
 		self.score_unview1.dims = (batch_l, sent_l1, sent_l2)
 		self.score_unview2.dims = (batch_l, sent_l2, sent_l1)
+		
 
+	def get_param_dict(self, root):
+		is_cuda = self.opt.gpuid != -1
+		param_dict = {}
+		for i in [1,4]:
+			param_dict['{0}.f[{1}].weight'.format(root, i)] = torch2np(self.f[i].weight.data, is_cuda)
+			if self.f[i].bias is not None:
+				param_dict['{0}.f[{1}].bias'.format(root, i)] = torch2np(self.f[i].bias.data, is_cuda)
+		return param_dict
 
+	def set_param_dict(self, param_dict, root):
+		for i in [1,4]:
+			self.f[i].weight.data.copy_(torch.from_numpy(param_dict['{0}.f[{1}].weight'.format(root, i)][:]))
+			if self.f[i].bias is not None:
+				self.f[i].bias.data.copy_(torch.from_numpy(param_dict['{0}.f[{1}].bias'.format(root, i)][:]))
 
 
 if __name__ == '__main__':
