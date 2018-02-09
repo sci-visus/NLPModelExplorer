@@ -18,6 +18,7 @@ class attentionComponent extends baseComponent {
             left: 25
         };
 
+        //use rect id to create animation
     }
 
     draw() {
@@ -71,6 +72,9 @@ class attentionComponent extends baseComponent {
                 .data(this.attList)
                 .enter()
                 .append('rect')
+                .attr('id', (d, i) => {
+                    return this.uuid + "_rect_" + i
+                })
                 .attr('class', 'attentionComponent_matrix_rect')
                 .attr('x', (d, i) => {
                     return this.width * 1 / 4 + (i % this.targWords.length) *
