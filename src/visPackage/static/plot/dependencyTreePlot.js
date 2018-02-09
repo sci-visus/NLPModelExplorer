@@ -24,20 +24,6 @@ class dependencyTreePlot {
 
         this.collapseIndex = new Set();
 
-        this.svg.append("g")
-            .append("svg:defs")
-            .append("svg:marker")
-            .attr("id", "arrow")
-            .attr('viewBox', '0 0 10 10')
-            .attr("refX", 1)
-            .attr("refY", 5)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
-            .attr("orient", "auto")
-            .append("svg:path")
-            .attr("d", "M 0 0 L 10 5 L 0 10 z")
-            .style('fill', 'steelblue');
-
         this.filter(); //init the display index
         // console.log(dep_triples);
         this.draw();
@@ -161,6 +147,20 @@ class dependencyTreePlot {
         //clean
         this.svg.selectAll('.label,.arc').remove();
         //arrow
+        this.svg.select("g").remove();
+        this.svg.append("g")
+            .append("svg:defs")
+            .append("svg:marker")
+            .attr("id", "arrow")
+            .attr('viewBox', '0 0 10 10')
+            .attr("refX", 1)
+            .attr("refY", 5)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("svg:path")
+            .attr("d", "M 0 0 L 10 5 L 0 10 z")
+            .style('fill', 'steelblue');
 
         //line function
         let lineFunction = d3.line()

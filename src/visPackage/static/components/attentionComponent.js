@@ -147,9 +147,8 @@ class attentionComponent extends baseComponent {
             if (this.src_dep === undefined || this.src_dep.getDepTreeData() !==
                 this.srcDepTreeData) {
 
-                if (this.src_dep)
-                    this.src_dep.clear();
-
+                // if (this.src_dep)
+                //     this.src_dep.clear();
                 this.src_dep = new dependencyTreePlot(this.svg, 'v-left',
                     this.srcWords, this.srcPos, this.srcDepTreeData,
                     this.width, this.height);
@@ -165,8 +164,8 @@ class attentionComponent extends baseComponent {
             if (this.targ_dep === undefined || this.targ_dep.getDepTreeData() !==
                 this.targDepTreeData) {
 
-                if (this.targ_dep)
-                    this.targ_dep.clear();
+                // if (this.targ_dep)
+                //     this.targ_dep.clear();
                 this.targ_dep = new dependencyTreePlot(this.svg, 'h-top',
                     this.targWords, this.targPos, this.targDepTreeData,
                     this.width, this.height);
@@ -220,7 +219,7 @@ class attentionComponent extends baseComponent {
                 //if attention is updated, redraw attention
                 this.srcDepTreeData = undefined;
                 this.targDepTreeData = undefined;
-                // this.draw();
+                this.draw();
                 //parse the sentence
                 let currentPair = this.data["currentPair"];
                 this.callFunc("parseSentence", {

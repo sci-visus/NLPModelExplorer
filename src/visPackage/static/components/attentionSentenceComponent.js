@@ -316,7 +316,7 @@ class attentionSentenceComponent extends baseComponent {
                 this.srcDepTreeData = undefined;
                 this.targDepTreeData = undefined;
 
-                // this.draw();
+                this.draw();
                 var pair = this.data["currentPair"];
 
                 this.callFunc("parseSentence", {
