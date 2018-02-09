@@ -43,7 +43,8 @@ class dependencyTreePlot {
             }
         }
 
-        // this.callback(this.sentenceMask); //[1,0,0,1]
+        if (this.callback)
+            this.callback(this.sentenceMask); //[1,0,0,1]
         // this.callback(this.display_index); //the index of word will be presented
     }
 
@@ -71,7 +72,7 @@ class dependencyTreePlot {
 
         this.collapseIndex.forEach(d => {
             let collapseChildren = this.getChild(d, this.dep_triples)
-            console.log(collapseChildren);
+            console.log(d, collapseChildren);
             childs = childs.concat(collapseChildren);
         });
 
@@ -88,8 +89,10 @@ class dependencyTreePlot {
 
     //support function for collapse: get child index
     getChild(index, deps) {
+        // console.log("------ deps:", deps);
         let childs = [];
         let filter = new Set();
+        filter.add(index);
 
         //loop throught the dependency until there is not new node
         //add to the filter.
@@ -98,11 +101,12 @@ class dependencyTreePlot {
             l = filter.size;
             for (let i = 0; i < deps.length; i++) {
                 if (filter.has(deps[i][0]) && !(filter.has(deps[i][2]))) {
-                    filter.add(dep[i][2]);
-                    childs.add(dep[i][2]);
+                    filter.add(deps[i][2]);
+                    childs.push(deps[i][2]);
                 }
             }
         } while (filter.size != l);
+
         return childs;
     }
 

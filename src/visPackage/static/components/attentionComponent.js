@@ -85,7 +85,6 @@ class attentionComponent extends baseComponent {
                 .style('stroke', 'black')
                 .style('stroke-width', '1px')
                 .style('fill', d => {
-                    // return d3.interpolateRdBu(1 - d);
                     return this.colorbar.lookup(1.0 - d);
                 });
 
@@ -94,6 +93,7 @@ class attentionComponent extends baseComponent {
             this.targ_dep = new dependencyTreePlot(this.svg, 'h-top', this.targWords,
                 this.targPos, this.data['targ_depTree'], this.width,
                 this.height);
+
             this.svg.selectAll('.attentionComponent_targWords')
                 .data(this.targWords)
                 .enter()
@@ -110,6 +110,7 @@ class attentionComponent extends baseComponent {
                 .style("text-anchor", "middle")
                 .on('click', (d, i) => {
                     this.targ_dep.collapse(i);
+                    this.handleColCollapse(i);
                 });
 
             //Draw src text
@@ -128,6 +129,7 @@ class attentionComponent extends baseComponent {
                 .style("text-anchor", "middle")
                 .on('click', (d, i) => {
                     this.src_dep.collapse(i);
+                    this.handleRowCollapse(i);
                 });
         }
     }
@@ -198,6 +200,14 @@ class attentionComponent extends baseComponent {
     }
 
     /////////////// handler /////////////////
+    handleRowCollapse(collapseIndex) {
+
+    }
+
+    handleColCollapse(collapseIndex) {
+
+    }
+
     handleParsedSentence(parseResult) {
         console.log(parseResult);
 
@@ -211,7 +221,6 @@ class attentionComponent extends baseComponent {
                 'unknow sentence in attention Component handle parsedSentence'
             );
         }
-
         this.draw();
     }
 

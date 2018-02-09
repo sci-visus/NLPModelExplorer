@@ -8,14 +8,14 @@ class dependencyTree:
     def hashSentence(self, sentence):
         string = " ".join(sentence)
         hex_dig = hashlib.sha1(string).hexdigest()
-        print(hex_dig)
+        # print(hex_dig)
         return hex_dig
 
     def getDependencyTree(self, sentence):
         # return {}
         hashKey = self.hashSentence(sentence)
         if hashKey in self.cache.keys():
-            print "found:", sentence
+            # print "found:", sentence
             return self.cache[hashKey]
         else:
             path_to_jar = '../data/stanford-corenlp-3.9.0.jar'
