@@ -24,8 +24,10 @@ from optimizer import *
 from embeddings import *
 from data import *
 from forward_hooks import *
+from util import *
 from eval import pick_label, evaluate
 from itertools import izip
+
 
 class modelInterface:
     #setup model
@@ -38,7 +40,7 @@ class modelInterface:
             attention='local',
             classifier='local',
             constr='',
-            data='../data/snli_1.0-val.hdf5',
+            data='../data/snli_1.0/snli_1.0-val.hdf5',
             dropout=0.0,
             encoder='proj',
             fix_word_vecs=1,
@@ -46,7 +48,7 @@ class modelInterface:
 
             gpuid=-1,
             hidden_size=200,
-            load_file='local_200_parikh',
+            load_file='../data/snli_1.0/local_200_parikh.hdf5',
             num_att_labels=1,
             num_labels=3,
             seed=3435,
@@ -58,7 +60,7 @@ class modelInterface:
         opt.attention='local'
         opt.classifier='local'
         opt.constr=''
-        opt.data = '../data/snli_1.0-val.hdf5' #validation dataset
+        opt.data = '../data/snli_1.0/snli_1.0-val.hdf5' #validation dataset
         opt.dropout = dropout
         opt.encoder = encoder
         opt.fix_word_vecs=1
@@ -86,12 +88,17 @@ class modelInterface:
         embeddings = WordVecLookup(opt)
         self.embeddings = embeddings
         self.pipeline = Pipeline(opt, self.shared)
-        pretrained = torch.load('{0}.pt'.format(opt.load_file))
+        # pretrained = torch.load('{0}.pt'.format(opt.load_file))
+
+        # initialize
+        print('initializing model from {0}'.format(opt.load_file))
+        param_dict = load_param_dict('{0}.hdf5'.format(opt.load_file))
+        self.pipeline.set_param_dict(param_dict)
 
         # instead of directly using the pretrained model, copy parameters into a fresh new model
         #	this allows post-training customization
-        print('initializing from pretrained model, might have warnings if code has been changed...')
-        self.pipeline.init_weight_from(pretrained)
+        # print('initializing from pretrained model, might have warnings if code has been changed...')
+        # self.pipeline.init_weight_from(pretrained)
 
         if opt.gpuid != -1:
             self.embeddings.cuda()

@@ -2,7 +2,8 @@ from visPackage import *
 from modelInterface import *
 from sentenceGenerator import *
 
-model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/glove.hdf5", model="local_200_parikh")
+model = modelInterface(wordDict="../data/snli_1.0/snli_1.0.word.dict",
+    wordVec="../data/glove.hdf5", model="../data/local_300_parikh")
 
 ################ test model interface #################
 # model.evaluateTestData("../data/snli_1.0/src-test.txt", "../data/snli_1.0/targ-test.txt", "../data/snli_1.0/label-test.txt")
