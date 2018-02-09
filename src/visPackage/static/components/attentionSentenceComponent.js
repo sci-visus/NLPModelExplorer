@@ -23,7 +23,7 @@ class attentionSentenceComponent extends baseComponent {
         this.startRange = 0.6;
         this.endRange = 2.3;
 
-        this.draw();
+        // this.draw();
     }
 
     collapseSrc(mask) {
@@ -58,18 +58,12 @@ class attentionSentenceComponent extends baseComponent {
                     this.margin.top + ")");
 
         } else {
-            console.log("resize svg");
-            //resize svg
-            // this.svg.attr("width", this.width)
-            //     .attr("height", this.height)
-            //     .append("g")
-            //     .attr("transform", "translate(" + this.margin.left + "," +
-            //         this.margin.top + ")");
+
             this.svgContainer
                 .attr("width", this.width)
                 .attr("height", this.height)
 
-            this.svg.selectAll("text,.sourceRect,.targRect").remove();
+            this.svg.selectAll("text,rect,path").remove();
         }
     }
 
@@ -118,7 +112,6 @@ class attentionSentenceComponent extends baseComponent {
             //sentence position
             this.computeWordPosition(this.srcWords, this.targWords);
             // console.log(this.srcWords, this.targWords);
-            console.log(this.srcPos, this.targPos);
 
             this.svg.append("text")
                 .attr("x", 2)
@@ -176,7 +169,6 @@ class attentionSentenceComponent extends baseComponent {
                 .style("opacity", (d, i) => this.targAtt[i] * 0.5);
 
             ///////////////////// drawing text ////////////////////
-            this.svg.selectAll(".srcWords").remove();
             this.svg.selectAll(".srcWords")
                 .data(this.srcWords)
                 .enter()
@@ -190,8 +182,6 @@ class attentionSentenceComponent extends baseComponent {
                 .style("writing-mode", this.checkOrientation.bind(this))
                 .style("text-anchor", "middle")
                 .on("click", (d, i) => {
-                    // let indexOrigin = this.srcCollapMap[i];
-                    // console.log("origin:", indexOrigin);
                     this.src_dep.collapse(i);
                 });
 
@@ -209,39 +199,44 @@ class attentionSentenceComponent extends baseComponent {
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
                 .on("click", (d, i) => {
-                    // let indexOrigin = this.targCollapMap[i];
-                    // console.log("origin:", indexOrigin);
                     this.targ_dep.collapse(i);
                 });
         }
     }
 
     drawDepTree() {
-        if (this.src_dep === undefined || this.src_dep.getDepTreeData() !==
-            this.srcDepTreeData) {
+        if (this.srcDepTreeData) {
+            if (this.src_dep === undefined || this.src_dep.getDepTreeData() !==
+                this.srcDepTreeData) {
 
-            this.src_dep = new dependencyTreePlot(this.svg, 'h-top', this.srcWords,
-                this.srcPos, this.srcDepTreeData, this.height, this
-                .height);
-            this.src_dep.setCollapseHandle(this.collapseSrc.bind(this));
-            console.log("create tree");
-        } else {
-            this.src_dep.updatePos(this.srcPos);
+                this.src_dep = new dependencyTreePlot(this.svg, 'h-top',
+                    this.srcWords,
+                    this.srcPos, this.srcDepTreeData, this.height, this
+                    .height);
+                this.src_dep.setCollapseHandle(this.collapseSrc.bind(this));
+                // console.log("create tree");
+            } else {
+                this.src_dep.updatePos(this.srcPos);
+            }
         }
 
-        if (this.targ_dep === undefined || this.targ_dep.getDepTreeData() !==
-            this.targDepTreeData) {
+        if (this.targDepTreeData) {
+            if (this.targ_dep === undefined || this.targ_dep.getDepTreeData() !==
+                this.targDepTreeData) {
 
-            this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom',
-                this.targWords,
-                this.targPos, this.targDepTreeData, this.height, this
-                .height);
+                this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom',
+                    this.targWords,
+                    this.targPos, this.targDepTreeData, this.height,
+                    this
+                    .height);
 
-            this.targ_dep.setCollapseHandle(this.collapseTarget.bind(this));
-            console.log("create tree");
-        } else {
-            this.targ_dep.updatePos(this.targPos);
-            console.log("draw tree");
+                this.targ_dep.setCollapseHandle(this.collapseTarget.bind(
+                    this));
+                // console.log("create tree");
+            } else {
+                this.targ_dep.updatePos(this.targPos);
+                // console.log("draw tree");
+            }
         }
     }
 
@@ -293,7 +288,7 @@ class attentionSentenceComponent extends baseComponent {
     }
 
     computeWordPosition(src, targ) {
-        console.log(src, targ);
+        // console.log(src, targ);
         this.srcPos = src.map((d, i) => {
             return {
                 'x': this.width / (src.length + 1) * (i + 1),
@@ -309,7 +304,6 @@ class attentionSentenceComponent extends baseComponent {
     }
 
     resize() {
-
         //you can redraw or resize your vis here
         this.draw();
     }
@@ -319,11 +313,12 @@ class attentionSentenceComponent extends baseComponent {
         switch (msg["name"]) {
             case "attention":
                 //if attention is updated, redraw attention
-                this.draw();
-                break;
-            case "currentPair":
-                var pair = msg["data"]["data"];
-                //parse the sentence
+                this.srcDepTreeData = undefined;
+                this.targDepTreeData = undefined;
+
+                // this.draw();
+                var pair = this.data["currentPair"];
+
                 this.callFunc("parseSentence", {
                     "sentence": pair[0]
                 });
@@ -331,6 +326,11 @@ class attentionSentenceComponent extends baseComponent {
                     "sentence": pair[1]
                 });
                 break;
+                // case "currentPair":
+                //     var pair = msg["data"]["data"];
+                //parse the sentence
+
+                // break;
         }
     }
 
@@ -347,13 +347,10 @@ class attentionSentenceComponent extends baseComponent {
         if (parseResult["sentence"] == this.data["currentPair"][0]) {
             //draw structure
             this.srcDepTreeData = parseResult["depTree"];
-            // define dependencyTreePlot
-            // this.srcDepTree.setCollapseHandle(this.redraw.bind(this));
         } else if (parseResult["sentence"] == this.data["currentPair"][1]) {
             this.targDepTreeData = parseResult["depTree"];
-            // this.targ_dep = new dependencyTreePlot(this.svg, 'h-top', this.targPos,
-            //     this.targDepTreeData, this.width, this.height);
         }
+        this.draw();
     }
 
     ///////////// helper //////////////
@@ -371,7 +368,7 @@ class attentionSentenceComponent extends baseComponent {
         this.srcCollapMap = this.generateIndexMap(src, this.srcWords)
         this.targCollapMap = this.generateIndexMap(targ, this.targWords)
 
-        console.log(this.srcCollapMap, this.targCollapMap);
+        // console.log(this.srcCollapMap, this.targCollapMap);
     }
 
     sen2words(sen) {

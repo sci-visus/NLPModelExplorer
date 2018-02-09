@@ -21,27 +21,38 @@ class attentionComponent extends baseComponent {
         //use rect id to create animation
     }
 
+    initSvg() {
+        //create svg
+        if (this.svgContainer === undefined) {
+            this.svgContainer = d3.select(this.div).append("svg")
+                .attr("width", this.width)
+                .attr("height", this.height);
+            this.svg = this.svgContainer
+                .append("g")
+                .attr("transform", "translate(" + this.margin.left + "," +
+                    this.margin.top + ")");
+
+        } else {
+
+            this.svgContainer
+                .attr("width", this.width)
+                .attr("height", this.height)
+
+            this.svg.selectAll("text,rect,path").remove();
+        }
+    }
+
     draw() {
         this._updateWidthHeight();
 
         if (this.data["attention"] !== undefined && this.data["currentPair"] !==
-            undefined && this.data['targ_depTree'] !== undefined && this.data[
-                'src_depTree'] !== undefined) {
+            undefined) {
 
-            //clear all
-            if (this.svg)
-                d3.select(this.div).html('');
+            //init svg
+            this.initSvg();
 
             //attention matrix
             let attMatrix = this.data['attention'];
-
-            //init svg
-            this.svg = d3.select(this.div).append("svg")
-                .attr("width", this.pwidth)
-                .attr("height", this.pheight)
-                .append("g")
-                .attr("transform", "translate(" + this.margin.left + "," +
-                    this.margin.top + ")");
 
             ////////////////////add colormap //////////////////////
             this.colorbar =
@@ -68,6 +79,8 @@ class attentionComponent extends baseComponent {
             this.rectw = rectw;
             this.recth = recth;
 
+            this.drawDepTree();
+
             this.svg.selectAll('.attentionComponent_matrix_rect')
                 .data(this.attList)
                 .enter()
@@ -93,11 +106,6 @@ class attentionComponent extends baseComponent {
                 });
 
             //Draw targ text
-            //text
-            this.targ_dep = new dependencyTreePlot(this.svg, 'h-top', this.targWords,
-                this.targPos, this.data['targ_depTree'], this.width,
-                this.height);
-
             this.svg.selectAll('.attentionComponent_targWords')
                 .data(this.targWords)
                 .enter()
@@ -114,13 +122,9 @@ class attentionComponent extends baseComponent {
                 .style("text-anchor", "middle")
                 .on('click', (d, i) => {
                     this.targ_dep.collapse(i);
-                    this.handleColCollapse(i);
                 });
 
             //Draw src text
-            this.src_dep = new dependencyTreePlot(this.svg, 'v-left', this.srcWords,
-                this.srcPos, this.data['src_depTree'], this.width, this
-                .height);
             this.svg.selectAll('.attentionCompoentn_srcWords')
                 .data(this.srcWords)
                 .enter()
@@ -133,8 +137,45 @@ class attentionComponent extends baseComponent {
                 .style("text-anchor", "middle")
                 .on('click', (d, i) => {
                     this.src_dep.collapse(i);
-                    this.handleRowCollapse(i);
                 });
+
+        }
+    }
+
+    drawDepTree() {
+        if (this.srcDepTreeData) {
+            if (this.src_dep === undefined || this.src_dep.getDepTreeData() !==
+                this.srcDepTreeData) {
+
+                if (this.src_dep)
+                    this.src_dep.clear();
+
+                this.src_dep = new dependencyTreePlot(this.svg, 'v-left',
+                    this.srcWords, this.srcPos, this.srcDepTreeData,
+                    this.width, this.height);
+                this.src_dep.setCollapseHandle(this.handleRowCollapse.bind(
+                    this));
+                // console.log("create tree");
+            } else {
+                this.src_dep.updatePos(this.srcPos);
+            }
+        }
+
+        if (this.targDepTreeData) {
+            if (this.targ_dep === undefined || this.targ_dep.getDepTreeData() !==
+                this.targDepTreeData) {
+
+                if (this.targ_dep)
+                    this.targ_dep.clear();
+                this.targ_dep = new dependencyTreePlot(this.svg, 'h-top',
+                    this.targWords, this.targPos, this.targDepTreeData,
+                    this.width, this.height);
+                this.targ_dep.setCollapseHandle(this.handleColCollapse.bind(
+                    this));
+
+            } else {
+                this.targ_dep.updatePos(this.targPos);
+            }
         }
     }
 
@@ -177,22 +218,24 @@ class attentionComponent extends baseComponent {
         switch (msg["name"]) {
             case "attention":
                 //if attention is updated, redraw attention
-                this.draw();
+                this.srcDepTreeData = undefined;
+                this.targDepTreeData = undefined;
+                // this.draw();
+                //parse the sentence
+                let currentPair = this.data["currentPair"];
+                this.callFunc("parseSentence", {
+                    "sentence": currentPair[0]
+                });
+                this.callFunc("parseSentence", {
+                    "sentence": currentPair[1]
+                });
                 break;
             case "currentPair":
                 let pair = msg["data"]["data"];
 
                 this.srcWords = pair[0].match(/\S+/g);
                 this.targWords = pair[1].match(/\S+/g);
-                console.log(this.srcWords);
 
-                //parse the sentence
-                this.callFunc("parseSentence", {
-                    "sentence": pair[0]
-                });
-                this.callFunc("parseSentence", {
-                    "sentence": pair[1]
-                });
                 break;
         }
     }
@@ -200,31 +243,25 @@ class attentionComponent extends baseComponent {
     parseFunctionReturn(msg) {
         switch (msg["func"]) {
             case "parseSentence":
-                this.handleParsedSentence(msg["data"]);
+                this.handleParsedSentence(msg["data"]["data"]);
         }
     }
 
     /////////////// handler /////////////////
-    handleRowCollapse(collapseIndex) {
+    handleRowCollapse(collapseMask) {
 
     }
 
-    handleColCollapse(collapseIndex) {
+    handleColCollapse(collapseMask) {
 
     }
 
     handleParsedSentence(parseResult) {
-        console.log(parseResult);
-
-        if (parseResult.data["sentence"] == this.data["currentPair"][0]) {
-            this.data['src_depTree'] = parseResult.data.depTree;
-        } else if (parseResult.data["sentence"] == this.data["currentPair"]
-            [1]) {
-            this.data['targ_depTree'] = parseResult.data.depTree;
-        } else {
-            throw Error(
-                'unknow sentence in attention Component handle parsedSentence'
-            );
+        if (parseResult["sentence"] == this.data["currentPair"][0]) {
+            //draw structure
+            this.srcDepTreeData = parseResult["depTree"];
+        } else if (parseResult["sentence"] == this.data["currentPair"][1]) {
+            this.targDepTreeData = parseResult["depTree"];
         }
         this.draw();
     }

@@ -24,9 +24,27 @@ class dependencyTreePlot {
 
         this.collapseIndex = new Set();
 
+        this.svg.append("g")
+            .append("svg:defs")
+            .append("svg:marker")
+            .attr("id", "arrow")
+            .attr('viewBox', '0 0 10 10')
+            .attr("refX", 1)
+            .attr("refY", 5)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("svg:path")
+            .attr("d", "M 0 0 L 10 5 L 0 10 z")
+            .style('fill', 'steelblue');
+
         this.filter(); //init the display index
         // console.log(dep_triples);
         this.draw();
+    }
+
+    clear() {
+        this.svg.selectAll("*").remove();
     }
 
     getDepTreeData() {
@@ -67,9 +85,8 @@ class dependencyTreePlot {
         }
 
         this.filter();
-        // this.draw();
 
-        //callback called
+        //callback called, this will trigger a redraw
         this.onHandleCollapse();
     }
 
@@ -99,8 +116,7 @@ class dependencyTreePlot {
 
     //support function for collapse: get child index
     getChild(index, deps) {
-
-        console.log(index, "------ deps:", deps);
+        // console.log(index, "------ deps:", deps);
         let childs = [];
         let filter = new Set();
 
@@ -143,22 +159,8 @@ class dependencyTreePlot {
     draw() {
 
         //clean
-        this.svg.selectAll('text,path').remove();
+        this.svg.selectAll('.label,.arc').remove();
         //arrow
-        this.svg.append("g")
-            // .attr("id", "depTree_" + this.orientation)
-            .append("svg:defs")
-            .append("svg:marker")
-            .attr("id", "arrow")
-            .attr('viewBox', '0 0 10 10')
-            .attr("refX", 1)
-            .attr("refY", 5)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
-            .attr("orient", "auto")
-            .append("svg:path")
-            .attr("d", "M 0 0 L 10 5 L 0 10 z")
-            .style('fill', 'steelblue');
 
         //line function
         let lineFunction = d3.line()
@@ -175,6 +177,7 @@ class dependencyTreePlot {
         this.svg.selectAll('.dep_tree_dep_path').data(path_loc)
             .enter()
             .append('path')
+            .attr("class", "arc")
             .attr('d', function(d) {
                 return lineFunction(d);
             })
@@ -194,6 +197,7 @@ class dependencyTreePlot {
         this.svg.selectAll('.dep_tree_rel_text').data(text_loc)
             .enter()
             .append('text')
+            .attr("class", "label")
             .text(function(d) {
                 return d.text;
             })
