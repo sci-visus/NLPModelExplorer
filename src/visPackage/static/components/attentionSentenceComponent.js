@@ -46,19 +46,41 @@ class attentionSentenceComponent extends baseComponent {
         this.draw();
     }
 
+    initSvg() {
+        //create svg
+        if (this.svgContainer === undefined) {
+            this.svgContainer = d3.select(this.div).append("svg")
+                .attr("width", this.width)
+                .attr("height", this.height);
+            this.svg = this.svgContainer
+                .append("g")
+                .attr("transform", "translate(" + this.margin.left + "," +
+                    this.margin.top + ")");
+
+        } else {
+            console.log("resize svg");
+            //resize svg
+            // this.svg.attr("width", this.width)
+            //     .attr("height", this.height)
+            //     .append("g")
+            //     .attr("transform", "translate(" + this.margin.left + "," +
+            //         this.margin.top + ")");
+            this.svgContainer
+                .attr("width", this.width)
+                .attr("height", this.height)
+
+            this.svg.selectAll("text,.sourceRect,.targRect").remove();
+        }
+    }
+
     draw() {
         this._updateWidthHeight();
 
 
         if (this.data["attention"] !== undefined) {
-            //clear all
-            if (!d3.select(this.div).select("svg").empty())
-                d3.select(this.div).select("svg").remove();
-            //draw your stuff here
-            //the dimension of the panel is this.width, this.height
-            //the attention is store at this.data["attention"]
-            // console.log("attention:", this.data["attention"]);
-            // console.log("currentPair:", this.data["currentPair"]);
+
+            // init svg
+            this.initSvg();
 
             var pair = this.data["currentPair"];
             //draw attention
@@ -98,14 +120,6 @@ class attentionSentenceComponent extends baseComponent {
             // console.log(this.srcWords, this.targWords);
             // console.log(this.srcPos, this.targPos);
 
-            //create svg
-            this.svg = d3.select(this.div).append("svg")
-                .attr("width", this.width)
-                .attr("height", this.height)
-                .append("g")
-                .attr("transform", "translate(" + this.margin.left + "," +
-                    this.margin.top + ")");
-
             this.svg.append("text")
                 .attr("x", 2)
                 .attr("y", this.startRange / 3 * this.height + this.rectHeight /
@@ -119,6 +133,7 @@ class attentionSentenceComponent extends baseComponent {
                 .style("text-anchor", "middle");
 
             this.svg.append("text")
+                .attr("class", "text")
                 .attr("x", 2)
                 .attr("y", this.endRange / 3 * this.height - this.rectHeight /
                     2.0)
@@ -161,10 +176,12 @@ class attentionSentenceComponent extends baseComponent {
                 .style("opacity", (d, i) => this.targAtt[i] * 0.5);
 
             ///////////////////// drawing text ////////////////////
+            this.svg.selectAll(".srcWords").remove();
             this.svg.selectAll(".srcWords")
                 .data(this.srcWords)
                 .enter()
                 .append("text")
+                .attr("class", "text")
                 .text(d => d)
                 .attr("x", (d, i) => this.srcPos[i].x)
                 .attr("y", (d, i) => this.srcPos[i].y + this.rectHeight *
@@ -173,14 +190,16 @@ class attentionSentenceComponent extends baseComponent {
                 .style("writing-mode", this.checkOrientation.bind(this))
                 .style("text-anchor", "middle")
                 .on("click", (d, i) => {
-                    let indexOrigin = this.srcCollapMap[i];
-                    this.src_dep.collapse(indexOrigin);
+                    // let indexOrigin = this.srcCollapMap[i];
+                    // console.log("origin:", indexOrigin);
+                    this.src_dep.collapse(i);
                 });
 
             this.svg.selectAll(".targWords")
                 .data(this.targWords)
                 .enter()
                 .append("text")
+                .attr("class", "text")
                 .text(d => d)
                 .attr("x", (d, i) => this.targPos[i].x)
                 .attr("y", (d, i) => this.targPos[i].y - this.rectHeight *
@@ -190,26 +209,40 @@ class attentionSentenceComponent extends baseComponent {
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
                 .on("click", (d, i) => {
-                    let indexOrigin = this.targCollapMap[i];
+                    // let indexOrigin = this.targCollapMap[i];
+                    // console.log("origin:", indexOrigin);
                     this.targ_dep.collapse(i);
                 });
         }
     }
 
     drawDepTree() {
-        this.src_dep = new dependencyTreePlot(this.svg, 'h-top', this.srcWords,
-            this.srcPos, this.srcDepTreeData, this.height, this
-            .height);
+        if (this.src_dep === undefined || this.src_dep.getDepTreeData() !==
+            this.srcDepTreeData) {
 
-        this.src_dep.setCollapseHandle(this.collapseSrc.bind(this));
+            this.src_dep = new dependencyTreePlot(this.svg, 'h-top', this.srcWords,
+                this.srcPos, this.srcDepTreeData, this.height, this
+                .height);
+            this.src_dep.setCollapseHandle(this.collapseSrc.bind(this));
+            console.log("create tree");
+        } else {
+            this.src_dep.updatePos(this.srcPos);
+        }
 
-        this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom',
-            this.targWords,
-            this.targPos, this.targDepTreeData, this.height, this
-            .height);
+        if (this.targ_dep === undefined || this.targ_dep.getDepTreeData() !==
+            this.targDepTreeData) {
 
-        this.targ_dep.setCollapseHandle(this.collapseTarget.bind(this));
+            this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom',
+                this.targWords,
+                this.targPos, this.targDepTreeData, this.height, this
+                .height);
 
+            this.targ_dep.setCollapseHandle(this.collapseTarget.bind(this));
+            console.log("create tree");
+        } else {
+            this.targ_dep.updatePos(this.targPos);
+            console.log("draw tree");
+        }
     }
 
 
@@ -222,7 +255,8 @@ class attentionSentenceComponent extends baseComponent {
                 return d[1];
             });
         // .curve("d3.curveLinear");
-        console.log(this.attList);
+        // console.log(this.attList);
+        this.svg.selectAll(".attConnect").remove();
         this.svg.selectAll(".attConnect")
             .data(this.attList)
             .enter()
@@ -259,7 +293,7 @@ class attentionSentenceComponent extends baseComponent {
     }
 
     computeWordPosition(src, targ) {
-        // console.log(src, targ);
+        console.log(src, targ);
         this.srcPos = src.map((d, i) => {
             return {
                 'x': this.width / (src.length + 1) * (i + 1),
@@ -375,6 +409,7 @@ class attentionSentenceComponent extends baseComponent {
                 map.push(j);
                 j += 1;
             } else {
+                //if the entry is deleted
                 map.push(-1);
             }
         }

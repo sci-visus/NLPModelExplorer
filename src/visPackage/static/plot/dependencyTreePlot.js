@@ -10,6 +10,7 @@ class dependencyTreePlot {
     //heigth: The height of sentence
     constructor(svg, orientation, sen, pos, dep_triples, width, height) {
         this.svg = svg.append('g');
+        // this.svg = svg;
         this.orientation = orientation;
         this.pos = pos;
         this.sen = sen;
@@ -26,6 +27,10 @@ class dependencyTreePlot {
         this.filter(); //init the display index
         // console.log(dep_triples);
         this.draw();
+    }
+
+    getDepTreeData() {
+        return this.dep_triples;
     }
 
     setCollapseHandle(func) {
@@ -76,7 +81,7 @@ class dependencyTreePlot {
         });
 
         let childs_set = new Set(childs);
-        // console.log(childs_set);
+        console.log("children set: ", childs_set);
         for (let i = 0; i < this.sen.length; i++) {
             if (!childs_set.has(i)) {
                 display_index.push(i);
@@ -88,9 +93,12 @@ class dependencyTreePlot {
 
     //support function for collapse: get child index
     getChild(index, deps) {
-        // console.log("------ deps:", deps);
+
+        console.log(index, "------ deps:", deps);
         let childs = [];
         let filter = new Set();
+
+        //filter hold the source / potential source of the arrow
         filter.add(index);
 
         //loop throught the dependency until there is not new node
@@ -127,10 +135,13 @@ class dependencyTreePlot {
 
     //draw the dependency tree over sentence
     draw() {
+
         //clean
-        this.svg.html('');
+        this.svg.selectAll('text,path').remove();
         //arrow
-        this.svg.append("svg:defs")
+        this.svg.append("g")
+            // .attr("id", "depTree_" + this.orientation)
+            .append("svg:defs")
             .append("svg:marker")
             .attr("id", "arrow")
             .attr('viewBox', '0 0 10 10')

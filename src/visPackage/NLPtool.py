@@ -6,7 +6,7 @@ class dependencyTree:
         self.cache = {}
 
     def hashSentence(self, sentence):
-        print "sentence:", sentence
+        # print "sentence:", sentence
         hex_dig = hashlib.sha1(sentence).hexdigest()
         # print(hex_dig)
         return hex_dig
