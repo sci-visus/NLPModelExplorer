@@ -17,7 +17,7 @@ class GoogleDriveDownloader:
     DOWNLOAD_URL = "https://docs.google.com/uc?export=download"
 
     @staticmethod
-    def download_file_from_google_drive(file_id, dest_path, overwrite=True, unzip=False):
+    def download_file_from_google_drive(file_id, dest_path, overwrite=False, unzip=False):
         """
         Downloads a shared file from google drive into a given folder.
         Optionally unzips it.
@@ -105,7 +105,10 @@ if __name__ == "__main__":
     snli_10_label_hdf5 = "1XVEvItusBCCXgshlbgx3bn_fJOUGIOgL"
     # https://drive.google.com/file/d/116HYEVyzeXDHA4Apyk3pBP4gw_lA4JZZ/view?usp=sharing
     snli_10_word_hdf5 = "116HYEVyzeXDHA4Apyk3pBP4gw_lA4JZZ"
-    # file_id = '0BwwA4oUTeiV1UVNwOHItT0xfa2M'
+    # https://drive.google.com/file/d/1deYs4h9BeyzvhWplczb8euJvJ2Efcgr1/view?usp=sharing
+    nlpcore_model = "1deYs4h9BeyzvhWplczb8euJvJ2Efcgr1"
+    # https://drive.google.com/file/d/1UZmw9g7DcpX-aGFeluj_AVoI06yYfz9r/view?usp=sharing
+    nlpcore = "1UZmw9g7DcpX-aGFeluj_AVoI06yYfz9r"
 
     GoogleDriveDownloader.download_file_from_google_drive(file_id=glove_hdf5,
                                         dest_path='../data/glove.hdf5')
@@ -123,3 +126,7 @@ if __name__ == "__main__":
                                         dest_path='../data/snli_1.0/snli_1.0.label.hdf5')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=snli_10_word_hdf5,
                                         dest_path='../data/snli_1.0/snli_1.0.word.hdf5')
+    GoogleDriveDownloader.download_file_from_google_drive(file_id=nlpcore_model,
+                                        dest_path='../data/stanford-corenlp-3.9.0-models.jar')
+    GoogleDriveDownloader.download_file_from_google_drive(file_id=nlpcore,
+                                        dest_path='../data/stanford-corenlp-3.9.0.jar')
