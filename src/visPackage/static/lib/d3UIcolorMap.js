@@ -41,7 +41,7 @@ class d3UIcolorMap {
                 "#e6f598", "#99d594", "#3288bd"
             ]
         });
-        this.cmIndex = 3;
+        this.cmIndex = 0;
         this.currentColormap = this.colorMap[this.cmIndex];
 
         ///// first draw /////
