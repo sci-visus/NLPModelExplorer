@@ -1,31 +1,27 @@
 # NLPModelExplorer
 
-### This branch is a reimplementation of the master branch using Pytorch
-
-### Fist thins fist, here is the TODO:
-   - fit to visualization interface
-
 ## Intro
 - The code was extensively modified from Harvard NLP's reimplimentation of Ankur Parikh's decomposable attention model https://github.com/harvardnlp/decomp-attn
 
 ## Setup
-- Please install numpy, pytorch, h5py
-- For data files, please refer to those data in master branch
+
+### 1. Install
+- Please install numpy, pytorch, h5py, requests, nltk 
+- Download model and data file (download from google drive):  
+`cd src; python downloadModels.py`
 
 ### 1. Training
-  `python train.py --gpuid 1 --train_data ../../learnlab/data/snli_1.0-train.hdf5 --val_data ../../learnlab/data/snli_1.0-val.hdf5 --word_vecs ../../learnlab/data/glove.hdf5 --encoder proj --attention local --classifier local --dropout 0.2 --epochs 300 --save_file local_300_parikh | tee local_300_parikh.txt`
-  
-  This will function the same as the traning script in master branch. The trained model will be saved accordingly. Expect to see accuracy to be around 0.86+ on val set. The trained model has been uploaded.
-
-### 2. Evaluation
+- The pre-trained model will be loaded.
+   
+### 2. Test the model
+- Using the pretrained model to do evaluation on val set. Expect to see `Val: 0.8631, Loss: 0.3750`
+- To test run the following:  
   `eval.py --gpuid -1 --data ../data/snli_1.0/snli_1.0-val.hdf5 --word_vecs ../data/glove.hdf5 --encoder proj --attention local --classifier local --dropout 0.0 --load_file ../data/local_300_parikh`
   
-   Using the pretrained model to do evaluation on val set. Expect to see `Val: 0.8631, Loss: 0.3750`
+  
    
+### 3. Run the visualization server
+ - Start the server:  
+   `python exampleVis.py` 
+ - Then open the browser at http://localhost:5050/
   
-### 3. Attention Printing
-  To print intermediate variables during forward pass, checkout the mechanism of `forward_hooks.py`. For instance, to print out soft attention (i.e. attention yielded by softmax), run the following:
-  
-  `python eval.py --gpuid -1 --data ../data/snli_1.0-val.hdf5 --word_vecs ../data/glove.hdf5 --encoder proj --attention local --classifier local --dropout 0.0 --load_file local_200_parikh --forward_hooks print_att_soft1 --att_output val_att`
-  
-  This will print out soft attention to the specified path as a hdf5 file. To print more stuff, simply extend `forward_hooks.py` file.
