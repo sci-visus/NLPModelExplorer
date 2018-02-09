@@ -118,7 +118,7 @@ class attentionSentenceComponent extends baseComponent {
             //sentence position
             this.computeWordPosition(this.srcWords, this.targWords);
             // console.log(this.srcWords, this.targWords);
-            // console.log(this.srcPos, this.targPos);
+            console.log(this.srcPos, this.targPos);
 
             this.svg.append("text")
                 .attr("x", 2)
