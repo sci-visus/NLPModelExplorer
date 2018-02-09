@@ -18,7 +18,7 @@
   This will function the same as the traning script in master branch. The trained model will be saved accordingly. Expect to see accuracy to be around 0.86+ on val set. The trained model has been uploaded.
 
 ### 2. Evaluation
-  `python eval.py --gpuid -1 --data ../data/snli_1.0-val.hdf5 --word_vecs ../data/glove.hdf5 --encoder proj --attention local --classifier local --dropout 0.0 --load_file local_300_parikh`
+  `eval.py --gpuid -1 --data ../data/snli_1.0/snli_1.0-val.hdf5 --word_vecs ../data/glove.hdf5 --encoder proj --attention local --classifier local --dropout 0.0 --load_file ../data/local_300_parikh`
   
    Using the pretrained model to do evaluation on val set. Expect to see `Val: 0.8631, Loss: 0.3750`
    
