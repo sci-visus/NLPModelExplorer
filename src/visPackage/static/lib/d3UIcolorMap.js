@@ -38,11 +38,10 @@ class d3UIcolorMap {
         this.colorMap.push({
             'name': 'diverging-spectral',
             'data': ["#d53e4f", "#fc8d59", "#fee08b", "#ffffbf",
-                "#e6f598",
-                "#99d594", "#3288bd"
+                "#e6f598", "#99d594", "#3288bd"
             ]
         });
-        this.cmIndex = 3;
+        this.cmIndex = 0;
         this.currentColormap = this.colorMap[this.cmIndex];
 
         ///// first draw /////
@@ -114,12 +113,12 @@ class d3UIcolorMap {
 
     drawAxis() {
         if (this._range) {
-            var scale = d3.scale.linear().domain(this._range).range([0,
+            var scale = d3.scaleLinear().domain(this._range).range([0,
                 this._size[
                     0]
             ]);
-            var axis = d3.svg.axis().scale(scale).orient('top')
-                .ticks(this._ticks).tickFormat(d3.format(".3s"));
+            var axis = d3.axisTop(scale).ticks(this._ticks).tickFormat(d3.format(
+                ".3s"));
             var g = this.svg.append('g')
                 .attr("transform", "translate(" + 0 + "," + 5 + ")")
                 .attr("class", "axis")
@@ -130,30 +129,6 @@ class d3UIcolorMap {
                 .style("stroke", "none");
         }
     }
-
-    // drawColorMapPicker() {
-    //   if (this.svg.select('#colorPicker').selectAll("rect").empty()) {
-    //
-    //     this.svg.select('#colorPicker').selectAll("rect")
-    //       .data(this.colorMap)
-    //       .enter().append("rect")
-    //       .attr('x', this._size[0] * 0.2)
-    //       .attr('y', (d, i) => this._size[1] + i * this._size[1] * 0.8)
-    //       .attr('width', this._size[0] * 0.8)
-    //       .attr('height', this._size[1] * 0.8)
-    //       .style("fill", d => "url(#lg-cm-" + d.name + ")")
-    //       .style("stroke", "grey")
-    //       .style("stroke-width", 1.0)
-    //       .on("click", (d, i) => {
-    //         this.svg.select('#colorPicker').selectAll("rect").remove();
-    //         //update the currentColormap
-    //         this.currentColormap = this.colorMap[i];
-    //         this.colormap(i);
-    //       });
-    //   } else {
-    //     this.svg.select('#colorPicker').selectAll("rect").remove();
-    //   }
-    // }
 
     svg() {
         return this.svg;
@@ -197,29 +172,33 @@ class d3UIcolorMap {
 
     ////////// internal helper function //////////////
     _setupGradient() {
-        //colormap
-        var colormapLen = this.colorMap.map(d => d.data.length);
 
-        this.defs
+        var gradients = this.defs
             .selectAll("linearGradient")
             .data(this.colorMap)
             .enter().append("linearGradient")
             .attr("id", d => this._id + "lg-cm-" + d.name)
-            .selectAll("stop")
-            .data(d => d.data)
-            .enter().append("stop")
-            .attr("offset", (d, i, j) => i / (colormapLen[j] - 1))
-            .attr("stop-color", d => d);
+            .each(function(d, j) {
+                var colormaplen = d.data.length;
+                // console.log(d, j);
+                d3.select(this)
+                    .selectAll("stop")
+                    .data(d.data)
+                    .enter().append("stop")
+                    .attr("offset", (d, i) => i / (colormaplen - 1))
+                    .attr("stop-color", d => d);
+            });
     }
 
     _generateColorlookup() {
         var cmrange = [];
         var cmlen = this.currentColormap.data.length;
         for (var i = 0; i < cmlen; i++) {
-            cmrange.push(this._range[0] + (i / (cmlen - 1)) * (this._range[
-                1] - this._range[0]));
+            cmrange.push(this._range[0] + (i / (cmlen - 1)) * (this
+                ._range[
+                    1] - this._range[0]));
         }
-        this.valueScale = d3.scale.linear()
+        this.valueScale = d3.scaleLinear()
             .domain(cmrange)
             .range(this.currentColormap.data)
             // .interpolate(d3.interpolateHsl);

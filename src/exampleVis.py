@@ -2,7 +2,8 @@ from visPackage import *
 from modelInterface import *
 from sentenceGenerator import *
 
-model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/glove.hdf5", model="local_200_parikh")
+model = modelInterface(wordDict="../data/snli_1.0/snli_1.0.word.dict",
+    wordVec="../data/glove.hdf5", model="../data/local_300_parikh")
 
 ################ test model interface #################
 # model.evaluateTestData("../data/snli_1.0/src-test.txt", "../data/snli_1.0/targ-test.txt", "../data/snli_1.0/label-test.txt")
@@ -12,6 +13,8 @@ model = modelInterface(wordDict="../data/snli_1.0.word.dict", wordVec="../data/g
 #######################################################
 
 gen = sentenceGenerator()
+dep = dependencyTree()
+
 ###### test sentence perturbation interface ###########
 # ps = gen.perturbSentence("A woman eat an apple.")
 # print ps
@@ -23,7 +26,7 @@ modelVis = textEntailVisModule(visComponentList)
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
-modelVis.setSentenceParserHook(getDependencyTree)
+modelVis.setSentenceParserHook(dep.getDependencyTree)
 # modelVis.predictionChangeHook()
 
 #open browser for visualization

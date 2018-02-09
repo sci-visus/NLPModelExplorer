@@ -18,7 +18,7 @@ class attentionComponent extends baseComponent {
             left: 25
         };
 
-
+        //use rect id to create animation
     }
 
     draw() {
@@ -43,6 +43,14 @@ class attentionComponent extends baseComponent {
                 .attr("transform", "translate(" + this.margin.left + "," +
                     this.margin.top + ")");
 
+            ////////////////////add colormap //////////////////////
+            this.colorbar =
+                new d3UIcolorMap(this.svg, this.uuid, [0, 1], [0, 0], [this
+                    .width * 0.22, 24
+                ], 2);
+            this.colorbar.draw();
+            this.colorbar.callback(this.updateMatrixColormap.bind(this));
+
             //data
             this.attList = [];
             for (let i = 0; i < attMatrix.length; i++)
@@ -57,10 +65,16 @@ class attentionComponent extends baseComponent {
             let rectw = (this.width * 3 / 4) / this.targWords.length,
                 recth = (this.height * 3 / 4) / this.srcWords.length;
 
-            this.svg.selectAll('.attentionComponent_matrix_rect').data(this
-                    .attList)
+            this.rectw = rectw;
+            this.recth = recth;
+
+            this.svg.selectAll('.attentionComponent_matrix_rect')
+                .data(this.attList)
                 .enter()
                 .append('rect')
+                .attr('id', (d, i) => {
+                    return this.uuid + "_rect_" + i
+                })
                 .attr('class', 'attentionComponent_matrix_rect')
                 .attr('x', (d, i) => {
                     return this.width * 1 / 4 + (i % this.targWords.length) *
@@ -75,7 +89,7 @@ class attentionComponent extends baseComponent {
                 .style('stroke', 'black')
                 .style('stroke-width', '1px')
                 .style('fill', d => {
-                    return d3.interpolateRdBu(1 - d);
+                    return this.colorbar.lookup(1.0 - d);
                 });
 
             //Draw targ text
@@ -83,6 +97,7 @@ class attentionComponent extends baseComponent {
             this.targ_dep = new dependencyTreePlot(this.svg, 'h-top', this.targWords,
                 this.targPos, this.data['targ_depTree'], this.width,
                 this.height);
+
             this.svg.selectAll('.attentionComponent_targWords')
                 .data(this.targWords)
                 .enter()
@@ -99,6 +114,7 @@ class attentionComponent extends baseComponent {
                 .style("text-anchor", "middle")
                 .on('click', (d, i) => {
                     this.targ_dep.collapse(i);
+                    this.handleColCollapse(i);
                 });
 
             //Draw src text
@@ -117,57 +133,18 @@ class attentionComponent extends baseComponent {
                 .style("text-anchor", "middle")
                 .on('click', (d, i) => {
                     this.src_dep.collapse(i);
+                    this.handleRowCollapse(i);
                 });
+        }
+    }
 
-            //Draw color scale bar
-            let linearGradient = this.svg.append('defs').append(
-                    'linearGradient')
-                .attr('id', 'attention_heatmap_gradient')
-                .attr('x1', '0%')
-                .attr('y1', '0%')
-                .attr('x2', '100%')
-                .attr('y2', '0%');
-
-            //color gradient break point
-            for (let i = 0; i <= 10; i++) {
-                linearGradient.append('stop')
-                    .attr('offset', (i * 10) + '%')
-                    .attr('stop-color', d3.interpolateRdBu(i / 10));
-            }
-
-            linearGradient.append('stop')
-                .attr('offset', '100%')
-                .attr('stop-color', d3.interpolateRdBu(1));
-
-            //render color scale map
-            this.svg.append('rect')
-                .attr('x', this.margin.left)
-                .attr('y', this.margin.top)
-                .attr('width', this.width * 1 / 6)
-                .attr('height', this.height / 10)
-                .style('fill', 'url(#attention_heatmap_gradient)');
-
-            //color scale ticks
-            let ticks = [1, 0.5, 0];
-
-            let ticksdata = ticks.map((d, i) => {
-                return {
-                    'text': d,
-                    'x': this.margin.left + i * this.width / 12,
-                    'y': this.margin.top
-                };
-            });
-
-            this.svg.selectAll('.attention_heatmap_gradient_ticks')
-                .data(ticksdata)
-                .enter()
-                .append('text')
-                .attr('x', d => d.x)
-                .attr('y', d => d.y)
-                .text(d => d.text)
-                .style("alignment-baseline", "middle")
-                .style("font-size", 12)
-                .style("text-anchor", "middle");
+    updateMatrixColormap() {
+        if (this.svg) {
+            this.svg.selectAll('.attentionComponent_matrix_rect')
+                .data(this.attList)
+                .style('fill', d => {
+                    return this.colorbar.lookup(1.0 - d);
+                });
         }
     }
 
@@ -191,7 +168,6 @@ class attentionComponent extends baseComponent {
     }
 
     resize() {
-
         //you can redraw or resize your vis here
         this.draw();
     }
@@ -206,8 +182,9 @@ class attentionComponent extends baseComponent {
             case "currentPair":
                 let pair = msg["data"]["data"];
 
-                this.srcWords = ["\<s\>"].concat(pair[0].match(/\S+/g));
-                this.targWords = ["\<s\>"].concat(pair[1].match(/\S+/g));
+                this.srcWords = pair[0].match(/\S+/g);
+                this.targWords = pair[1].match(/\S+/g);
+                console.log(this.srcWords);
 
                 //parse the sentence
                 this.callFunc("parseSentence", {
@@ -228,6 +205,14 @@ class attentionComponent extends baseComponent {
     }
 
     /////////////// handler /////////////////
+    handleRowCollapse(collapseIndex) {
+
+    }
+
+    handleColCollapse(collapseIndex) {
+
+    }
+
     handleParsedSentence(parseResult) {
         console.log(parseResult);
 
@@ -241,7 +226,6 @@ class attentionComponent extends baseComponent {
                 'unknow sentence in attention Component handle parsedSentence'
             );
         }
-
         this.draw();
     }
 

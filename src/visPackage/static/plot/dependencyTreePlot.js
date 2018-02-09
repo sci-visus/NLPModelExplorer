@@ -24,7 +24,7 @@ class dependencyTreePlot {
         this.collapseIndex = new Set();
 
         this.filter(); //init the display index
-
+        // console.log(dep_triples);
         this.draw();
     }
 
@@ -67,25 +67,31 @@ class dependencyTreePlot {
     filter() {
         let childs = [];
         let display_index = [];
+        // console.log("collapseIndex:", this.collapseIndex);
 
         this.collapseIndex.forEach(d => {
-            childs = childs.concat(getChild(d, this.dep_triples))
+            let collapseChildren = this.getChild(d, this.dep_triples)
+                // console.log(d, collapseChildren);
+            childs = childs.concat(collapseChildren);
         });
 
         let childs_set = new Set(childs);
+        // console.log(childs_set);
         for (let i = 0; i < this.sen.length; i++) {
             if (!childs_set.has(i)) {
                 display_index.push(i);
             }
         }
         this.display_index = display_index;
-        console.log(display_index);
+        // console.log(display_index);
     }
 
     //support function for collapse: get child index
     getChild(index, deps) {
+        // console.log("------ deps:", deps);
         let childs = [];
         let filter = new Set();
+        filter.add(index);
 
         //loop throught the dependency until there is not new node
         //add to the filter.
@@ -94,12 +100,29 @@ class dependencyTreePlot {
             l = filter.size;
             for (let i = 0; i < deps.length; i++) {
                 if (filter.has(deps[i][0]) && !(filter.has(deps[i][2]))) {
-                    filter.add(dep[i][2]);
-                    childs.add(dep[i][2]);
+                    filter.add(deps[i][2]);
+                    childs.push(deps[i][2]);
                 }
             }
         } while (filter.size != l);
+
         return childs;
+    }
+
+    updatePos(pos) {
+        this.pos = pos;
+        this.draw();
+    }
+
+    updateSize(width, height) {
+        this.width = width;
+        this.height = height;
+
+        //text box width and height
+        this.text_box_width = Math.min(this.width * 0.1, 15);
+        this.text_box_height = Math.min(this.height * 0.1, 10);
+
+        this.draw();
     }
 
     //draw the dependency tree over sentence
