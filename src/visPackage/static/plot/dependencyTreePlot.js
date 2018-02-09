@@ -24,7 +24,7 @@ class dependencyTreePlot {
         this.collapseIndex = new Set();
 
         this.filter(); //init the display index
-
+        // console.log(dep_triples);
         this.draw();
     }
 
@@ -43,8 +43,10 @@ class dependencyTreePlot {
             }
         }
 
-        if (this.callback)
+        if (this.callback) {
+            // console.log(this.sentenceMask)
             this.callback(this.sentenceMask); //[1,0,0,1]
+        }
         // this.callback(this.display_index); //the index of word will be presented
     }
 
@@ -68,23 +70,23 @@ class dependencyTreePlot {
     filter() {
         let childs = [];
         let display_index = [];
-        console.log("collapseIndex:", this.collapseIndex);
+        // console.log("collapseIndex:", this.collapseIndex);
 
         this.collapseIndex.forEach(d => {
             let collapseChildren = this.getChild(d, this.dep_triples)
-            console.log(d, collapseChildren);
+                // console.log(d, collapseChildren);
             childs = childs.concat(collapseChildren);
         });
 
         let childs_set = new Set(childs);
-        console.log(childs_set);
+        // console.log(childs_set);
         for (let i = 0; i < this.sen.length; i++) {
             if (!childs_set.has(i)) {
                 display_index.push(i);
             }
         }
         this.display_index = display_index;
-        console.log(display_index);
+        // console.log(display_index);
     }
 
     //support function for collapse: get child index
@@ -108,6 +110,22 @@ class dependencyTreePlot {
         } while (filter.size != l);
 
         return childs;
+    }
+
+    updatePos(pos) {
+        this.pos = pos;
+        this.draw();
+    }
+
+    updateSize(width, height) {
+        this.width = width;
+        this.height = height;
+
+        //text box width and height
+        this.text_box_width = Math.min(this.width * 0.1, 15);
+        this.text_box_height = Math.min(this.height * 0.1, 10);
+
+        this.draw();
     }
 
     //draw the dependency tree over sentence

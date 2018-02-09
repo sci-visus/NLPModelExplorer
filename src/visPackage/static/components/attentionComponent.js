@@ -182,8 +182,9 @@ class attentionComponent extends baseComponent {
             case "currentPair":
                 let pair = msg["data"]["data"];
 
-                this.srcWords = ["\<s\>"].concat(pair[0].match(/\S+/g));
-                this.targWords = ["\<s\>"].concat(pair[1].match(/\S+/g));
+                this.srcWords = pair[0].match(/\S+/g);
+                this.targWords = pair[1].match(/\S+/g);
+                console.log(this.srcWords);
 
                 //parse the sentence
                 this.callFunc("parseSentence", {

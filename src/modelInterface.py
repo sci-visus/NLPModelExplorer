@@ -181,5 +181,6 @@ class modelInterface:
         # print('printing {0} for {1} examples...'.format(att_name, self.shared.batch_l))
         # for i in xrange(self.shared.batch_l):
         #     ex_id = self.shared.batch_ex_idx[i]
-        att = batch_att.data[0, :, :]
+        #remove the attention corresponds to <s>
+        att = batch_att.data[0, 1:, 1:]
         return att.numpy()

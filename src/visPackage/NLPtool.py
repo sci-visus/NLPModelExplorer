@@ -6,8 +6,8 @@ class dependencyTree:
         self.cache = {}
 
     def hashSentence(self, sentence):
-        string = " ".join(sentence)
-        hex_dig = hashlib.sha1(string).hexdigest()
+        print "sentence:", sentence
+        hex_dig = hashlib.sha1(sentence).hexdigest()
         # print(hex_dig)
         return hex_dig
 
@@ -34,7 +34,8 @@ class dependencyTree:
                             continue
                         else:
                             for v in node['deps'][key]:
-                                dep_json.append([node['address'], key, v])
+                                #the index is not start with 0
+                                dep_json.append([node['address']-1, key, v-1])
 
             self.cache[hashKey] = dep_json
             return dep_json

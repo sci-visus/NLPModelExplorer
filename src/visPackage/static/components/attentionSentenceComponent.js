@@ -1,7 +1,6 @@
 /*
 
-Matrix representation of attention
-
+Graph representation of attention
 
 */
 
@@ -27,12 +26,23 @@ class attentionSentenceComponent extends baseComponent {
         this.draw();
     }
 
-    updateMask(srcList, targList) {
-        // collapse
+    collapseSrc(mask) {
         this.srcIndexMaskSet.clear();
+        mask.map((d, i) => {
+            if (d === 0) {
+                this.srcIndexMaskSet.add(i)
+            }
+        });
+        this.draw();
+    }
+
+    collapseTarget(mask) {
         this.targIndexMaskSet.clear();
-        srcList.map(d => this.srcIndexMaskSet.add(d));
-        targList.map(d => this.targIndexMaskSet.add(d));
+        mask.map((d, i) => {
+            if (d === 0) {
+                this.targIndexMaskSet.add(i);
+            }
+        });
         this.draw();
     }
 
@@ -121,14 +131,7 @@ class attentionSentenceComponent extends baseComponent {
                 .style("text-anchor", "middle");
 
             ///////////////////// draw dependency tree //////////////////
-            this.src_dep = new dependencyTreePlot(this.svg, 'h-top', this.srcWords,
-                this.srcPos, this.srcDepTreeData, this.width, this
-                .height);
-
-            this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom',
-                this.targWords,
-                this.targPos, this.targDepTreeData, this.width, this
-                .height);
+            this.drawDepTree();
             ///////////////////// drawing line //////////////////////
             this.drawConnection();
 
@@ -155,7 +158,7 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("height", this.rectHeight)
                 .attr("class", "targRect")
                 .style("fill", "#87CEFA")
-                .style("opacity", (d, i) => this.targAtt[i] * 0.5)
+                .style("opacity", (d, i) => this.targAtt[i] * 0.5);
 
             ///////////////////// drawing text ////////////////////
             this.svg.selectAll(".srcWords")
@@ -168,7 +171,11 @@ class attentionSentenceComponent extends baseComponent {
                     0.5)
                 .style("font-size", this.checkFontSize.bind(this))
                 .style("writing-mode", this.checkOrientation.bind(this))
-                .style("text-anchor", "middle");
+                .style("text-anchor", "middle")
+                .on("click", (d, i) => {
+                    let indexOrigin = this.srcCollapMap[i];
+                    this.src_dep.collapse(indexOrigin);
+                });
 
             this.svg.selectAll(".targWords")
                 .data(this.targWords)
@@ -181,9 +188,30 @@ class attentionSentenceComponent extends baseComponent {
                 .style("font-size", this.checkFontSize.bind(this))
                 .style("writing-mode", this.checkOrientation.bind(this))
                 .style("alignment-baseline", "middle")
-                .style("text-anchor", "middle");
+                .style("text-anchor", "middle")
+                .on("click", (d, i) => {
+                    let indexOrigin = this.targCollapMap[i];
+                    this.targ_dep.collapse(i);
+                });
         }
     }
+
+    drawDepTree() {
+        this.src_dep = new dependencyTreePlot(this.svg, 'h-top', this.srcWords,
+            this.srcPos, this.srcDepTreeData, this.height, this
+            .height);
+
+        this.src_dep.setCollapseHandle(this.collapseSrc.bind(this));
+
+        this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom',
+            this.targWords,
+            this.targPos, this.targDepTreeData, this.height, this
+            .height);
+
+        this.targ_dep.setCollapseHandle(this.collapseTarget.bind(this));
+
+    }
+
 
     drawConnection() {
         var d3line = d3.line()
@@ -194,17 +222,18 @@ class attentionSentenceComponent extends baseComponent {
                 return d[1];
             });
         // .curve("d3.curveLinear");
-
+        console.log(this.attList);
         this.svg.selectAll(".attConnect")
             .data(this.attList)
             .enter()
             .append("path")
             .attr("d", d => {
                 // console.log(d);
+                //mapped from original index to collapsed index
                 let mappedSrcIndex = this.srcCollapMap[d[0]];
                 let mappedTargIndex = this.targCollapMap[d[1]];
 
-                if (mappedSrcIndex && mappedTargIndex) {
+                if (mappedSrcIndex >= 0 && mappedTargIndex >= 0) {
 
                     var lineData = [
                         [
@@ -308,12 +337,12 @@ class attentionSentenceComponent extends baseComponent {
         this.srcCollapMap = this.generateIndexMap(src, this.srcWords)
         this.targCollapMap = this.generateIndexMap(targ, this.targWords)
 
-        // console.log(this.srcCollapMap, this.targCollapMap);
+        console.log(this.srcCollapMap, this.targCollapMap);
     }
 
     sen2words(sen) {
         var words = sen.match(/\S+/g);
-        words.unshift("\<s\>");
+        // words.unshift("\<s\>");
         return words
     }
 
@@ -336,7 +365,7 @@ class attentionSentenceComponent extends baseComponent {
     }
 
     /*
-    generate index from collapsed sentence to the original sentence
+    generate index from original sentence to the collapsed sentence
     */
     generateIndexMap(originSen, collapSen) {
         var j = 0;
@@ -346,7 +375,7 @@ class attentionSentenceComponent extends baseComponent {
                 map.push(j);
                 j += 1;
             } else {
-                map.push(undefined);
+                map.push(-1);
             }
         }
         return map
