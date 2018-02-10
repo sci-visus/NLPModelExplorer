@@ -50,8 +50,8 @@ class attentionSentenceComponent extends baseComponent {
         //create svg
         if (this.svgContainer === undefined) {
             this.svgContainer = d3.select(this.div).append("svg")
-                .attr("width", this.width)
-                .attr("height", this.height);
+                .attr("width", this.pwidth)
+                .attr("height", this.pheight);
             this.svg = this.svgContainer
                 .append("g")
                 .attr("transform", "translate(" + this.margin.left + "," +
@@ -60,8 +60,8 @@ class attentionSentenceComponent extends baseComponent {
         } else {
 
             this.svgContainer
-                .attr("width", this.width)
-                .attr("height", this.height)
+                .attr("width", this.pwidth)
+                .attr("height", this.pheight)
 
             this.svg.selectAll("text,rect,path").remove();
         }

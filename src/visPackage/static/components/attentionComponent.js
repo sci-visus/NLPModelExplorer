@@ -2,7 +2,6 @@
 
 Matrix representation of attention
 
-
 */
 
 //beside margin matrix will take 2/3 width and 2/3 height space
@@ -27,8 +26,8 @@ class attentionComponent extends baseComponent {
         //create svg
         if (this.svgContainer === undefined) {
             this.svgContainer = d3.select(this.div).append("svg")
-                .attr("width", this.width)
-                .attr("height", this.height);
+                .attr("width", this.pwidth)
+                .attr("height", this.pheight);
             this.svg = this.svgContainer
                 .append("g")
                 .attr("transform", "translate(" + this.margin.left + "," +
@@ -37,8 +36,8 @@ class attentionComponent extends baseComponent {
         } else {
 
             this.svgContainer
-                .attr("width", this.width)
-                .attr("height", this.height)
+                .attr("width", this.pwidth)
+                .attr("height", this.pheight)
 
             this.svg.selectAll("text,rect,path").remove();
         }
@@ -90,8 +89,8 @@ class attentionComponent extends baseComponent {
             this.drawDepTree();
 
             //matrix
-            let rectw = (this.width * 3 / 4) / this.targWords.length,
-                recth = (this.height * 3 / 4) / this.srcWords.length;
+            let rectw = (this.width * (3 / 4)) / this.targWords.length;
+            let recth = (this.height * (3 / 4)) / this.srcWords.length;
 
             this.rectw = rectw;
             this.recth = recth;
@@ -106,7 +105,7 @@ class attentionComponent extends baseComponent {
                         rectw;
                 })
                 .attr('y', (d, i) => {
-                    return this.height * 1 / 4 + Math.floor(i / this.srcWords
+                    return this.height * 1 / 4 + Math.floor(i / this.targWords
                         .length) * recth;
                 })
                 .attr('width', rectw)
