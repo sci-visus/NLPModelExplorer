@@ -41,6 +41,18 @@ class dependencyTreePlot {
         this.callback = func;
     }
 
+    getCurrentMask() {
+        sentenceMask = [];
+        for (let i = 0; i < this.sen.length; i++) {
+            if (this.display_index.includes(i)) {
+                sentenceMask[i] = 1;
+            } else {
+                sentenceMask[i] = 0;
+            }
+        }
+        return sentenceMask;
+    }
+
     onHandleCollapse() {
 
         this.sentenceMask = [];

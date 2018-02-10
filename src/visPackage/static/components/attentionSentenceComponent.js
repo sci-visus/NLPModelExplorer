@@ -343,9 +343,7 @@ class attentionSentenceComponent extends baseComponent {
 
     /////////////// handler /////////////////
     handleParsedSentence(parseResult) {
-        // console.log(parseResult);
         if (parseResult["sentence"] == this.data["currentPair"][0]) {
-            //draw structure
             this.srcDepTreeData = parseResult["depTree"];
         } else if (parseResult["sentence"] == this.data["currentPair"][1]) {
             this.targDepTreeData = parseResult["depTree"];

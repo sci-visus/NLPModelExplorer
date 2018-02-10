@@ -18,7 +18,9 @@ class attentionComponent extends baseComponent {
             left: 25
         };
 
-        //use rect id to create animation
+        //init member
+        this.srcIndexMaskSet = new Set();
+        this.targIndexMaskSet = new Set()
     }
 
     initSvg() {
@@ -63,14 +65,29 @@ class attentionComponent extends baseComponent {
             this.colorbar.callback(this.updateMatrixColormap.bind(this));
 
             //data
-            this.attList = [];
-            for (let i = 0; i < attMatrix.length; i++)
-                for (let j = 0; j < attMatrix[i].length; j++) {
-                    this.attList.push(attMatrix[i][j])
-                }
 
             //location of words
+            var pair = this.data["currentPair"];
+
+            this.attList = [];
+            for (let i = 0; i < attMatrix.length; i++) {
+                for (let j = 0; j < attMatrix[i].length; j++) {
+                    if (!this.srcIndexMaskSet.has(i) && !this.targIndexMaskSet
+                        .has(j))
+                        this.attList.push(attMatrix[i][j]);
+                }
+            }
+
+            this.srcWords = this.collapSenBySet(this.sen2words(pair[0]),
+                this.srcIndexMaskSet);
+            this.targWords = this.collapSenBySet(this.sen2words(pair[1]),
+                this.targIndexMaskSet);
+
+            console.log(this.srcWords, this.targWords, this.attList);
+
             this.computeWordPosition(this.srcWords, this.targWords);
+
+            this.drawDepTree();
 
             //matrix
             let rectw = (this.width * 3 / 4) / this.targWords.length,
@@ -79,15 +96,10 @@ class attentionComponent extends baseComponent {
             this.rectw = rectw;
             this.recth = recth;
 
-            this.drawDepTree();
-
             this.svg.selectAll('.attentionComponent_matrix_rect')
                 .data(this.attList)
                 .enter()
                 .append('rect')
-                .attr('id', (d, i) => {
-                    return this.uuid + "_rect_" + i
-                })
                 .attr('class', 'attentionComponent_matrix_rect')
                 .attr('x', (d, i) => {
                     return this.width * 1 / 4 + (i % this.targWords.length) *
@@ -152,7 +164,7 @@ class attentionComponent extends baseComponent {
                 this.src_dep = new dependencyTreePlot(this.svg, 'v-left',
                     this.srcWords, this.srcPos, this.srcDepTreeData,
                     this.width, this.height);
-                this.src_dep.setCollapseHandle(this.handleRowCollapse.bind(
+                this.src_dep.setCollapseHandle(this.collapseSrc.bind(
                     this));
                 // console.log("create tree");
             } else {
@@ -169,13 +181,49 @@ class attentionComponent extends baseComponent {
                 this.targ_dep = new dependencyTreePlot(this.svg, 'h-top',
                     this.targWords, this.targPos, this.targDepTreeData,
                     this.width, this.height);
-                this.targ_dep.setCollapseHandle(this.handleColCollapse.bind(
+                this.targ_dep.setCollapseHandle(this.collapseTarget.bind(
                     this));
 
             } else {
                 this.targ_dep.updatePos(this.targPos);
             }
         }
+    }
+
+    sen2words(sen) {
+        var words = sen.match(/\S+/g);
+        // words.unshift("\<s\>");
+        return words;
+    }
+
+
+    collapSenBySet(words, maskSet) {
+        var collapWords = [];
+        for (var i = 0; i < words.length; i++) {
+            if (!maskSet.has(i))
+                collapWords.push(words[i]);
+        }
+        return collapWords;
+    }
+
+    collapseSrc(mask) {
+        this.srcIndexMaskSet.clear();
+        mask.map((d, i) => {
+            if (d === 0) {
+                this.srcIndexMaskSet.add(i)
+            }
+        });
+        this.draw();
+    }
+
+    collapseTarget(mask) {
+        this.targIndexMaskSet.clear();
+        mask.map((d, i) => {
+            if (d === 0) {
+                this.targIndexMaskSet.add(i);
+            }
+        });
+        this.draw();
     }
 
     updateMatrixColormap() {
@@ -259,7 +307,8 @@ class attentionComponent extends baseComponent {
         if (parseResult["sentence"] == this.data["currentPair"][0]) {
             //draw structure
             this.srcDepTreeData = parseResult["depTree"];
-        } else if (parseResult["sentence"] == this.data["currentPair"][1]) {
+        } else if (parseResult["sentence"] == this.data[
+                "currentPair"][1]) {
             this.targDepTreeData = parseResult["depTree"];
         }
         this.draw();
