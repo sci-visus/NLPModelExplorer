@@ -106,7 +106,7 @@ class attentionComponent extends baseComponent {
                         rectw;
                 })
                 .attr('y', (d, i) => {
-                    return this.height * 1 / 4 + Math.floor(i / this.targWords
+                    return this.height * 1 / 4 + Math.floor(i / this.srcWords
                         .length) * recth;
                 })
                 .attr('width', rectw)
