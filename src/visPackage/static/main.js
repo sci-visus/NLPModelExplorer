@@ -122,7 +122,7 @@ appLayout.init()
 
 //handle whole window resize
 window.addEventListener('resize', function(size) {
-    console.log(size);
+    // console.log(size);
     appLayout.updateSize();
 })
 
