@@ -42,7 +42,7 @@ class attentionComponent extends baseComponent {
                 .attr("width", this.pwidth)
                 .attr("height", this.pheight)
 
-            this.svg.selectAll("text,rect,path").remove();
+            this.svg.selectAll("text,rect,path, defs").remove();
 
             this.svgSave.updatePos([this.width - 10, 10])
             this.svgSave.draw();

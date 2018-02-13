@@ -226,35 +226,34 @@ class dependencyTreePlot {
             .attr("dominant-baseline", "central");
     }
 
-    //breadth first search, get depth of tree.
-    //TODO: using breadth search to loop through current tree.
-    nodeDepth(node){
-    	let depth = 0,
-	    nodes = [node];
-	    let temp = [];
-    	
-	do {
-		temp = [];//next level nodes
-                for (let i = 0; i < deps.length; i++) {
-			//one 
-			let one = nodes.includes(deps[i][0]);//dependency exist
-			let two = !temp.includes(deps[i][2]);//not add to temp
-			let three = this.display_index.includes(deps[i][2]);//include in the display index
-                    if ( one && two && three ) {
-			    temp.push(deps[i][2]);
-		    }
-	        }
-		//if new nodes are add, depth +1
-		if(temp.length > 0){
-			depth++;
-			nodes = nodes.concat(temp);
-		}
-		
-    	} while (temp.length != 0);
+
+    //TODO: pathDepth is using brute force algorithm. optimize it by using dynamic programming
+    PathDepth(start_node, end_node){
+	    let  depth = 1;
+	    
+	    let b_left = Math.min(start_node, end_node),
+	    b_right = Math.max(start_node, end_node);
+	    
+	    for(let i = 0; i < this.dep_triples.length; i++){
+	    	let triples = this.dep_triples[i];
 	
-	return depth;
+		let left = Math.min(triples[0], triples[2]),
+		right = Math.max(triples[0], triples[2]);
+		
+		
+		let condition1 = b_left <= left && right < b_right;
+		let condition2 = b_left < left && right <= b_right;
+		
+		if(condition1 || condition2){
+			let temp = 1 + this.PathDepth(triples[0], triples[2]);
+			if(temp > depth)
+				depth = temp;
+		}
+	    }
+	    return depth;
     }
 
+   
     //get text pos
     textLocation() {
         let data = [];
@@ -267,18 +266,22 @@ class dependencyTreePlot {
                     word2_loc = this.pos[this.display_index.indexOf(d[2])],
                     item = {
                         'text': d[1]
-                    };
+                    },
+		    depth = this.PathDepth(d[0], d[2]); 
+		    //depth = this.nodeDepth(d[2]);
+		    
+		    
 
                 if (this.orientation == 'h-top') {
                     item['x'] = (word1_loc.x + word2_loc.x) / 2;
-                    item['y'] = word1_loc.y - Math.abs(d[0] - d[2]) * this.text_box_height -
+                    item['y'] = word1_loc.y - depth * this.text_box_height -
                         this.text_box_height * 1.5;
                 } else if (this.orientation == 'h-bottom') {
                     item['x'] = (word1_loc.x + word2_loc.x) / 2;
-                    item['y'] = word1_loc.y + Math.abs(d[0] - d[2]) * this.text_box_height +
+                    item['y'] = word1_loc.y + depth * this.text_box_height +
                         this.text_box_height * 1.5;
                 } else if (this.orientation == 'v-left') {
-                    item['x'] = word1_loc.x - Math.abs(d[0] - d[2]) * this.text_box_width -
+                    item['x'] = word1_loc.x - depth * this.text_box_width -
                         this.text_box_width * 1.5;
                     item['y'] = (word1_loc.y + word2_loc.y) / 2;
                 }
@@ -298,7 +301,9 @@ class dependencyTreePlot {
                     d[2])) {
                 let word1_loc = this.pos[this.display_index.indexOf(d[0])],
                     word2_loc = this.pos[this.display_index.indexOf(d[2])],
-                    item = [];
+                    item = [],
+		    depth = this.PathDepth(d[0], d[2]);
+		    //depth = this.nodeDepth(d[2]);
 
                 if (this.orientation == 'h-top') {
                     //first point
@@ -311,7 +316,7 @@ class dependencyTreePlot {
                     item.push({
                         'x': word1_loc.x * 5 / 6 + word2_loc.x * 1 /
                             6,
-                        'y': word1_loc.y - Math.abs(d[0] - d[2]) *
+                        'y': word1_loc.y - depth *
                             this.text_box_height - this
                             .text_box_height * 1.5
                     });
@@ -319,7 +324,7 @@ class dependencyTreePlot {
                     item.push({
                         'x': word1_loc.x * 1 / 6 + word2_loc.x * 5 /
                             6,
-                        'y': word1_loc.y - Math.abs(d[0] - d[2]) *
+                        'y': word1_loc.y - depth *
                             this.text_box_height - this
                             .text_box_height * 1.5
                     });
@@ -340,7 +345,7 @@ class dependencyTreePlot {
                     item.push({
                         'x': word1_loc.x * 5 / 6 + word2_loc.x * 1 /
                             6,
-                        'y': word1_loc.y + Math.abs(d[0] - d[2]) *
+                        'y': word1_loc.y + depth *
                             this.text_box_height + this
                             .text_box_height * 1.5
                     });
@@ -348,7 +353,7 @@ class dependencyTreePlot {
                     item.push({
                         'x': word1_loc.x * 1 / 6 + word2_loc.x * 5 /
                             6,
-                        'y': word1_loc.y + Math.abs(d[0] - d[2]) *
+                        'y': word1_loc.y + depth *
                             this.text_box_height + this
                             .text_box_height * 1.5
                     });
@@ -367,7 +372,7 @@ class dependencyTreePlot {
                     });
                     //second point
                     item.push({
-                        'x': word1_loc.x - Math.abs(d[0] - d[2]) *
+                        'x': word1_loc.x - depth *
                             this.text_box_width - this.text_box_width *
                             1.5,
                         'y': word1_loc.y * 5 / 6 + word2_loc.y * 1 /
@@ -375,7 +380,7 @@ class dependencyTreePlot {
                     });
                     //third point
                     item.push({
-                        'x': word1_loc.x - Math.abs(d[0] - d[2]) *
+                        'x': word1_loc.x - depth *
                             this.text_box_width - this.text_box_width *
                             1.5,
                         'y': word1_loc.y * 1 / 6 + word2_loc.y * 5 /
