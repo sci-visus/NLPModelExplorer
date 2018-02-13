@@ -30,7 +30,7 @@ class dependencyTreePlot {
     }
 
     clear() {
-        this.svg.selectAll("*").remove();
+        this.svg.remove();
     }
 
     getDepTreeData() {
@@ -158,14 +158,15 @@ class dependencyTreePlot {
     draw() {
 
         //clean
-        //this.svg.selectAll('.label,.arc, defs').remove();
-        //arrow
-	//this.svg.select("#arrow").remove();
-        //this.svg.select("g").remove();
-        let arrow = this.svg
+        //this.svg.selectAll('.label,.arc, defs,g').remove();
+        //this.clear();
+	
+	//arrow
+	let arrowid = uuidv1()
+        this.svg
 	.append("svg:defs")
             .append("svg:marker")
-            .attr("id", this.sen.toString()+this.orientation)
+            .attr("id", arrowid)
             .attr('viewBox', '0 0 10 10')
             .attr("refX", 1)
             .attr("refY", 5)
@@ -202,7 +203,7 @@ class dependencyTreePlot {
             .attr("stroke-linecap", "round")
             .attr("stroke-width", 1.5)
             .style("stroke-dasharray", "4,4")
-            .style("marker-end", "url(#"+this.sen.toString()+this.orientation+")");
+            .style("marker-end", "url(#"+arrowid+")");
 
         //component rect
         let text_loc = this.textLocation();
@@ -252,7 +253,6 @@ class dependencyTreePlot {
 	    }
 	    return depth;
     }
-
    
     //get text pos
     textLocation() {
