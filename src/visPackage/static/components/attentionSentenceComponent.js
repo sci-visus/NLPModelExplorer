@@ -57,7 +57,7 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("transform", "translate(" + this.margin.left + "," +
                     this.margin.top + ")");
 
-            this.svgSave = new svgExporter(this.svg);
+            this.svgSave = new svgExporter(this.svgContainer);
 
         } else {
 
