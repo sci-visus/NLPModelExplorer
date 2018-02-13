@@ -121,9 +121,10 @@ class dependencyTreePlot {
         //filter hold the source / potential source of the arrow
         filter.add(index);
 
-        //loop throught the dependency until there is not new node
+        //loop through the dependency until there is not new node
         //add to the filter.
         let l = 0;
+	let depth = 0;
         do {
             l = filter.size;
             for (let i = 0; i < deps.length; i++) {
@@ -157,13 +158,14 @@ class dependencyTreePlot {
     draw() {
 
         //clean
-        this.svg.selectAll('.label,.arc').remove();
+        //this.svg.selectAll('.label,.arc, defs').remove();
         //arrow
-        this.svg.select("g").remove();
-        this.svg.append("g")
-            .append("svg:defs")
+	//this.svg.select("#arrow").remove();
+        //this.svg.select("g").remove();
+        let arrow = this.svg
+	.append("svg:defs")
             .append("svg:marker")
-            .attr("id", "arrow")
+            .attr("id", this.sen.toString()+this.orientation)
             .attr('viewBox', '0 0 10 10')
             .attr("refX", 1)
             .attr("refY", 5)
@@ -200,7 +202,7 @@ class dependencyTreePlot {
             .attr("stroke-linecap", "round")
             .attr("stroke-width", 1.5)
             .style("stroke-dasharray", "4,4")
-            .style("marker-end", "url(#arrow)");
+            .style("marker-end", "url(#"+this.sen.toString()+this.orientation+")");
 
         //component rect
         let text_loc = this.textLocation();
@@ -222,6 +224,35 @@ class dependencyTreePlot {
             .attr('font-size', 8)
             .attr("text-anchor", "middle")
             .attr("dominant-baseline", "central");
+    }
+
+    //breadth first search, get depth of tree.
+    //TODO: using breadth search to loop through current tree.
+    nodeDepth(node){
+    	let depth = 0,
+	    nodes = [node];
+	    let temp = [];
+    	
+	do {
+		temp = [];//next level nodes
+                for (let i = 0; i < deps.length; i++) {
+			//one 
+			let one = nodes.includes(deps[i][0]);//dependency exist
+			let two = !temp.includes(deps[i][2]);//not add to temp
+			let three = this.display_index.includes(deps[i][2]);//include in the display index
+                    if ( one && two && three ) {
+			    temp.push(deps[i][2]);
+		    }
+	        }
+		//if new nodes are add, depth +1
+		if(temp.length > 0){
+			depth++;
+			nodes = nodes.concat(temp);
+		}
+		
+    	} while (temp.length != 0);
+	
+	return depth;
     }
 
     //get text pos
