@@ -10,10 +10,10 @@ class attentionSentenceComponent extends baseComponent {
         this.subscribeDatabyNames(["attention", "currentPair"]);
 
         this.margin = {
-            top: 5,
+            top: 10,
             right: 10,
-            bottom: 5,
-            left: 15
+            bottom: 10,
+            left: 10
         };
 
         //init member
@@ -57,7 +57,9 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("transform", "translate(" + this.margin.left + "," +
                     this.margin.top + ")");
 
-            this.svgSave = new svgExporter(this.svgContainer);
+            this.svgSave = new svgExporter(this.svgContainer, [this.width -
+                10, 10
+            ]);
 
         } else {
 
@@ -66,6 +68,8 @@ class attentionSentenceComponent extends baseComponent {
                 .attr("height", this.pheight)
 
             this.svg.selectAll("text,rect,path").remove();
+
+            this.svgSave.updatePos([this.width - 10, 10])
             this.svgSave.draw();
         }
     }

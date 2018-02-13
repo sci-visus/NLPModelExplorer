@@ -11,10 +11,10 @@ class attentionComponent extends baseComponent {
         this.subscribeDatabyNames(["attention", "currentPair"]);
 
         this.margin = {
-            top: 25,
-            right: 25,
-            bottom: 25,
-            left: 25
+            top: 10,
+            right: 10,
+            bottom: 10,
+            left: 10
         };
 
         //init member
@@ -33,6 +33,9 @@ class attentionComponent extends baseComponent {
                 .attr("transform", "translate(" + this.margin.left + "," +
                     this.margin.top + ")");
 
+            this.svgSave = new svgExporter(this.svgContainer, [this.width -
+                10, 10
+            ]);
         } else {
 
             this.svgContainer
@@ -40,6 +43,9 @@ class attentionComponent extends baseComponent {
                 .attr("height", this.pheight)
 
             this.svg.selectAll("text,rect,path").remove();
+
+            this.svgSave.updatePos([this.width - 10, 10])
+            this.svgSave.draw();
         }
     }
 

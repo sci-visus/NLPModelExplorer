@@ -1,27 +1,37 @@
 class svgExporter {
-    constructor(svg, figName = "attention", pos = [10, 10]) {
+    constructor(svg, pos = [10, 10], figName = "attention") {
         this.svg = svg;
         this.pos = pos;
         this.figName = figName;
         this.draw();
     }
 
+    updatePos(pos) {
+        this.pos = pos;
+        this.draw();
+    }
+
     draw() {
-        this.icon = this.svg.append('text')
-            .attr("id", "cameraIcon")
-            .attr("x", this.pos[0])
-            .attr("y", this.pos[1] + 20)
-            .attr('font-family', 'FontAwesome')
-            .attr('font-size', function(d) {
-                return 1.2 + 'em'
-            })
-            .text(function(d) {
-                return '\uf030'
-            })
-            .attr("fill", "lightgrey")
-            .style("alignment-baseline", "middle")
-            .style("cursor", "hand")
-            .on("click", this.exportSvg.bind(this));
+        if (this.icon == undefined) {
+            this.icon = this.svg.append('text')
+                .attr("id", "cameraIcon")
+                .attr("x", this.pos[0])
+                .attr("y", this.pos[1] + 10)
+                .attr('font-family', 'FontAwesome')
+                .attr('font-size', function(d) {
+                    return 1.2 + 'em'
+                })
+                .text(function(d) {
+                    return '\uf030'
+                })
+                .attr("fill", "lightgrey")
+                .style("alignment-baseline", "middle")
+                .style("cursor", "hand")
+                .on("click", this.exportSvg.bind(this));
+        } else {
+            this.icon.attr("x", this.pos[0])
+                .attr("y", this.pos[1] + 10);
+        }
     }
 
     exportSvg() {
@@ -36,8 +46,7 @@ class svgExporter {
         }
 
         var html = this.svg
-            // .attr("title", "test2")
-            .attr("version", 1.1)
+            .attr("version", 2)
             .attr("xmlns", "http://www.w3.org/2000/svg")
             .node().parentNode.innerHTML;
 
