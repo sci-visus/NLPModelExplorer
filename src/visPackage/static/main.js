@@ -108,7 +108,7 @@ function registerComponent(appLayout, name) {
 // }
 
 //////////////////////create layout ///////////////////////
-var appLayout = new window.GoldenLayout(config, $('#layoutContainer'));
+var appLayout = new window.GoldenLayout(config, $('body'));
 
 //register components
 for (key in panelMetaInfo) {
@@ -121,7 +121,8 @@ for (key in panelMetaInfo) {
 appLayout.init()
 
 //handle whole window resize
-window.addEventListener('resize', function() {
+window.addEventListener('resize', function(size) {
+    console.log(size);
     appLayout.updateSize();
 })
 

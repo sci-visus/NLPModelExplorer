@@ -63,7 +63,8 @@ class attentionComponent extends baseComponent {
 
             ////////////////////add colormap //////////////////////
             this.colorbar =
-                new d3UIcolorMap(this.svg, this.uuid, [0, 1], [0, 0], [this
+                new d3UIcolorMap(this.svg, this.uuid, [0, 1], [10, 10], [
+                    this
                     .width * 0.22, 24
                 ], 2);
             this.colorbar.draw();
