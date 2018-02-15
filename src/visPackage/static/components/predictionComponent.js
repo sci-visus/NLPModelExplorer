@@ -20,13 +20,20 @@ class predictionComponent extends baseComponent {
             left: 25
         };
 
+        this.svgContainer = d3.select(this.div);
+        this.svgSave = new svgExporter(this.svgContainer);
+
         this.draw();
+
     }
 
     draw() {
         // console.log(this.data);
         this._updateWidthHeight();
         this.svg = d3.select(this.div + "triangle");
+
+        this.svgSave.updatePos([this.width, 10])
+        this.svgSave.draw();
 
         //entailment
         //neutral, Contradiction, Entailment
@@ -144,7 +151,7 @@ class predictionComponent extends baseComponent {
                 .style("stroke", 'black')
                 .style("opacity", 0.7)
                 //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
-                .on("mouseover", (d, i) => {
+                .on("click", (d, i) => {
                     if (this.data["allSourcePairs"] !== undefined) {
                         var source = this.data["allSourcePairs"][d[3]];
                         var target = this.data["allTargetPairs"][d[4]];
