@@ -38,9 +38,9 @@ def perturb_noun_in_sentence(s, train_tokens):
 				lemma_map[lemma].extend([ln.lower() for ln in s.lemma_names() if '_' not in ln])
 
 				## add antonyms
-				for syn_lemma in s.lemmas():
-					if syn_lemma.antonyms():
-						lemma_map[lemma].extend([ln.name().lower() for ln in syn_lemma.antonyms()])
+				# for syn_lemma in s.lemmas():
+				# 	if syn_lemma.antonyms():
+				# 		lemma_map[lemma].extend([ln.name().lower() for ln in syn_lemma.antonyms()])
 
 				## filter out words not in train dict
 				lemma_map[lemma] = [l for l in lemma_map[lemma] if l in train_tokens]
