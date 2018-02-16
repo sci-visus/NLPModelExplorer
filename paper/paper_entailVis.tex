@@ -100,19 +100,15 @@ for Interpreting, Debugging, \\ and Tunning Text Entailment Model}
 %% Abstract section.
 % What are we doing in this paper
 \abstract{
-(What is the highlevel motivation)
-Making sense and explaining the predictions made by deep neural networks is not only essential for validating and improving the model, but also becoming a necessity with increasing requirement for model accountability (e.g., for medical application where the decision have serious consequences) and model fairness ( e.g., the model may capture and perpetuate the biases exists in the training data~\cite{}).
-
-%
-
-(Limitation of the state-of-the arts)
-Model independent explanations is useful to gain intuition,
-but they lack an examination of the inner mechanism.
-%
-
-(What did we bring)
-Recently attention mechanism~\cite{} has gained a strong following in
-the Natural Language Processs (NLP) research.
+With the advances of deep learning, neural network based models have reset
+the state-of-the-art for nearly all linguistic tasks in natural language
+processing. The disruptive advance also brings enormous challenges.
+The opaque nature of neural network model leads to hard to debug system and
+difficult to interpret mechanism~cite{}. In this work, we use textual
+entailment task as an example to illustrate how a flexible visualization
+system can help NLP researchers quickly identify the potential limitation of
+a models and probe the model inner states for interpreting key mechanism
+such as attention.
 } % end of abstract
 
 %% Keywords that describe your work. Will show as 'Index Terms' in journal
@@ -159,6 +155,17 @@ Visual Analytics}
 %% the only exception to this rule is the \firstsection command
 \input{intro_entailVis.tex}
 \input{relatedWorks_entailVis.tex}
+\input{background.tex}
+% \input{tasks.tex}
+\input{perturbation.tex} % how to do the perturbation
+\input{attention.tex} % how to encode the information
+\input{application.tex}
+%%%%%%%%%%%%% identify errors %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% interpret attention %%%%%%%%%%%%%%%%%%%
+
+\input{discussion.tex} % how to encode the information
+
+
 
 
 
