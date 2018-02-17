@@ -3,7 +3,7 @@ var panelMetaInfo = {
     'Attention': ['attention_view', 'attentionComponent'],
     'Sentence': ['sentence_view', 'sentenceComponent'],
     "AttentionSentence": ['attentionSentence_view',
-        'attentionSentenceComponent'
+        'attentionGraphComponent'
     ],
     'Evaluation': ['evaluation_view', 'evaluationComponent']
 };
@@ -12,7 +12,7 @@ var panelMetaInfo = {
 var objectMap = {
     predictionComponent: predictionComponent,
     attentionComponent: attentionComponent,
-    attentionSentenceComponent: attentionSentenceComponent,
+    attentionGraphComponent: attentionGraphComponent,
     sentenceComponent: sentenceComponent,
     evaluationComponent: evaluationComponent
 };
@@ -56,7 +56,7 @@ var config = {
                 componentName: 'AttentionSentence',
                 componentState: {
                     route: 'attentionSentence_view',
-                    name: 'attentionSentenceComponent'
+                    name: 'attentionGraphComponent'
                 }
             }]
         }]

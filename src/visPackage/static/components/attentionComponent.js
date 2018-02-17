@@ -1,6 +1,6 @@
 /*
 
-Matrix representation of attention
+Based class for attention visualization
 
 */
 
@@ -320,4 +320,13 @@ class attentionComponent extends baseComponent {
         this.draw();
     }
 
+    softmax(arr) {
+        return arr.map(function(value, index) {
+            return Math.exp(value) / arr.map(function(y /*value*/ ) {
+                return Math.exp(y)
+            }).reduce(function(a, b) {
+                return a + b
+            })
+        })
+    }
 }

@@ -4,7 +4,7 @@ Graph representation of attention
 
 */
 
-class attentionSentenceComponent extends baseComponent {
+class attentionGraphComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
         this.subscribeDatabyNames(["attention", "currentPair"]);
