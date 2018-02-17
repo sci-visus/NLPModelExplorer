@@ -1,6 +1,6 @@
 var panelMetaInfo = {
     'Prediction': ['prediction_view', 'predictionComponent'],
-    'Attention': ['attention_view', 'attentionComponent'],
+    'Attention': ['attention_view', 'attentionMatrixComponent'],
     'Sentence': ['sentence_view', 'sentenceComponent'],
     "AttentionSentence": ['attentionSentence_view',
         'attentionGraphComponent'
@@ -11,7 +11,7 @@ var panelMetaInfo = {
 //for lookup component class on-the-fly
 var objectMap = {
     predictionComponent: predictionComponent,
-    attentionComponent: attentionComponent,
+    attentionMatrixComponent: attentionMatrixComponent,
     attentionGraphComponent: attentionGraphComponent,
     sentenceComponent: sentenceComponent,
     evaluationComponent: evaluationComponent
@@ -39,7 +39,7 @@ var config = {
                 componentName: 'Attention',
                 componentState: {
                     route: 'attention_view',
-                    name: 'attentionComponent'
+                    name: 'attentionMatrixComponent'
                 }
             }]
         }, {

@@ -4,75 +4,61 @@ Graph representation of attention
 
 */
 
-class attentionGraphComponent extends baseComponent {
+class attentionGraphComponent extends attentionComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["attention", "currentPair"]);
-
-        this.margin = {
-            top: 10,
-            right: 10,
-            bottom: 10,
-            left: 10
-        };
-
-        //init member
-        this.srcIndexMaskSet = new Set();
-        this.targIndexMaskSet = new Set();
 
         this.startRange = 0.6;
         this.endRange = 2.3;
-
-        // this.draw();
     }
 
-    collapseSrc(mask) {
-        this.srcIndexMaskSet.clear();
-        mask.map((d, i) => {
-            if (d === 0) {
-                this.srcIndexMaskSet.add(i)
-            }
-        });
-        this.draw();
-    }
+    // collapseSrc(mask) {
+    //     this.srcIndexMaskSet.clear();
+    //     mask.map((d, i) => {
+    //         if (d === 0) {
+    //             this.srcIndexMaskSet.add(i)
+    //         }
+    //     });
+    //     this.draw();
+    // }
+    //
+    // collapseTarget(mask) {
+    //     this.targIndexMaskSet.clear();
+    //     mask.map((d, i) => {
+    //         if (d === 0) {
+    //             this.targIndexMaskSet.add(i);
+    //         }
+    //     });
+    //     this.draw();
+    // }
 
-    collapseTarget(mask) {
-        this.targIndexMaskSet.clear();
-        mask.map((d, i) => {
-            if (d === 0) {
-                this.targIndexMaskSet.add(i);
-            }
-        });
-        this.draw();
-    }
-
-    initSvg() {
-        //create svg
-        if (this.svgContainer === undefined) {
-            this.svgContainer = d3.select(this.div).append("svg")
-                .attr("width", this.pwidth)
-                .attr("height", this.pheight);
-            this.svg = this.svgContainer
-                .append("g")
-                .attr("transform", "translate(" + this.margin.left + "," +
-                    this.margin.top + ")");
-
-            this.svgSave = new svgExporter(this.svgContainer, [this.width -
-                10, 10
-            ]);
-
-        } else {
-
-            this.svgContainer
-                .attr("width", this.pwidth)
-                .attr("height", this.pheight)
-
-            this.svg.selectAll("text,rect,path,defs").remove();
-
-            this.svgSave.updatePos([this.width - 10, 10])
-            this.svgSave.draw();
-        }
-    }
+    // initSvg() {
+    //     //create svg
+    //     if (this.svgContainer === undefined) {
+    //         this.svgContainer = d3.select(this.div).append("svg")
+    //             .attr("width", this.pwidth)
+    //             .attr("height", this.pheight);
+    //         this.svg = this.svgContainer
+    //             .append("g")
+    //             .attr("transform", "translate(" + this.margin.left + "," +
+    //                 this.margin.top + ")");
+    //
+    //         this.svgSave = new svgExporter(this.svgContainer, [this.width -
+    //             10, 10
+    //         ]);
+    //
+    //     } else {
+    //
+    //         this.svgContainer
+    //             .attr("width", this.pwidth)
+    //             .attr("height", this.pheight)
+    //
+    //         this.svg.selectAll("text,rect,path,defs").remove();
+    //
+    //         this.svgSave.updatePos([this.width - 10, 10])
+    //         this.svgSave.draw();
+    //     }
+    // }
 
     draw() {
         this._updateWidthHeight();
@@ -310,43 +296,43 @@ class attentionGraphComponent extends baseComponent {
         });
     }
 
-    resize() {
-        //you can redraw or resize your vis here
-        this.draw();
-    }
+    // resize() {
+    //     //you can redraw or resize your vis here
+    //     this.draw();
+    // }
+    /*
+        parseDataUpdate(msg) {
+            super.parseDataUpdate(msg);
+            switch (msg["name"]) {
+                case "attention":
+                    //if attention is updated, redraw attention
+                    this.srcDepTreeData = undefined;
+                    this.targDepTreeData = undefined;
 
-    parseDataUpdate(msg) {
-        super.parseDataUpdate(msg);
-        switch (msg["name"]) {
-            case "attention":
-                //if attention is updated, redraw attention
-                this.srcDepTreeData = undefined;
-                this.targDepTreeData = undefined;
+                    this.draw();
+                    var pair = this.data["currentPair"];
 
-                this.draw();
-                var pair = this.data["currentPair"];
+                    this.callFunc("parseSentence", {
+                        "sentence": pair[0]
+                    });
+                    this.callFunc("parseSentence", {
+                        "sentence": pair[1]
+                    });
+                    break;
+                    // case "currentPair":
+                    //     var pair = msg["data"]["data"];
+                    //parse the sentence
 
-                this.callFunc("parseSentence", {
-                    "sentence": pair[0]
-                });
-                this.callFunc("parseSentence", {
-                    "sentence": pair[1]
-                });
-                break;
-                // case "currentPair":
-                //     var pair = msg["data"]["data"];
-                //parse the sentence
-
-                // break;
+                    // break;
+            }
         }
-    }
 
-    parseFunctionReturn(msg) {
-        switch (msg["func"]) {
-            case "parseSentence":
-                this.handleParsedSentence(msg["data"]["data"]);
+        parseFunctionReturn(msg) {
+            switch (msg["func"]) {
+                case "parseSentence":
+                    this.handleParsedSentence(msg["data"]["data"]);
+            }
         }
-    }
 
     /////////////// handler /////////////////
     handleParsedSentence(parseResult) {
@@ -357,7 +343,7 @@ class attentionGraphComponent extends baseComponent {
         }
         this.draw();
     }
-
+    */
     ///////////// helper //////////////
     collapSrcTarg(src, targ, srcAtt, targAtt) {
         //save the original files
