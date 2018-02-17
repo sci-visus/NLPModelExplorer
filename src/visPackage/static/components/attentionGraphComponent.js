@@ -12,54 +12,6 @@ class attentionGraphComponent extends attentionComponent {
         this.endRange = 2.3;
     }
 
-    // collapseSrc(mask) {
-    //     this.srcIndexMaskSet.clear();
-    //     mask.map((d, i) => {
-    //         if (d === 0) {
-    //             this.srcIndexMaskSet.add(i)
-    //         }
-    //     });
-    //     this.draw();
-    // }
-    //
-    // collapseTarget(mask) {
-    //     this.targIndexMaskSet.clear();
-    //     mask.map((d, i) => {
-    //         if (d === 0) {
-    //             this.targIndexMaskSet.add(i);
-    //         }
-    //     });
-    //     this.draw();
-    // }
-
-    // initSvg() {
-    //     //create svg
-    //     if (this.svgContainer === undefined) {
-    //         this.svgContainer = d3.select(this.div).append("svg")
-    //             .attr("width", this.pwidth)
-    //             .attr("height", this.pheight);
-    //         this.svg = this.svgContainer
-    //             .append("g")
-    //             .attr("transform", "translate(" + this.margin.left + "," +
-    //                 this.margin.top + ")");
-    //
-    //         this.svgSave = new svgExporter(this.svgContainer, [this.width -
-    //             10, 10
-    //         ]);
-    //
-    //     } else {
-    //
-    //         this.svgContainer
-    //             .attr("width", this.pwidth)
-    //             .attr("height", this.pheight)
-    //
-    //         this.svg.selectAll("text,rect,path,defs").remove();
-    //
-    //         this.svgSave.updatePos([this.width - 10, 10])
-    //         this.svgSave.draw();
-    //     }
-    // }
-
     draw() {
         this._updateWidthHeight();
 
@@ -296,10 +248,6 @@ class attentionGraphComponent extends attentionComponent {
         });
     }
 
-    // resize() {
-    //     //you can redraw or resize your vis here
-    //     this.draw();
-    // }
     /*
         parseDataUpdate(msg) {
             super.parseDataUpdate(msg);

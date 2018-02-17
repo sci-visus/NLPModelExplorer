@@ -43,7 +43,7 @@ class predictionComponent extends baseComponent {
         label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 112 - 20)
-            .attr("y", -2)
+            .attr("y", -7)
             .text("Neutral")
             .style("font-size", "14px")
             .style("fill", "grey");
@@ -52,7 +52,7 @@ class predictionComponent extends baseComponent {
         label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 0 - 10)
-            .attr("y", 194 + 12)
+            .attr("y", 194 + 17)
             .text("Contradiction")
             .style("font-size", "14px")
             .style("fill", "grey");
@@ -61,7 +61,7 @@ class predictionComponent extends baseComponent {
         label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 224 - 55)
-            .attr("y", 194 + 12)
+            .attr("y", 194 + 17)
             .text("Entailment")
             .style("font-size", "14px")
             .style("fill", "grey");
@@ -97,21 +97,30 @@ class predictionComponent extends baseComponent {
         prediction.concat([0, 0]);
         // console.log(prediction);
         this.updatePredictDisplay([prediction]);
+
     }
 
     onUpdateAllPairPrediction() {
         var data = [];
         var allPairsPrediction = this.data["allPairsPrediction"];
         // console.log(allPairsPrediction);
+
+        //the euclidean coordinate data
+        var dataXY = [];
         for (var i = 0; i < allPairsPrediction.length; i++)
             for (var j = 0; j < allPairsPrediction[i].length; j++) {
                 if (i >= j) {
                     data.push(allPairsPrediction[i][j].concat([i, j]));
+                    let d = allPairsPrediction[i][j];
+                    let x = d[1] * 112 + d[2] * 0 + d[0] * 224;
+                    let y = d[1] * 0 + d[2] * 194 + d[0] * 194;
+                    dataXY.push([x, y]);
                 }
             }
 
-        console.log(data);
+        // console.log(data);
         this.updatePredictDisplay(data);
+        this.drawDensityOverlay(dataXY)
     }
 
     updatePredictDisplay(data) {
@@ -161,6 +170,34 @@ class predictionComponent extends baseComponent {
                     }
                 });
         }
+    }
 
+    //triangle range: 224, 194
+    drawDensityOverlay(dataPoints) {
+        this.svg.select(this.div + "overlay").remove();
+        this.svg.append("g")
+            .attr("id", this.uuid + "overlay")
+            .attr("fill", "none")
+            .attr("stroke", "#000")
+            .attr("stroke-width", 0.5)
+            .attr("stroke-linejoin", "round")
+            .selectAll("path")
+            .data(d3.contourDensity()
+                .x(function(d) {
+                    return d[0];
+                })
+                .y(function(d) {
+                    return d[1];
+                })
+                .size([224, 194])
+                .bandwidth(5)
+                (dataPoints))
+            .enter().append("path")
+            .attr("color", "blue")
+            // .attr("opacity", function(d) {
+            //     console.log(d);
+            //     return d.value;
+            // })
+            .attr("d", d3.geoPath());
     }
 }
