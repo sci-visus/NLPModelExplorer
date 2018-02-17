@@ -24,7 +24,6 @@ class predictionComponent extends baseComponent {
         this.svgSave = new svgExporter(this.svgContainer);
 
         this.draw();
-
     }
 
     draw() {
@@ -145,11 +144,11 @@ class predictionComponent extends baseComponent {
                     else return 3;
                 })
                 .style("fill", (d, i) => {
-                    if (i == 0) return 'grey';
-                    else return 'white';
+                    if (i == 0) return 'red';
+                    else return 'grey';
                 })
-                .style("stroke", 'black')
-                .style("opacity", 0.7)
+                // .style("stroke", 'black')
+                .style("opacity", 0.5)
                 //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
                 .on("click", (d, i) => {
                     if (this.data["allSourcePairs"] !== undefined) {
