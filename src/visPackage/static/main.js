@@ -1,8 +1,8 @@
 var panelMetaInfo = {
     'Prediction': ['prediction_view', 'predictionComponent'],
-    'Attention': ['attention_view', 'attentionMatrixComponent'],
+    'AttentionMatrix': ['attention_view', 'attentionMatrixComponent'],
     'Sentence': ['sentence_view', 'sentenceComponent'],
-    "AttentionSentence": ['attentionSentence_view',
+    "AttentionGraph": ['attentionSentence_view',
         'attentionGraphComponent'
     ],
     'Evaluation': ['evaluation_view', 'evaluationComponent']
@@ -36,7 +36,7 @@ var config = {
                 }
             }, {
                 type: 'component',
-                componentName: 'Attention',
+                componentName: 'AttentionMatrix',
                 componentState: {
                     route: 'attention_view',
                     name: 'attentionMatrixComponent'
@@ -53,7 +53,7 @@ var config = {
                 }
             }, {
                 type: 'component',
-                componentName: 'AttentionSentence',
+                componentName: 'AttentionGraph',
                 componentState: {
                     route: 'attentionSentence_view',
                     name: 'attentionGraphComponent'

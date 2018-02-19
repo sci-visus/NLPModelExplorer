@@ -24,7 +24,7 @@
 #adjust the following for your purpose
 
 #set the a .dvi name that corresponds to your main .tex file
-DVIFILES = template.dvi
+DVIFILES = paper_entailVis.dvi
 MAINTEXFILE = $(DVIFILES:.dvi=.tex)
 SUBTEXFILES =
 BIBFILES = entailVis.bib
@@ -152,6 +152,6 @@ $(MAINTEXFILE) : $(SUBTEXFILES) $(BIBFILES)
 # cleans anything that can be re-generated automatically, plus emacs backups
 clean:
 				rm -f *.aux *.log *.bbl *.blg *.brf *.cb *.ind *.idx *.ilg	\
-				*.inx *.toc *.out $(DVIFILES) $(PSFILES) template.pdf *~
+				*.inx *.toc *.out $(DVIFILES) $(PSFILES) paper_entailVis.pdf *~
 
 .PHONY : all pdf ps dvi clean $(MAINTEXFILE)
