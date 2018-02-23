@@ -93,16 +93,19 @@ class predictionComponent extends baseComponent {
     }
 
     onUpdatePrediction() {
-        var prediction = this.data['prediction'][0];
+        //clone prediction
+        var prediction = this.data['prediction'][0].slice(0);
         prediction.concat([0, 0]);
+        //reverse prediction
+        // prediction = prediction.reverse();
         // console.log(prediction);
         this.updatePredictDisplay([prediction]);
-
     }
 
     onUpdateAllPairPrediction() {
         var data = [];
-        var allPairsPrediction = this.data["allPairsPrediction"];
+        var allPairsPrediction = this.data["allPairsPrediction"].slice(0);
+        allPairsPrediction = allPairsPrediction.reverse();
         // console.log(allPairsPrediction);
 
         //the euclidean coordinate data
@@ -124,10 +127,11 @@ class predictionComponent extends baseComponent {
     }
 
     updatePredictDisplay(data) {
+        var pLen = data.length;
         // console.log(this.data);
-        //neutral, Contradiction, Entailment
-        //Entailment, neutral, contradiction
-        //(112,0) (0,194) (224,194)
+        // neutral, Contradiction, Entailment
+        // Entailment, neutral, contradiction
+        // (112,0) (0,194) (224,194)
         if (data !== undefined) {
             // console.log(data);
             this.svg.selectAll("circle").remove();
@@ -149,11 +153,11 @@ class predictionComponent extends baseComponent {
                         d[0] * 194;
                 })
                 .attr("r", (d, i) => {
-                    if (i == 0) return 6;
+                    if (i == pLen - 1) return 6;
                     else return 3;
                 })
                 .style("fill", (d, i) => {
-                    if (i == 0) return 'red';
+                    if (i == pLen - 1) return 'red';
                     else return 'grey';
                 })
                 // .style("stroke", 'black')
@@ -178,8 +182,8 @@ class predictionComponent extends baseComponent {
         this.svg.append("g")
             .attr("id", this.uuid + "overlay")
             .attr("fill", "none")
-            .attr("stroke", "#000")
-            .attr("stroke-width", 0.5)
+            .attr("stroke", "black")
+            .attr("stroke-width", 0.8)
             .attr("stroke-linejoin", "round")
             .selectAll("path")
             .data(d3.contourDensity()
@@ -190,14 +194,12 @@ class predictionComponent extends baseComponent {
                     return d[1];
                 })
                 .size([224, 194])
-                .bandwidth(5)
+                .bandwidth(4)
+                .thresholds(12)
                 (dataPoints))
             .enter().append("path")
-            .attr("color", "blue")
-            // .attr("opacity", function(d) {
-            //     console.log(d);
-            //     return d.value;
-            // })
+            .attr("clip-path", "url(#triClip)")
+            .attr("opacity", 0.6)
             .attr("d", d3.geoPath());
     }
 }

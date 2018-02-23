@@ -2,26 +2,20 @@ from visPackage import *
 from modelInterface import *
 from sentenceGenerator import *
 
-model = modelInterface(wordDict="../data/snli_1.0/snli_1.0.word.dict",
+#initialize NLP model
+model = modelInterface(
+    wordDict="../data/snli_1.0/snli_1.0.word.dict",
     wordVec="../data/glove.hdf5", model="../data/local_300_parikh")
 
-################ test model interface #################
-# model.evaluateTestData("../data/snli_1.0/src-test.txt", "../data/snli_1.0/targ-test.txt", "../data/snli_1.0/label-test.txt")
-# model.predict([exampleData[0]["src"], exampleData[0]["targ"]])
-# model.attention()
-# exit()
-#######################################################
-
+#sentence perturbation
 gen = sentenceGenerator()
+#dependency parsing
 dep = dependencyTree()
 
-###### test sentence perturbation interface ###########
-# ps = gen.perturbSentence("A woman eat an apple.")
-# print ps
-# exit()
-#######################################################
+#visualization components
 visComponentList = ["prediction", "sentence", "attention", "evaluation"]
 
+#setup interface
 modelVis = textEntailVisModule(visComponentList)
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
