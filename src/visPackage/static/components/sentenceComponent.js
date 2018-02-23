@@ -84,11 +84,13 @@ class sentenceComponent extends baseComponent {
 
     onReceiveCurrentPair() {
         var currentPair = this.data['currentPair'];
+        // console.log(this.data["currentPair"]);
 
-        d3.select(this.div + "src").html(currentPair[0]);
-        d3.select(this.div + "targ").html(currentPair[1]);
+        d3.select(this.div + "src").property("value", currentPair[0]);
+        d3.select(this.div + "targ").property("value", currentPair[1]);
         // console.log("----------", this.data["allSourcePairs"]);
         if (this.data["allSourcePairs"]) {
+
             $(this.div + "src").highlightWithinTextarea({
                 highlight: this.getSentenceDiff(
                     this.data["allSourcePairs"][0],
@@ -189,32 +191,32 @@ class sentenceComponent extends baseComponent {
             d3.select(selector)
                 .append("div")
                 .attr("class", "dropdown-menu");
-        }
 
-        //cleanup
-        // console.log(menu);
-        var menu = d3.select(selector).select(".dropdown-menu");
 
-        menu.selectAll(".dropdown-item").remove();
-        menu.selectAll(".dropdown-item")
-            .data(sentences)
-            .enter()
-            .append("a")
-            .attr("class", "dropdown-item")
-            .html(d => this.colorSentenceDiff(sentences[0], d))
-            .on("click", (d, i) => {
-                //update sentence edit box
-                // console.log(d);
-                d3.select(labelSelector).html(d);
-                $(labelSelector).highlightWithinTextarea({
-                    highlight: this.getSentenceDiff(sentences[0],
-                        d), //
-                    className: 'blue'
+            //cleanup
+            // console.log(menu);
+            var menu = d3.select(selector).select(".dropdown-menu");
+
+            menu.selectAll(".dropdown-item").remove();
+            menu.selectAll(".dropdown-item")
+                .data(sentences)
+                .enter()
+                .append("a")
+                .attr("class", "dropdown-item")
+                .html(d => this.colorSentenceDiff(sentences[0], d))
+                .on("click", (d, i) => {
+                    //update sentence edit box
+                    d3.select(labelSelector).property("value", d);
+                    $(labelSelector).highlightWithinTextarea({
+                        highlight: this.getSentenceDiff(
+                            sentences[0],
+                            d), //
+                        className: 'blue'
+                    });
+
+                    this.onUpdateCurrentPair();
                 });
-
-                this.onUpdateCurrentPair();
-            });
-
+        }
         /////////////////// reference /////////////////
         // <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         //   <span class="sr-only">Toggle Dropdown</span>

@@ -100,6 +100,7 @@ class predictionComponent extends baseComponent {
         //reverse prediction
         // prediction = prediction.reverse();
         // console.log(prediction);
+        this.drawDensityOverlay([])
         this.updatePredictDisplay([prediction]);
     }
 
@@ -181,27 +182,29 @@ class predictionComponent extends baseComponent {
     //triangle range: 224, 194
     drawDensityOverlay(dataPoints) {
         this.svg.select(this.div + "overlay").remove();
-        this.svg.append("g")
-            .attr("id", this.uuid + "overlay")
-            .attr("fill", "none")
-            .attr("stroke", "black")
-            .attr("stroke-width", 0.8)
-            .attr("stroke-linejoin", "round")
-            .selectAll("path")
-            .data(d3.contourDensity()
-                .x(function(d) {
-                    return d[0];
-                })
-                .y(function(d) {
-                    return d[1];
-                })
-                .size([224, 194])
-                .bandwidth(4)
-                .thresholds(12)
-                (dataPoints))
-            .enter().append("path")
-            .attr("clip-path", "url(#triClip)")
-            .attr("opacity", 0.6)
-            .attr("d", d3.geoPath());
+        if (dataPoints.length > 0) {
+            this.svg.append("g")
+                .attr("id", this.uuid + "overlay")
+                .attr("fill", "none")
+                .attr("stroke", "black")
+                .attr("stroke-width", 0.8)
+                .attr("stroke-linejoin", "round")
+                .selectAll("path")
+                .data(d3.contourDensity()
+                    .x(function(d) {
+                        return d[0];
+                    })
+                    .y(function(d) {
+                        return d[1];
+                    })
+                    .size([224, 194])
+                    .bandwidth(4)
+                    .thresholds(12)
+                    (dataPoints))
+                .enter().append("path")
+                .attr("clip-path", "url(#triClip)")
+                .attr("opacity", 0.6)
+                .attr("d", d3.geoPath());
+        }
     }
 }
