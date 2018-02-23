@@ -84,9 +84,26 @@ class sentenceComponent extends baseComponent {
 
     onReceiveCurrentPair() {
         var currentPair = this.data['currentPair'];
-        // console.log("----------", currentPair);
-        d3.select(this.div + "src").property("value", currentPair[0]);
-        d3.select(this.div + "targ").property("value", currentPair[1]);
+
+        d3.select(this.div + "src").html(currentPair[0]);
+        d3.select(this.div + "targ").html(currentPair[1]);
+        // console.log("----------", this.data["allSourcePairs"]);
+        if (this.data["allSourcePairs"]) {
+            $(this.div + "src").highlightWithinTextarea({
+                highlight: this.getSentenceDiff(
+                    this.data["allSourcePairs"][0],
+                    currentPair[0]), //
+                className: 'blue'
+            });
+        }
+        if (this.data["allTargetPairs"]) {
+            $(this.div + "targ").highlightWithinTextarea({
+                highlight: this.getSentenceDiff(
+                    this.data["allTargetPairs"][0],
+                    currentPair[1]), //
+                className: 'blue'
+            });
+        }
     }
 
     onChangeOriginalPair() {
@@ -97,6 +114,7 @@ class sentenceComponent extends baseComponent {
             this.data["sentenceList"][index]["targ"]
         ];
         // console.log(currentPair);
+        // this.onReceiveCurrentPair()
         this.data["currentPair"] = currentPair;
         d3.select(this.div + "src").property("value", currentPair[0]);
         d3.select(this.div + "targ").property("value", currentPair[1]);
@@ -115,11 +133,12 @@ class sentenceComponent extends baseComponent {
         var currentPair = [d3.select(this.div + "src").property("value"),
             d3.select(this.div + "targ").property("value")
         ];
-        console.log(currentPair);
+        // console.log(currentPair);
         this.setData("currentPair", currentPair);
     }
 
     updatePerturbedSentences(sentences) {
+
         if (this.data["currentPair"][0] == sentences[0]) {
             this.setData("allSourcePairs", sentences);
             this.addDropdown(this.div + "srcInput", sentences, this.div +
@@ -156,7 +175,6 @@ class sentenceComponent extends baseComponent {
     }
 
     addDropdown(selector, sentences, labelSelector) {
-        // console.log(sentences[0]);
         if (d3.select(selector).select(".dropdown-toggle").empty()) {
             // console.log("add Button");
             d3.select(selector).append("button")
@@ -186,7 +204,14 @@ class sentenceComponent extends baseComponent {
             .html(d => this.colorSentenceDiff(sentences[0], d))
             .on("click", (d, i) => {
                 //update sentence edit box
-                d3.select(labelSelector).property("value", d);
+                // console.log(d);
+                d3.select(labelSelector).html(d);
+                $(labelSelector).highlightWithinTextarea({
+                    highlight: this.getSentenceDiff(sentences[0],
+                        d), //
+                    className: 'blue'
+                });
+
                 this.onUpdateCurrentPair();
             });
 
@@ -221,5 +246,22 @@ class sentenceComponent extends baseComponent {
             return outputStr;
         }
         return perturbed;
+    }
+
+    getSentenceDiff(origin, perturbed) {
+        var originList = origin.split(" ");
+        var perturbedList = perturbed.split(" ");
+        var wordList = [];
+        if (originList.length === perturbedList.length) {
+            var outputStr = "";
+            for (var i = 0; i < originList.length; i++) {
+                var word = perturbedList[i];
+                if (word !== originList[i] && word !== ".") {
+                    // console.log(word, "-", originList[i]);
+                    wordList.push(word);
+                }
+            }
+        }
+        return wordList;
     }
 }

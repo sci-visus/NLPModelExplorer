@@ -1,10 +1,11 @@
 <div style="margin-top: 25px; margin-left:25px; margin-right:25px" id='{{id}}'>
 
     <div class="form-group">
-
         <div class="input-group mb-3">
             <button class="btn btn-primary mr-2" id="{{id}}Predict">Predict</button>
+
             <button class="btn btn-primary mr-2" id="{{id}}PredictAll">Predict All</button>
+
             <div class="input-group-prepend ">
                 <label class="input-group-text" for="inputGroupSelect01">Examples</label>
             </div>
@@ -12,29 +13,21 @@
             <select id="{{id}}selectExample" class="custom-select">
             </select>
         </div>
+    </div>
 
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <label class="input-group-text">Premise</label>
-            </div>
-            <input type="text" id="{{id}}src" class="form-control" placeholder="Source" aria-label="" aria-describedby="basic-addon1">
-
-            <div class="input-group-append" id="{{id}}srcInput">
-                <button type="button" id="{{id}}perturbSource" class="btn btn-outline-secondary">Perturb</button>
-            </div>
+    <div class="form-group">
+        <label>Premise</label>
+        <textarea id="{{id}}src" class="form-control"></textarea>
+        <div class="input-group-append float-right" id="{{id}}srcInput">
+            <button class="btn btn-outline-secondary" id="{{id}}perturbSource">Perturb</button>
         </div>
+    </div>
 
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <label class="input-group-text">Hypothesis</label>
-            </div>
-
-            <input type="text" id="{{id}}targ" class="form-control" placeholder="Target" aria-label="" aria-describedby="basic-addon1">
-
-            <div class="input-group-append" id="{{id}}targInput">
-                <button type="button" id="{{id}}perturbTarget" class="btn btn-outline-secondary">Perturb</button>
-            </div>
-
+    <div class="form-group">
+        <label>Hypothesis</label>
+        <textarea id="{{id}}targ" class="form-control"></textarea>
+        <div class="input-group-append float-right" id="{{id}}targInput">
+            <button class="btn btn-outline-secondary" id="{{id}}perturbTarget">Perturb</button>
         </div>
     </div>
 
