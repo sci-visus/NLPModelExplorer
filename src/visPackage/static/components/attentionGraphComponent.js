@@ -89,7 +89,7 @@ class attentionGraphComponent extends attentionComponent {
             this.drawConnection();
 
             ///////////////////// drawing rect //////////////////////
-            this.svg.selectAll(".sourceRect")
+            this.svg.selectAll(".srcRect")
                 .data(this.srcWords)
                 .enter()
                 .append("rect")
@@ -97,7 +97,7 @@ class attentionGraphComponent extends attentionComponent {
                 .attr("y", (d, i) => this.srcPos[i].y)
                 .attr("width", srcWidth)
                 .attr("height", this.rectHeight)
-                .attr("class", "sourceRect")
+                .attr("class", "srcRect")
                 .style("fill", "#87CEFA")
                 .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
 
@@ -124,7 +124,7 @@ class attentionGraphComponent extends attentionComponent {
                 .attr("y", (d, i) => this.srcPos[i].y + this.rectHeight *
                     0.5)
                 .style("font-size", this.checkFontSize.bind(this))
-                .style("writing-mode", this.checkOrientation.bind(this))
+                .style("writing-mode", this.checkSrcOrientation.bind(this))
                 .style("text-anchor", "middle")
                 .on("click", (d, i) => {
                     this.src_dep.collapse(i);
@@ -140,7 +140,7 @@ class attentionGraphComponent extends attentionComponent {
                 .attr("y", (d, i) => this.targPos[i].y - this.rectHeight *
                     0.5)
                 .style("font-size", this.checkFontSize.bind(this))
-                .style("writing-mode", this.checkOrientation.bind(this))
+                .style("writing-mode", this.checkTargOrientation.bind(this))
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
                 .on("click", (d, i) => {
@@ -358,7 +358,16 @@ class attentionGraphComponent extends attentionComponent {
         return 14;
     }
 
-    checkOrientation(d) {
+    checkSrcOrientation(d) {
+        var cbbox = this.svg.select(".srcRect").node().getBBox();
+        // console.log(cbbox);
+        if (cbbox.height > cbbox.width)
+            return "vertical-rl";
+        else
+            return "hortizontal-rl";
+
+    }
+    checkTargOrientation(d) {
         var cbbox = this.svg.select(".targRect").node().getBBox();
         // console.log(cbbox);
         if (cbbox.height > cbbox.width)
@@ -367,4 +376,5 @@ class attentionGraphComponent extends attentionComponent {
             return "hortizontal-rl";
 
     }
+
 }

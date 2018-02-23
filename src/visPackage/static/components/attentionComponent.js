@@ -87,17 +87,6 @@ class attentionComponent extends baseComponent {
         this.draw();
     }
 
-    updateMatrixColormap() {
-        if (this.svg) {
-            this.svg.selectAll('.attentionComponent_matrix_rect')
-                .data(this.attList)
-                .style('fill', d => {
-                    return this.colorbar.lookup(1.0 - d);
-                });
-        }
-    }
-
-
     resize() {
         //you can redraw or resize your vis here
         this.draw();
@@ -108,8 +97,8 @@ class attentionComponent extends baseComponent {
         switch (msg["name"]) {
             case "attention":
                 //if attention is updated, redraw attention
-                this.srcDepTreeData = undefined;
-                this.targDepTreeData = undefined;
+                // this.srcDepTreeData = undefined;
+                // this.targDepTreeData = undefined;
                 this.draw();
                 //parse the sentence
                 let currentPair = this.data["currentPair"];

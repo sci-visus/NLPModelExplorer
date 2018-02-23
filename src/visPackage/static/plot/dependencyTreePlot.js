@@ -102,7 +102,7 @@ class dependencyTreePlot {
         });
 
         let childs_set = new Set(childs);
-        console.log("children set: ", childs_set);
+        // console.log("children set: ", childs_set);
         for (let i = 0; i < this.sen.length; i++) {
             if (!childs_set.has(i)) {
                 display_index.push(i);
@@ -124,7 +124,7 @@ class dependencyTreePlot {
         //loop through the dependency until there is not new node
         //add to the filter.
         let l = 0;
-	let depth = 0;
+        let depth = 0;
         do {
             l = filter.size;
             for (let i = 0; i < deps.length; i++) {
@@ -160,11 +160,11 @@ class dependencyTreePlot {
         //clean
         //this.svg.selectAll('.label,.arc, defs,g').remove();
         //this.clear();
-	
-	//arrow
-	let arrowid = uuidv1()
+
+        //arrow
+        let arrowid = uuidv1()
         this.svg
-	.append("svg:defs")
+            .append("svg:defs")
             .append("svg:marker")
             .attr("id", arrowid)
             .attr('viewBox', '0 0 10 10')
@@ -203,7 +203,7 @@ class dependencyTreePlot {
             .attr("stroke-linecap", "round")
             .attr("stroke-width", 1.5)
             .style("stroke-dasharray", "4,4")
-            .style("marker-end", "url(#"+arrowid+")");
+            .style("marker-end", "url(#" + arrowid + ")");
 
         //component rect
         let text_loc = this.textLocation();
@@ -229,31 +229,31 @@ class dependencyTreePlot {
 
 
     //TODO: pathDepth is using brute force algorithm. optimize it by using dynamic programming
-    PathDepth(start_node, end_node){
-	    let  depth = 1;
-	    
-	    let b_left = Math.min(start_node, end_node),
-	    b_right = Math.max(start_node, end_node);
-	    
-	    for(let i = 0; i < this.dep_triples.length; i++){
-	    	let triples = this.dep_triples[i];
-	
-		let left = Math.min(triples[0], triples[2]),
-		right = Math.max(triples[0], triples[2]);
-		
-		
-		let condition1 = b_left <= left && right < b_right;
-		let condition2 = b_left < left && right <= b_right;
-		
-		if(condition1 || condition2){
-			let temp = 1 + this.PathDepth(triples[0], triples[2]);
-			if(temp > depth)
-				depth = temp;
-		}
-	    }
-	    return depth;
+    PathDepth(start_node, end_node) {
+        let depth = 1;
+
+        let b_left = Math.min(start_node, end_node),
+            b_right = Math.max(start_node, end_node);
+
+        for (let i = 0; i < this.dep_triples.length; i++) {
+            let triples = this.dep_triples[i];
+
+            let left = Math.min(triples[0], triples[2]),
+                right = Math.max(triples[0], triples[2]);
+
+
+            let condition1 = b_left <= left && right < b_right;
+            let condition2 = b_left < left && right <= b_right;
+
+            if (condition1 || condition2) {
+                let temp = 1 + this.PathDepth(triples[0], triples[2]);
+                if (temp > depth)
+                    depth = temp;
+            }
+        }
+        return depth;
     }
-   
+
     //get text pos
     textLocation() {
         let data = [];
@@ -267,10 +267,10 @@ class dependencyTreePlot {
                     item = {
                         'text': d[1]
                     },
-		    depth = this.PathDepth(d[0], d[2]); 
-		    //depth = this.nodeDepth(d[2]);
-		    
-		    
+                    depth = this.PathDepth(d[0], d[2]);
+                //depth = this.nodeDepth(d[2]);
+
+
 
                 if (this.orientation == 'h-top') {
                     item['x'] = (word1_loc.x + word2_loc.x) / 2;
@@ -302,8 +302,8 @@ class dependencyTreePlot {
                 let word1_loc = this.pos[this.display_index.indexOf(d[0])],
                     word2_loc = this.pos[this.display_index.indexOf(d[2])],
                     item = [],
-		    depth = this.PathDepth(d[0], d[2]);
-		    //depth = this.nodeDepth(d[2]);
+                    depth = this.PathDepth(d[0], d[2]);
+                //depth = this.nodeDepth(d[2]);
 
                 if (this.orientation == 'h-top') {
                     //first point

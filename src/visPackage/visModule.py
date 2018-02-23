@@ -144,6 +144,13 @@ class textEntailVisModule(visModule):
         attentionMatrix = self.attentionHook()
         dataManager.setData("attention", attentionMatrix)
 
+    def updateAttention(self):
+        sentencePair = dataManager.getData("currentPair")
+        predictionResult = self.predictionHook(sentencePair)
+        # dataManager.setData("prediction", predictionResult)
+        attentionMatrix = self.attentionHook()
+        dataManager.setData("attention", attentionMatrix)
+
     def predictAll(self):
         allSourcePairs = None
         allTargetPairs = None
@@ -161,6 +168,7 @@ class textEntailVisModule(visModule):
             return
 
         allPairsPrediction = np.zeros( (len(allSourcePairs), len(allTargetPairs), 3) )
+        # allAttention = [None]
         for i, source in enumerate(allSourcePairs):
             for j, target in enumerate(allTargetPairs):
                 # if i>=j:
@@ -169,6 +177,7 @@ class textEntailVisModule(visModule):
                     # allPairsPrediction[j,i,:] = predResult
         # print allPairsPrediction
         dataManager.setData("allPairsPrediction", allPairsPrediction)
+        # dataManager.setData("allAttention", allAttention)
 
     def perturbSentence(self, sentence):
         perturbed = self.sentencePerturbationHook(sentence)

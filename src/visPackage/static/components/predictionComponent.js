@@ -174,6 +174,7 @@ class predictionComponent extends baseComponent {
                             source,
                             target
                         ]);
+                        this.callFunc("updateAttention");
                     }
                 });
         }

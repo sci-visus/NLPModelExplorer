@@ -51,7 +51,7 @@ class attentionMatrixComponent extends attentionComponent {
             this.targWords = this.collapSenBySet(this.sen2words(pair[1]),
                 this.targIndexMaskSet);
 
-            console.log(this.srcWords, this.targWords, this.attList);
+            // console.log(this.srcWords, this.targWords, this.attList);
 
             this.computeWordPosition(this.srcWords, this.targWords);
 
@@ -119,6 +119,16 @@ class attentionMatrixComponent extends attentionComponent {
                     this.src_dep.collapse(i);
                 });
 
+        }
+    }
+
+    updateMatrixColormap() {
+        if (this.svg) {
+            this.svg.selectAll('.attentionComponent_matrix_rect')
+                .data(this.attList)
+                .style('fill', d => {
+                    return this.colorbar.lookup(1.0 - d);
+                });
         }
     }
 
