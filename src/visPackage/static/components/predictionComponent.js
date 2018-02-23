@@ -95,6 +95,7 @@ class predictionComponent extends baseComponent {
     onUpdatePrediction() {
         //clone prediction
         var prediction = this.data['prediction'][0].slice(0);
+        //add sentence index
         prediction.concat([0, 0]);
         //reverse prediction
         // prediction = prediction.reverse();
@@ -105,20 +106,20 @@ class predictionComponent extends baseComponent {
     onUpdateAllPairPrediction() {
         var data = [];
         var allPairsPrediction = this.data["allPairsPrediction"].slice(0);
-        allPairsPrediction = allPairsPrediction.reverse();
+        // allPairsPrediction = allPairsPrediction.reverse();
         // console.log(allPairsPrediction);
 
         //the euclidean coordinate data
         var dataXY = [];
         for (var i = 0; i < allPairsPrediction.length; i++)
             for (var j = 0; j < allPairsPrediction[i].length; j++) {
-                if (i >= j) {
-                    data.push(allPairsPrediction[i][j].concat([i, j]));
-                    let d = allPairsPrediction[i][j];
-                    let x = d[1] * 112 + d[2] * 0 + d[0] * 224;
-                    let y = d[1] * 0 + d[2] * 194 + d[0] * 194;
-                    dataXY.push([x, y]);
-                }
+                // if (i >= j) {
+                data.push(allPairsPrediction[i][j].concat([i, j]));
+                let d = allPairsPrediction[i][j];
+                let x = d[1] * 112 + d[2] * 0 + d[0] * 224;
+                let y = d[1] * 0 + d[2] * 194 + d[0] * 194;
+                dataXY.push([x, y]);
+                // }
             }
 
         // console.log(data);
@@ -128,6 +129,7 @@ class predictionComponent extends baseComponent {
 
     updatePredictDisplay(data) {
         var pLen = data.length;
+        data = data.reverse();
         // console.log(this.data);
         // neutral, Contradiction, Entailment
         // Entailment, neutral, contradiction
