@@ -156,12 +156,18 @@ class predictionComponent extends baseComponent {
                         d[0] * 194;
                 })
                 .attr("r", (d, i) => {
-                    if (i == pLen - 1) return 6;
+                    if (i === pLen - 1) return 6;
                     else return 3;
                 })
                 .style("fill", (d, i) => {
-                    if (i == pLen - 1) return 'red';
-                    else return 'grey';
+                    if (i === pLen - 1) {
+                        if (pLen === 1)
+                            return 'grey';
+                        else
+                            return 'red';
+                    } else {
+                        return 'grey';
+                    }
                 })
                 // .style("stroke", 'black')
                 .style("opacity", 0.5)
@@ -183,7 +189,7 @@ class predictionComponent extends baseComponent {
     //triangle range: 224, 194
     drawDensityOverlay(dataPoints) {
         this.svg.select(this.div + "overlay").remove();
-        if (dataPoints.length > 0) {
+        if (dataPoints.length > 1) {
             this.svg.append("g")
                 .attr("id", this.uuid + "overlay")
                 .attr("fill", "none")
