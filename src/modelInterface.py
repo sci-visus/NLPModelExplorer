@@ -178,6 +178,8 @@ class modelInterface:
     def attention(self, att_name="att_soft1"):
         #get the current attention, this seems to be reading attention from file
         batch_att = getattr(self.shared, att_name)
+        print self.shared.keys()
+        print "get attention: ", att_name
         # print('printing {0} for {1} examples...'.format(att_name, self.shared.batch_l))
         # for i in xrange(self.shared.batch_l):
         #     ex_id = self.shared.batch_ex_idx[i]

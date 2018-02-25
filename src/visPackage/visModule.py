@@ -29,6 +29,14 @@ exampleData = [{
     "index":1,
     "src": "Two young children in blue jerseys , one with the number 9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
     "targ": "Two kids in numbered jerseys wash their hands .\n"
+},{
+    "index":2,
+    "src": "This church choir sings to the masses as they sing joyous songs from the book at a church .",
+    "targ": "The church has cracks in the ceiling ."
+},{
+    "index":3,
+    "src": "A woman with a green headscarf , blue shirt and a very big grin .",
+    "targ": "The woman is young ."
 }
 ]
 
@@ -80,8 +88,8 @@ class visModule:
 data organization structure
     - sentenceList (list of example pairs)
     - currentPair (the current selected pair)
-    - allSourcePairs (all source pairs including the oringal)
-    - allTargetPairs (all target pairs including the oringal)
+    - allSourceSens (all source sentences including the oringal)
+    - allTargetSens (all target sentences including the oringal)
     - allPairsPrediction (a matrix record the predict for all combination of pairs)
     - perturbedSource
     - perturbedTarget
@@ -141,36 +149,38 @@ class textEntailVisModule(visModule):
         sentencePair = dataManager.getData("currentPair")
         predictionResult = self.predictionHook(sentencePair)
         dataManager.setData("prediction", predictionResult)
-        attentionMatrix = self.attentionHook()
+        #use raw attention
+        attentionMatrix = self.attentionHook("att1")
         dataManager.setData("attention", attentionMatrix)
 
     def updateAttention(self):
         sentencePair = dataManager.getData("currentPair")
         predictionResult = self.predictionHook(sentencePair)
         # dataManager.setData("prediction", predictionResult)
-        attentionMatrix = self.attentionHook()
+        #use raw attention
+        attentionMatrix = self.attentionHook("att1")
         dataManager.setData("attention", attentionMatrix)
 
     def predictAll(self):
-        allSourcePairs = None
-        allTargetPairs = None
-        if dataManager.getData("allSourcePairs") is not None:
-            allSourcePairs = dataManager.getData("allSourcePairs")
+        allSourceSens = None
+        allTargetSens = None
+        if dataManager.getData("allSourceSens") is not None:
+            allSourceSens = dataManager.getData("allSourceSens")
         else:
-            allSourcePairs = [dataManager.getData("currentPair")[0]]
-        if dataManager.getData("allTargetPairs") is not None:
-            allTargetPairs = dataManager.getData("allTargetPairs")
+            allSourceSens = [dataManager.getData("currentPair")[0]]
+        if dataManager.getData("allTargetSens") is not None:
+            allTargetSens = dataManager.getData("allTargetSens")
         else:
-            allTargetPairs = [dataManager.getData("currentPair")[1]]
+            allTargetSens = [dataManager.getData("currentPair")[1]]
         # print "original s, t:"
-        # print allSourcePairs, allTargetPairs
-        if len(allSourcePairs) == 0 and len(allTargetPairs):
+        print allSourceSens, allTargetSens
+        if len(allSourceSens) == 0 and len(allTargetSens):
             return
 
-        allPairsPrediction = np.zeros( (len(allSourcePairs), len(allTargetPairs), 3) )
+        allPairsPrediction = np.zeros( (len(allSourceSens), len(allTargetSens), 3) )
         # allAttention = [None]
-        for i, source in enumerate(allSourcePairs):
-            for j, target in enumerate(allTargetPairs):
+        for i, source in enumerate(allSourceSens):
+            for j, target in enumerate(allTargetSens):
                 # if i>=j:
                     predResult = self.predictionHook([source, target])
                     allPairsPrediction[i,j,:] = predResult

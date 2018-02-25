@@ -88,20 +88,20 @@ class sentenceComponent extends baseComponent {
 
         d3.select(this.div + "src").property("value", currentPair[0]);
         d3.select(this.div + "targ").property("value", currentPair[1]);
-        // console.log("----------", this.data["allSourcePairs"]);
-        if (this.data["allSourcePairs"]) {
+        // console.log("----------", this.data["allSourceSens"]);
+        if (this.data["allSourceSens"]) {
 
             $(this.div + "src").highlightWithinTextarea({
                 highlight: this.getSentenceDiff(
-                    this.data["allSourcePairs"][0],
+                    this.data["allSourceSens"][0],
                     currentPair[0]), //
                 className: 'blue'
             });
         }
-        if (this.data["allTargetPairs"]) {
+        if (this.data["allTargetSens"]) {
             $(this.div + "targ").highlightWithinTextarea({
                 highlight: this.getSentenceDiff(
-                    this.data["allTargetPairs"][0],
+                    this.data["allTargetSens"][0],
                     currentPair[1]), //
                 className: 'blue'
             });
@@ -127,8 +127,8 @@ class sentenceComponent extends baseComponent {
         this.clearDropdown(this.div + "srcInput");
         this.clearDropdown(this.div + "targInput");
 
-        this.setData("allSourcePairs", [currentPair[0]]);
-        this.setData("allTargetPairs", [currentPair[1]]);
+        this.setData("allSourceSens", [currentPair[0]]);
+        this.setData("allTargetSens", [currentPair[1]]);
     }
 
     onUpdateCurrentPair() {
@@ -142,11 +142,11 @@ class sentenceComponent extends baseComponent {
     updatePerturbedSentences(sentences) {
 
         if (this.data["currentPair"][0] == sentences[0]) {
-            this.setData("allSourcePairs", sentences);
+            this.setData("allSourceSens", sentences);
             this.addDropdown(this.div + "srcInput", sentences, this.div +
                 "src");
         } else if (this.data["currentPair"][1] == sentences[0]) {
-            this.setData("allTargetPairs", sentences);
+            this.setData("allTargetSens", sentences);
             this.addDropdown(this.div + "targInput", sentences, this.div +
                 "targ");
         }

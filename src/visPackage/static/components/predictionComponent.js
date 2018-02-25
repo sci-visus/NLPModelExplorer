@@ -9,7 +9,7 @@ class predictionComponent extends baseComponent {
         super(uuid);
 
         //subscribe to data
-        this.subscribeDatabyNames(["allSourcePairs", "allTargetPairs",
+        this.subscribeDatabyNames(["allSourceSens", "allTargetSens",
             "prediction", "allPairsPrediction"
         ]);
 
@@ -173,9 +173,9 @@ class predictionComponent extends baseComponent {
                 .style("opacity", 0.5)
                 //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
                 .on("click", (d, i) => {
-                    if (this.data["allSourcePairs"] !== undefined) {
-                        var source = this.data["allSourcePairs"][d[3]];
-                        var target = this.data["allTargetPairs"][d[4]];
+                    if (this.data["allSourceSens"] !== undefined) {
+                        var source = this.data["allSourceSens"][d[3]];
+                        var target = this.data["allTargetSens"][d[4]];
                         this.setData("currentPair", [
                             source,
                             target
@@ -213,5 +213,10 @@ class predictionComponent extends baseComponent {
                 .attr("opacity", 0.6)
                 .attr("d", d3.geoPath());
         }
+    }
+
+    //drawing a series of predictions
+    drawPredictPath() {
+
     }
 }
