@@ -55,6 +55,11 @@ def print_attention(opt, shared, m, att_name):
 
 	file.close()
 
+def print_score1(opt, shared, m):
+	print_attention(opt, shared, m, 'score1')
+
+def print_score2(opt, shared, m):
+	print_attention(opt, shared, m, 'score2')
 
 def print_att_soft1(opt, shared, m):
 	print_attention(opt, shared, m, 'att_soft1')
@@ -70,6 +75,8 @@ def run_forward_hooks(opt, shared, m):
 
 		
 	hooks = {}
+	hooks['print_score1'] = print_score1
+	hooks['print_score2'] = print_score2
 	hooks['print_att_soft1'] = print_att_soft1
 	hooks['print_att_soft2'] = print_att_soft2
 

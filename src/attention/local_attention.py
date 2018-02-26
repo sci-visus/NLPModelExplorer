@@ -52,9 +52,13 @@ class LocalAttention(torch.nn.Module):
 		# score tensors of size batch_l x sent_l1 x sent_l2
 		score1 = hidden1.bmm(hidden2.transpose(1,2))
 		score2 = score1.transpose(1,2).contiguous()
+		self.shared.score1 = score1
+		self.shared.score2 = score2
+		# to modify score, use self.shared.score1.data[:] = whatever
+		# 	doring so will modify the raw data in torch, thus dangerous.
 		# attention
-		self.shared.att_soft1 = self.score_unview1(self.softmax(self.score_view1(score1)))
-		self.shared.att_soft2 = self.score_unview2(self.softmax(self.score_view2(score2)))
+		self.shared.att_soft1 = self.score_unview1(self.softmax(self.score_view1(self.shared.score1)))
+		self.shared.att_soft2 = self.score_unview2(self.softmax(self.score_view2(self.shared.score2)))
 		return [self.shared.att_soft1, self.shared.att_soft2]
 
 
