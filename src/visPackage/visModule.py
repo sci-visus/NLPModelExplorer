@@ -45,27 +45,10 @@ class visModule:
     def __init__(self):
         dataManager.setObject(self)
 
-    @app.route('/')
-    def index():
-        dataManager.clear()
-        dataManager.setData("sentenceList", exampleData)
-        dataManager.setData("currentPair", [exampleData[0]['src'], exampleData[0]['targ']])
-        return app.send_static_file('index.html')
-
-    @app.route('/<name>')
-    def views(name):
-        return {
-            'prediction_view': app.send_static_file('viewTemplates/prediction_view.mst'),
-            'attention_view': app.send_static_file('viewTemplates/template_view.mst'),
-            'attentionSentence_view': app.send_static_file('viewTemplates/attentionSentence_view.mst'),
-            'sentence_view': app.send_static_file('viewTemplates/sentence_view.mst'),
-            'evaluation_view': app.send_static_file('viewTemplates/template_view.mst')
-        }.get(name)
-
     # envoke callback when the server is running
     @sio.on('message', namespace='/app')
     def parsingMessage(sid, msg):
-        # print sid, msg
+        print sid, msg
         return dataManager.receiveFromClient(msg)
 
     def show(self):
@@ -96,15 +79,33 @@ data organization structure
     - prediction (the current prediction)
     - predictionsHighlight (use the index to update currentPair display)
 '''
+layoutConfig = None
+
 class textEntailVisModule(visModule):
-    def __init__(self, componentList=["prediction", "sentence", "attention"]):
+    def __init__(self, componentLayout):
+        # super(visModule, self).__init__()
         self.index = 0
+        global layoutConfig
+        layoutConfig = componentLayout
         dataManager.setObject(self)
 
-    # def init(self):
-        # app = Flask(__name__)
-        # socketio = SocketIO(app)
-        # self.app.run(host='localhost',port=5000,debug=True)
+    @app.route('/')
+    def index():
+        dataManager.clear()
+        dataManager.setData("componentLayout", layoutConfig)
+        dataManager.setData("sentenceList", exampleData)
+        dataManager.setData("currentPair", [exampleData[0]['src'], exampleData[0]['targ']])
+        return app.send_static_file('index.html')
+
+    @app.route('/<name>')
+    def views(name):
+        return {
+            'prediction_view': app.send_static_file('viewTemplates/prediction_view.mst'),
+            'attention_view': app.send_static_file('viewTemplates/template_view.mst'),
+            'attentionSentence_view': app.send_static_file('viewTemplates/attentionSentence_view.mst'),
+            'sentence_view': app.send_static_file('viewTemplates/sentence_view.mst'),
+            'evaluation_view': app.send_static_file('viewTemplates/template_view.mst')
+        }.get(name)
 
     # an sentence pair index (self.index) is used as handle for the correspondence
     # between attention, prediction, and the input

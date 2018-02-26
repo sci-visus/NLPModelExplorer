@@ -13,10 +13,13 @@ gen = sentenceGenerator()
 dep = dependencyTree()
 
 #visualization components
-visComponentList = ["prediction", "sentence", "attention", "evaluation"]
+visLayout = {
+    "column":[{"row":["Prediction", "AttentionGraph", "AttentionMatrix"]},
+               {"row":["Sentence", "Evaluation"]}]
+    }
 
 #setup interface
-modelVis = textEntailVisModule(visComponentList)
+modelVis = textEntailVisModule(visLayout)
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
