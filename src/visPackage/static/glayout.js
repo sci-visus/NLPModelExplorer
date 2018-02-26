@@ -92,8 +92,8 @@ class glayout {
         var layoutDesc = msg["data"]["data"]
         var config = this.convertToConfig(layoutDesc);
 
-        this.layout = new window.GoldenLayout(config, $('body'));
-        console.log(config);
+        this.layout = new window.GoldenLayout(config, this.container);
+        // console.log(config);
 
         //register components
         for (let key in this.panelMetaInfo) {
@@ -135,13 +135,13 @@ class glayout {
                         componentState.name](uuid);
                     panel.data("component", component);
                     container.on("resize", component.resize
-                        .bind(
-                            component));
+                        .bind(component));
                 });
         });
     }
 }
 
+//////////////// config file reference /////////////////
 
 // var config = {
 //     settings: {
