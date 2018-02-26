@@ -3,6 +3,7 @@ sys.path.insert(0, '../')
 
 import torch
 from torch import nn
+from torch.autograd import Variable
 from view import *
 from holder import *
 
@@ -56,9 +57,18 @@ class LocalAttention(torch.nn.Module):
 		self.shared.score2 = score2
 		# to modify score, use self.shared.score1.data[:] = whatever
 		# 	doring so will modify the raw data in torch, thus dangerous.
-		# attention
-		self.shared.att_soft1 = self.score_unview1(self.softmax(self.score_view1(self.shared.score1)))
-		self.shared.att_soft2 = self.score_unview2(self.softmax(self.score_view2(self.shared.score2)))
+
+		# to use externally specified att values and discard the computed ones
+		if self.opt.customize_att == 1:
+			# self.shared.customized_att* will be a torch tensor
+			# thus wrap the tensor in Variable to proceed forward pass
+			customized1 = self.shared.customized_att1 if self.opt.gpuid == -1 else self.shared.customized_att1.cuda()
+			customized2 = self.shared.customized_att2 if self.opt.gpuid == -2 else self.shared.customized_att2.cuda()
+			self.shared.att_soft1 = Variable(customized1, requires_grad=True)
+			self.shared.att_soft2 = Variable(customized2, requires_grad=True)
+		else:
+			self.shared.att_soft1 = self.score_unview1(self.softmax(self.score_view1(self.shared.score1)))
+			self.shared.att_soft2 = self.score_unview2(self.softmax(self.score_view2(self.shared.score2)))
 		return [self.shared.att_soft1, self.shared.att_soft2]
 
 
