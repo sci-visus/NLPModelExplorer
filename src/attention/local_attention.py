@@ -35,6 +35,7 @@ class LocalAttention(torch.nn.Module):
 
 		# bookkeeping
 		self.shared = shared
+		self.opt = opt
 		self.dropout = opt.dropout
 		self.hidden_size = opt.hidden_size
 
@@ -86,7 +87,7 @@ class LocalAttention(torch.nn.Module):
 		self.score_view2.dims = (batch_l * sent_l2, sent_l1)
 		self.score_unview1.dims = (batch_l, sent_l1, sent_l2)
 		self.score_unview2.dims = (batch_l, sent_l2, sent_l1)
-		
+
 
 	def get_param_dict(self, root):
 		is_cuda = self.opt.gpuid != -1
@@ -131,6 +132,3 @@ if __name__ == '__main__':
 	print(rs)
 	print(rs[0].sum(2))
 	print(rs[1].sum(2))
-
-
-

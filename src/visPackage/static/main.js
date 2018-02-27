@@ -37,5 +37,6 @@ window.addEventListener('resize', function(size) {
 
 window.onbeforeunload = function(e) {
     console.log("@@@@@@@@@@@ reset module on server @@@@@@@@@\n");
-    $.get("/reset/", d => console.log(d));
+    $.get("/", d => console.log(d));
+    // $.get("/reset/", d => console.log(d));
 };
