@@ -38,6 +38,7 @@ parser.add_argument('--word_vecs', help="The path to word embeddings", default =
 parser.add_argument('--fix_word_vecs', help="Whether to make word embeddings NOT learnable", type=int, default=1)
 parser.add_argument('--seed', help="The random seed", type=int, default=3435)
 parser.add_argument('--gpuid', help="The GPU index, if -1 then use CPU", type=int, default=-1)
+parser.add_argument('--customize_att', help="Whether to use customized att values instead of computed ones", type=int, default=0)
 
 def pick_label(dist):
 	return np.argmax(dist, axis=1)
