@@ -76,7 +76,7 @@ class modelInterface:
         opt.word_vecs=wordVec
 
         ##### whether or not using raw attention #####
-        opt.customize_att = 1
+        opt.customize_att = 0
 
         #read the wordDict
         self.tokenMap = {}

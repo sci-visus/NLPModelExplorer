@@ -151,7 +151,7 @@ class textEntailVisModule(visModule):
         predictionResult = self.predictionHook(sentencePair)
         dataManager.setData("prediction", predictionResult)
         #use raw attention
-        attentionMatrix = self.attentionHook("att1")
+        attentionMatrix = self.attentionHook("score1")
         dataManager.setData("attention", attentionMatrix)
 
     def updateAttention(self):
@@ -159,7 +159,7 @@ class textEntailVisModule(visModule):
         predictionResult = self.predictionHook(sentencePair)
         # dataManager.setData("prediction", predictionResult)
         #use raw attention
-        attentionMatrix = self.attentionHook("att1")
+        attentionMatrix = self.attentionHook("score1")
         dataManager.setData("attention", attentionMatrix)
 
     def predictAll(self):
