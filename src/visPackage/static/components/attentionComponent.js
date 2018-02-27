@@ -99,15 +99,26 @@ class attentionComponent extends baseComponent {
                 //if attention is updated, redraw attention
                 // this.srcDepTreeData = undefined;
                 // this.targDepTreeData = undefined;
+                //normalize att
+                this.rawAttention = this.data["attention"];
+                this.normAttention = this.rawAttention.map(d => this.softmax(
+                    d));
+                // console.log(this.rawAttention);
+                console.log(this.normAttention);
+                // this.normAttention =
+
                 this.draw();
+
                 //parse the sentence
-                let currentPair = this.data["currentPair"];
-                this.callFunc("parseSentence", {
-                    "sentence": currentPair[0]
-                });
-                this.callFunc("parseSentence", {
-                    "sentence": currentPair[1]
-                });
+                if (this.srcDepTreeData === undefined) {
+                    let currentPair = this.data["currentPair"];
+                    this.callFunc("parseSentence", {
+                        "sentence": currentPair[0]
+                    });
+                    this.callFunc("parseSentence", {
+                        "sentence": currentPair[1]
+                    });
+                }
                 break;
             case "currentPair":
                 let pair = msg["data"]["data"];

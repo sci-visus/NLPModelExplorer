@@ -48,7 +48,7 @@ class visModule:
     # envoke callback when the server is running
     @sio.on('message', namespace='/app')
     def parsingMessage(sid, msg):
-        print sid, msg
+        # print sid, msg
         return dataManager.receiveFromClient(msg)
 
     def show(self):
@@ -120,7 +120,6 @@ class textEntailVisModule(visModule):
             # sentence['targ'] = pair['targ']
             sentenceList.append(pair)
         dataManager.setData("sentenceList", sentenceList)
-        # print data[0]
         dataManager.setData("currentPair", [data[0]['src'], data[0]['targ']])
 
     # called when the user change the prediction, the attention need to be

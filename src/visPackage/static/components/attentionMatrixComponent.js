@@ -21,8 +21,8 @@ class attentionMatrixComponent extends attentionComponent {
             this.initSvg();
 
             //attention matrix
-            let attMatrix = this.data['attention'];
-
+            // let attMatrix = this.data['attention'];
+            let attMatrix = this.normAttention;
             ////////////////////add colormap //////////////////////
             this.colorbar =
                 new d3UIcolorMap(this.svg, this.uuid, [0, 1], [10, 10], [

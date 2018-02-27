@@ -11,6 +11,4 @@ class evaluationComponent extends baseComponent {
     draw() {
 
     }
-
-
 }

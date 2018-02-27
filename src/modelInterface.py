@@ -188,4 +188,7 @@ class modelInterface:
         #     ex_id = self.shared.batch_ex_idx[i]
         #remove the attention corresponds to <s>
         att = batch_att.data[0, 1:, 1:]
-        return att.numpy()
+        att = att.numpy()
+        print "attention range:", att.min(), att.max()
+        # att = att/att.max()
+        return att

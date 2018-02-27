@@ -139,6 +139,10 @@ class glayout {
                 });
         });
     }
+
+    updateSize() {
+        this.layout.updateSize();
+    }
 }
 
 //////////////// config file reference /////////////////

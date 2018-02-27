@@ -69,7 +69,7 @@ class socketioManager:
         #propagate data update
         if name in self.data2ID.keys():
             for id in self.data2ID[name]:
-                print "setData:", name, id
+                # print "setData:", name, id
                 if id == uID:
                     continue
                 mappedData = dataMapper.Py2Js(data)
@@ -95,7 +95,7 @@ class socketioManager:
             self.data2ID[name].add(uID)
 
         #tigger data update if the subscribed data already exist
-        print "subscribeData:", self.data.keys()
+        # print "subscribeData:", self.data.keys()
         if name in self.data.keys():
             self.sendDataToClient(name, self.data[name], uID)
 

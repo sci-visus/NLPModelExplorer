@@ -23,7 +23,8 @@ class attentionGraphComponent extends attentionComponent {
 
             var pair = this.data["currentPair"];
             //draw attention
-            var attMatrix = this.data["attention"];
+            var attMatrix = this.normAttention;
+            //var attMatrix = this.data["attention"];
             // console.log(attMatrix);
 
             var srcAtt = attMatrix.map(d => d.reduce((a, b) => a + b));
