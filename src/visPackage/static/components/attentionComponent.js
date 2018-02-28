@@ -37,7 +37,6 @@ class attentionComponent extends baseComponent {
                 10, 10
             ]);
         } else {
-
             this.svgContainer
                 .attr("width", this.pwidth)
                 .attr("height", this.pheight)
