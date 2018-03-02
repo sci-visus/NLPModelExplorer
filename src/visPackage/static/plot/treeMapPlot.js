@@ -1,18 +1,16 @@
 class treeMapPlot {
-    constructor() {
-
-
-
-        console.log(this.root);
+    constructor(svg, pos, size) {
+        this.svg = svg;
+        this.pos = pos;
+        this.size = size;
     }
 
-    generateHierarchy(data, levelTag, rootName) {
+    generateNestData(data, levelTag, rootName) {
 
         var nestData;
         if (levelTag.length === 1) {
             nestData = d3.nest().key(d => d[levelTag[0]]).entries(data);
 
-            // } else if (levelTag.length === 2) {
         } else { //only generate tree with depth 2
             nestData = d3.nest().key(d => {
                 return d[levelTag[0]];
@@ -21,35 +19,105 @@ class treeMapPlot {
             }).entries(data);
         }
 
-        var root = {
+        var data = {
             key: rootName,
             values: nestData
         }
-        return root;
+
+        // console.log(data);
+        return data;
     }
 
-    setData(treeData) {
-
+    setData(treeData, rootName) {
         //test data
-        this.data = this.generateHierarchy(treeData, ["region",
+        this.data = this.generateNestData(treeData, ["region",
             "subregion"
-        ], "World");
+        ], rootName);
     }
 
-    resize() {
-
-    }
-
-    initPlot() {
-
+    update(pos, size) {
+        this.pos = pos;
+        this.size = size;
+        this.draw();
     }
 
     draw() {
-        var svg = this.svg;
-        var data = this.data;
-        var root;
+        this.drawSimple();
+    }
 
-        var color = d3.scale.category20c();
+    drawSimple() {
+        var width = this.size[0];
+        var height = this.size[1];
+
+        var data = this.data;
+        var svg = this.svg;
+        const color = d3.scaleOrdinal().range(d3.schemeCategory20c);
+        const treemap = d3.treemap().size([width, height]);
+
+        // d3.json("flare.json", function(error, data) {
+        //     if (error) throw error;
+
+        const root = d3.hierarchy(data, d => d.values)
+            .sum(d => d.value)
+            .sort(function(a, b) {
+                return a.value - b.value;
+            });
+
+        // console.log(root);
+        const tree = treemap(root);
+        // console.log(tree.leaves());
+
+        const node = svg.selectAll(".node")
+            .data(tree.leaves())
+            .enter().append("rect")
+            .attr("class", "node")
+            .attr("x", (d) => d.x0)
+            .attr("y", (d) => d.y0)
+            .attr("width", (d) => Math.max(0, d.x1 - d.x0 - 1))
+            .attr("height", (d) => Math.max(0, d.y1 - d.y0 - 1))
+            .attr("fill", (d) => {
+                // console.log(d);
+                return color(d.data.key);
+            });
+        // .text((d) => d.data.name);
+
+        d3.selectAll("input").on("change", function change() {
+            const value = this.value === "count" ? (d) => {
+                return d.size ? 1 : 0;
+            } : (d) => {
+                return d.size;
+            };
+
+            const newRoot = d3.hierarchy(data, (d) => d
+                    .children)
+                .sum(value);
+
+            node.data(treemap(newRoot).leaves())
+                .transition()
+                .duration(1500)
+                .style("left", (d) => d.x0 + "px")
+                .style("top", (d) => d.y0 + "px")
+                .style("width", (d) => Math.max(0, d.x1 -
+                    d.x0 - 1) + "px")
+                .style("height", (d) => Math.max(0, d.y1 -
+                    d.y0 - 1) + "px")
+        });
+        // });
+    }
+
+    drawComplex() {
+        var formatNumber = d3.format("d");
+
+        var svg = this.svg;
+        var data = this.data
+
+        // var width = +this.svg.attr("width");
+        // var height = +this.svg.attr("height");
+        var width = 400;
+        var height = 400;
+
+        // var color = d3.scale.category20c();
+        var color = d3.scaleOrdinal(d3.schemeCategory20);
 
         var x = d3.scaleLinear()
             .domain([0, width])
@@ -59,15 +127,27 @@ class treeMapPlot {
             .domain([0, height])
             .range([0, height]);
 
-        var treemap = d3.treemap()
-            .children(function(d, depth) {
-                return depth ? null : d._children;
-            })
+        const root = d3.hierarchy(data, d => d.values)
+            .sum(d => d.value)
             .sort(function(a, b) {
                 return a.value - b.value;
-            })
-            .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
+            });
+
+        // root.children((d, depth) => {
+        //     return depth ? null : d._children;
+        // })
+
+        var treemap = d3.treemap(root)
+            .size([width, height])
             .round(false);
+
+        // treemap(root.sum(function(d) {
+        //         return d.value;
+        //     }).sort(function(a, b) {
+        //         return a.value - b.value;
+        //     }))
+        // .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
+        // .round(false);
 
         // var svg = d3.select("#chart").append("svg")
         //     .attr("width", width + margin.left + margin.right)
@@ -92,18 +172,8 @@ class treeMapPlot {
             .attr("y", 6)
             .attr("dy", ".75em");
 
-        // if (opts.title) {
-        //     $("#chart").prepend("<p class='title'>" + opts.title + "</p>");
-        // }
-        if (data instanceof Array) {
-            root = {
-                key: rname,
-                values: data
-            };
-        } else {
-            root = data;
-        }
 
+        // console.log(root);
         initialize(root);
         accumulate(root);
         layout(root);
@@ -163,6 +233,7 @@ class treeMapPlot {
                 .datum(d)
                 .attr("class", "depth");
 
+            console.log(d._children);
             var g = g1.selectAll("g")
                 .data(d._children)
                 .enter().append("g");

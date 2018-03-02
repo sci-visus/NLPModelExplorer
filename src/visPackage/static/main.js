@@ -10,7 +10,8 @@ var panelMetaInfo = {
     "AttentionGraph": ['attentionSentence_view',
         'attentionGraphComponent'
     ],
-    'Evaluation': ['evaluation_view', 'evaluationComponent']
+    'Evaluation': ['evaluation_view', 'evaluationComponent'],
+    'Pipeline': ['template_view', 'pipelineComponent']
 };
 
 //for lookup component class on-the-fly
@@ -19,7 +20,8 @@ var objectMap = {
     attentionMatrixComponent: attentionMatrixComponent,
     attentionGraphComponent: attentionGraphComponent,
     sentenceComponent: sentenceComponent,
-    evaluationComponent: evaluationComponent
+    evaluationComponent: evaluationComponent,
+    pipelineComponent: pipelineComponent
 };
 
 //////////////////////create layout ///////////////////////

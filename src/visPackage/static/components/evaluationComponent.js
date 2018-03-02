@@ -75,6 +75,7 @@ class evaluationComponent extends baseComponent {
             "value": 12973808
         }];
 
+        this.draw();
     }
 
     initSvg() {
@@ -86,13 +87,22 @@ class evaluationComponent extends baseComponent {
             this.svg = this.svgContainer
                 .append("g")
                 .attr("transform", "translate(" + this.margin.left + "," +
-                    this.margin.top + ")");
+                    this.margin.top + ")")
+                .attr("width", this.width)
+                .attr("height", this.height);
 
             // this.svgSave = new svgExporter(this.svgContainer, [this.width -
             //     10, 10
             // ]);
-            this.treeMap = new treeMapPlot(this.svg);
-            this.treeMap.setData(this.data);
+            this.treeMap = new treeMapPlot(this.svg, [0, 0], [
+                this.width * 0.5, this.height
+            ]);
+            this.treeMap.setData(this.data, "world");
+
+            this.histo = new histoPlot(this.svg, [this.width * 0.55, 0], [
+                this.width * 0.45, this.height * 0.95
+            ]);
+
 
         } else {
             this.svgContainer
@@ -107,8 +117,22 @@ class evaluationComponent extends baseComponent {
     }
 
     draw() {
+        this._updateWidthHeight();
         this.initSvg();
         this.treeMap.draw();
+        this.histo.draw();
+    }
+
+    resize() {
+        this._updateWidthHeight();
+        if (this.treeMap) {
+            this.treeMap.update([0, 0], [this.width * 0.5, this.height]);
+        }
+        if (this.histo) {
+            this.histo.update([this.width * 0.55, 0], [
+                this.width * 0.45, this.height * 0.95
+            ]);
+        }
 
     }
 }
