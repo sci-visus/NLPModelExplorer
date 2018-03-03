@@ -4,7 +4,7 @@ Handle multiple histogram
 
 class histoPlot {
     constructor(svg, pos, size) {
-        this.svg = svg;
+        this.svg = svg.append("g");
         this.pos = pos;
         this.size = size;
         this.sample = [10, 9, 7, 6, 7, 3, 2,
@@ -20,6 +20,7 @@ class histoPlot {
     }
 
     draw() {
+        this.svg.selectAll("*").remove();
         var width = this.size[0];
         var height = this.size[1];
         var binNum = 6;
@@ -28,13 +29,11 @@ class histoPlot {
             .domain([0, 11])
             .range([this.pos[0], this.pos[0] + width]);
 
-
         // Generate a histogram using twenty uniformly-spaced bins.
         var histogram = d3.histogram()
             .domain(x.domain())
             .thresholds(x.ticks(binNum))
         var bins = histogram(samples);
-        console.log(bins);
 
         var y = d3.scaleLinear()
             .range([height, 0])

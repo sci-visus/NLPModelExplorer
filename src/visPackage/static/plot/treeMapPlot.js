@@ -1,6 +1,6 @@
 class treeMapPlot {
     constructor(svg, pos, size) {
-        this.svg = svg;
+        this.svg = svg.append("g");
         this.pos = pos;
         this.size = size;
     }
@@ -46,6 +46,7 @@ class treeMapPlot {
     }
 
     drawSimple() {
+        this.svg.selectAll("*").remove();
         var width = this.size[0];
         var height = this.size[1];
 

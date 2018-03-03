@@ -125,6 +125,8 @@ class evaluationComponent extends baseComponent {
 
     resize() {
         this._updateWidthHeight();
+        this.initSvg(); //update svg size
+
         if (this.treeMap) {
             this.treeMap.update([0, 0], [this.width * 0.5, this.height]);
         }

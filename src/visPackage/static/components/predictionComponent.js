@@ -216,7 +216,11 @@ class predictionComponent extends baseComponent {
     }
 
     //drawing a series of predictions
-    drawPredictPath() {
+    //the old prediction circle with dotted line
+    //the new prediction is solid
+
+    drawPredictPath(path) {
+        //draw arrow
 
     }
 }
