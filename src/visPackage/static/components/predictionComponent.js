@@ -407,6 +407,7 @@ class predictionComponent extends baseComponent {
                 });
 
             if (type === "dotted") {
+                this.svg.selectAll(".dotPredPath").remove();
                 this.svg.append("rect")
                     .attr("class", "dotPredPath")
                     .attr("x", line[1][0] - 5)
@@ -426,6 +427,7 @@ class predictionComponent extends baseComponent {
                     .attr("marker-end", "url(#arrowhead)")
                     .attr("d", d => d3line(line));
             } else {
+                this.svg.selectAll(".predPath").remove();
                 this.svg.append("circle")
                     .attr("class", "predPath")
                     .attr("cx", line[0][0])
