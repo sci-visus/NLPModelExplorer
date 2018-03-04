@@ -73,6 +73,9 @@ class predictionComponent extends baseComponent {
             .attr("y", 0);
 
         // this.updateSelection();
+        // var p1 = [0.5, 0.25, 0.25];
+        // var p2 = [0.25, 0.25, 0.55];
+        // this.drawPredictPath([p1, p2]);
     }
 
     parseDataUpdate(msg) {
@@ -90,6 +93,12 @@ class predictionComponent extends baseComponent {
     resize() {
         // console.log("prediction-resize\n");
         this.draw();
+    }
+
+    pred2Pos(d) {
+        let x = d[1] * 112 + d[2] * 0 + d[0] * 224;
+        let y = d[1] * 0 + d[2] * 194 + d[0] * 194;
+        return [x, y];
     }
 
     onUpdatePrediction() {
@@ -220,7 +229,53 @@ class predictionComponent extends baseComponent {
     //the new prediction is solid
 
     drawPredictPath(path) {
+        var line = [this.pred2Pos(path[0]), this.pred2Pos(path[1])];
+        console.log(line);
+
         //draw arrow
+        var d3line = d3.line()
+            .x(function(d) {
+                return d[0];
+            })
+            .y(function(d) {
+                return d[1];
+            });
+
+        this.svg.append("circle")
+            .attr("cx", line[0][0])
+            .attr("cy", line[0][1])
+            .attr("r", 5)
+            .style("stroke-dasharray", ("2, 2"))
+            .style('stroke', 'grey')
+            .style("fill", "none");
+
+        this.svg.append("rect")
+            .attr("x", line[1][0] - 5)
+            .attr("y", line[1][1] - 5)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", "grey");
+
+        this.svg.append('path')
+            .attr('fill', '#999')
+            .style("stroke-dasharray", ("2, 2"))
+            .style('stroke', 'black')
+            .attr("marker-end", "url(#arrowhead)")
+            .attr("d", d => d3line(line))
+            .attr();
+
+        // this.svg.append("defs").append("marker")
+        //     .attr("id", "triangle")
+        //     .attr("refX", 6)
+        //     .attr("refY", 6)
+        //     .attr("markerWidth", 30)
+        //     .attr("markerHeight", 30)
+        //     .attr("orient", "auto")
+        //     .append("path")
+        //     .attr("d", d => d3line(line))
+        //     .style("fill", "black");
+
+
 
     }
 }
