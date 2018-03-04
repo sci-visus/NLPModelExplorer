@@ -73,8 +73,9 @@ class predictionComponent extends baseComponent {
             .attr("y", 0);
 
         // this.updateSelection();
-        // var p1 = [0.5, 0.25, 0.25];
-        // var p2 = [0.25, 0.25, 0.55];
+        //entail, netrual, contradict
+        // var p1 = [1.0, 0.0, 0.0];
+        // var p2 = [0.0, 0.0, 1.0];
         // this.drawPredictPath([p1, p2]);
     }
 
@@ -99,6 +100,16 @@ class predictionComponent extends baseComponent {
         let x = d[1] * 112 + d[2] * 0 + d[0] * 224;
         let y = d[1] * 0 + d[2] * 194 + d[0] * 194;
         return [x, y];
+    }
+
+    //trigger request to reassign prediction
+    onPredictionReassign() {
+        //call python side
+    }
+
+    //trigger when python return optimized
+    onUpdateOptimizedPrediction() {
+
     }
 
     onUpdatePrediction() {
@@ -191,8 +202,158 @@ class predictionComponent extends baseComponent {
                         ]);
                         this.callFunc("updateAttention");
                     }
-                });
+                })
+                .call(d3.drag()
+                    .on("start", this.dragstarted.bind(this))
+                    .on("drag", this.dragged.bind(this))
+                    .on("end", this.dragended.bind(this)));
         }
+    }
+
+    drawCurrentAssignedPred() {
+        if (this.reassignedPred) {
+            this.drawPredictPath([
+                this.selectPred,
+                this.reassignedPred
+            ], "dotted");
+
+        } else {
+            this.drawPredictPath();
+        }
+    }
+
+    /////////////// drag ////////////////
+
+    dragstarted(d) {
+        console.log("dragStarted:", d);
+
+    }
+
+    dragged(d) {
+        var pos = this.pred2Pos(d);
+
+        if (this.svg.select("#reassignPredict").empty()) {
+            // console.log("dragged:", d);
+            // var pos = [0, 0];
+            var w = 20;
+            var h = 15;
+
+            var g = this.svg.append("g").attr("id", "reassignPredict");
+
+            var entailRect = g.append("g");
+
+            var neutralRect = g.append("g");
+            var contractRect = g.append("g");
+            var that = this;
+
+            this.selectPred = d;
+
+            ///////// N ///////////
+            neutralRect.append("rect")
+                .attr("x", pos[0] - w / 2)
+                .attr("y", pos[1] - 20 - h / 2)
+                .attr("width", w)
+                .attr("height", h)
+                .attr("fill", "lightgrey")
+                .attr("stroke", "black")
+                .on("mouseover", function(d) {
+                    d3.select(this).attr("fill", "grey");
+                    that.reassignedPred = [0, 1, 0];
+                    that.drawCurrentAssignedPred();
+                })
+                .on("mouseout", function(d) {
+                    d3.select(this).attr("fill", "lightgrey");
+                    that.reassignedPred = undefined;
+                    that.drawCurrentAssignedPred();
+                })
+                .on("click", this.onPredictionReassign.bind(this));
+            neutralRect.append("text")
+                .attr("x", pos[0])
+                .attr("y", pos[1] - 20)
+                .attr("dy", ".35em")
+                .attr("font-size", 10)
+                .text("N")
+                .style("text-anchor", "middle")
+                .style("pointer-events", "none");
+
+            ///////// E ///////////
+            entailRect.append("rect")
+                .attr("x", pos[0] + 20 - w / 2)
+                .attr("y", pos[1] + 15 - h / 2)
+                .attr("width", w)
+                .attr("height", h)
+                .attr("fill", "lightgrey")
+                .attr("stroke", "black")
+                .on("mouseover", function(d) {
+                    d3.select(this).attr("fill", "grey");
+                    that.reassignedPred = [1, 0, 0];
+                    that.drawCurrentAssignedPred();
+                })
+                .on("mouseout", function(d) {
+                    d3.select(this).attr("fill", "lightgrey");
+                    that.reassignedPred = undefined;
+                    that.drawCurrentAssignedPred();
+                })
+                .on("click", this.onPredictionReassign.bind(this));
+            entailRect.append("text")
+                .attr("x", pos[0] + 20)
+                .attr("y", pos[1] + 15)
+                .attr("dy", ".35em")
+                .attr("font-size", 10)
+                .text("E")
+                .style("text-anchor", "middle")
+                .style("pointer-events", "none");
+
+            ///////// C ///////////
+            contractRect.append("rect")
+                .attr("x", pos[0] - 20 - w / 2)
+                .attr("y", pos[1] + 15 - h / 2)
+                .attr("width", w)
+                .attr("height", h)
+                .attr("fill", "lightgrey")
+                .attr("stroke", "black")
+                .on("mouseover", function(d) {
+                    d3.select(this).attr("fill", "grey");
+                    that.reassignedPred = [0, 0, 1];
+                    that.drawCurrentAssignedPred();
+                })
+                .on("mouseout", function(d) {
+                    d3.select(this).attr("fill", "lightgrey");
+                    that.reassignedPred = undefined;
+                    that.drawCurrentAssignedPred();
+                })
+                .on("click", this.onPredictionReassign.bind(this));
+            contractRect.append("text")
+                .attr("x", pos[0] - 20)
+                .attr("y", pos[1] + 15)
+                .attr("dy", ".35em")
+                .attr("font-size", 10)
+                .text("C")
+                .style("text-anchor", "middle")
+                .style("pointer-events", "none");
+        } else {
+            //draw line from the center
+            // var currentPos = [d3.event.x, d3.event.y];
+            // this.svg.selectAll(".dragline").remove();
+            // this.svg
+            //     .append("line")
+            //     .attr("class", "dragline")
+            //     .attr("x1", pos[0])
+            //     .attr("y1", pos[1])
+            //     .attr("x2", currentPos[0])
+            //     .attr("y2", currentPos[1])
+            //     .attr("stroke", "grey");
+            // console.log("dragged:", currentPos);
+        }
+    }
+
+    dragended(d) {
+        console.log("dragended", d);
+        //check the location
+        this.svg.select("#reassignPredict").remove();
+
+        //trigger optimizaton on the python side
+        this.onPredictionReassign();
     }
 
     //triangle range: 224, 194
@@ -228,54 +389,69 @@ class predictionComponent extends baseComponent {
     //the old prediction circle with dotted line
     //the new prediction is solid
 
-    drawPredictPath(path) {
-        var line = [this.pred2Pos(path[0]), this.pred2Pos(path[1])];
-        console.log(line);
+    drawPredictPath(path, type = "dotted") {
+        if (path === undefined) {
+            this.svg.selectAll(".dotPredPath").remove();
+            this.svg.selectAll(".predPath").remove();
+        } else {
+            var line = [this.pred2Pos(path[0]), this.pred2Pos(path[1])];
+            // console.log(line);
 
-        //draw arrow
-        var d3line = d3.line()
-            .x(function(d) {
-                return d[0];
-            })
-            .y(function(d) {
-                return d[1];
-            });
+            //draw arrow
+            var d3line = d3.line()
+                .x(function(d) {
+                    return d[0];
+                })
+                .y(function(d) {
+                    return d[1];
+                });
 
-        this.svg.append("circle")
-            .attr("cx", line[0][0])
-            .attr("cy", line[0][1])
-            .attr("r", 5)
-            .style("stroke-dasharray", ("2, 2"))
-            .style('stroke', 'grey')
-            .style("fill", "none");
+            if (type === "dotted") {
+                this.svg.append("rect")
+                    .attr("class", "dotPredPath")
+                    .attr("x", line[1][0] - 5)
+                    .attr("y", line[1][1] - 5)
+                    .attr("width", 10)
+                    .attr("height", 10)
+                    .style("stroke-dasharray", ("2, 2"))
+                    .style('stroke', 'grey')
+                    .style("fill", "none");
+                // .attr("fill", "grey");
 
-        this.svg.append("rect")
-            .attr("x", line[1][0] - 5)
-            .attr("y", line[1][1] - 5)
-            .attr("width", 10)
-            .attr("height", 10)
-            .attr("fill", "grey");
+                this.svg.append('path')
+                    .attr("class", "dotPredPath")
+                    .attr('fill', '#999')
+                    .style("stroke-dasharray", ("2, 2"))
+                    .style('stroke', 'grey')
+                    .attr("marker-end", "url(#arrowhead)")
+                    .attr("d", d => d3line(line));
+            } else {
+                this.svg.append("circle")
+                    .attr("class", "predPath")
+                    .attr("cx", line[0][0])
+                    .attr("cy", line[0][1])
+                    .attr("r", 5)
+                    .style("stroke-dasharray", ("2, 2"))
+                    .style('stroke', 'grey')
+                    .style("fill", "none");
+                this.svg.append("rect")
+                    .attr("class", "predPath")
+                    .attr("x", line[1][0] - 5)
+                    .attr("y", line[1][1] - 5)
+                    .attr("width", 10)
+                    .attr("height", 10)
+                    // .style("stroke-dasharray", ("2, 2"))
+                    // .style('stroke', 'grey')
+                    .attr("fill", "grey");
 
-        this.svg.append('path')
-            .attr('fill', '#999')
-            .style("stroke-dasharray", ("2, 2"))
-            .style('stroke', 'black')
-            .attr("marker-end", "url(#arrowhead)")
-            .attr("d", d => d3line(line))
-            .attr();
-
-        // this.svg.append("defs").append("marker")
-        //     .attr("id", "triangle")
-        //     .attr("refX", 6)
-        //     .attr("refY", 6)
-        //     .attr("markerWidth", 30)
-        //     .attr("markerHeight", 30)
-        //     .attr("orient", "auto")
-        //     .append("path")
-        //     .attr("d", d => d3line(line))
-        //     .style("fill", "black");
-
-
-
+                this.svg.append('path')
+                    .attr("class", "predPath")
+                    .attr('fill', '#999')
+                    // .style("stroke-dasharray", ("2, 2"))
+                    .style('stroke', 'black')
+                    .attr("marker-end", "url(#arrowhead)")
+                    .attr("d", d => d3line(line));
+            }
+        }
     }
 }
