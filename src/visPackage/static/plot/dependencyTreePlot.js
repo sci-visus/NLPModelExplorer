@@ -222,9 +222,20 @@ class dependencyTreePlot {
             .attr('y', function(d, i) {
                 return d.y;
             })
-            .attr('font-size', 8)
+            .attr('font-size', (d, i)=>{
+		    return Math.min(12, d['width'] * 0.3) +'px';
+            })
+	    .style('writing-mode',(d)=>{
+		    return this.orientation == 'v-left'?'vertical-lr':'horizontal-tb';
+	    })
             .attr("text-anchor", "middle")
-            .attr("dominant-baseline", "central");
+            .attr("dominant-baseline", "central")
+	    .on('mouseover', function(){
+		    d3.select(this).attr('font-size', 12);
+	    })
+	    .on('mouseout', function(){
+	    	    d3.select(this).attr('font-size', function(d){return Math.min(12, d['width'] * 0.3) +'px';});
+	    })
     }
 
 
@@ -276,14 +287,17 @@ class dependencyTreePlot {
                     item['x'] = (word1_loc.x + word2_loc.x) / 2;
                     item['y'] = word1_loc.y - depth * this.text_box_height -
                         this.text_box_height * 1.5;
+		    item['width'] = Math.abs(word1_loc.x - word2_loc.x)
                 } else if (this.orientation == 'h-bottom') {
                     item['x'] = (word1_loc.x + word2_loc.x) / 2;
                     item['y'] = word1_loc.y + depth * this.text_box_height +
                         this.text_box_height * 1.5;
+		    item['width'] = Math.abs(word1_loc.x - word2_loc.x)
                 } else if (this.orientation == 'v-left') {
                     item['x'] = word1_loc.x - depth * this.text_box_width -
                         this.text_box_width * 1.5;
                     item['y'] = (word1_loc.y + word2_loc.y) / 2;
+		    item['width'] = Math.abs(word1_loc.y - word2_loc.y)
                 }
                 data.push(item)
             }
