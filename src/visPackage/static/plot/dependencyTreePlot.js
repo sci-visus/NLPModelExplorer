@@ -222,9 +222,20 @@ class dependencyTreePlot {
             .attr('y', function(d, i) {
                 return d.y;
             })
-            .attr('font-size', 8)
+            .attr('font-size', (d, i)=>{
+		    return Math.min(12, d['width'] * 0.3) +'px';
+            })
+	    .style('writing-mode',(d)=>{
+		    return this.orientation == 'v-left'?'vertical-lr':'horizontal-tb';
+	    })
             .attr("text-anchor", "middle")
-            .attr("dominant-baseline", "central");
+            .attr("dominant-baseline", "central")
+	    .on('mouseover', function(){
+		    d3.select(this).attr('font-size', 12);
+	    })
+	    .on('mouseout', function(){
+	    	    d3.select(this).attr('font-size', function(d){return Math.min(12, d['width'] * 0.3) +'px';});
+	    })
     }
 
 
