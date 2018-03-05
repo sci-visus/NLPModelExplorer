@@ -72,6 +72,7 @@ class batchEvaluation:
                 if self.verify(src_orig) and self.verify(targ_orig):
                     self.storage["origSrc"].append(src_orig)
                     self.storage["origTarg"].append(targ_orig)
+                    self.storage["origLabel"].append(label_orig)
                     self.storage["origPred"] = self.predict([src_orig,targ_orig])
 
                     for targ in targ_perb:
@@ -80,6 +81,9 @@ class batchEvaluation:
                         self.storage["mapToOrigIndex"].append(index)
                         pred = self.predict([src_orig, targ])
                         self.storage["pred"].append(pred)
+
+                    ##### statistic #####
+                    
 
                 # batch prediction
                 if index % 10 == 0:
@@ -101,10 +105,13 @@ def main(args):
     #sentence perturbation
     gen = sentenceGenerator()
 
+    ###### test set ######
     # evaluator = batchEvaluation("../data/snli_1.0/src-test.txt",
     #                        "../data/snli_1.0/targ-test.txt",
     #                        "../data/snli_1.0/label-test.txt",
     #                        "../data/test-pred-statistic.pkl" )
+
+    ###### dev set ######
     evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
                            "../data/snli_1.0/targ-dev.txt",
                            "../data/snli_1.0/label-dev.txt",
