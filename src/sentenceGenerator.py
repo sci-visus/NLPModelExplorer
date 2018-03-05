@@ -14,10 +14,11 @@ class sentenceGenerator:
                 self.train_tokens[toks[0].lower()] = 1
 
         # print "angele:", "angele" in self.train_tokens.keys()
+        print "token count:", len(self.train_tokens.keys())
 
     def verifySentence(self, sen):
         for word in sen.split():
-            if word not in self.train_tokens.keys():
+            if word.lower() not in self.train_tokens.keys():
                 return False
         return True
 
