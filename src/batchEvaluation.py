@@ -67,8 +67,8 @@ class batchEvaluation:
             pred = labels[np.argmax(self.storage["pred"][index])]
             # print  self.storage["mapToOrigIndex"]
             origIndex = self.storage["mapToOrigIndex"][index]
-            print len(self.storage["origLabel"]), origIndex
-            print len(self.storage["origSrc"])
+            # print len(self.storage["origLabel"]), origIndex
+            # print len(self.storage["origPred"])
             origLabel = self.storage["origLabel"][origIndex]
             if pred is not origLabel:
                 wrongPred = wrongPred + 1
@@ -115,7 +115,7 @@ class batchEvaluation:
                     self.storage["origSrc"].append(src_orig)
                     self.storage["origTarg"].append(targ_orig)
                     self.storage["origLabel"].append(label_orig)
-                    self.storage["origPred"] = self.predict([src_orig,targ_orig])
+                    self.storage["origPred"].append(self.predict([src_orig,targ_orig]))
 
                     for targ in targ_perb:
                         self.storage["srcSens"].append(src_orig)
