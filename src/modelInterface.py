@@ -84,7 +84,7 @@ class modelInterface:
             lines = f.readlines()
             for l in lines:
                 toks = l.split(" ")
-                self.tokenMap[toks[0].lower()] = 1
+                self.tokenMap[toks[0].lower()] = int(toks[1])
 
         #evaluate
         self.shared = Holder()

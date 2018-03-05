@@ -151,6 +151,7 @@ class textEntailVisModule(visModule):
         dataManager.setData("prediction", predictionResult)
         #use raw attention
         attentionMatrix = self.attentionHook("score1")
+        # print attentionMatrix
         dataManager.setData("attention", attentionMatrix)
 
     def updateAttention(self):
