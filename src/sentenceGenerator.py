@@ -10,9 +10,16 @@ class sentenceGenerator:
         with open(train_dict, 'r+') as f:
             lines = f.readlines()
             for l in lines:
-                toks = l.split(" ")
-                self.train_tokens[toks[0]] = 1
-        # print self.train_tokens
+                toks = l.split()
+                self.train_tokens[toks[0].lower()] = 1
+
+        # print "angele:", "angele" in self.train_tokens.keys()
+
+    def verifySentence(self, sen):
+        for word in sen.split():
+            if word not in self.train_tokens.keys():
+                return False
+        return True
 
     #perturb nouns and verb in the sentence
     def perturbSentence(self, inputSentence):
@@ -81,11 +88,11 @@ class sentenceGenerator:
                             target = singularize(s)
 
                         #if the plural or singular form does not exists in the training then continue
-                        if target not in train_tokens.keys():
+                        if target.lower() not in train_tokens.keys():
                             continue
 
                         target_list = copy.copy(orig_list)
-                        target_list[i] = target
+                        target_list[i] = target.lower()
                         result_list.append(' '.join(target_list))
 
         return result_list
