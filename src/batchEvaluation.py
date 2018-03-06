@@ -53,36 +53,59 @@ class batchEvaluation:
 
     '''
         generate statistics and write to a JSON file
+        store as hierarchy [origin]->[perturb pairs]
+        - Original Prediction T/F
+        - Perturbation Change Percentage
+        - Prediction Change E/C/N=>E/C/N (all pair)
+
     '''
     def generateStatistic(self):
-        wrongPred = 0
-        allPred = 0
         labels = ["entailment", "neutral", "contradiction"]
+        ## per original pair ##
         self.storage["perturbErrorRatio"] = []
+        ## self.storage["originPredCase"] = []
+        ## per all(perturbed+original) pairs ##
+        self.storage["predCase"] = []
         preOrigIndex = None
         origIndex = None
+
+        count = 0
+        wrongPred = 0
+        allPred = 0
+
+        # json output only have per origina pair information
+        self.jsonOut = {}
+
         for index, srcSen in enumerate(self.storage["srcSens"]):
-            if index > 200:
-                break
+            # if index > 200:
+            #     break
             pred = labels[np.argmax(self.storage["pred"][index])]
             # print  self.storage["mapToOrigIndex"]
             origIndex = self.storage["mapToOrigIndex"][index]
             # print len(self.storage["origLabel"]), origIndex
             # print len(self.storage["origPred"])
-            origLabel = self.storage["origLabel"][origIndex]
-            if pred is not origLabel:
+            origLabel = self.storage["origLabel"][origIndex].rstrip('\n')
+            # print origLabel, pred
+            count = count + 1
+            if pred != origLabel:
                 wrongPred = wrongPred + 1
+                # print wrongPred
 
             allPred = allPred + 1
 
-            if preOrigIndex and preOrigIndex is not origIndex:
+            #store the string for both the ground truth and pred label
+            self.storage["predCase"].append(origLabel+'-'+pred)
+
+            if preOrigIndex and preOrigIndex != origIndex:
+                self.storage["origPerturbCount"] = count
 
                 origPred = self.storage["origPred"][origIndex]
                 ratio = float(wrongPred)/float(allPred)
                 # self.storage["perturbErrorRatio"].append(ratio)
-                print ratio
+                # print ratio
 
                 #### reset variable ####
+                count = 0
                 wrongPred = 0
                 allPred = 0
 
@@ -111,15 +134,25 @@ class batchEvaluation:
                 # generate perturbation
                 # print index, src_orig, targ_orig, label_orig
                 targ_perb = self.perturb(targ_orig)
+                src_perb = self.perturb(src_orig)
                 if self.verify(src_orig) and self.verify(targ_orig):
                     self.storage["origSrc"].append(src_orig)
                     self.storage["origTarg"].append(targ_orig)
                     self.storage["origLabel"].append(label_orig)
                     self.storage["origPred"].append(self.predict([src_orig,targ_orig]))
 
+                    ### only perturb target ####
                     for targ in targ_perb:
                         self.storage["srcSens"].append(src_orig)
                         self.storage["targSens"].append(targ)
+                        self.storage["mapToOrigIndex"].append(index)
+                        pred = self.predict([src_orig, targ])
+                        self.storage["pred"].append(pred)
+
+                    ### only perturb src ####
+                    for src in src_perb:
+                        self.storage["srcSens"].append(src)
+                        self.storage["targSens"].append(targ_orig)
                         self.storage["mapToOrigIndex"].append(index)
                         pred = self.predict([src_orig, targ])
                         self.storage["pred"].append(pred)
@@ -128,8 +161,8 @@ class batchEvaluation:
                     ##### statistic #####
 
                 # batch prediction
-                if index % 10 == 0:
-                    item = "  processing:" + str(float(index)/float(num_lines)*100.0) + "%" + str(index)
+                if index % 20 == 0:
+                    item = "  processing:" + str(float(index)/float(num_lines)*100.0) + "% - " + str(index)
                     print item
                     # print(item, flush=True)
 
