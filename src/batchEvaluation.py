@@ -54,9 +54,13 @@ class batchEvaluation:
     '''
         generate statistics and write to a JSON file
         store as hierarchy [origin]->[perturb pairs]
-        - Original Prediction T/F
-        - Perturbation Change Percentage
-        - Prediction Change E/C/N=>E/C/N (all pair)
+
+        Label Filter
+            - Original Prediction T/F
+            - Prediction Change E/C/N=>E/C/N (for failed origin pair)
+
+        Value Filter
+            - Perturbation Change Percentage
 
     '''
     def generateStatistic(self):
@@ -74,11 +78,13 @@ class batchEvaluation:
         allPred = 0
 
         # json output only have per origina pair information
-        self.jsonOut = {}
+        self.jsonOut = []
 
         for index, srcSen in enumerate(self.storage["srcSens"]):
-            # if index > 200:
-            #     break
+
+            if index > 200:
+                break
+
             pred = labels[np.argmax(self.storage["pred"][index])]
             # print  self.storage["mapToOrigIndex"]
             origIndex = self.storage["mapToOrigIndex"][index]
@@ -100,9 +106,19 @@ class batchEvaluation:
                 self.storage["origPerturbCount"] = count
 
                 origPred = self.storage["origPred"][origIndex]
-                ratio = float(wrongPred)/float(allPred)
+                predLabel = labels[np.argmax(origPred)]
+                ratio = 1.0-float(wrongPred)/float(allPred)
                 # self.storage["perturbErrorRatio"].append(ratio)
                 # print ratio
+
+                item = {
+                    "index": origIndex,
+                    "src": self.storage["origSrc"][origIndex],
+                    "targ": self.storage["origTarg"][origIndex],
+                    "stability": ratio,
+                    "predict": origLabel+'-'+predLabel
+                }
+                self.jsonOut.append(item)
 
                 #### reset variable ####
                 count = 0
@@ -110,6 +126,10 @@ class batchEvaluation:
                 allPred = 0
 
             preOrigIndex = origIndex
+
+            import json
+            with open('testData.json', 'w') as outfile:
+                json.dump(self.jsonOut, outfile)
 
     def generatePerturbedPrediction(self):
         self.storage = {}
@@ -158,6 +178,10 @@ class batchEvaluation:
                         self.storage["pred"].append(pred)
 
                     index = index + 1
+
+                    ####### test on small number of example #####
+                    if index > 100:
+                        break
                     ##### statistic #####
 
                 # batch prediction
