@@ -118,6 +118,28 @@ class attentionMatrixComponent extends attentionComponent {
                 .on('click', (d, i) => {
                     this.src_dep.collapse(i);
                 });
+		
+	     //draw text background
+	     this.svg.selectAll('.attentionMatrixComponent_background_text')
+		.data(['Premise', 'Hypothesis'])
+		.enter()
+		.append('text')
+		.text(d=>d)
+                .attr('x', (d, i) => {
+			return i == 0 ? this.width/32 : this.width * 5/8;
+		})
+                .attr("y", (d, i) => {
+                	return i == 0? this.height * 5/8 : this.width/16;
+                })
+    	    	.style('writing-mode',(d,i)=>{
+    		     	return i == 0?'vertical-lr':'horizontal-tb';
+    	   	 })
+                .style("alignment-baseline", "middle")
+                .style("font-size", 32)
+		.style('fill', 'steelblue')
+		.style('fill-opacity', 0.2)
+                .style("text-anchor", "middle")
+	
 
         }
     }
@@ -174,7 +196,7 @@ class attentionMatrixComponent extends attentionComponent {
             return {
                 'y': (this.height * 0.75) / this.srcWords.length *
                     (i + 0.5) + this.height / 4,
-                'x': this.width * 1 / 4 - this.margin.left
+                'x': this.width * 1 / 4 - this.margin.left * 3
             };
         });
 
@@ -182,7 +204,7 @@ class attentionMatrixComponent extends attentionComponent {
             return {
                 'x': (this.width * 0.75) / this.targWords.length *
                     (i + 0.5) + this.width / 4,
-                'y': this.height * 1 / 4 - this.margin.top
+                'y': this.height * 1 / 4 - this.margin.top * 3
             };
         });
     }

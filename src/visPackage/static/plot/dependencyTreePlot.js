@@ -170,8 +170,8 @@ class dependencyTreePlot {
             .attr('viewBox', '0 0 10 10')
             .attr("refX", 1)
             .attr("refY", 5)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
+            .attr("markerWidth", 5)
+            .attr("markerHeight", 5)
             .attr("orient", "auto")
             .append("svg:path")
             .attr("d", "M 0 0 L 10 5 L 0 10 z")
@@ -381,7 +381,7 @@ class dependencyTreePlot {
                     //first point
                     item.push({
                         'x': word1_loc.x - this.text_box_width *
-                            1.5,
+                            2,
                         'y': word1_loc.y
                     });
                     //second point
@@ -403,7 +403,7 @@ class dependencyTreePlot {
                     //fourth point
                     item.push({
                         'x': word2_loc.x - this.text_box_width *
-                            1.5,
+                            2,
                         'y': word2_loc.y
                     });
                 } else
