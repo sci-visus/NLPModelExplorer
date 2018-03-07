@@ -194,13 +194,23 @@ class predictionComponent extends baseComponent {
                 //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
                 .on("click", (d, i) => {
                     if (this.data["allSourceSens"] !== undefined) {
-                        var source = this.data["allSourceSens"][d[3]];
-                        var target = this.data["allTargetSens"][d[4]];
+                        var source, target;
+                        if (this.data["allSourceSens"])
+                            source = this.data["allSourceSens"][d[3]];
+                        else
+                            source = this.data["originalPair"][0];
+
+                        if (this.data["allTargetSens"])
+                            target = this.data["allTargetSens"][d[4]];
+                        else
+                            target = this.data["originalPair"][1];
+
+                        this.callFunc("updateAttention");
+
                         this.setData("currentPair", [
                             source,
                             target
                         ]);
-                        this.callFunc("updateAttention");
                     }
                 })
                 .call(d3.drag()

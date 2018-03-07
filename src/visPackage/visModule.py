@@ -94,6 +94,7 @@ class textEntailVisModule(visModule):
         dataManager.clear()
         dataManager.setData("componentLayout", layoutConfig)
         dataManager.setData("sentenceList", exampleData)
+        dataManager.setData("originalPair", [exampleData[0]['src'], exampleData[0]['targ']])
         dataManager.setData("currentPair", [exampleData[0]['src'], exampleData[0]['targ']])
         return app.send_static_file('index.html')
 
@@ -120,6 +121,7 @@ class textEntailVisModule(visModule):
             # sentence['targ'] = pair['targ']
             sentenceList.append(pair)
         dataManager.setData("sentenceList", sentenceList)
+        dataManager.setData("originalPair", [data[0]['src'], data[0]['targ']])
         dataManager.setData("currentPair", [data[0]['src'], data[0]['targ']])
 
     # called when the user change the prediction, the attention need to be
