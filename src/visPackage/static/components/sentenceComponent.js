@@ -140,7 +140,6 @@ class sentenceComponent extends baseComponent {
     }
 
     updatePerturbedSentences(sentences) {
-
         if (this.data["currentPair"][0] == sentences[0]) {
             this.setData("allSourceSens", sentences);
             this.addDropdown(this.div + "srcInput", sentences, this.div +
@@ -184,14 +183,14 @@ class sentenceComponent extends baseComponent {
                     "btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
                 )
                 .attr("data-toggle", "dropdown")
-                .attr("aria-haspopup", "true")
-                .attr("aria-expanded", "false")
+                // .attr("aria-haspopup", "true")
+                // .attr("aria-expanded", "false")
                 .append("span")
                 .attr("class", "sr-only");
+
             d3.select(selector)
                 .append("div")
                 .attr("class", "dropdown-menu");
-
 
             //cleanup
             // console.log(menu);
