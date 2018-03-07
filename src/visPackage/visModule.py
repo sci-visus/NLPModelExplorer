@@ -79,6 +79,7 @@ data organization structure
     - prediction (the current prediction)
     - predictionsHighlight (use the index to update currentPair display)
 '''
+
 layoutConfig = None
 
 class textEntailVisModule(visModule):

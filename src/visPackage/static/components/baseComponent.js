@@ -90,7 +90,6 @@ class baseComponent {
         var name = msg["name"];
         var data = msg["data"]["data"];
         this.data[name] = data;
-
     }
 
     ////////// implemented by individual component ////////

@@ -10,7 +10,7 @@ class predictionComponent extends baseComponent {
 
         //subscribe to data
         this.subscribeDatabyNames(["allSourceSens", "allTargetSens",
-            "prediction", "allPairsPrediction"
+            "prediction", "allPairsPrediction", "originalPair"
         ]);
 
         this.margin = {
