@@ -139,6 +139,7 @@ class attentionMatrixComponent extends attentionComponent {
 		.style('fill', 'steelblue')
 		.style('fill-opacity', 0.2)
                 .style("text-anchor", "middle")
+		 .style('pointer-events', 'none');
 	
 
         }
