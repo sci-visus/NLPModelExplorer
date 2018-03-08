@@ -5,7 +5,16 @@ class pipelineComponent extends baseComponent {
 
     draw() {
         this._updateWidthHeight();
+        this.itemSize = [];
+        var item = new pipelineItemPlot();
+        this.itemSize.push(item);
+
 
     }
+
+    drawArraw(pos1, pos2) {
+
+    }
+
 
 }
