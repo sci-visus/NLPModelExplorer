@@ -14,8 +14,8 @@ dep = dependencyTree()
 
 #visualization components
 visLayout = {
-    "column":[{"row":["Prediction", "AttentionGraph", "AttentionMatrix"]},
-               {"row":["Sentence", "Evaluation", "Pipeline"]}]
+    "column":[{"row":["Selector", "Sentence", "Pipeline"]},
+            {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
     }
 
 #setup interface
