@@ -11,7 +11,7 @@ var panelMetaInfo = {
         'attentionGraphComponent'
     ],
     'Evaluation': ['evaluation_view', 'evaluationComponent'],
-    'Pipeline': ['template_view', 'pipelineComponent']
+    'Pipeline': ['pipeline_view', 'pipelineComponent']
 };
 
 //for lookup component class on-the-fly

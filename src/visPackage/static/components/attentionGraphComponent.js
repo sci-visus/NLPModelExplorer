@@ -16,7 +16,6 @@ class attentionGraphComponent extends attentionComponent {
         this._updateWidthHeight();
 
         if (this.data["attention"] !== undefined) {
-
             // init svg
             this.initSvg();
 
