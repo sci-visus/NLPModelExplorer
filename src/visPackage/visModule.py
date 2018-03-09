@@ -24,19 +24,23 @@ dataManager = socketioManager(sio)
 exampleData = [{
     "index":0,
     "src": "Two women are embracing while holding to go packages .\n",
-    "targ": "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n"
+    "targ": "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n",
+    "pred": "neutral"
 },{
     "index":1,
     "src": "Two young children in blue jerseys , one with the number 9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
-    "targ": "Two kids in numbered jerseys wash their hands .\n"
+    "targ": "Two kids in numbered jerseys wash their hands .\n",
+    "pred": "entailment"
 },{
     "index":2,
     "src": "This church choir sings to the masses as they sing joyous songs from the book at a church .",
-    "targ": "The church has cracks in the ceiling ."
+    "targ": "The church has cracks in the ceiling .",
+    "pred": "neutral"
 },{
     "index":3,
     "src": "A woman with a green headscarf , blue shirt and a very big grin .",
-    "targ": "The woman is young ."
+    "targ": "The woman is young .",
+    "pred": "neutral"
 }
 ]
 

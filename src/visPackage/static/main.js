@@ -10,7 +10,7 @@ var panelMetaInfo = {
     "AttentionGraph": ['attentionSentence_view',
         'attentionGraphComponent'
     ],
-    'Evaluation': ['evaluation_view', 'evaluationComponent'],
+    'Selector': ['evaluation_view', 'evaluationComponent'],
     'Pipeline': ['pipeline_view', 'pipelineComponent']
 };
 
