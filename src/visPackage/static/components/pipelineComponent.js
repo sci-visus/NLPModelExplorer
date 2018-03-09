@@ -95,7 +95,7 @@ class pipelineComponent extends baseComponent {
             var pipelineData = this.data["pipeline"];
 
             var len = pipelineData.length;
-            var size = [this.width / (len + 2), 45];
+            var size = [this.width / (len + 1), 45];
             for (var i = 0; i < pipelineData.length; i++) {
                 var pos = [this.width / (len) * (i + 0.5), this.height *
                     0.5

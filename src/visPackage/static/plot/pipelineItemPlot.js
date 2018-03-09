@@ -43,6 +43,22 @@ class pipelineItemPlot {
                     }
                 });
 
+            /////// title ///////
+            this.svg.append("rect")
+                .attr("x", this.pos[0] - this.size[0] * 0.5)
+                .attr("y", this.pos[1] - this.size[1] * 1.5)
+                .attr("width", this.size[0])
+                .attr("height", this.size[1])
+                .attr("fill", "grey");
+
+            this.svg.append("text")
+                .attr("x", this.pos[0])
+                .attr("y", this.pos[1] - this.size[1] * 1.0 + 5)
+                .text(this.label)
+                .attr("fill", "white")
+                .style("text-anchor", "middle")
+                .style("pointer-events", "none");
+
             let hiddenLayerBoxPos = [this.pos[0] - this.size[0] * 0.5,
                 this.pos[1] + this.size[1] * 0.5
             ];
@@ -61,7 +77,7 @@ class pipelineItemPlot {
             this.svg.append("text")
                 .attr("x", this.pos[0])
                 .attr("y", this.pos[1] + 5)
-                .text(this.label)
+                .text("parameters")
                 .style("text-anchor", "middle")
                 .style("pointer-events", "none");
 
