@@ -64,7 +64,7 @@ class attentionMatrixComponent extends attentionComponent {
             this.rectw = rectw;
             this.recth = recth;
 
-            this.svg.selectAll('.attentionComponent_matrix_rect')
+            let rects = this.svg.selectAll('.attentionComponent_matrix_rect')
                 .data(this.attList)
                 .enter()
                 .append('rect')
@@ -82,11 +82,13 @@ class attentionMatrixComponent extends attentionComponent {
                 .style('stroke', 'black')
                 .style('stroke-width', '1px')
                 .style('fill', d => {
-                    return this.colorbar.lookup(1.0 - d);
+                    return this.colorbar.lookup(d);
                 });
+		
+	    
 
             //Draw targ text
-            this.svg.selectAll('.attentionComponent_targWords')
+            let targtext = this.svg.selectAll('.attentionComponent_targWords')
                 .data(this.targWords)
                 .enter()
                 .append('text')
@@ -97,15 +99,21 @@ class attentionMatrixComponent extends attentionComponent {
                     return "rotate(-45, " + this.targPos[i].x + ' , ' +
                         this.targPos[i].y + ')';
                 })
-                .style("font-size", 10)
+                .style("font-size", 12)
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
+		.on('mouseover', (d, i)=>{
+			this.targ_dep.highlight(i);
+		})
+		.on('mouseout', (d, i)=>{
+			this.targ_dep.highlight(-1);
+		})
                 .on('click', (d, i) => {
                     this.targ_dep.collapse(i);
                 });
 
             //Draw src text
-            this.svg.selectAll('.attentionCompoentn_srcWords')
+            let srctext = this.svg.selectAll('.attentionCompoentn_srcWords')
                 .data(this.srcWords)
                 .enter()
                 .append('text')
@@ -113,11 +121,49 @@ class attentionMatrixComponent extends attentionComponent {
                 .attr('x', (d, i) => this.srcPos[i].x)
                 .attr("y", (d, i) => this.srcPos[i].y)
                 .style("alignment-baseline", "middle")
-                .style("font-size", 10)
+                .style("font-size", 12)
                 .style("text-anchor", "middle")
+		.on('mouseover', (d, i)=>{
+			this.src_dep.highlight(i);
+		})
+		.on('mouseout', (d, i)=>{
+			this.src_dep.highlight(-1);
+		})
                 .on('click', (d, i) => {
                     this.src_dep.collapse(i);
                 });
+		
+    	    ////////////// rect mouse over event ///////////////
+    	    rects.on('mouseover', (d, i)=>{
+	    	
+    		    let col = i % this.targWords.length,
+    		    row = Math.floor(i / this.targWords.length);
+		    
+    		    rects.style('stroke', (data, index)=>{
+    			    if(col == index % this.targWords.length || row == Math.floor(index / this.targWords.length))
+    				    return 'red';
+    			    else
+    				    return 'black';
+    		    });
+		    
+		    targtext.style('font-size', (d, i)=>{return i==col?'16':'12';})
+		    	.style('font-weight', (d, i)=>{return i==col?'bold':'normal';})
+			.attr('fill', (d, i)=>{return i==col?'orange':'black'});
+		    srctext.style('font-size', (d, i)=>{return i==row?'16':'12';})
+			.style('font-weight', (d, i)=>{return i==row?'bold':'normal';})
+			.attr('fill', (d, i)=>{return i==row?'orange':'black';});
+			
+    		    this.targ_dep.highlight(col);
+    		    this.src_dep.highlight(row);		
+    	    })
+    	    .on('mouseout', (d, i)=>{
+		    targtext.style('font-size', 12).style('font-weight', 'normal').attr('fill', 'black');
+		    srctext.style('font-size', 12).style('font-weight', 'normal').attr('fill', 'black');
+    		    rects.style('stroke','black');
+    		    this.targ_dep.highlight(-1);
+    		    this.src_dep.highlight(-1);
+    	    });
+	 
 		
 	     //draw text background
 	     this.svg.selectAll('.attentionMatrixComponent_background_text')
@@ -138,8 +184,8 @@ class attentionMatrixComponent extends attentionComponent {
                 .style("font-size", 32)
 		.style('fill', 'steelblue')
 		.style('fill-opacity', 0.2)
-                .style("text-anchor", "middle")
-		 .style('pointer-events', 'none');
+		.style("text-anchor", "middle")
+		.style('pointer-events', 'none');
 	
 
         }
@@ -150,7 +196,7 @@ class attentionMatrixComponent extends attentionComponent {
             this.svg.selectAll('.attentionComponent_matrix_rect')
                 .data(this.attList)
                 .style('fill', d => {
-                    return this.colorbar.lookup(1.0 - d);
+                    return this.colorbar.lookup(d);
                 });
         }
     }
@@ -169,7 +215,7 @@ class attentionMatrixComponent extends attentionComponent {
                     this));
                 // console.log("create tree");
             } else {
-                this.src_dep.updatePos(this.srcPos);
+		    this.src_dep.updatePos(this.srcPos);
             }
         }
 
@@ -186,7 +232,7 @@ class attentionMatrixComponent extends attentionComponent {
                     this));
 
             } else {
-                this.targ_dep.updatePos(this.targPos);
+		    this.targ_dep.updatePos(this.targPos);
             }
         }
     }

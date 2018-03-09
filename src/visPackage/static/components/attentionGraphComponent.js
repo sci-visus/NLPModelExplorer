@@ -85,7 +85,7 @@ class attentionGraphComponent extends attentionComponent {
             ///////////////////// draw dependency tree //////////////////
             this.drawDepTree();
             ///////////////////// drawing line //////////////////////
-            this.drawConnection();
+            let connections = this.drawConnection();
 
             ///////////////////// drawing rect //////////////////////
             this.svg.selectAll(".srcRect")
@@ -98,7 +98,7 @@ class attentionGraphComponent extends attentionComponent {
                 .attr("height", this.rectHeight)
                 .attr("class", "srcRect")
                 .style("fill", "#87CEFA")
-                .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
+	        .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
 
             this.svg.selectAll(".targRect")
                 .data(this.targWords)
@@ -111,9 +111,10 @@ class attentionGraphComponent extends attentionComponent {
                 .attr("class", "targRect")
                 .style("fill", "#87CEFA")
                 .style("opacity", (d, i) => this.targAtt[i] * 0.5);
+		
 
             ///////////////////// drawing text ////////////////////
-            this.svg.selectAll(".srcWords")
+            let srcWords = this.svg.selectAll(".srcWords")
                 .data(this.srcWords)
                 .enter()
                 .append("text")
@@ -125,11 +126,18 @@ class attentionGraphComponent extends attentionComponent {
                 .style("font-size", this.checkFontSize.bind(this))
                 .style("writing-mode", this.checkSrcOrientation.bind(this))
                 .style("text-anchor", "middle")
-                .on("click", (d, i) => {
-                    this.src_dep.collapse(i);
-                });
+		.on('mouseover', (d, i)=>{
+			this.src_dep.highlight(i);
+		})
+		.on('mouseout', (d, i)=>{
+			this.src_dep.highlight(-1);
+		})
+		.on("click", (d, i) => {
+	                this.src_dep.collapse(i);
+	        });
+                
 
-            this.svg.selectAll(".targWords")
+            let targWords = this.svg.selectAll(".targWords")
                 .data(this.targWords)
                 .enter()
                 .append("text")
@@ -142,9 +150,30 @@ class attentionGraphComponent extends attentionComponent {
                 .style("writing-mode", this.checkTargOrientation.bind(this))
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
-                .on("click", (d, i) => {
+		.on('mouseover', (d, i)=>{
+			this.targ_dep.highlight(i);
+		})
+		.on('mouseout', (d, i)=>{
+			this.targ_dep.highlight(-1);
+		})
+		.on("click", (d, i) => {
                     this.targ_dep.collapse(i);
                 });
+		
+	///////////////////// path mouse event ////////////////////
+		
+                connections.on('mouseover', (d, i)=>{
+    		    let col = i % this.targWords.length,
+    		    row = Math.floor(i / this.targWords.length);
+		    
+		    this.targ_dep.highlight(col);
+		    this.src_dep.highlight(row);
+                })
+		.on('mouseout', (d, i)=>{
+		    this.targ_dep.highlight(-1);
+		    this.src_dep.highlight(-1);
+	    	});
+		
         }
     }
 
@@ -196,7 +225,7 @@ class attentionGraphComponent extends attentionComponent {
         // .curve("d3.curveLinear");
         // console.log(this.attList);
         this.svg.selectAll(".attConnect").remove();
-        this.svg.selectAll(".attConnect")
+        let connections = this.svg.selectAll(".attConnect")
             .data(this.attList)
             .enter()
             .append("path")
@@ -229,6 +258,8 @@ class attentionGraphComponent extends attentionComponent {
             .style("stroke", "#87CEFA")
             .style("opacity", d => 0.1 + d[2])
             .style("fill", "none");
+	    
+	    return connections;
     }
 
     computeWordPosition(src, targ) {

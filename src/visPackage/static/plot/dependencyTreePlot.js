@@ -23,6 +23,8 @@ class dependencyTreePlot {
         this.text_box_height = Math.min(this.height * 0.1, 10);
 
         this.collapseIndex = new Set();
+	
+	this.highlight_indexs = [];
 
         this.filter(); //init the display index
         // console.log(dep_triples);
@@ -30,7 +32,7 @@ class dependencyTreePlot {
     }
 
     clear() {
-        this.svg.remove();
+        this.svg.html('');
     }
 
     getDepTreeData() {
@@ -88,6 +90,16 @@ class dependencyTreePlot {
         this.onHandleCollapse();
     }
 
+    //i: index of word in sentence
+    highlight(i){
+	    
+	    this.highlight_indexs = [];
+	    if(i != -1)
+	    	this.highlight_indexs = this.getChild(i, this.dep_triples);
+	    
+	    this.draw();
+    }
+
     //support function for collapse: filter
     //this.display_index is reset, shows which words are presented
     filter() {
@@ -142,14 +154,6 @@ class dependencyTreePlot {
         this.pos = pos;
         this.draw();
     }
-    
-    updateSen(sen){
-	    this.sen = sen;
-    }
-    
-    updateDep(dep){
-	    this.dep_triples = dep;
-    }
 
     updateSize(width, height) {
         this.width = width;
@@ -167,7 +171,7 @@ class dependencyTreePlot {
 
         //clean
         //this.svg.selectAll('.label,.arc, defs,g').remove();
-        //this.clear();
+        this.clear();
 
         //arrow
         let arrowid = uuidv1()
@@ -202,11 +206,15 @@ class dependencyTreePlot {
             .append('path')
             .attr("class", "arc")
             .attr('d', function(d) {
-                return lineFunction(d);
+                return lineFunction(d.data);
             })
             .attr("fill", "none")
-            .attr("stroke", "gray")
-            .attr("stroke-opacity", 0.5)
+            .attr("stroke", (d)=>{ 
+		    return d.highlight?'orange':"gray";
+	    })
+            .attr("stroke-opacity", (d)=>{
+		    return d.highlight? 1:0.5;
+            })
             .attr("stroke-linejoin", "round")
             .attr("stroke-linecap", "round")
             .attr("stroke-width", 1.5)
@@ -230,6 +238,7 @@ class dependencyTreePlot {
             .attr('y', function(d, i) {
                 return d.y;
             })
+	    .attr('font-weight', (d)=>{return d.highlight?'bold':'normal';})
             .attr('font-size', (d, i)=>{
 		    return Math.min(12, d['width'] * 0.3) +'px';
             })
@@ -284,13 +293,11 @@ class dependencyTreePlot {
                 let word1_loc = this.pos[this.display_index.indexOf(d[0])],
                     word2_loc = this.pos[this.display_index.indexOf(d[2])],
                     item = {
-                        'text': d[1]
+                        'text': d[1],
+			'highlight':this.highlight_indexs.includes(d[2])
                     },
                     depth = this.PathDepth(d[0], d[2]);
                 //depth = this.nodeDepth(d[2]);
-		if(word1_loc == undefined || word2_loc == undefined){
-			break;
-		}
 
 
                 if (this.orientation == 'h-top') {
@@ -325,23 +332,19 @@ class dependencyTreePlot {
                     d[2])) {
                 let word1_loc = this.pos[this.display_index.indexOf(d[0])],
                     word2_loc = this.pos[this.display_index.indexOf(d[2])],
-                    item = [],
+		    item = {'data':[], 'highlight':this.highlight_indexs.includes(d[2])},
                     depth = this.PathDepth(d[0], d[2]);
                 
-		if(word1_loc==undefined || word2_loc == undefined){
-			break;
-		}
-
                 if (this.orientation == 'h-top') {
                     //first point
-                    item.push({
+                    item.data.push({
                         'x': word1_loc.x,
                         'y': word1_loc.y - this.text_box_height *
                             1.5
                     });
 		    		    
                     //second point
-                    item.push({
+                    item.data.push({
                         'x': word1_loc.x * 5 / 6 + word2_loc.x * 1 /
                             6,
                         'y': word1_loc.y - depth *
@@ -349,7 +352,7 @@ class dependencyTreePlot {
                             .text_box_height * 1.5
                     });
                     //third point
-                    item.push({
+                    item.data.push({
                         'x': word1_loc.x * 1 / 6 + word2_loc.x * 5 /
                             6,
                         'y': word1_loc.y - depth *
@@ -357,20 +360,20 @@ class dependencyTreePlot {
                             .text_box_height * 1.5
                     });
                     //fourth point
-                    item.push({
+                    item.data.push({
                         'x': word2_loc.x,
                         'y': word2_loc.y - this.text_box_height *
                             1.5
                     });
                 } else if (this.orientation == 'h-bottom') {
                     //first point
-                    item.push({
+                    item.data.push({
                         'x': word1_loc.x,
                         'y': word1_loc.y + this.text_box_height *
                             1.5
                     });
                     //second point
-                    item.push({
+                    item.data.push({
                         'x': word1_loc.x * 5 / 6 + word2_loc.x * 1 /
                             6,
                         'y': word1_loc.y + depth *
@@ -378,7 +381,7 @@ class dependencyTreePlot {
                             .text_box_height * 1.5
                     });
                     //third point
-                    item.push({
+                    item.data.push({
                         'x': word1_loc.x * 1 / 6 + word2_loc.x * 5 /
                             6,
                         'y': word1_loc.y + depth *
@@ -386,20 +389,20 @@ class dependencyTreePlot {
                             .text_box_height * 1.5
                     });
                     //fourth point
-                    item.push({
+                    item.data.push({
                         'x': word2_loc.x,
                         'y': word2_loc.y + this.text_box_height *
                             1.5
                     });
                 } else if (this.orientation == 'v-left') {
                     //first point
-                    item.push({
+                    item.data.push({
                         'x': word1_loc.x - this.text_box_width *
                             2,
                         'y': word1_loc.y
                     });
                     //second point
-                    item.push({
+                    item.data.push({
                         'x': word1_loc.x - depth *
                             this.text_box_width - this.text_box_width *
                             1.5,
@@ -407,7 +410,7 @@ class dependencyTreePlot {
                             6
                     });
                     //third point
-                    item.push({
+                    item.data.push({
                         'x': word1_loc.x - depth *
                             this.text_box_width - this.text_box_width *
                             1.5,
@@ -415,7 +418,7 @@ class dependencyTreePlot {
                             6
                     });
                     //fourth point
-                    item.push({
+                    item.data.push({
                         'x': word2_loc.x - this.text_box_width *
                             2,
                         'y': word2_loc.y
