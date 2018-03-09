@@ -20,7 +20,7 @@ class pipelineItemPlot {
                 .attr("width", this.size[0])
                 .attr("height", this.size[1])
                 .attr("fill", "lightblue")
-                .attr("stroke", "black")
+                .attr("stroke", "lightgrey")
                 .on("click", function() {
                     // console.log(d3.select(this).attr("fill"));
                     if (d3.select(this).attr("fill") ===
@@ -45,7 +45,7 @@ class pipelineItemPlot {
                 .attr("width", hiddenLayerBoxSize[0])
                 .attr("height", hiddenLayerBoxSize[1])
                 .attr("fill", "white")
-                .attr("stroke", "black");
+                .attr("stroke", "lightgrey");
 
             this.svg.append("text")
                 .attr("x", this.pos[0])
@@ -57,11 +57,11 @@ class pipelineItemPlot {
             this.svg.append("text")
                 .attr("x", this.pos[0])
                 .attr("y", this.pos[1] + 2.30 * this.size[1])
-                .text("hidden")
+                .text("layer")
                 .style("text-anchor", "middle")
                 .style("pointer-events", "none");
 
-            //create histogram to disable distribution of value update 
+            //create histogram to disable distribution of value update
             let hist = new histoPlot(this.svg, [
                 hiddenLayerBoxPos[0] + 2.5,
                 hiddenLayerBoxPos[1] + 2.5

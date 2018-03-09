@@ -143,14 +143,14 @@ class pipelineComponent extends baseComponent {
         this.legend.selectAll("*").remove();
         this.legend.append("rect")
             .attr("fill", "lightblue")
-            .attr("stroke", "black")
+            .attr("stroke", "grey")
             .attr("x", this.width - 90)
             .attr("y", 10)
             .attr("width", 70)
-            .attr("height", 20);
+            .attr("height", 30);
         this.legend.append("text")
             .attr("x", this.width - 100)
-            .attr("y", 20)
+            .attr("y", 25)
             .attr("font-size", 14)
             .text("Allow Update")
             .style("text-anchor", "end")
@@ -158,14 +158,14 @@ class pipelineComponent extends baseComponent {
 
         this.legend.append("rect")
             .attr("fill", "url(#stripe)")
-            .attr("stroke", "black")
+            .attr("stroke", "grey")
             .attr("x", this.width - 90)
             .attr("y", 50)
             .attr("width", 70)
-            .attr("height", 20);
+            .attr("height", 30);
         this.legend.append("text")
             .attr("x", this.width - 100)
-            .attr("y", 60)
+            .attr("y", 65)
             .attr("font-size", 14)
             .text("Freeze Update")
             .style("text-anchor", "end")
