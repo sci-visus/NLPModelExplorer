@@ -61,12 +61,13 @@ class pipelineItemPlot {
                 .style("text-anchor", "middle")
                 .style("pointer-events", "none");
 
+            //create histogram to disable distribution of value update 
             let hist = new histoPlot(this.svg, [
                 hiddenLayerBoxPos[0] + 2.5,
                 hiddenLayerBoxPos[1] + 2.5
             ], [
                 hiddenLayerBoxSize[0] - 5,
-                hiddenLayerBoxSize[1] - 25
+                hiddenLayerBoxSize[1] - 30
             ]);
 
         } else {
