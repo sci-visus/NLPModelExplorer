@@ -134,18 +134,18 @@ class predictionComponent extends baseComponent {
         var dataXY = [];
         for (var i = 0; i < allPairsPrediction.length; i++)
             for (var j = 0; j < allPairsPrediction[i].length; j++) {
-                // if (i >= j) {
-                data.push(allPairsPrediction[i][j].concat([i, j]));
-                let d = allPairsPrediction[i][j];
-                let x = d[1] * 112 + d[2] * 0 + d[0] * 224;
-                let y = d[1] * 0 + d[2] * 194 + d[0] * 194;
-                dataXY.push([x, y]);
-                // }
+                if (i === 0 || j === 0) {
+                    data.push(allPairsPrediction[i][j].concat([i, j]));
+                    let d = allPairsPrediction[i][j];
+                    let x = d[1] * 112 + d[2] * 0 + d[0] * 224;
+                    let y = d[1] * 0 + d[2] * 194 + d[0] * 194;
+                    dataXY.push([x, y]);
+                }
             }
 
         // console.log(data);
-        this.updatePredictDisplay(data);
         this.drawDensityOverlay(dataXY)
+        this.updatePredictDisplay(data);
     }
 
     updatePredictDisplay(data) {
@@ -182,15 +182,22 @@ class predictionComponent extends baseComponent {
                 .style("fill", (d, i) => {
                     if (i === pLen - 1) {
                         if (pLen === 1)
-                            return 'grey';
+                            return '#3F3F3F';
                         else
                             return 'red';
                     } else {
-                        return 'grey';
+                        return '#3F3F3F';
                     }
                 })
+                .style("stroke", "white")
                 // .style("stroke", 'black')
-                .style("opacity", 0.5)
+                .style("opacity", 0.8)
+                .on("mouseover", function(d) {
+
+                })
+                .on("mouseout", function(d) {
+
+                })
                 //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
                 .on("click", (d, i) => {
                     if (this.data["allSourceSens"] !== undefined) {
@@ -373,7 +380,7 @@ class predictionComponent extends baseComponent {
             this.svg.append("g")
                 .attr("id", this.uuid + "overlay")
                 .attr("fill", "none")
-                .attr("stroke", "black")
+                .attr("stroke", "grey")
                 .attr("stroke-width", 0.8)
                 .attr("stroke-linejoin", "round")
                 .selectAll("path")
@@ -390,7 +397,7 @@ class predictionComponent extends baseComponent {
                     (dataPoints))
                 .enter().append("path")
                 .attr("clip-path", "url(#triClip)")
-                .attr("opacity", 0.6)
+                .attr("opacity", 0.5)
                 .attr("d", d3.geoPath());
         }
     }

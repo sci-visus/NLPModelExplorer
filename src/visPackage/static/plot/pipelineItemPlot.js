@@ -4,6 +4,9 @@ class pipelineItemPlot {
         this.pos = pos;
         this.size = size;
         this.label = label;
+
+        //store whether the layer can be updated
+        this.updateFlag = true;
     }
 
     setState(state) {
@@ -19,17 +22,25 @@ class pipelineItemPlot {
                 .attr("y", this.pos[1] - this.size[1] * 0.5)
                 .attr("width", this.size[0])
                 .attr("height", this.size[1])
-                .attr("fill", "lightblue")
+                .attr("fill", d => {
+                    if (this.updateFlag)
+                        return "lightblue";
+                    else
+                        return "url(#stripe)"
+                })
                 .attr("stroke", "lightgrey")
                 .on("click", function() {
                     // console.log(d3.select(this).attr("fill"));
                     if (d3.select(this).attr("fill") ===
-                        "lightblue")
+                        "lightblue") {
+                        this.updateFlag = false;
                         d3.select(this).attr("fill",
                             "url(#stripe)");
-                    else
+                    } else {
+                        this.updateFlag = true;
                         d3.select(this).attr("fill",
                             "lightblue");
+                    }
                 });
 
             let hiddenLayerBoxPos = [this.pos[0] - this.size[0] * 0.5,

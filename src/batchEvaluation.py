@@ -180,8 +180,8 @@ class batchEvaluation:
                     index = index + 1
 
                     ####### test on small number of example #####
-                    if index > 100:
-                        break
+                    # if index > 100:
+                    #     break
                     ##### statistic #####
 
                 # batch prediction

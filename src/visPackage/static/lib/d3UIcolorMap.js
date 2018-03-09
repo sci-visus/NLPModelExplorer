@@ -13,8 +13,11 @@ class d3UIcolorMap {
         this.colorMap = [];
         this.colorMap.push({
             'name': 'yellow-green-blue',
-            'data': ["#ffffcc", "#a1dab4", "#41b6c4", "#2c7fb8",
-                "#253494"
+            // 'data': ["#ffffcc", "#a1dab4", "#41b6c4", "#2c7fb8",
+            //     "#253494"
+            // ]
+            'data': ["#253494", "#2c7fb8", "#41b6c4", "#a1dab4",
+                "#ffffcc"
             ]
         });
         this.colorMap.push({
@@ -118,7 +121,7 @@ class d3UIcolorMap {
                     0]
             ]);
             var axis = d3.axisTop(scale).ticks(this._ticks).tickFormat(d3.format(
-                ".3s"));
+                ".2f"));
             var g = this.svg.append('g')
                 .attr("transform", "translate(" + 0 + "," + 5 + ")")
                 .attr("class", "axis")
@@ -132,6 +135,11 @@ class d3UIcolorMap {
 
     svg() {
         return this.svg;
+    }
+
+    setReverseFlag(flag) {
+        this.reverseFlag = flag;
+        this.draw();
     }
 
     colormap(index) {

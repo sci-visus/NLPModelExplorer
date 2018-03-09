@@ -116,6 +116,7 @@ class textEntailVisModule(visModule):
 
     # an sentence pair index (self.index) is used as handle for the correspondence
     # between attention, prediction, and the input
+    ### !!!! this is not called curretnly !!!! ####
     def setSentenceExample(self, data):
         sentenceList = []
         for pair in data:
@@ -190,7 +191,7 @@ class textEntailVisModule(visModule):
         # allAttention = [None]
         for i, source in enumerate(allSourceSens):
             for j, target in enumerate(allTargetSens):
-                # if i>=j:
+                if i==0 or j==0:
                     predResult = self.predictionHook([source, target])
                     allPairsPrediction[i,j,:] = predResult
                     # allPairsPrediction[j,i,:] = predResult
