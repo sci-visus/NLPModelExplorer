@@ -96,9 +96,9 @@ class dependencyTreePlot {
         // console.log("collapseIndex:", this.collapseIndex);
 
         this.collapseIndex.forEach(d => {
-            let collapseChildren = this.getChild(d, this.dep_triples)
+		let collapseChildren = this.getChild(d, this.dep_triples);
                 // console.log(d, collapseChildren);
-            childs = childs.concat(collapseChildren);
+		childs = childs.concat(collapseChildren);
         });
 
         let childs_set = new Set(childs);
@@ -141,6 +141,14 @@ class dependencyTreePlot {
     updatePos(pos) {
         this.pos = pos;
         this.draw();
+    }
+    
+    updateSen(sen){
+	    this.sen = sen;
+    }
+    
+    updateDep(dep){
+	    this.dep_triples = dep;
     }
 
     updateSize(width, height) {
@@ -280,7 +288,9 @@ class dependencyTreePlot {
                     },
                     depth = this.PathDepth(d[0], d[2]);
                 //depth = this.nodeDepth(d[2]);
-
+		if(word1_loc == undefined || word2_loc == undefined){
+			break;
+		}
 
 
                 if (this.orientation == 'h-top') {
@@ -317,7 +327,10 @@ class dependencyTreePlot {
                     word2_loc = this.pos[this.display_index.indexOf(d[2])],
                     item = [],
                     depth = this.PathDepth(d[0], d[2]);
-                //depth = this.nodeDepth(d[2]);
+                
+		if(word1_loc==undefined || word2_loc == undefined){
+			break;
+		}
 
                 if (this.orientation == 'h-top') {
                     //first point
@@ -326,6 +339,7 @@ class dependencyTreePlot {
                         'y': word1_loc.y - this.text_box_height *
                             1.5
                     });
+		    		    
                     //second point
                     item.push({
                         'x': word1_loc.x * 5 / 6 + word2_loc.x * 1 /
