@@ -96,7 +96,7 @@ class treeMapPlot {
         let nodes = tree.descendants().filter(d => d.depth <= 2);
         svg.selectAll(".node")
             .data(nodes).enter().each(d => {
-                console.log(d);
+                // console.log(d);
                 var g = svg.append("g");
                 g.append("rect")
                     .attr("class", "node")
@@ -105,10 +105,13 @@ class treeMapPlot {
                     .attr("width", Math.max(0, d.x1 - d.x0 - 1))
                     .attr("height", Math.max(0, d.y1 - d.y0 - 1))
                     .attr("fill", colormap(d.data.key))
-                    .attr("stroke", "white");
+                    .attr("stroke", "white")
+                    .on("click", _ => {
+                        this.selectCell(d);
+                    });
                 g.append("text")
                     .attr("x", (d.x0 + d.x1) * 0.5)
-                    .attr("y", (d.y0 + d.y1) * 0.5)
+                    .attr("y", (d.y0 + d.y1) * 0.5 + 5)
                     .text(_ => {
                         var str = d.data.key.replace("-", "->");
                         str = str.replace(/neutral/g, "N");
@@ -118,7 +121,7 @@ class treeMapPlot {
                     })
                     .style("font-size", 14)
                     .style("writing-mode", _ => {
-                        if (d.x1 - d.x0 < d.y1 - d.y0)
+                        if (d.y1 - d.y0 > 2 * (d.x1 - d.x0))
                             return "vertical-rl";
                         else
                             return "hortizontal-rl";
@@ -129,6 +132,22 @@ class treeMapPlot {
         // .text((d) => d.data.name);
 
     }
+
+    selectCell(d) {
+        // console.log(d);
+        var cellData = [];
+        for (var i = 0; i < d.children.length; i++) {
+            cellData.push(d.children[i].data);
+        }
+        // console.log(cellData);
+        this.selectionCallback(cellData);
+    }
+
+    setSelectionCallback(callback) {
+        this.selectionCallback = callback;
+    }
+
+    //////////////////
 
     drawComplex() {
         var formatNumber = d3.format("d");

@@ -45,7 +45,7 @@ class evaluationComponent extends baseComponent {
 
             this.histo = new histoPlot(this.svg, [this.width * 0.52, 0], [
                 this.width * 0.45, this.height * 0.5
-            ]);
+            ], true);
 
 
         } else {
@@ -72,11 +72,16 @@ class evaluationComponent extends baseComponent {
         this.height = this.height - this.topOffset;
 
         this.initSvg();
-
         this.treeMap.setData(this.data, "pairs");
+        this.treeMap.setSelectionCallback(this.updateHisto.bind(this));
 
         this.treeMap.draw();
         this.histo.draw();
+    }
+
+    updateHisto(data) {
+        var stabilities = data.map(d => d.stability);
+        this.histo.setSample(stabilities);
     }
 
     resize() {
