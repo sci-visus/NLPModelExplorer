@@ -83,7 +83,7 @@ class histoPlot {
             // Generate a histogram using twenty uniformly-spaced bins.
             var minS = Math.min.apply(null, samples);
             var maxS = Math.max.apply(null, samples);
-            console.log("Sample range:", minS, maxS);
+            // console.log("Sample range:", minS, maxS);
             x = d3.scaleLinear()
                 .domain([minS, maxS])
                 .range([this.pos[0], this.pos[0] + width]);
@@ -97,7 +97,7 @@ class histoPlot {
                 })])
                 .range([height + pos[1], pos[1]]);
 
-            console.log(bins);
+            // console.log(bins);
         } else {
 
 

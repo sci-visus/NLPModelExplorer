@@ -9,73 +9,18 @@ histoPlot
 class evaluationComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["evaluationSummary"]);
+        this.subscribeDatabyNames(["evaluationStatistics"]);
 
         this.margin = {
-            top: 10,
-            right: 10,
-            bottom: 10,
-            left: 10
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
         };
 
-        this.data = [{
-            "key": "United States Virgin Islands",
-            "region": "Americas",
-            "subregion": "Caribbean",
-            "value": 106405
-        }, {
-            "key": "Uruguay",
-            "region": "Americas",
-            "subregion": "South America",
-            "value": 3286314
-        }, {
-            "key": "Uzbekistan",
-            "region": "Asia",
-            "subregion": "Central Asia",
-            "value": 30183400
-        }, {
-            "key": "Vanuatu",
-            "region": "Oceania",
-            "subregion": "Melanesia",
-            "value": 264652
-        }, {
-            "key": "Venezuela",
-            "region": "Americas",
-            "subregion": "South America",
-            "value": 28946101
-        }, {
-            "key": "Vietnam",
-            "region": "Asia",
-            "subregion": "South-Eastern Asia",
-            "value": 90388000
-        }, {
-            "key": "Wallis and Futuna",
-            "region": "Oceania",
-            "subregion": "Polynesia",
-            "value": 13135
-        }, {
-            "key": "Western Sahara",
-            "region": "Africa",
-            "subregion": "Northern Africa",
-            "value": 567000
-        }, {
-            "key": "Yemen",
-            "region": "Asia",
-            "subregion": "Western Asia",
-            "value": 24527000
-        }, {
-            "key": "Zambia",
-            "region": "Africa",
-            "subregion": "Eastern Africa",
-            "value": 13092666
-        }, {
-            "key": "Zimbabwe",
-            "region": "Africa",
-            "subregion": "Eastern Africa",
-            "value": 12973808
-        }];
-
+        this.topOffset = 65;
         this.draw();
+        this.setupUI();
     }
 
     initSvg() {
@@ -95,22 +40,26 @@ class evaluationComponent extends baseComponent {
             //     10, 10
             // ]);
             this.treeMap = new treeMapPlot(this.svg, [0, 0], [
-                this.width * 0.5, this.height
+                this.width * 0.5, this.height * 0.5
             ]);
-            this.treeMap.setData(this.data, "world");
 
-            this.histo = new histoPlot(this.svg, [this.width * 0.55, 0], [
-                this.width * 0.45, this.height * 0.95
+            this.histo = new histoPlot(this.svg, [this.width * 0.52, 0], [
+                this.width * 0.45, this.height * 0.5
             ]);
 
 
         } else {
             this.svgContainer
                 .attr("width", this.pwidth)
-                .attr("height", this.pheight)
+                .attr("height", this.pheight - this.topOffset)
 
-            this.svg.selectAll("text,rect,path").remove();
-
+            // this.svg.selectAll("text,rect,path").remove();
+            this.treeMap.update([0, 0], [
+                this.width * 0.5, this.height * 0.5
+            ]);
+            this.histo.update([this.width * 0.52, 0], [
+                this.width * 0.45, this.height * 0.5
+            ]);
             // this.svgSave.updatePos([this.width - 10, 10])
             // this.svgSave.draw();
         }
@@ -118,7 +67,14 @@ class evaluationComponent extends baseComponent {
 
     draw() {
         this._updateWidthHeight();
+        //apply top offset
+        this.pheight = this.pheight - this.topOffset;
+        this.height = this.height - this.topOffset;
+
         this.initSvg();
+
+        this.treeMap.setData(this.data, "pairs");
+
         this.treeMap.draw();
         this.histo.draw();
     }
@@ -127,14 +83,59 @@ class evaluationComponent extends baseComponent {
         this._updateWidthHeight();
         this.initSvg(); //update svg size
 
-        if (this.treeMap) {
-            this.treeMap.update([0, 0], [this.width * 0.5, this.height]);
-        }
-        if (this.histo) {
-            this.histo.update([this.width * 0.55, 0], [
-                this.width * 0.45, this.height * 0.95
-            ]);
+        // if (this.treeMap) {
+        //     this.treeMap.update([0, 0], [this.width * 0.5, this.height]);
+        // }
+        // if (this.histo) {
+        //     this.histo.update([this.width * 0.55, 0], [
+        //         this.width * 0.45, this.height * 0.95
+        //     ]);
+        // }
+
+    }
+
+    setupUI() {
+        let fileList = ["../data/test-set-statistic.json"]
+        d3.select(this.div + "selectData")
+            .selectAll('option')
+            .data(fileList).enter()
+            .append('option')
+            .text(d => d)
+            .property("value", (d, i) => i);
+
+        d3.select(this.div + "selectData")
+            .on("change", d => {
+                var index = Number(d3.select(this.div + "selectData").property(
+                    'value'));
+                this.callFunc("loadSummaryStatistic", {
+                    "filename": fileList[index]
+                });
+            });
+        //load the data
+        this.callFunc("loadSummaryStatistic", {
+            "filename": fileList[0]
+        });
+    }
+
+    parseDataUpdate(msg) {
+        super.parseDataUpdate(msg);
+
+        switch (msg['name']) {
+            case "evaluationStatistics":
+                this.treeMap.setData(this.data["evaluationStatistics"],
+                    "All Pairs");
+                // this.draw();
+                break;
         }
 
     }
+
+    // parseFunctionReturn(msg) {
+    //     switch (msg["func"]) {
+    //         case "loadSummaryStatistic":
+    //             //load data
+    //             console.log(msg);
+    //             break;
+    //     }
+    // }
 }

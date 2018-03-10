@@ -15,6 +15,7 @@ import eventlet
 from socketioManager import *
 import webbrowser, threading
 import time
+import json
 
 app = Flask(__name__)
 sio = socketio.Server()
@@ -113,6 +114,13 @@ class textEntailVisModule(visModule):
             'evaluation_view': app.send_static_file('viewTemplates/evaluation_view.mst'),
             'pipeline_view': app.send_static_file('viewTemplates/template_view.mst')
         }.get(name)
+
+
+    def loadSummaryStatistic(self, filename):
+        with open(filename) as json_data:
+            statistics = json.load(json_data)
+            print "loadSummaryStatistic: ", type(statistics), type(statistics[0])
+            dataManager.setData("evaluationStatistics", statistics)
 
     # an sentence pair index (self.index) is used as handle for the correspondence
     # between attention, prediction, and the input

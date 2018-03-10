@@ -1,4 +1,4 @@
-<div style="margin-top: 25px; margin-left:25px; margin-right:25px" id='{{id}}'>
+<div style="margin-top: 10px; margin-left:10px; margin-right:10px" id='{{id}}'>
 
     <div class="form-group">
         <div class="input-group mb-3">

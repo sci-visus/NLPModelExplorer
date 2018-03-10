@@ -31,9 +31,9 @@ class sentenceComponent extends baseComponent {
 
     draw() {
         //add to sentence list
-        if (this.data["sentenceList"] !== undefined) {
-            this.onReceiveSentenceList();
-        }
+        // if (this.data["sentenceList"] !== undefined) {
+        //     this.onReceiveSentenceList();
+        // }
         //update currentPair display
         if (this.data["currentPair"] !== undefined) {
             this.onReceiveCurrentPair();

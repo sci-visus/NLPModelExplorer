@@ -24,15 +24,16 @@ class treeMapPlot {
             values: nestData
         }
 
-        // console.log(data);
+        console.log(data);
         return data;
     }
 
     setData(treeData, rootName) {
         //test data
-        this.data = this.generateNestData(treeData, ["region",
-            "subregion"
+        this.data = this.generateNestData(treeData, ["correctness",
+            "predict"
         ], rootName);
+        this.draw();
     }
 
     update(pos, size) {
@@ -52,58 +53,81 @@ class treeMapPlot {
 
         var data = this.data;
         var svg = this.svg;
-        const color = d3.scaleOrdinal().range(d3.schemeCategory20c);
+        const colormap = d3.scaleOrdinal().domain([
+            "entailment-entailment",
+            "neutral-neutral",
+            "contradiction-contradiction",
+
+            "entailment-contradiction",
+            "contradiction-entailment",
+            "neutral-entailment",
+            "neutral-contradiction",
+            "entailment-neutral",
+            "contradiction-neutral",
+
+        ]).range([
+            "#00B31A",
+            "#59D966",
+            "#B3FFB3",
+
+            "#FF5C05",
+            "#FF7726",
+            "#FF9248",
+            "#FFAA69",
+            "#FFC08B",
+            "#FFD4AD"
+        ]);
         const treemap = d3.treemap().size([width, height]);
 
         // d3.json("flare.json", function(error, data) {
         //     if (error) throw error;
 
         const root = d3.hierarchy(data, d => d.values)
-            .sum(d => d.value)
+            .sum(d => {
+                return d.index ? 1 : 0;
+            })
             .sort(function(a, b) {
-                return a.value - b.value;
+                return a.index - b.index;
             });
 
-        // console.log(root);
-        const tree = treemap(root);
-        // console.log(tree.leaves());
 
-        const node = svg.selectAll(".node")
-            .data(tree.leaves())
-            .enter().append("rect")
-            .attr("class", "node")
-            .attr("x", (d) => d.x0)
-            .attr("y", (d) => d.y0)
-            .attr("width", (d) => Math.max(0, d.x1 - d.x0 - 1))
-            .attr("height", (d) => Math.max(0, d.y1 - d.y0 - 1))
-            .attr("fill", (d) => {
-                // console.log(d);
-                return color(d.data.key);
+        const tree = treemap(root);
+        // console.log(tree.descendants());
+        let nodes = tree.descendants().filter(d => d.depth <= 2);
+        svg.selectAll(".node")
+            .data(nodes).enter().each(d => {
+                console.log(d);
+                var g = svg.append("g");
+                g.append("rect")
+                    .attr("class", "node")
+                    .attr("x", d.x0)
+                    .attr("y", d.y0)
+                    .attr("width", Math.max(0, d.x1 - d.x0 - 1))
+                    .attr("height", Math.max(0, d.y1 - d.y0 - 1))
+                    .attr("fill", colormap(d.data.key))
+                    .attr("stroke", "white");
+                g.append("text")
+                    .attr("x", (d.x0 + d.x1) * 0.5)
+                    .attr("y", (d.y0 + d.y1) * 0.5)
+                    .text(_ => {
+                        var str = d.data.key.replace("-", "->");
+                        str = str.replace(/neutral/g, "N");
+                        str = str.replace(/entailment/g, "E");
+                        str = str.replace(/contradiction/g, "C");
+                        return str;
+                    })
+                    .style("font-size", 14)
+                    .style("writing-mode", _ => {
+                        if (d.x1 - d.x0 < d.y1 - d.y0)
+                            return "vertical-rl";
+                        else
+                            return "hortizontal-rl";
+                    })
+                    .style("text-anchor", "middle")
+                    .style("pointer-events", "none");
             });
         // .text((d) => d.data.name);
 
-        d3.selectAll("input").on("change", function change() {
-            const value = this.value === "count" ? (d) => {
-                return d.size ? 1 : 0;
-            } : (d) => {
-                return d.size;
-            };
-
-            const newRoot = d3.hierarchy(data, (d) => d
-                    .children)
-                .sum(value);
-
-            node.data(treemap(newRoot).leaves())
-                .transition()
-                .duration(1500)
-                .style("left", (d) => d.x0 + "px")
-                .style("top", (d) => d.y0 + "px")
-                .style("width", (d) => Math.max(0, d.x1 -
-                    d.x0 - 1) + "px")
-                .style("height", (d) => Math.max(0, d.y1 -
-                    d.y0 - 1) + "px")
-        });
-        // });
     }
 
     drawComplex() {
@@ -118,7 +142,7 @@ class treeMapPlot {
         var height = 400;
 
         // var color = d3.scale.category20c();
-        var color = d3.scaleOrdinal(d3.schemeCategory20);
+        var color = d3.scaleOrdinal(d3.schemeCategory20c);
 
         var x = d3.scaleLinear()
             .domain([0, width])

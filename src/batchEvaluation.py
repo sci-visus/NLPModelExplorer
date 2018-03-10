@@ -82,8 +82,8 @@ class batchEvaluation:
 
         for index, srcSen in enumerate(self.storage["srcSens"]):
 
-            if index > 200:
-                break
+            # if index > 200:
+            #     break
 
             pred = labels[np.argmax(self.storage["pred"][index])]
             # print  self.storage["mapToOrigIndex"]
@@ -116,7 +116,8 @@ class batchEvaluation:
                     "src": self.storage["origSrc"][origIndex],
                     "targ": self.storage["origTarg"][origIndex],
                     "stability": ratio,
-                    "predict": origLabel+'-'+predLabel
+                    "predict": origLabel+'-'+predLabel,
+                    "correctness": origLabel == predLabel
                 }
                 self.jsonOut.append(item)
 
@@ -127,8 +128,9 @@ class batchEvaluation:
 
             preOrigIndex = origIndex
 
-            import json
-            with open('testData.json', 'w') as outfile:
+        ####### output json ##########
+        import json
+        with open('../data/test-set-statistic.json', 'w') as outfile:
                 json.dump(self.jsonOut, outfile)
 
     def generatePerturbedPrediction(self):
@@ -163,18 +165,18 @@ class batchEvaluation:
 
                     ### only perturb target ####
                     for targ in targ_perb:
-                        self.storage["srcSens"].append(src_orig)
-                        self.storage["targSens"].append(targ)
+                        # self.storage["srcSens"].append(src_orig)
+                        # self.storage["targSens"].append(targ)
                         self.storage["mapToOrigIndex"].append(index)
                         pred = self.predict([src_orig, targ])
                         self.storage["pred"].append(pred)
 
                     ### only perturb src ####
                     for src in src_perb:
-                        self.storage["srcSens"].append(src)
-                        self.storage["targSens"].append(targ_orig)
+                        # self.storage["srcSens"].append(src)
+                        # self.storage["targSens"].append(targ_orig)
                         self.storage["mapToOrigIndex"].append(index)
-                        pred = self.predict([src_orig, targ])
+                        pred = self.predict([src, targ_orig])
                         self.storage["pred"].append(pred)
 
                     index = index + 1
