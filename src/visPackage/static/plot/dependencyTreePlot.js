@@ -28,7 +28,7 @@ class dependencyTreePlot {
 
         this.filter(); //init the display index
         // console.log(dep_triples);
-        this.draw();
+        //this.draw();
     }
 
     clear() {
@@ -85,7 +85,8 @@ class dependencyTreePlot {
         }
 
         this.filter();
-
+	
+	this.draw();
         //callback called, this will trigger a redraw
         this.onHandleCollapse();
     }

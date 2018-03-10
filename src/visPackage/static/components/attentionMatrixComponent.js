@@ -37,21 +37,10 @@ class attentionMatrixComponent extends attentionComponent {
             //location of words
             var pair = this.data["currentPair"];
 
-            this.attList = [];
-            for (let i = 0; i < attMatrix.length; i++) {
-                for (let j = 0; j < attMatrix[i].length; j++) {
-			if (!this.srcIndexMaskSet.has(i) && !this.targIndexMaskSet
-                        .has(j))
-                       this.attList.push(attMatrix[i][j]);
-                }
-            }
-
-            this.srcWords = this.collapSenBySet(this.sen2words(pair[0]),
-                this.srcIndexMaskSet);
-            this.targWords = this.collapSenBySet(this.sen2words(pair[1]),
-                this.targIndexMaskSet);
-
-            // console.log(this.srcWords, this.targWords, this.attList);
+            this.attList = this.generateMatrixGeometry();
+	    
+	    this.srcWords = this.sen2words(pair[0]);
+	    this.targWords = this.sen2words(pair[1]);
 
             this.computeWordPosition(this.srcWords, this.targWords);
 
@@ -63,30 +52,25 @@ class attentionMatrixComponent extends attentionComponent {
 
             this.rectw = rectw;
             this.recth = recth;
-
-            let rects = this.svg.selectAll('.attentionComponent_matrix_rect')
-                .data(this.attList)
-	    	//.data(attMatrix)
+		
+	   let rects = this.svg.selectAll('.attentionComponent_matrix_rect')
+		.data(this.attList)
 		.enter()
-                .append('rect')
+		.append('rect')
                 .attr('class', 'attentionComponent_matrix_rect')
                 .attr('x', (d, i) => {
-                    return this.width * 1 / 4 + (i % this.targWords.length) *
-                        rectw;
+			return d.x;
                 })
                 .attr('y', (d, i) => {
-                    return this.height * 1 / 4 + Math.floor(i / this.targWords
-                        .length) * recth;
+                    	return d.y;
                 })
-                .attr('width', rectw)
-                .attr('height', recth)
+                .attr('width', (d)=>{return d.width;})
+                .attr('height', (d)=>{return d.height;})
                 .style('stroke', 'black')
                 .style('stroke-width', '1px')
                 .style('fill', d => {
-                    return this.colorbar.lookup(d);
+                    return this.colorbar.lookup(d.value);
                 });
-		
-	    
 
             //Draw targ text
             let targtext = this.svg.selectAll('.attentionComponent_targWords')
@@ -111,6 +95,7 @@ class attentionMatrixComponent extends attentionComponent {
 		})
                 .on('click', (d, i) => {
                     this.targ_dep.collapse(i);
+		    this.collapse_Animation();
                 });
 
             //Draw src text
@@ -131,7 +116,8 @@ class attentionMatrixComponent extends attentionComponent {
 			this.src_dep.highlight(-1);
 		})
                 .on('click', (d, i) => {
-                    this.src_dep.collapse(i);
+			this.src_dep.collapse(i);
+			this.collapse_Animation();
                 });
 		
     	    ////////////// rect mouse over event ///////////////
@@ -142,7 +128,7 @@ class attentionMatrixComponent extends attentionComponent {
 		    
     		    rects.style('stroke', (data, index)=>{
     			    if(col == index % this.targWords.length || row == Math.floor(index / this.targWords.length))
-    				    return 'red';
+    				    return 'orange';
     			    else
     				    return 'black';
     		    });
@@ -150,6 +136,7 @@ class attentionMatrixComponent extends attentionComponent {
 		    targtext.style('font-size', (d, i)=>{return i==col?'16':'12';})
 		    	.style('font-weight', (d, i)=>{return i==col?'bold':'normal';})
 			.attr('fill', (d, i)=>{return i==col?'orange':'black'});
+			
 		    srctext.style('font-size', (d, i)=>{return i==row?'16':'12';})
 			.style('font-weight', (d, i)=>{return i==row?'bold':'normal';})
 			.attr('fill', (d, i)=>{return i==row?'orange':'black';});
@@ -192,6 +179,76 @@ class attentionMatrixComponent extends attentionComponent {
         }
     }
 
+    //define each rect's width, height, x, y and color map value
+    generateMatrixGeometry(){
+	    
+	    let attMatrix = this.normAttention;
+	    
+	    let w = this.width * 3/4 / (this.targWords.length -  this.targIndexMaskSet.size);
+	    
+	    let h = this.height * 3/4 / (this.srcWords.length  - this.srcIndexMaskSet.size);
+	    
+	    let attList = [];
+	    
+	    //init x location of visualization
+	    let attx = this.width * 1/4;
+	    
+	    //init y location of visualization
+	    let atty = this.height * 1/4;
+	    
+	    //row
+            for (let i = 0; i < attMatrix.length; i++) {    
+		attx = this.width * 1/4;
+		//column
+		//init location, width and height value of each rect in the heatmap matrix 
+                for (let j = 0; j < attMatrix[i].length; j++) {
+			let item = {'x': attx, 'y':atty, 'value':attMatrix[i][j]};
+			if (!this.srcIndexMaskSet.has(i) && !this.targIndexMaskSet.has(j)){
+				item['width'] = w;
+				item['height'] = h;
+				attx += w;
+			}
+			else{
+				item['width'] = 0;
+				item['height'] = 0;
+			}
+                       	attList.push(item); 
+                }
+		
+		//if current row is not filtered 
+		if(!this.srcIndexMaskSet.has(i)){
+			atty += h;
+		}
+            }
+	    
+	    return attList;
+    }
+    
+    collapse_Animation(){
+	    let attMatrix = this.generateMatrixGeometry();
+	    
+	    let rects = d3.selectAll('.attentionComponent_matrix_rect').data(attMatrix);
+	    
+	    rects.exit().remove();
+	    
+	    rects.append('rect');
+	    
+	    rects.transition()
+            .duration(2000)
+            .attr('x', (d, i) => {
+		    return d.x;
+            })
+            .attr('y', (d, i) => {
+		    return d.y;
+            })
+            .attr('width', (d)=>{return d.width;})
+            .attr('height', (d)=>{return d.height;})
+            .style('fill', d => {
+                return this.colorbar.lookup(d.value);
+            });
+	    
+    }
+    
     updateMatrixColormap() {
         if (this.svg) {
             this.svg.selectAll('.attentionComponent_matrix_rect')
