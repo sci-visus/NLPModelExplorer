@@ -40,9 +40,9 @@ class attentionMatrixComponent extends attentionComponent {
             this.attList = [];
             for (let i = 0; i < attMatrix.length; i++) {
                 for (let j = 0; j < attMatrix[i].length; j++) {
-                    if (!this.srcIndexMaskSet.has(i) && !this.targIndexMaskSet
+			if (!this.srcIndexMaskSet.has(i) && !this.targIndexMaskSet
                         .has(j))
-                        this.attList.push(attMatrix[i][j]);
+                       this.attList.push(attMatrix[i][j]);
                 }
             }
 
@@ -66,7 +66,8 @@ class attentionMatrixComponent extends attentionComponent {
 
             let rects = this.svg.selectAll('.attentionComponent_matrix_rect')
                 .data(this.attList)
-                .enter()
+	    	//.data(attMatrix)
+		.enter()
                 .append('rect')
                 .attr('class', 'attentionComponent_matrix_rect')
                 .attr('x', (d, i) => {
