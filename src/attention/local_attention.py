@@ -64,12 +64,13 @@ class LocalAttention(torch.nn.Module):
 			# self.shared.customized_att* will be a torch tensor
 			# thus wrap the tensor in Variable to proceed forward pass
 			customized1 = self.shared.customized_att1 if self.opt.gpuid == -1 else self.shared.customized_att1.cuda()
-			customized2 = self.shared.customized_att2 if self.opt.gpuid == -2 else self.shared.customized_att2.cuda()
+			customized2 = self.shared.customized_att2 if self.opt.gpuid == -1 else self.shared.customized_att2.cuda()
 			self.shared.att_soft1 = Variable(customized1, requires_grad=True)
 			self.shared.att_soft2 = Variable(customized2, requires_grad=True)
 		else:
 			self.shared.att_soft1 = self.score_unview1(self.softmax(self.score_view1(self.shared.score1)))
 			self.shared.att_soft2 = self.score_unview2(self.softmax(self.score_view2(self.shared.score2)))
+
 		return [self.shared.att_soft1, self.shared.att_soft2]
 
 
