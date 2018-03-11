@@ -117,9 +117,19 @@ class attentionComponent extends baseComponent {
                 break;
             case "currentPair":
                 let pair = msg["data"]["data"];
+                if (this.oldPair) {
+                    if (this.oldPair[0].length !== pair[0].length ||
+                        this.oldPair[1].length !== pair[1].length
+                    ) {
+                        //clear the current dependency
+                        this.srcDepTreeData = undefined;
+                        this.targDepTreeData = undefined;
+                    }
+                }
 
                 this.srcWords = pair[0].match(/\S+/g);
                 this.targWords = pair[1].match(/\S+/g);
+                this.oldPair = pair;
 
                 break;
         }
@@ -133,6 +143,9 @@ class attentionComponent extends baseComponent {
     }
 
     /////////////// handler /////////////////
+    // onCurrentPairChange(){
+    //
+    // }
 
     handleParsedSentence(parseResult) {
         if (parseResult["sentence"] == this.data["currentPair"][0]) {

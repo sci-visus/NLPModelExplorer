@@ -43,9 +43,13 @@ class evaluationComponent extends baseComponent {
                 this.width * 0.5, this.height * 0.5
             ]);
 
-            this.histo = new histoPlot(this.svg, [this.width * 0.52, 0], [
-                this.width * 0.45, this.height * 0.5
+            this.histo = new histoPlot(this.svg, [0, this.height * 0.5], [
+                this.width * 0.5, this.height * 0.5
             ], true);
+
+            this.scatter = new scatterPlot(this.svg, [this.width * 0.5, 0]);
+            this.scatter.bindSelectionCallback(this.senetenceSelection.bind(
+                this));
 
 
         } else {
@@ -57,8 +61,8 @@ class evaluationComponent extends baseComponent {
             this.treeMap.update([0, 0], [
                 this.width * 0.5, this.height * 0.5
             ]);
-            this.histo.update([this.width * 0.52, 0], [
-                this.width * 0.45, this.height * 0.5
+            this.histo.update([0, this.height * 0.5], [
+                this.width * 0.5, this.height * 0.5
             ]);
             // this.svgSave.updatePos([this.width - 10, 10])
             // this.svgSave.draw();
@@ -82,6 +86,10 @@ class evaluationComponent extends baseComponent {
     updateHisto(data) {
         var stabilities = data.map(d => d.stability);
         this.histo.setSample(stabilities);
+    }
+
+    senetenceSelection(index) {
+
     }
 
     resize() {
