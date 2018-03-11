@@ -137,9 +137,9 @@ def main(args):
 
 
 	################### some options
-	opt.zero_out_encoder = 1
-	opt.zero_out_attention = 1
-	opt.zero_out_classifier = 1
+	#opt.zero_out_encoder = 1
+	#opt.zero_out_attention = 1
+	#opt.zero_out_classifier = 1
 
 	# fake some input
 	batch_l = 1
