@@ -64,7 +64,7 @@ class batchEvaluation:
 
     '''
     def generateStatistic(self):
-        labels = ["entailment", "neutral", "contradiction"]
+
         ## per original pair ##
         self.storage["perturbErrorRatio"] = []
         ## self.storage["originPredCase"] = []
@@ -77,20 +77,20 @@ class batchEvaluation:
         wrongPred = 0
         allPred = 0
 
-        # json output only have per origina pair information
+        # json output only have per original pair information
         self.jsonOut = []
-
-        for index, srcSen in enumerate(self.storage["srcSens"]):
+        labels = ["entailment", "neutral", "contradiction"]
+        for index, origIndex in enumerate(self.storage["mapToOrigIndex"]):
 
             # if index > 200:
             #     break
 
             pred = labels[np.argmax(self.storage["pred"][index])]
             # print  self.storage["mapToOrigIndex"]
-            origIndex = self.storage["mapToOrigIndex"][index]
+            # origIndex = self.storage["mapToOrigIndex"][index]
             # print len(self.storage["origLabel"]), origIndex
             # print len(self.storage["origPred"])
-            origLabel = self.storage["origLabel"][origIndex].rstrip('\n')
+            origLabel = self.storage["origLabel"][origIndex]
             # print origLabel, pred
             count = count + 1
             if pred != origLabel:
@@ -103,7 +103,7 @@ class batchEvaluation:
             self.storage["predCase"].append(origLabel+'-'+pred)
 
             if preOrigIndex and preOrigIndex != origIndex:
-                self.storage["origPerturbCount"] = count
+                # self.storage["origPerturbCount"] = count
 
                 origPred = self.storage["origPred"][origIndex]
                 predLabel = labels[np.argmax(origPred)]
@@ -117,7 +117,9 @@ class batchEvaluation:
                     "targ": self.storage["origTarg"][origIndex],
                     "stability": ratio,
                     "predict": origLabel+'-'+predLabel,
-                    "correctness": origLabel == predLabel
+                    "correctness": origLabel == predLabel,
+                    "trueLabel":origLabel,
+                    "perturbCount":count
                 }
                 self.jsonOut.append(item)
 
@@ -143,25 +145,35 @@ class batchEvaluation:
         self.storage["origPred"] = []
 
         ##### perturbed length ######
-        self.storage["srcSens"] = []
-        self.storage["targSens"] = []
+        # self.storage["srcSens"] = []
+        # self.storage["targSens"] = []
         self.storage["mapToOrigIndex"] = []
         self.storage["pred"] = []
 
+        correctPred = 0
+        originCount = 0
+
         num_lines = sum(1 for line in open(self.labelFile))
         index = 0
+        labels = ["entailment", "neutral", "contradiction"]
         for _, (src_orig, targ_orig, label_orig) in \
             enumerate(itertools.izip(open(self.srcFile,'r'),
             open(self.targFile,'r'),open(self.labelFile,'r'))):
                 # generate perturbation
                 # print index, src_orig, targ_orig, label_orig
+                label_orig = label_orig.rstrip('\n')
                 targ_perb = self.perturb(targ_orig)
                 src_perb = self.perturb(src_orig)
                 if self.verify(src_orig) and self.verify(targ_orig):
                     self.storage["origSrc"].append(src_orig)
                     self.storage["origTarg"].append(targ_orig)
                     self.storage["origLabel"].append(label_orig)
-                    self.storage["origPred"].append(self.predict([src_orig,targ_orig]))
+                    prediction = labels[np.argmax(self.predict([src_orig,targ_orig]))]
+                    self.storage["origPred"].append(prediction)
+
+                    originCount= originCount+1
+                    if label_orig == prediction:
+                        correctPred=correctPred+1
 
                     ### only perturb target ####
                     for targ in targ_perb:
@@ -169,6 +181,7 @@ class batchEvaluation:
                         # self.storage["targSens"].append(targ)
                         self.storage["mapToOrigIndex"].append(index)
                         pred = self.predict([src_orig, targ])
+                        # predLabel=labels[np.argmax(pred))]
                         self.storage["pred"].append(pred)
 
                     ### only perturb src ####
@@ -183,7 +196,7 @@ class batchEvaluation:
 
                     ####### test on small number of example #####
                     # if index > 100:
-                    #     break
+                        # break
                     ##### statistic #####
 
                 # batch prediction
@@ -192,7 +205,8 @@ class batchEvaluation:
                     print item
                     # print(item, flush=True)
 
-                # summary prediction deviation
+        # summary prediction deviation
+        print "accuracy:", float(correctPred)/float(originCount)
         with open(self.saveFileName, 'wb') as handle:
             pickle.dump(self.storage, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -207,16 +221,16 @@ def main(args):
     gen = sentenceGenerator()
 
     ###### test set ######
-    evaluator = batchEvaluation("../data/snli_1.0/src-test.txt",
-                           "../data/snli_1.0/targ-test.txt",
-                           "../data/snli_1.0/label-test.txt",
-                           "../data/test-pred-statistic.pkl" )
+    # evaluator = batchEvaluation("../data/snli_1.0/src-test.txt",
+    #                        "../data/snli_1.0/targ-test.txt",
+    #                        "../data/snli_1.0/label-test.txt",
+    #                        "../data/test-pred-statistic.pkl" )
 
     ###### dev set ######
-    # evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
-    #                        "../data/snli_1.0/targ-dev.txt",
-    #                        "../data/snli_1.0/label-dev.txt",
-    #                        "../data/test-pred-statistic.pkl" )
+    evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
+                           "../data/snli_1.0/targ-dev.txt",
+                           "../data/snli_1.0/label-dev.txt",
+                           "../data/dev-pred-statistic.pkl" )
     evaluator.setPredictionHook(model.predict)
     evaluator.setAttentionHook(model.attention)
     evaluator.setSentencePerturbationHook(gen.perturbSentence)
