@@ -1,8 +1,7 @@
 ///////////// scatterplot matrix d3 v4 version /////////////
 
-class scatterPlot extends basePlot {
-    constructor(div, pos, size, renderMode = 'd3', plotType = 'single') {
-        super(div);
+class scatterPlot {
+    constructor(svg, pos, size, renderMode = 'd3', plotType = 'single') {
         this.pos = pos;
         this.size = size;
         this.renderMode = renderMode; //'canvas' or 'd3'

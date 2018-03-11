@@ -47,7 +47,9 @@ class evaluationComponent extends baseComponent {
                 this.width * 0.5, this.height * 0.5
             ], true);
 
-            this.scatter = new scatterPlot(this.svg, [this.width * 0.5, 0]);
+            this.scatter = new scatterPlot(this.svg, [this.width * 0.5, 0], [
+                this.width * 0.5, this.height
+            ]);
             this.scatter.bindSelectionCallback(this.senetenceSelection.bind(
                 this));
 

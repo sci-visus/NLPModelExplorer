@@ -106,6 +106,7 @@ class batchEvaluation:
                 # self.storage["origPerturbCount"] = count
 
                 origPred = self.storage["origPred"][origIndex]
+                print origPred
                 predLabel = labels[np.argmax(origPred)]
                 ratio = 1.0-float(wrongPred)/float(allPred)
                 # self.storage["perturbErrorRatio"].append(ratio)
