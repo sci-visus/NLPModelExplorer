@@ -28,7 +28,7 @@ class dependencyTreePlot {
 
         this.filter(); //init the display index
         // console.log(dep_triples);
-        //this.draw();
+        this.draw();
     }
 
     clear() {
@@ -73,10 +73,10 @@ class dependencyTreePlot {
     //i: index of word in sentence
     collapse(i) {
         // this.display_index.indexOf(d[0])
-        if (this.display_index[i] !== i) {
+        //if (this.display_index[i] !== i) {
             //correct index, when the not all words are displayed
-            i = this.display_index[i];
-        }
+        //    i = this.display_index[i];
+        //}
 
         if (this.collapseIndex.has(i)) {
             this.collapseIndex.delete(i);
@@ -86,7 +86,7 @@ class dependencyTreePlot {
 
         this.filter();
 	
-	this.draw();
+	//this.draw();
         //callback called, this will trigger a redraw
         this.onHandleCollapse();
     }

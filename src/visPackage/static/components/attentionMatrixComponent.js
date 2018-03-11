@@ -47,11 +47,9 @@ class attentionMatrixComponent extends attentionComponent {
             this.drawDepTree();
 
             //matrix
-            let rectw = (this.width * (3 / 4)) / this.targWords.length;
-            let recth = (this.height * (3 / 4)) / this.srcWords.length;
+            this.rectw = (this.width * (3 / 4)) / this.targWords.length;
+            this.recth = (this.height * (3 / 4)) / this.srcWords.length;
 
-            this.rectw = rectw;
-            this.recth = recth;
 		
 	   let rects = this.svg.selectAll('.attentionComponent_matrix_rect')
 		.data(this.attList)
@@ -71,18 +69,21 @@ class attentionMatrixComponent extends attentionComponent {
                 .style('fill', d => {
                     return this.colorbar.lookup(d.value);
                 });
-
+	    /////////////////////// draw text /////////////////////////
+	    let texts = this.generateTextGeometry();
             //Draw targ text
             let targtext = this.svg.selectAll('.attentionComponent_targWords')
-                .data(this.targWords)
+                .data(texts.targ)
                 .enter()
                 .append('text')
-                .text(d => d)
-                .attr('x', (d, i) => this.targPos[i].x)
-                .attr("y", (d, i) => this.targPos[i].y)
+                .text(d => d.text)
+		.attr('class', 'attentionComponent_targWords')
+                .attr('x', (d, i) => d.x)
+                .attr("y", (d, i) => d.y)
+	    	.attr('display', d=>d.display)
                 .attr("transform", (d, i) => {
-                    return "rotate(-45, " + this.targPos[i].x + ' , ' +
-                        this.targPos[i].y + ')';
+                    return "rotate(-45, " + d.x + ' , ' +
+                        d.y + ')';
                 })
                 .style("font-size", 12)
                 .style("alignment-baseline", "middle")
@@ -99,15 +100,17 @@ class attentionMatrixComponent extends attentionComponent {
                 });
 
             //Draw src text
-            let srctext = this.svg.selectAll('.attentionCompoentn_srcWords')
-                .data(this.srcWords)
+            let srctext = this.svg.selectAll('.attentionComponent_srcWords')
+                .data(texts.src)
                 .enter()
                 .append('text')
-                .text(d => d)
-                .attr('x', (d, i) => this.srcPos[i].x)
-                .attr("y", (d, i) => this.srcPos[i].y)
+                .text(d => d.text)
+		.attr('class', 'attentionComponent_srcWords')
+                .attr('x', (d, i) => d.x)
+                .attr("y", (d, i) => d.y)
                 .style("alignment-baseline", "middle")
                 .style("font-size", 12)
+		.attr('display', d=>d.display)
                 .style("text-anchor", "middle")
 		.on('mouseover', (d, i)=>{
 			this.src_dep.highlight(i);
@@ -184,9 +187,13 @@ class attentionMatrixComponent extends attentionComponent {
 	    
 	    let attMatrix = this.normAttention;
 	    
-	    let w = this.width * 3/4 / (this.targWords.length -  this.targIndexMaskSet.size);
+	    let targWords = this.sen2words(this.data["currentPair"][1]);
 	    
-	    let h = this.height * 3/4 / (this.srcWords.length  - this.srcIndexMaskSet.size);
+	    let srcWords = this.sen2words(this.data["currentPair"][0]);
+	    
+	    let w = this.width * 3/4 / (targWords.length -  this.targIndexMaskSet.size);
+	    
+	    let h = this.height * 3/4 / (srcWords.length  - this.srcIndexMaskSet.size);
 	    
 	    let attList = [];
 	    
@@ -224,7 +231,64 @@ class attentionMatrixComponent extends attentionComponent {
 	    return attList;
     }
     
+    //define each text font x, y, and font-size base on whether they are filtered
+    generateTextGeometry(){
+	    
+	    let srcText = [];
+	
+	    let srcWords = this.sen2words(this.data["currentPair"][0]);
+	    
+	    let h = (this.height * 0.75) / (srcWords.length - this.srcIndexMaskSet.size);
+	    
+	    let text_loc = h/2 + this.height / 4;
+	    for(let i = 0; i < srcWords.length; i++){
+		    let item = {};
+		    if(!this.srcIndexMaskSet.has(i)){
+			    item['x'] = this.width * 1 / 4 - this.margin.left * 3;
+			    item['y'] = text_loc;		    
+			    item['display'] = 'block';
+			    item['text'] = srcWords[i];
+			    text_loc += h;
+		    }else{
+			    item['x'] = this.width * 1 / 4 - this.margin.left * 3;
+			    item['y'] = text_loc;		    
+			    item['display'] = 'none';
+			    item['text'] = srcWords[i];
+		    }   
+		    srcText.push(item);
+	    }
+	    
+	    let targText = [];
+	    
+	    let targWords = this.sen2words(this.data["currentPair"][1]);
+	    
+	    let w = (this.width * 0.75) / (targWords.length - this.targIndexMaskSet.size);
+	    
+	    text_loc = w/2 + this.width / 4;
+	    for(let i = 0; i < targWords.length; i++){
+		    let item = {};
+		    if(!this.targIndexMaskSet.has(i)){
+			    item['x'] = text_loc;
+			    item['y'] = this.height * 1 / 4 - this.margin.top * 3;		    
+			    item['display'] = 'block';
+			    item['text'] = targWords[i];
+			    text_loc += w;
+		    }else{
+			    item['x'] = text_loc;
+			    item['y'] = this.height * 1 / 4 - this.margin.top * 3;		    
+			    item['display'] = 'none';
+			    item['text'] = targWords[i];
+		    }
+		    targText.push(item);  
+	    }
+	    
+	    return {'src':srcText, 'targ':targText};
+	    
+    }
+    
     collapse_Animation(){
+	    
+	    //////////////////// rect animation ////////////////////
 	    let attMatrix = this.generateMatrixGeometry();
 	    
 	    let rects = d3.selectAll('.attentionComponent_matrix_rect').data(attMatrix);
@@ -245,8 +309,48 @@ class attentionMatrixComponent extends attentionComponent {
             .attr('height', (d)=>{return d.height;})
             .style('fill', d => {
                 return this.colorbar.lookup(d.value);
-            });
+            });  
 	    
+	    let texts = this.generateTextGeometry(); 
+	    /////////////////  src text animation ///////////////////
+	    let srctext = this.svg.selectAll('.attentionComponent_srcWords')
+	    .data(texts.src);
+	    
+	    srctext.exit().remove();
+	    srctext.append('text')
+            
+            srctext
+	    .transition()
+            .duration(2000)
+	    .attr('x', (d, i) => d.x)
+            .attr("y", (d, i) => d.y)
+            .attr("display", (d)=>d['display']);
+	    
+	    /////////////////  targ text animation ///////////////////
+    	    let targtext = this.svg.selectAll('.attentionComponent_targWords')
+    	    .data(texts.targ);
+    
+    	    targtext.exit().remove();
+    	    targtext.append('text');
+            
+            targtext
+	    .transition()
+	    .duration(2000)
+            .attr('x', (d, i) => d.x)
+	    .attr("y", (d, i) => d.y)
+            
+            .attr("transform", (d, i) => {
+                return "rotate(-45, " + d.x + ' , ' +
+                    d.y + ')';
+            })
+	    .attr("display", (d)=>d['display']);
+	    
+	    
+	     ///////////////// dependency tree animation ///////////////////
+	    this.srcWords = this.collapSenBySet(this.sen2words(this.data["currentPair"][0]),this.srcIndexMaskSet);
+	    this.targWords = this.collapSenBySet(this.sen2words(this.data["currentPair"][1]),this.targIndexMaskSet);
+	    this.computeWordPosition(this.srcWords, this.targWords);
+	    this.drawDepTree();
     }
     
     updateMatrixColormap() {
