@@ -16,7 +16,7 @@ class histoPlot {
         this.sample = sample;
 
         this.leftOffset = 10;
-        this.bottomOffset = 15;
+        this.bottomOffset = 18;
 
         this.draw();
     }
@@ -37,7 +37,7 @@ class histoPlot {
         var pos = this.pos;
         var width = this.size[0] - (this.axisYflag ? this.leftOffset : 0);
         var height = this.size[1] - (this.axisXflag ? this.bottomOffset : 0);
-        // console.log(width, height);
+        console.log(width, height);
         var binNum = 10;
         var x, y, bins;
         if (this.mode === "sample") {
@@ -90,7 +90,8 @@ class histoPlot {
         // add the x Axis
         if (this.axisXflag) {
             this.svg.append("g")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", "translate(0," + (pos[1] + height) +
+                    ")")
                 .call(d3.axisBottom(x));
         }
         // add the y Axis

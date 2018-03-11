@@ -63,8 +63,7 @@ class batchEvaluation:
             - Perturbation Change Percentage
 
     '''
-    def generateStatistic(self):
-
+    def generateStatistic(self,outputPath):
         ## per original pair ##
         self.storage["perturbErrorRatio"] = []
         ## self.storage["originPredCase"] = []
@@ -105,9 +104,9 @@ class batchEvaluation:
             if preOrigIndex and preOrigIndex != origIndex:
                 # self.storage["origPerturbCount"] = count
 
-                origPred = self.storage["origPred"][origIndex]
-                print origPred
-                predLabel = labels[np.argmax(origPred)]
+                predLabel = self.storage["origPred"][origIndex]
+                # print origPred
+                # predLabel = labels[np.argmax(origPred)]
                 ratio = 1.0-float(wrongPred)/float(allPred)
                 # self.storage["perturbErrorRatio"].append(ratio)
                 # print ratio
@@ -133,7 +132,7 @@ class batchEvaluation:
 
         ####### output json ##########
         import json
-        with open('../data/test-set-statistic.json', 'w') as outfile:
+        with open(outputPath, 'w') as outfile:
                 json.dump(self.jsonOut, outfile)
 
     def generatePerturbedPrediction(self):
@@ -238,7 +237,8 @@ def main(args):
     evaluator.setSentenceVerifyHook(gen.verifySentence)
 
     evaluator.initialize()
-    evaluator.generateStatistic()
+    evaluator.generateStatistic('../data/dev-set-statistic.json')
+    # evaluator.generateStatistic('../data/test-set-statistic.json')
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))
