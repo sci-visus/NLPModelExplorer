@@ -71,6 +71,8 @@ class attentionComponent extends baseComponent {
                 this.srcIndexMaskSet.add(i)
             }
         });
+	
+	//this.draw();
     }
 
     collapseTarget(mask) {
@@ -80,6 +82,8 @@ class attentionComponent extends baseComponent {
                 this.targIndexMaskSet.add(i);
             }
         });
+	
+	//this.draw();
     }
 
     resize() {

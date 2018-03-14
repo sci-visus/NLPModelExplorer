@@ -134,6 +134,7 @@ class attentionGraphComponent extends attentionComponent {
 		})
 		.on("click", (d, i) => {
 	                this.src_dep.collapse(i);
+			this.draw();
 	        });
                 
 
@@ -157,7 +158,8 @@ class attentionGraphComponent extends attentionComponent {
 			this.targ_dep.highlight(-1);
 		})
 		.on("click", (d, i) => {
-                    this.targ_dep.collapse(i);
+                    this.targ_dep.collapse();
+		    this.draw();
                 });
 		
 	///////////////////// path mouse event ////////////////////
@@ -277,6 +279,7 @@ class attentionGraphComponent extends attentionComponent {
             };
         });
     }
+ 
 
     /*
         parseDataUpdate(msg) {
@@ -397,6 +400,7 @@ class attentionGraphComponent extends attentionComponent {
             return "hortizontal-rl";
 
     }
+    
     checkTargOrientation(d) {
         var cbbox = this.svg.select(".targRect").node().getBBox();
         // console.log(cbbox);

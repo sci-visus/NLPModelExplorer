@@ -98,8 +98,11 @@ class attentionMatrixComponent extends attentionComponent {
 			.classed('attentionMatrixComponent_text_normal', !d3.select(nodes[i]).classed("attentionMatrixComponent_text_normal"))
 			.classed('attentionMatrixComponent_text_collapse', !d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse"));
 			
+			//get the child node of i and aggregate the data
+			//this.targ_dep.getChild(i);
+			
 			this.targ_dep.collapse(i);
-			this.collapse_Animation();
+			this.collapse_Animation('vertical');
                 });
 
             //Draw src text
@@ -113,82 +116,24 @@ class attentionMatrixComponent extends attentionComponent {
                 .attr("y", (d, i) => d.y)
 		.attr('display', d=>d.display)
 		.attr('text-anchor','middle')
-		.classed('attentionMatrixComponent_text_normal', true);
-	    
-	    //src text mouse event
-	    srctext.on('mouseover', (d, i)=>{
-			this.src_dep.highlight(i);
-		})
-		.on('mouseout', (d, i)=>{
-			this.src_dep.highlight(-1);
-		})
-                .on('click', (d, i, nodes) => {
+		.classed('attentionMatrixComponent_text_normal', true)
+		.on('mouseover', (d, i)=>{
+		    this.src_dep.highlight(i);
+	    	})
+	    	.on('mouseout', (d, i)=>{
+		    this.src_dep.highlight(-1);
+	    	})
+            	.on('click', (d, i, nodes) => {
 			d3.select(nodes[i])
 			.classed('attentionMatrixComponent_text_normal', !d3.select(nodes[i]).classed("attentionMatrixComponent_text_normal"))
 			.classed('attentionMatrixComponent_text_collapse', !d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse"));
 			
 			this.src_dep.collapse(i);
-			this.collapse_Animation();
-                });
+			this.collapse_Animation('horizontal');
+             	});
 		
-    	    ////////////// rect mouse over event ///////////////
-    	    rects.on('mouseover', (d, i)=>{
-	    	
-    		    let targWords = this.sen2words(this.data["currentPair"][1]),
-		    col = i % targWords.length,
-    		    row = Math.floor(i / this.targWords.length);
-		    
-    		    rects.style('stroke', (data, index)=>{
-    			    if(col == index % targWords.length || row == Math.floor(index / targWords.length))
-    				    return 'orange';
-    			    else
-    				    return 'black';
-    		    });
-		    
-		    targtext
-		    .classed('attentionMatrixComponent_text_normal', (d, i, nodes)=>{
-			    if(d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")) return false;
-			    return i==col?false:true;
-		    })
-		    .classed('attentionMatrixComponent_text_highlight', (d, i, nodes)=>{
-			    if(d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")) return false;
-			    return i==col?true:false;
-		    });	
-		    
-		    srctext
-		    .classed('attentionMatrixComponent_text_normal', (d, i, nodes)=>{
-			    if(d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")) return false;
-			    return i==row?false:true;
-		    })
-		    .classed('attentionMatrixComponent_text_highlight', (d, i, nodes)=>{
-			    if(d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")) return false;
-			    return i==row?true:false;
-		    });
-			
-    		    this.targ_dep.highlight(col);
-    		    this.src_dep.highlight(row);		
-    	    })
-    	    .on('mouseout', (d, i)=>{
-    		    let col = i % this.targWords.length,
-    		    row = Math.floor(i / this.targWords.length);
-		    
-		    targtext
-		    .classed('attentionMatrixComponent_text_normal', (d, i, nodes)=>{
-			    return d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")?false:true;
-		    })
-		    .classed('attentionMatrixComponent_text_highlight', false);	
-		    
-		    srctext
-		    .classed('attentionMatrixComponent_text_normal', (d, i, nodes)=>{
-			    return d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")?false:true;
-		    })
-		    .classed('attentionMatrixComponent_text_highlight', false);
-		    
-    		    rects.style('stroke','black');
-    		    this.targ_dep.highlight(-1);
-    		    this.src_dep.highlight(-1);
-    	    });
-	 
+    	     ////////////// rect mouse over event ///////////////
+		this.rectMouseEvent(rects, targtext, srctext);
 		
 	     //draw text background
 	     this.svg.selectAll('.attentionMatrixComponent_background_text')
@@ -204,11 +149,70 @@ class attentionMatrixComponent extends attentionComponent {
                 })
     	    	.style('writing-mode',(d,i)=>{
     		     	return i == 0?'vertical-lr':'horizontal-tb';
-    	   	 })
-		 .classed('attentionMatrixComponent_background_text', true);
-	
-
+    	   	})
+		.classed('attentionMatrixComponent_background_text', true);
         }
+    }
+    
+    ////////////// rect mouse over event ///////////////
+    rectMouseEvent(rects, targtext, srctext){
+   	    rects.on('mouseover', (d, i)=>{
+    	
+   		    let targWords = this.sen2words(this.data["currentPair"][1]),
+	    col = i % targWords.length,
+   		    row = Math.floor(i / this.targWords.length);
+	    
+   		    rects.style('stroke', (data, index)=>{
+   			    if(col == index % targWords.length || row == Math.floor(index / targWords.length))
+   				    return 'orange';
+   			    else
+   				    return 'black';
+   		    });
+	    
+	    targtext
+	    .classed('attentionMatrixComponent_text_normal', (d, i, nodes)=>{
+		    if(d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")) return false;
+		    return i==col?false:true;
+	    })
+	    .classed('attentionMatrixComponent_text_highlight', (d, i, nodes)=>{
+		    if(d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")) return false;
+		    return i==col?true:false;
+	    });	
+	    
+	    srctext
+	    .classed('attentionMatrixComponent_text_normal', (d, i, nodes)=>{
+		    if(d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")) return false;
+		    return i==row?false:true;
+	    })
+	    .classed('attentionMatrixComponent_text_highlight', (d, i, nodes)=>{
+		    if(d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")) return false;
+		    return i==row?true:false;
+	    });
+		
+   		    this.targ_dep.highlight(col);
+   		    this.src_dep.highlight(row);		
+   	    })
+   	     .on('mouseout', (d, i)=>{
+   		    let targWords = this.sen2words(this.data["currentPair"][1]),
+	    col = i % targWords.length,
+   		    row = Math.floor(i / this.targWords.length);
+	    
+	    targtext
+	    .classed('attentionMatrixComponent_text_normal', (d, i, nodes)=>{
+		    return d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")?false:true;
+	    })
+	    .classed('attentionMatrixComponent_text_highlight', false);	
+	    
+	    srctext
+	    .classed('attentionMatrixComponent_text_normal', (d, i, nodes)=>{
+		    return d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse")?false:true;
+	    })
+	    .classed('attentionMatrixComponent_text_highlight', false);
+	    
+   		    rects.style('stroke','black');
+   		    this.targ_dep.highlight(-1);
+   		    this.src_dep.highlight(-1);
+   	    });
     }
 
     //define each rect's width, height, x, y and color map value
@@ -315,7 +319,7 @@ class attentionMatrixComponent extends attentionComponent {
 	    
     }
     
-    collapse_Animation(){
+    collapse_Animation(direction){
 	    
 	    //////////////////// rect animation ////////////////////
 	    let attMatrix = this.generateMatrixGeometry();
@@ -326,19 +330,36 @@ class attentionMatrixComponent extends attentionComponent {
 	    
 	    rects.append('rect');
 	    
-	    rects.transition()
-            .duration(1000)
-            .attr('x', (d, i) => {
+	    //if(direction == 'horizontal'){
+	    	rects
+		.transition()
+            	.duration(1000)
+            	.attr('x', (d, i) => {
 		    return d.x;
-            })
-            .attr('y', (d, i) => {
-		    return d.y;
-            })
-            .attr('width', (d)=>{return d.width;})
-            .attr('height', (d)=>{return d.height;})
-            .style('fill', d => {
-                return this.colorbar.lookup(d.value);
-            });  
+            	})
+            	.attr('y', (d, i) => {
+		    return direction == 'vertical' && d.height == 0?this.height/4:d.y;
+            	})
+		.attr('width', (d)=>{return d.width;})
+            	.attr('height', (d)=>{return d.height;})
+            	.style('fill', d => {
+            	    return this.colorbar.lookup(d.value);
+            	});
+	    //}else if(direction == 'vertical'){
+    	    //	rects.transition()
+            //    .duration(1000)
+            //   	.attr('x', (d, i) => {
+    	    //	    return d.x;
+            //    })
+            //    .attr('y', (d, i) => {
+    	    //	    return d.y;
+            //    })
+	    //	.attr('height', (d)=>{return d.height;})
+	    //	.attr('width', (d)=>{return d.width;})
+            //    .style('fill', d => {
+            //        return this.colorbar.lookup(d.value);
+            //    });
+	    //}
 	    
 	    let texts = this.generateTextGeometry(); 
 	    /////////////////  src text animation ///////////////////
@@ -444,6 +465,11 @@ class attentionMatrixComponent extends attentionComponent {
                 'y': this.height * 1 / 4 - this.margin.top * 3
             };
         });
+    }
+    
+    //TODO: softmax function
+    renormalize(index, childs){
+    	
     }
 
 }
