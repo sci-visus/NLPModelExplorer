@@ -11,14 +11,14 @@ class sentenceGenerator:
             lines = f.readlines()
             for l in lines:
                 toks = l.split()
-                self.train_tokens[toks[0].lower()] = 1
+                self.train_tokens[toks[0]] = 1
 
         # print "angele:", "angele" in self.train_tokens.keys()
         # print "token count:", len(self.train_tokens.keys())
 
     def verifySentence(self, sen):
         for word in sen.split():
-            if word.lower() not in self.train_tokens.keys():
+            if word not in self.train_tokens.keys():
                 return False
         return True
 
@@ -53,7 +53,7 @@ class sentenceGenerator:
                 for s in synsets:
                     ## add synonyms
                     ## only add synonyms that has a single token (i.e.     exclude '_')
-                    lemma_map[lemma].extend([ln.lower() for ln in s.lemma_names() if '_' not in ln])
+                    lemma_map[lemma].extend([ln for ln in s.lemma_names() if '_' not in ln])
 
                     ## add antonyms
                     # for syn_lemma in s.lemmas():
@@ -89,11 +89,11 @@ class sentenceGenerator:
                             target = singularize(s)
 
                         #if the plural or singular form does not exists in the training then continue
-                        if target.lower() not in train_tokens.keys():
+                        if target not in train_tokens.keys():
                             continue
 
                         target_list = copy.copy(orig_list)
-                        target_list[i] = target.lower()
+                        target_list[i] = target
                         result_list.append(' '.join(target_list))
 
         return result_list

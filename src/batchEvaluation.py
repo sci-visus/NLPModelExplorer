@@ -164,20 +164,22 @@ class batchEvaluation:
                 label_orig = label_orig.rstrip('\n')
                 targ_perb = self.perturb(targ_orig)
                 src_perb = self.perturb(src_orig)
-                if self.verify(src_orig) and self.verify(targ_orig):
-                    self.storage["origSrc"].append(src_orig)
-                    self.storage["origTarg"].append(targ_orig)
-                    self.storage["origLabel"].append(label_orig)
-                    prediction = labels[np.argmax(self.predict([src_orig,targ_orig]))]
-                    self.storage["origPred"].append(prediction)
 
-                    originCount = originCount+1
-                    if label_orig == prediction:
-                        correctPred = correctPred+1
+                # if self.verify(src_orig) and self.verify(targ_orig):
 
-                    ### only perturb target ####
-                    for targ in targ_perb:
-                        if self.verify(targ):
+                self.storage["origSrc"].append(src_orig)
+                self.storage["origTarg"].append(targ_orig)
+                self.storage["origLabel"].append(label_orig)
+                prediction = labels[np.argmax(self.predict([src_orig,targ_orig]))]
+                self.storage["origPred"].append(prediction)
+
+                originCount = originCount+1
+                if label_orig == prediction:
+                    correctPred = correctPred+1
+
+                ### only perturb target ####
+                for targ in targ_perb:
+                    # if self.verify(targ):
                             # self.storage["srcSens"].append(src_orig)
                             # self.storage["targSens"].append(targ)
                             self.storage["mapToOrigIndex"].append(index)
@@ -185,26 +187,26 @@ class batchEvaluation:
                             # predLabel=labels[np.argmax(pred))]
                             self.storage["pred"].append(pred)
 
-                    ### only perturb src ####
-                    for src in src_perb:
-                        if self.verify(src):
+                ### only perturb src ####
+                for src in src_perb:
+                    # if self.verify(src):
                             # self.storage["srcSens"].append(src)
                             # self.storage["targSens"].append(targ_orig)
                             self.storage["mapToOrigIndex"].append(index)
                             pred = self.predict([src, targ_orig])
                             self.storage["pred"].append(pred)
 
-                    index = index + 1
+                index = index + 1
 
-                    ####### test on small number of example #####
-                    # if index > 100:
-                        # break
-                    ##### statistic #####
+                ####### test on small number of example #####
+                # if index > 100:
+                    # break
+                ##### statistic #####
 
                 # batch prediction
                 if index % 20 == 0:
-                    item = "  processing:" + str(float(index)/float(num_lines)*100.0) + "% - " + str(index)
-                    print item
+                    print "  processing:", str(float(index)/float(num_lines)*100.0), str(index)
+                    print "current accuracy:", float(correctPred)/float(originCount)
                     # print(item, flush=True)
 
         # summary prediction deviation
@@ -223,24 +225,24 @@ def main(args):
     gen = sentenceGenerator()
 
     ###### test set ######
-    evaluator = batchEvaluation("../data/snli_1.0/src-test.txt",
-                           "../data/snli_1.0/targ-test.txt",
-                           "../data/snli_1.0/label-test.txt",
-                           "../data/test-pred-statistic.pkl" )
+    # evaluator = batchEvaluation("../data/snli_1.0/src-test.txt",
+    #                        "../data/snli_1.0/targ-test.txt",
+    #                        "../data/snli_1.0/label-test.txt",
+    #                        "../data/test-pred-statistic.pkl" )
 
     ###### dev set ######
-    # evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
-    #                        "../data/snli_1.0/targ-dev.txt",
-    #                        "../data/snli_1.0/label-dev.txt",
-    #                        "../data/dev-pred-statistic.pkl" )
+    evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
+                           "../data/snli_1.0/targ-dev.txt",
+                           "../data/snli_1.0/label-dev.txt",
+                           "../data/dev-pred-statistic.pkl" )
     evaluator.setPredictionHook(model.predict)
     evaluator.setAttentionHook(model.attention)
     evaluator.setSentencePerturbationHook(gen.perturbSentence)
     evaluator.setSentenceVerifyHook(gen.verifySentence)
 
     evaluator.initialize()
-    # evaluator.generateStatistic('../data/dev-set-statistic.json')
-    evaluator.generateStatistic('../data/test-set-statistic.json')
+    evaluator.generateStatistic('../data/dev-set-statistic.json')
+    # evaluator.generateStatistic('../data/test-set-statistic.json')
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))

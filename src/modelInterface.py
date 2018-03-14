@@ -114,7 +114,10 @@ class modelInterface:
         tokenList = [self.tokenMap["<s>"]]
         sentence = sentence.rstrip().split(" ")
         for word in sentence:
-            tokenList.append(self.tokenMap[word.lower()])
+            if word in self.tokenMap.keys():
+                tokenList.append(self.tokenMap[word])
+            else:
+                tokenList.append(self.tokenMap["<unk>"])
         #1XN array
         # tokenList.append(self.tokenMap["<s>"])
         # print tokenList
