@@ -84,7 +84,7 @@ class modelInterface:
             lines = f.readlines()
             for l in lines:
                 toks = l.split(" ")
-                self.tokenMap[toks[0].lower()] = int(toks[1])-1
+                self.tokenMap[toks[0]] = int(toks[1])-1
 
         #evaluate
         self.shared = Holder()
@@ -111,12 +111,15 @@ class modelInterface:
         # exit()
 
     def mapToToken(self, sentence):
-        tokenList = []
+        tokenList = [self.tokenMap["<s>"]]
         sentence = sentence.rstrip().split(" ")
         for word in sentence:
-            tokenList.append(self.tokenMap[word.lower()])
+            if word in self.tokenMap.keys():
+                tokenList.append(self.tokenMap[word])
+            else:
+                tokenList.append(self.tokenMap["<unk>"])
         #1XN array
-        tokenList.append(self.tokenMap["<s>"])
+        # tokenList.append(self.tokenMap["<s>"])
         # print tokenList
         token = torch.from_numpy(np.asarray(tokenList).reshape(1, len(tokenList)))
         # print token
