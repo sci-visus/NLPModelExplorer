@@ -276,17 +276,18 @@ class attentionMatrixComponent extends attentionComponent {
 	    let text_loc = h/2 + this.height / 4;
 	    for(let i = 0; i < srcWords.length; i++){
 		    let item = {};
-		    if(!this.srcIndexMaskSet.has(i)){
-			    item['x'] = this.width * 1 / 4 - this.margin.left * 3;
-			    item['y'] = text_loc;		    
+		    
+		    item['x'] = this.width * 1 / 4 - this.margin.left * 3;
+		    
+		    item['y'] = text_loc;
+		    
+		    item['text'] = srcWords[i];
+		    
+		    if(!this.srcIndexMaskSet.has(i)){	    
 			    item['display'] = 'block';
-			    item['text'] = srcWords[i];
 			    text_loc += h;
-		    }else{
-			    item['x'] = this.width * 1 / 4 - this.margin.left * 3;
-			    item['y'] = text_loc;		    
+		    }else{		    
 			    item['display'] = 'none';
-			    item['text'] = srcWords[i];
 		    }   
 		    srcText.push(item);
 	    }
@@ -300,17 +301,19 @@ class attentionMatrixComponent extends attentionComponent {
 	    text_loc = w/2 + this.width / 4;
 	    for(let i = 0; i < targWords.length; i++){
 		    let item = {};
-		    if(!this.targIndexMaskSet.has(i)){
-			    item['x'] = text_loc;
-			    item['y'] = this.height * 1 / 4 - this.margin.top * 3;		    
+		    
+		    item['x'] = text_loc;
+		    
+		    item['y'] = this.height * 1 / 4 - this.margin.top * 3;
+		    
+		    item['text'] = targWords[i];
+		    
+		    if(!this.targIndexMaskSet.has(i)){	    
 			    item['display'] = 'block';
-			    item['text'] = targWords[i];
 			    text_loc += w;
-		    }else{
-			    item['x'] = text_loc;
-			    item['y'] = this.height * 1 / 4 - this.margin.top * 3;		    
+		    }else{		    
 			    item['display'] = 'none';
-			    item['text'] = targWords[i];
+			    
 		    }
 		    targText.push(item);  
 	    }

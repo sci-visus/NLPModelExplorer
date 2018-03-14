@@ -72,7 +72,7 @@ class attentionComponent extends baseComponent {
             }
         });
 	
-	//this.draw();
+	//this.drawDepTree();
     }
 
     collapseTarget(mask) {
@@ -83,7 +83,7 @@ class attentionComponent extends baseComponent {
             }
         });
 	
-	//this.draw();
+	//this.drawDepTree();
     }
 
     resize() {

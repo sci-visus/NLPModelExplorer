@@ -70,7 +70,7 @@ class attentionGraphComponent extends attentionComponent {
                 .style("text-anchor", "middle");
 
             this.svg.append("text")
-                .attr("class", "text")
+                //.attr("class", "text")
                 .attr("x", 2)
                 .attr("y", this.endRange / 3 * this.height - this.rectHeight /
                     2.0)
@@ -92,6 +92,7 @@ class attentionGraphComponent extends attentionComponent {
                 .data(this.srcWords)
                 .enter()
                 .append("rect")
+	    	.attr('class', 'attentionGraphComponentSrcRect'+this.uuid)
                 .attr("x", (d, i) => this.srcPos[i].x - srcWidth / 2.0)
                 .attr("y", (d, i) => this.srcPos[i].y)
                 .attr("width", srcWidth)
@@ -104,6 +105,7 @@ class attentionGraphComponent extends attentionComponent {
                 .data(this.targWords)
                 .enter()
                 .append("rect")
+		.attr('class', 'attentionGraphComponentTargRect'+this.uuid)
                 .attr("x", (d, i) => this.targPos[i].x - targWidth / 2.0)
                 .attr("y", (d, i) => this.targPos[i].y - this.rectHeight)
                 .attr("width", targWidth)
@@ -118,7 +120,7 @@ class attentionGraphComponent extends attentionComponent {
                 .data(this.srcWords)
                 .enter()
                 .append("text")
-                .attr("class", "text")
+		.attr('class', 'attentionGraphComponentSrcText'+this.uuid)
                 .text(d => d)
                 .attr("x", (d, i) => this.srcPos[i].x)
                 .attr("y", (d, i) => this.srcPos[i].y + this.rectHeight *
@@ -128,13 +130,14 @@ class attentionGraphComponent extends attentionComponent {
                 .style("text-anchor", "middle")
 		.on('mouseover', (d, i)=>{
 			this.src_dep.highlight(i);
+			this.linkAlignTarg(i);
 		})
 		.on('mouseout', (d, i)=>{
 			this.src_dep.highlight(-1);
+			this.targ_dep.highlight(-1);
 		})
 		.on("click", (d, i) => {
 	                this.src_dep.collapse(i);
-			this.draw();
 	        });
                 
 
@@ -142,7 +145,7 @@ class attentionGraphComponent extends attentionComponent {
                 .data(this.targWords)
                 .enter()
                 .append("text")
-                .attr("class", "text")
+		.attr('class', 'attentionGraphComponentTargText'+this.uuid)
                 .text(d => d)
                 .attr("x", (d, i) => this.targPos[i].x)
                 .attr("y", (d, i) => this.targPos[i].y - this.rectHeight *
@@ -151,32 +154,115 @@ class attentionGraphComponent extends attentionComponent {
                 .style("writing-mode", this.checkTargOrientation.bind(this))
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
-		.on('mouseover', (d, i)=>{
+		.on('mouseover', (d, i, nodes)=>{
 			this.targ_dep.highlight(i);
+			this.linkAlignSrc(i);
 		})
 		.on('mouseout', (d, i)=>{
 			this.targ_dep.highlight(-1);
+			this.src_dep.highlight(-1);
 		})
 		.on("click", (d, i) => {
-                    this.targ_dep.collapse();
-		    this.draw();
+			this.targ_dep.collapse(i);
+		    //this.drawDepTree();
                 });
-		
-	///////////////////// path mouse event ////////////////////
-		
-                connections.on('mouseover', (d, i)=>{
-    		    let col = i % this.targWords.length,
-    		    row = Math.floor(i / this.targWords.length);
-		    
-		    this.targ_dep.highlight(col);
-		    this.src_dep.highlight(row);
-                })
-		.on('mouseout', (d, i)=>{
-		    this.targ_dep.highlight(-1);
-		    this.src_dep.highlight(-1);
-	    	});
-		
         }
+    }
+
+    linkAlignSrc(index){
+	    this.currentMatrix = this.normAttention;
+	    
+	    //maximum value index
+	    let max = -1;
+	    let maxindex = -1;
+	    for(let i = 0; i < this.currentMatrix.length; i++){
+	    	if (max < this.currentMatrix[i][index]){
+			max = this.currentMatrix[i][index];
+			maxindex = i;
+		}
+	    }
+	    
+	    this.src_dep.highlight(maxindex);
+    }
+    
+    linkAlignTarg(index){
+	    this.currentMatrix = this.normAttention;
+	    //maximum value index
+	    let max = -1;
+	    let maxindex = -1;
+	    for(let i = 0; i < this.currentMatrix[index].length; i++){
+		    if(max < this.currentMatrix[index][i]){
+			    max = this.currentMatrix[index][i];
+			    maxindex = i;
+		    }
+	    }
+	    
+	    this.targ_dep.highlight(maxindex);
+    }
+    
+    generateTextGeometry(){
+    	
+	    ////////// src words ////////////////
+	    let srcText = [];
+	    
+	    let srcRect = [];
+	    
+	    let srcWords = this.sen2word2(this.data['currentPair'][0]);
+	    
+	    let text_loc = this.width / (srcWords.length + 1);
+	    
+	    for(let i = 0 ; i < srcWords.length; i++){
+		    let textitem = {};
+		    let rectitem = {};
+		    
+		    textitem['x'] = text_loc;
+		    
+		    textitem['y'] = this.height / 3 * this.startRange + this.rectHeight * 0.5;
+		    
+		    textitem['text'] = srcWords[i];
+		    
+		    if(!this.srcIndexMaskSet.has(i)){
+			    textitem['display'] = 'block'
+			    text_loc += this.width / (src.length + 1);
+		    }
+		    else{
+			    textitem['display'] = 'none'; 
+		    }
+		    srcText.push(textitem);
+	    }
+	    
+	    
+	    ////////// targ words ////////////////
+	    let targText = [];
+	    
+	    let targWords = this.sen2words(this.data['currentPair'][1]);
+	    
+	    text_loc = this.width / (targWords.length + 1);
+	    
+	    for(let i = 0; i < targWords.length; i++){
+		    let item = {};
+		    
+		    item['x'] = text_loc;
+		    
+		    item['y'] = this.height / 3 * this.endRange;
+		    
+		    item['text'] = targWords[i];
+		    
+		    if(!this.targIndexMaskSet.has(i)){	    
+			    item['display'] = 'block';
+			    text_loc += this.width / (src.length + 1);
+		    }else{		    
+			    item['display'] = 'none';
+		    }
+		    
+		    targText.push(item);  	
+	    }
+	    
+	    return {'src':srcText, 'targ':targText};
+    }
+    
+    generateMatrixGeometry(){
+    	
     }
 
     drawDepTree() {
@@ -214,8 +300,11 @@ class attentionGraphComponent extends attentionComponent {
             }
         }
     }
-
-
+    
+    collapseAnimation(){
+	    
+    }
+	 
     drawConnection() {
         var d3line = d3.line()
             .x(function(d) {
@@ -255,7 +344,7 @@ class attentionGraphComponent extends attentionComponent {
                     return d3line(lineData);
                 }
             })
-            .attr("class", "attConnect")
+            .attr("class", 'attentionGraphComponentAttConnect'+this.uuid)
             .style("stroke-width", d => d[2] * 5)
             .style("stroke", "#87CEFA")
             .style("opacity", d => 0.1 + d[2])

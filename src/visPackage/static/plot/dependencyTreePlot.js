@@ -67,7 +67,6 @@ class dependencyTreePlot {
         }
 
         this.callback(this.sentenceMask); //[1,0,0,1]
-        //this.callback(display_index);//the index of word will be presented
     }
 
     //i: index of word in sentence
@@ -89,6 +88,7 @@ class dependencyTreePlot {
 	//this.draw();
         //callback called, this will trigger a redraw
         this.onHandleCollapse();
+	//this.draw();
     }
 
     //i: index of word in sentence
@@ -96,7 +96,7 @@ class dependencyTreePlot {
 	    
 	    this.highlight_indexs = [];
 	    if(i != -1)
-	    	this.highlight_indexs = this.getChild(i, this.dep_triples);
+	    	this.highlight_indexs = this.getChild(i);
 	    
 	    this.draw();
     }
@@ -109,7 +109,7 @@ class dependencyTreePlot {
         // console.log("collapseIndex:", this.collapseIndex);
 
         this.collapseIndex.forEach(d => {
-		let collapseChildren = this.getChild(d, this.dep_triples);
+		let collapseChildren = this.getChild(d);
                 // console.log(d, collapseChildren);
 		childs = childs.concat(collapseChildren);
         });
@@ -126,7 +126,7 @@ class dependencyTreePlot {
     }
 
     //support function for collapse: get child index
-    getChild(index, deps) {
+    getChild(index) {
         // console.log(index, "------ deps:", deps);
         let childs = [];
         let filter = new Set();
@@ -140,10 +140,10 @@ class dependencyTreePlot {
         let depth = 0;
         do {
             l = filter.size;
-            for (let i = 0; i < deps.length; i++) {
-                if (filter.has(deps[i][0]) && !(filter.has(deps[i][2]))) {
-                    filter.add(deps[i][2]);
-                    childs.push(deps[i][2]);
+            for (let i = 0; i < this.dep_triples.length; i++) {
+                if (filter.has(this.dep_triples[i][0]) && !(filter.has(this.dep_triples[i][2]))) {
+                    filter.add(this.dep_triples[i][2]);
+                    childs.push(this.dep_triples[i][2]);
                 }
             }
         } while (filter.size != l);
