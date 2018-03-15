@@ -88,11 +88,11 @@ class attentionGraphComponent extends attentionComponent {
             let connections = this.drawConnection();
 
             ///////////////////// drawing rect //////////////////////
-            this.svg.selectAll(".srcRect")
+            this.svg.selectAll(".attentionGraphComponentSrcRect")
                 .data(this.srcWords)
                 .enter()
                 .append("rect")
-	    	.attr('class', 'attentionGraphComponentSrcRect'+this.uuid)
+	    	.attr('class', 'attentionGraphComponentSrcRect')
                 .attr("x", (d, i) => this.srcPos[i].x - srcWidth / 2.0)
                 .attr("y", (d, i) => this.srcPos[i].y)
                 .attr("width", srcWidth)
@@ -101,11 +101,11 @@ class attentionGraphComponent extends attentionComponent {
                 .style("fill", "#87CEFA")
 	        .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
 
-            this.svg.selectAll(".targRect")
+            this.svg.selectAll(".attentionGraphComponentTargRect")
                 .data(this.targWords)
                 .enter()
                 .append("rect")
-		.attr('class', 'attentionGraphComponentTargRect'+this.uuid)
+		.attr('class', 'attentionGraphComponentTargRect')
                 .attr("x", (d, i) => this.targPos[i].x - targWidth / 2.0)
                 .attr("y", (d, i) => this.targPos[i].y - this.rectHeight)
                 .attr("width", targWidth)
@@ -116,36 +116,35 @@ class attentionGraphComponent extends attentionComponent {
 		
 
             ///////////////////// drawing text ////////////////////
-            let srcWords = this.svg.selectAll(".srcWords")
+            let srcWords = this.svg.selectAll(".attentionGraphComponentSrcText")
                 .data(this.srcWords)
                 .enter()
                 .append("text")
-		.attr('class', 'attentionGraphComponentSrcText'+this.uuid)
+		.attr('class', 'attentionGraphComponentSrcText')
                 .text(d => d)
                 .attr("x", (d, i) => this.srcPos[i].x)
-                .attr("y", (d, i) => this.srcPos[i].y + this.rectHeight *
-                    0.5)
+                .attr("y", (d, i) => this.srcPos[i].y + this.rectHeight * 0.5)
                 .style("font-size", this.checkFontSize.bind(this))
                 .style("writing-mode", this.checkSrcOrientation.bind(this))
                 .style("text-anchor", "middle")
-		.on('mouseover', (d, i)=>{
-			this.src_dep.highlight(i);
-			this.linkAlignTarg(i);
+		.on('mouseover', (d, i, nodes)=>{
+			d3.select(nodes[i]).style('fill', 'orange');
+			this.highlight_and_linkAlignTarg(i);
 		})
-		.on('mouseout', (d, i)=>{
-			this.src_dep.highlight(-1);
-			this.targ_dep.highlight(-1);
+		.on('mouseout', (d, i, nodes)=>{
+			d3.select(nodes[i]).style('fill', 'black');
+			this.highlight_and_linkAlignTarg('clean');
 		})
 		.on("click", (d, i) => {
 	                this.src_dep.collapse(i);
 	        });
                 
 
-            let targWords = this.svg.selectAll(".targWords")
+            let targWords = this.svg.selectAll(".attentionGraphComponentTargText")
                 .data(this.targWords)
                 .enter()
                 .append("text")
-		.attr('class', 'attentionGraphComponentTargText'+this.uuid)
+		.attr('class', 'attentionGraphComponentTargText')
                 .text(d => d)
                 .attr("x", (d, i) => this.targPos[i].x)
                 .attr("y", (d, i) => this.targPos[i].y - this.rectHeight *
@@ -155,49 +154,90 @@ class attentionGraphComponent extends attentionComponent {
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
 		.on('mouseover', (d, i, nodes)=>{
-			this.targ_dep.highlight(i);
-			this.linkAlignSrc(i);
+			d3.select(nodes[i]).style('fill', 'orange');
+			this.highlight_and_linkAlignSrc(i);
 		})
-		.on('mouseout', (d, i)=>{
-			this.targ_dep.highlight(-1);
-			this.src_dep.highlight(-1);
+		.on('mouseout', (d, i, nodes)=>{
+			d3.select(nodes[i]).style('fill', 'black');
+			this.highlight_and_linkAlignSrc('clean');
 		})
 		.on("click", (d, i) => {
 			this.targ_dep.collapse(i);
-		    //this.drawDepTree();
                 });
         }
     }
 
-    linkAlignSrc(index){
-	    this.currentMatrix = this.normAttention;
+    highlight_and_linkAlignSrc(index){
 	    
-	    //maximum value index
-	    let max = -1;
-	    let maxindex = -1;
-	    for(let i = 0; i < this.currentMatrix.length; i++){
-	    	if (max < this.currentMatrix[i][index]){
-			max = this.currentMatrix[i][index];
-			maxindex = i;
-		}
-	    }
-	    
-	    this.src_dep.highlight(maxindex);
+	 if(index == 'clean'){
+		 this.targ_dep.highlight(-1);
+		 this.src_dep.highlight(-1);
+		 
+		 d3.selectAll('.attentionGraphComponentSrcText').style('fill', 'black');
+		 d3.selectAll('.attentionGraphComponentSrcRect').style('fill', '#87CEFA');
+		 d3.selectAll('.attentionGraphComponentAttConnect').style('stroke', '#87CEFA');
+	 }
+	 else{   
+	    	this.targ_dep.highlight(index);
+	    	this.currentMatrix = this.normAttention;
+		
+	    	//maximum value index
+	    	let max = -1;
+	    	let maxindex = -1;
+	    	for(let i = 0; i < this.currentMatrix.length; i++){
+	    		if (max < this.currentMatrix[i][index]){
+				max = this.currentMatrix[i][index];
+				maxindex = i;
+			}
+	    	}
+		
+		d3.selectAll('.attentionGraphComponentSrcText').filter((d,i)=>{return i == maxindex;})
+		.style('fill', 'orange');
+		d3.selectAll('.attentionGraphComponentSrcRect').filter((d,i)=>{return i == maxindex;})
+		.style('fill', 'orange');
+		d3.selectAll('.attentionGraphComponentAttConnect').filter((d,i)=>{
+			return i == (maxindex * this.currentMatrix[0].length + index);
+		})
+		.style('stroke', 'orange');
+	    	this.src_dep.highlight(maxindex);
+	}
     }
     
-    linkAlignTarg(index){
-	    this.currentMatrix = this.normAttention;
-	    //maximum value index
-	    let max = -1;
-	    let maxindex = -1;
-	    for(let i = 0; i < this.currentMatrix[index].length; i++){
+    highlight_and_linkAlignTarg(index){
+	    
+   	 if(index == 'clean'){
+   		 this.targ_dep.highlight(-1);
+   		 this.src_dep.highlight(-1);
+ 		 
+		 d3.selectAll('.attentionGraphComponentTargText').style('fill', 'black');
+		 d3.selectAll('.attentionGraphComponentTargRect').style('fill', '#87CEFA');
+		 d3.selectAll('.attentionGraphComponentAttConnect').style('stroke', '#87CEFA');
+   	 }
+   	 else{
+		this.src_dep.highlight(index);
+	    	this.currentMatrix = this.normAttention;
+		
+	    	//maximum value index
+	    	let max = -1;
+	    	let maxindex = -1;
+	    	for(let i = 0; i < this.currentMatrix[index].length; i++){
 		    if(max < this.currentMatrix[index][i]){
 			    max = this.currentMatrix[index][i];
 			    maxindex = i;
 		    }
-	    }
-	    
-	    this.targ_dep.highlight(maxindex);
+	    	}
+		
+		d3.selectAll('.attentionGraphComponentTargText').filter((d,i)=>{return i == maxindex;})
+		.style('fill', 'orange');
+		d3.selectAll('.attentionGraphComponentTargRect').filter((d,i)=>{return i == maxindex;})
+		.style('fill', 'orange');
+		d3.selectAll('.attentionGraphComponentAttConnect').filter((d,i)=>{
+			return i == (index * this.currentMatrix[0].length + maxindex);
+		})
+		.style('stroke', 'orange');
+		
+	    	this.targ_dep.highlight(maxindex);
+    	}
     }
     
     generateTextGeometry(){
@@ -315,8 +355,8 @@ class attentionGraphComponent extends attentionComponent {
             });
         // .curve("d3.curveLinear");
         // console.log(this.attList);
-        this.svg.selectAll(".attConnect").remove();
-        let connections = this.svg.selectAll(".attConnect")
+        this.svg.selectAll(".attentionGraphComponentAttConnect").remove();
+        let connections = this.svg.selectAll(".attentionGraphComponentAttConnect")
             .data(this.attList)
             .enter()
             .append("path")
@@ -344,7 +384,7 @@ class attentionGraphComponent extends attentionComponent {
                     return d3line(lineData);
                 }
             })
-            .attr("class", 'attentionGraphComponentAttConnect'+this.uuid)
+            .attr("class", 'attentionGraphComponentAttConnect')
             .style("stroke-width", d => d[2] * 5)
             .style("stroke", "#87CEFA")
             .style("opacity", d => 0.1 + d[2])
