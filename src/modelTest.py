@@ -10,5 +10,4 @@ model = modelInterface(
 pair = ["Two women are embracing while holding to go packages .\n",
 "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n"]
 
-att, pred = model.updatePrediction(pair, 0)
-print att, pred
+model.updatePrediction(pair, 0)

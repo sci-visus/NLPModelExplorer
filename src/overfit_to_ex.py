@@ -78,6 +78,7 @@ def overfit_to_ex(opt, shared, wv, optim, m, ex):
 	m.update_context(batch_ex_idx, batch_l, source_l, target_l)
 
 	y_dist = m.forward(word_vecs1, word_vecs2)
+
 	loss = criterion(y_dist, y_gold)
 
 	# register hooks
@@ -143,20 +144,22 @@ def main(args):
 
 	# fake some input
 	batch_l = 1
-	sent_l1 = 5
-	sent_l2 = 6
+	sent_l1 = 11
+	sent_l2 = 16
+	src = [2, 26541, 38507, 38122, 32686, 33083, 32090, 20493, 6051, 12375, 392]
+	targ = [2, 13579, 7067, 38122, 35529, 4917, 33083, 32090, 20493, 6051, 12375, 38981, 34394, 33186, 5546, 392]
 	batch_ex_idx = None
-	source = torch.LongTensor([0,1,2,3,4]).view(1, sent_l1)
-	target = torch.LongTensor([0,1,2,3,4,5]).view(1, sent_l2)
-	y_gold = torch.LongTensor([2])
+	source = torch.LongTensor(src).view(1, sent_l1)
+	target = torch.LongTensor(targ).view(1, sent_l2)
+	y_gold = torch.LongTensor([0])
 	ex = (source, target, batch_ex_idx, batch_l, sent_l1, sent_l2, y_gold)
 
 	m, y = overfit_to_ex(opt, shared, embeddings, optim, pipeline, ex)
 	print(y)
-	print(shared.att_soft1.grad)
+	# print(shared.att_soft1.grad)
 	m, y = overfit_to_ex(opt, shared, embeddings, optim, pipeline, ex)
 	print(y)
-	print(shared.att_soft1.grad)
+	# print(shared.att_soft1.grad)
 
 
 
