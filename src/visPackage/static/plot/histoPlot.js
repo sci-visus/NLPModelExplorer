@@ -37,7 +37,7 @@ class histoPlot {
         var pos = this.pos;
         var width = this.size[0] - (this.axisYflag ? this.leftOffset : 0);
         var height = this.size[1] - (this.axisXflag ? this.bottomOffset : 0);
-        console.log(width, height);
+        // console.log(width, height);
         var binNum = 10;
         var x, y, bins;
         if (this.mode === "sample") {
@@ -65,9 +65,7 @@ class histoPlot {
             //directly provide the histogram bin size
         }
 
-        // var xAxis = d3.axisBottom()
-        //     .scale(x);
-
+        // console.log(bins);
 
         var bar = this.svg.selectAll(".bar")
             .data(bins)
@@ -79,12 +77,14 @@ class histoPlot {
                 return "translate(" + x(d.x0) + "," + y(d.length) + ")";
             })
             .attr("width", function(d) {
-                let width = x(d.x1) - x(d.x0) - 1.0;
+                var width = x(d.x1) - x(d.x0) - 1;
                 if (width < 0)
                     width == 0;
+                // console.log(width);
                 return width;
             })
             .attr("height", function(d) {
+                console.log(pos[1] + height - y(d.length));
                 return pos[1] + height - y(d.length);
             });
         // add the x Axis
@@ -100,5 +100,9 @@ class histoPlot {
                 .attr("transform", "translate(" + this.pos[0] + ",0)")
                 .call(d3.axisLeft(y));
         }
+    }
+
+    bindSelectionCallback(callback) {
+        this.callback = callback;
     }
 }

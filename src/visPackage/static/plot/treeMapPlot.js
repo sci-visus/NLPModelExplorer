@@ -143,7 +143,7 @@ class treeMapPlot {
         this.selectionCallback(cellData);
     }
 
-    setSelectionCallback(callback) {
+    bindSelectionCallback(callback) {
         this.selectionCallback = callback;
     }
 

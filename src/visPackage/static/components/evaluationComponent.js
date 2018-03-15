@@ -42,30 +42,37 @@ class evaluationComponent extends baseComponent {
             this.treeMap = new treeMapPlot(this.svg, [0, 0], [
                 this.width * 0.5, this.height * 0.5
             ]);
+            this.treeMap.bindSelectionCallback(this.updateHisto.bind(
+                this));
 
             this.histo = new histoPlot(this.svg, [0, this.height * 0.5], [
                 this.width * 0.5, this.height * 0.5
             ], true);
-
-            this.scatter = new scatterPlot(this.svg, [this.width * 0.5, 0], [
-                this.width * 0.5, this.height
-            ]);
-            this.scatter.bindSelectionCallback(this.senetenceSelection.bind(
+            this.histo.bindSelectionCallback(this.updateScatterplot.bind(
                 this));
+
+            // this.scatter = new scatterPlot(this.svg, [this.width * 0.5, 0], [
+            //     this.width * 0.5, this.height
+            // ]);
+            // this.scatter.bindSelectionCallback(this.senetenceSelection.bind(
+            //     this));
 
 
         } else {
             this.svgContainer
                 .attr("width", this.pwidth)
-                .attr("height", this.pheight - this.topOffset)
+                .attr("height", this.pheight)
 
             // this.svg.selectAll("text,rect,path").remove();
             this.treeMap.update([0, 0], [
                 this.width * 0.5, this.height * 0.5
             ]);
-            this.histo.update([0, this.height * 0.5], [
-                this.width * 0.5, this.height * 0.5
+            this.histo.update([0, this.height * 0.6], [
+                this.width * 0.5, this.height * 0.4
             ]);
+            // this.scatter.update([this.width * 0.5, 0], [
+            //     this.width * 0.5, this.height
+            // ]);
             // this.svgSave.updatePos([this.width - 10, 10])
             // this.svgSave.draw();
         }
@@ -78,35 +85,40 @@ class evaluationComponent extends baseComponent {
         this.height = this.height - this.topOffset;
 
         this.initSvg();
-        this.treeMap.setData(this.data, "pairs");
-        this.treeMap.setSelectionCallback(this.updateHisto.bind(this));
 
-        this.treeMap.draw();
-        this.histo.draw();
+        if (this.statistic) {
+            this.treeMap.draw();
+            this.histo.draw();
+        }
     }
 
     updateHisto(data) {
         var stabilities = data.map(d => d.stability);
+        // console.log(stabilities);
         this.histo.setSample(stabilities);
     }
 
-    senetenceSelection(index) {
+    updateScatterplot(data) {
+        //index get data
+        var data = [];
+        // this.scatterplot.setData();
+    }
+
+    senetenceSelection(indice) {
+        for (var i = 0; i < indice.length; i++) {
+            // indice[i]
+
+        }
+
+    }
+
+    getDataFromIndex(index) {
 
     }
 
     resize() {
         this._updateWidthHeight();
         this.initSvg(); //update svg size
-
-        // if (this.treeMap) {
-        //     this.treeMap.update([0, 0], [this.width * 0.5, this.height]);
-        // }
-        // if (this.histo) {
-        //     this.histo.update([this.width * 0.55, 0], [
-        //         this.width * 0.45, this.height * 0.95
-        //     ]);
-        // }
-
     }
 
     setupUI() {
@@ -139,9 +151,9 @@ class evaluationComponent extends baseComponent {
 
         switch (msg['name']) {
             case "evaluationStatistics":
-                this.treeMap.setData(this.data["evaluationStatistics"],
-                    "All Pairs");
-                // this.draw();
+                this.statistic = this.data["evaluationStatistics"];
+                this.treeMap.setData(this.statistic, "All Pairs");
+                this.draw();
                 break;
         }
 
