@@ -36,6 +36,8 @@ class attentionMatrixComponent extends attentionComponent {
 
             //location of words
             var pair = this.data["currentPair"];
+	    
+	    this.aggregatedMatrix = Object.assign(this.normAttention);
 
             this.attList = this.generateMatrixGeometry();
 	    
@@ -99,7 +101,10 @@ class attentionMatrixComponent extends attentionComponent {
 			.classed('attentionMatrixComponent_text_collapse', !d3.select(nodes[i]).classed("attentionMatrixComponent_text_collapse"));
 			
 			//get the child node of i and aggregate the data
-			//this.targ_dep.getChild(i);
+			this.aggregationMatrix(i, this.targ_dep.getChild(i));
+			//TODO: get all the child node and do softmax
+			
+			
 			
 			this.targ_dep.collapse(i);
 			this.collapse_Animation('vertical');
@@ -133,7 +138,7 @@ class attentionMatrixComponent extends attentionComponent {
              	});
 		
     	     ////////////// rect mouse over event ///////////////
-		this.rectMouseEvent(rects, targtext, srctext);
+	    this.rectMouseEvent(rects, targtext, srctext);
 		
 	     //draw text background
 	     this.svg.selectAll('.attentionMatrixComponent_background_text')
@@ -218,7 +223,7 @@ class attentionMatrixComponent extends attentionComponent {
     //define each rect's width, height, x, y and color map value
     generateMatrixGeometry(){
 	    
-	    let attMatrix = this.normAttention;
+	    let attMatrix = this.aggregatedMatrix;
 	    
 	    let targWords = this.sen2words(this.data["currentPair"][1]);
 	    
@@ -334,35 +339,20 @@ class attentionMatrixComponent extends attentionComponent {
 	    rects.append('rect');
 	    
 	    //if(direction == 'horizontal'){
-	    	rects
-		.transition()
-            	.duration(1000)
-            	.attr('x', (d, i) => {
-		    return d.x;
-            	})
-            	.attr('y', (d, i) => {
-		    return direction == 'vertical' && d.height == 0?this.height/4:d.y;
-            	})
-		.attr('width', (d)=>{return d.width;})
-            	.attr('height', (d)=>{return d.height;})
-            	.style('fill', d => {
-            	    return this.colorbar.lookup(d.value);
-            	});
-	    //}else if(direction == 'vertical'){
-    	    //	rects.transition()
-            //    .duration(1000)
-            //   	.attr('x', (d, i) => {
-    	    //	    return d.x;
-            //    })
-            //    .attr('y', (d, i) => {
-    	    //	    return d.y;
-            //    })
-	    //	.attr('height', (d)=>{return d.height;})
-	    //	.attr('width', (d)=>{return d.width;})
-            //    .style('fill', d => {
-            //        return this.colorbar.lookup(d.value);
-            //    });
-	    //}
+	    rects
+	    .transition()
+            .duration(1000)
+            .attr('x', (d, i) => {
+	    	return d.x;
+            })
+            .attr('y', (d, i) => {
+		return direction == 'vertical' && d.height == 0?this.height/4:d.y;
+            })
+	    .attr('width', (d)=>{return d.width;})
+            .attr('height', (d)=>{return d.height;})
+            .style('fill', d => {
+            	return this.colorbar.lookup(d.value);
+            });
 	    
 	    let texts = this.generateTextGeometry(); 
 	    /////////////////  src text animation ///////////////////
@@ -392,8 +382,7 @@ class attentionMatrixComponent extends attentionComponent {
             .attr('x', (d, i) => d.x)
 	    .attr("y", (d, i) => d.y)
             .attr("transform", (d, i) => {
-                return "rotate(-45, " + d.x + ' , ' +
-                    d.y + ')';
+		    return "rotate(-45, " + d.x + ' , ' + d.y + ')';
             })
 	    .attr("display", (d)=>d['display']);
 	    
@@ -470,9 +459,4 @@ class attentionMatrixComponent extends attentionComponent {
         });
     }
     
-    //TODO: softmax function
-    renormalize(index, childs){
-    	
-    }
-
 }
