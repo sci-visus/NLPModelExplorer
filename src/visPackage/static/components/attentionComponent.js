@@ -19,7 +19,9 @@ class attentionComponent extends baseComponent {
 
         //init member
         this.srcIndexMaskSet = new Set();
-        this.targIndexMaskSet = new Set()
+        this.targIndexMaskSet = new Set();
+	
+	this.aggregationIndex = {};
     }
 
     initSvg() {
@@ -53,7 +55,6 @@ class attentionComponent extends baseComponent {
         // words.unshift("\<s\>");
         return words;
     }
-
 
     collapSenBySet(words, maskSet) {
         var collapWords = [];
@@ -146,11 +147,6 @@ class attentionComponent extends baseComponent {
         }
     }
 
-    /////////////// handler /////////////////
-    // onCurrentPairChange(){
-    //
-    // }
-
     handleParsedSentence(parseResult) {
         if (parseResult["sentence"] == this.data["currentPair"][0]) {
             //draw structure
@@ -160,6 +156,42 @@ class attentionComponent extends baseComponent {
             this.targDepTreeData = parseResult["depTree"];
         }
         this.draw();
+    }
+
+    aggregationMatrix(root, nodes){
+	    //check whether the aggregate root already exist 
+	    if(root in this.aggregationIndex){
+	    	    delete this.aggregationIndex[root];
+	    }else{
+		    this.aggregationIndex[root] = nodes;
+	    }  
+	    
+	    //clone object
+	    this.aggregatedMatrix = this.normAttention.map(function(arr){
+		    return arr.slice();
+	    })
+	    
+	    //TODO: aggregate the information base on this.normAttention
+	    for(const root in this.aggregationIndex){
+		    this.aggregationMatrixHelper(root, this.aggregationIndex[root]);
+	    }
+	    
+    }
+    
+    aggregationMatrixHelper(root, indexs){
+    	
+	    for(let i = 0; i < this.aggregatedMatrix.length; i++){
+		    let maxvalue = this.aggregatedMatrix[i][root];
+		    for(let j = 0; j < this.aggregatedMatrix[i].length; j++){
+			    if(indexs.includes(j)){
+				if(maxvalue < this.aggregatedMatrix[i][j]){
+					maxvalue = this.aggregatedMatrix[i][j];
+				}
+				this.aggregatedMatrix[i][j] = 0;
+			    }
+		    }
+		    this.aggregatedMatrix[i][root] = maxvalue;
+	    }
     }
 
     softmax(arr) {
