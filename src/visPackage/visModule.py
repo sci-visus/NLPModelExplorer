@@ -156,11 +156,21 @@ class textEntailVisModule(visModule):
     def setSentenceParserHook(self, callback):
         self.parserHook = callback
 
+    def setPredictionUpdateHook(self, callback):
+        self.predictionUpdateHook = callback
+
     #get sentence parse tree
     def parseSentence(self, sentence):
         if self.parserHook:
             depTree = self.parserHook(sentence)
             return {"depTree": depTree, "sentence":sentence}
+
+    def predictUpdate(self, newLabel):
+        sentencePair = dataManager.getData("currentPair")
+        att, pred = self.predictionUpdateHook(sentencePair, newLabel)
+        print att, pred
+        dataManager.setData("attention", att)
+        dataManager.setData("predictionUpdate", pred)
 
     def predict(self):
         sentencePair = dataManager.getData("currentPair")
