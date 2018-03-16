@@ -129,21 +129,14 @@ class attentionComponent extends baseComponent {
                 // console.log(pair, this.oldPair);
                 if (this.oldPair) {
                     //clear the current dependency
-                    if (this.oldPair[0].split().length !== pair[0].split().length) {
+                    if (this.oldPair[0].split().length !== pair[0].split().length ||
+                        this.oldPair[1].split().length !== pair[1].split().length
+                    ) {
                         this.srcDepTreeData = undefined;
                         this.src_dep = undefined;
-                        // this.callFunc("parseSentence", {
-                        //     "sentence": pair[0]
-                        // });
-                        console.log("clear src tree");
-                    }
-                    if (this.oldPair[1].split().length !== pair[1].split().length) {
                         this.targDepTreeData = undefined;
                         this.targ_dep = undefined;
-                        // this.callFunc("parseSentence", {
-                        //     "sentence": pair[1]
-                        // });
-                        console.log("clear targ tree");
+                        console.log("new pair loaded clear tree");
                     }
                 }
 

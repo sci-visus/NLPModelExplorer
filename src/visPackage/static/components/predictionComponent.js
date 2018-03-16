@@ -130,7 +130,7 @@ class predictionComponent extends baseComponent {
     }
 
     onUpdateGroundTruth(label) {
-        // console.log(label);
+        console.log(label);
         if (label === "neutral") {
             this.Neutral.style("fill", "mediumseagreen");
             this.Contradiction.style("fill", "grey");
