@@ -126,19 +126,30 @@ class attentionComponent extends baseComponent {
 
             case "currentPair":
                 let pair = msg["data"]["data"]["sentences"];
+                // console.log(pair, this.oldPair);
                 if (this.oldPair) {
                     //clear the current dependency
-                    if (this.oldPair[0].length !== pair[0].length) {
+                    if (this.oldPair[0].split().length !== pair[0].split().length) {
                         this.srcDepTreeData = undefined;
+                        this.src_dep = undefined;
+                        // this.callFunc("parseSentence", {
+                        //     "sentence": pair[0]
+                        // });
+                        console.log("clear src tree");
                     }
-                    if (this.oldPair[1].length !== pair[1].length) {
+                    if (this.oldPair[1].split().length !== pair[1].split().length) {
                         this.targDepTreeData = undefined;
+                        this.targ_dep = undefined;
+                        // this.callFunc("parseSentence", {
+                        //     "sentence": pair[1]
+                        // });
+                        console.log("clear targ tree");
                     }
                 }
 
                 this.srcWords = pair[0].match(/\S+/g);
                 this.targWords = pair[1].match(/\S+/g);
-                this.oldPair = pair;
+                this.oldPair = pair.slice();
 
                 break;
         }
@@ -156,10 +167,13 @@ class attentionComponent extends baseComponent {
         if (parsedSen == this.data["currentPair"]["sentences"][0]) {
             //draw structure
             this.srcDepTreeData = parseResult["depTree"];
-        } else if (parsedSen == this.data["currentPair"]["sentences"][1]) {
-            this.targDepTreeData = parseResult["depTree"];
+            this.drawDepTree();
         }
-        this.draw();
+
+        if (parsedSen == this.data["currentPair"]["sentences"][1]) {
+            this.targDepTreeData = parseResult["depTree"];
+            this.drawDepTree();
+        }
     }
 
     aggregationMatrix(root, nodes) {

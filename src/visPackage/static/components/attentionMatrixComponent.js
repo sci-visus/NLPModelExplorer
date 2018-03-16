@@ -475,8 +475,7 @@ class attentionMatrixComponent extends attentionComponent {
 
     drawDepTree() {
         if (this.srcDepTreeData) {
-            if (this.src_dep === undefined || this.src_dep.getDepTreeData() !==
-                this.srcDepTreeData) {
+            if (this.src_dep === undefined) {
 
                 // if (this.src_dep)
                 //     this.src_dep.clear();
@@ -492,8 +491,7 @@ class attentionMatrixComponent extends attentionComponent {
         }
 
         if (this.targDepTreeData) {
-            if (this.targ_dep === undefined || this.targ_dep.getDepTreeData() !==
-                this.targDepTreeData) {
+            if (this.targ_dep === undefined) {
 
                 // if (this.targ_dep)
                 //     this.targ_dep.clear();
@@ -504,6 +502,7 @@ class attentionMatrixComponent extends attentionComponent {
                     this));
 
             } else {
+                // this.targ_dep.setData(this.targDepTreeData);
                 this.targ_dep.updatePos(this.targPos);
             }
         }

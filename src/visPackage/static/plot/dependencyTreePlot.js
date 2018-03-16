@@ -32,7 +32,7 @@ class dependencyTreePlot {
     }
 
     clear() {
-        this.svg.html('');
+        this.svg.selectAll("*").remove();
     }
 
     getDepTreeData() {
@@ -177,18 +177,18 @@ class dependencyTreePlot {
 
         //arrow
         // let arrowid = uuidv1()
-        let arrowid = "arrowDep";
+        let arrowid = "depArrow";
         this.svg
-            .append("svg:defs")
-            .append("svg:marker")
-            .attr("id", "arrowDep")
+            .append("defs")
+            .append("marker")
+            .attr("id", "depArrow")
             .attr('viewBox', '0 0 10 10')
             .attr("refX", 1)
             .attr("refY", 5)
             .attr("markerWidth", 5)
             .attr("markerHeight", 5)
             .attr("orient", "auto")
-            .append("svg:path")
+            .append("path")
             .attr("d", "M 0 0 L 10 5 L 0 10 z")
             .style('fill', 'steelblue');
 
