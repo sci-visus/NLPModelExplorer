@@ -100,9 +100,7 @@ class textEntailVisModule(visModule):
         dataManager.clear()
         dataManager.setData("componentLayout", layoutConfig)
         dataManager.setData("sentenceList", exampleData)
-        dataManager.setData("originalPair", [exampleData[0]['src'], exampleData[0]['targ']])
-        dataManager.setData("currentPair", [exampleData[0]['src'], exampleData[0]['targ']])
-        dataManager.setData("groundTruthLabel", exampleData[0]['pred'])
+        dataManager.setData("currentPair", {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']})
         return app.send_static_file('index.html')
 
     @app.route('/<name>')
@@ -138,7 +136,7 @@ class textEntailVisModule(visModule):
             sentenceList.append(pair)
         dataManager.setData("sentenceList", sentenceList)
         dataManager.setData("originalPair", [data[0]['src'], data[0]['targ']])
-        dataManager.setData("currentPair", [data[0]['src'], data[0]['targ']])
+        dataManager.setData("currentPair", {"sentences":[data[0]['src'], data[0]['targ']],"label":data[0]['pred']})
 
     # called when the user change the prediction, the attention need to be
     # recomputed by python model
@@ -174,7 +172,7 @@ class textEntailVisModule(visModule):
         dataManager.setData("predictionUpdate", pred)
 
     def predict(self):
-        sentencePair = dataManager.getData("currentPair")
+        sentencePair = dataManager.getData("currentPair")['sentences']
         predictionResult = self.predictionHook(sentencePair)
         dataManager.setData("prediction", predictionResult)
         #use raw attention
@@ -183,7 +181,7 @@ class textEntailVisModule(visModule):
         dataManager.setData("attention", attentionMatrix)
 
     def updateAttention(self):
-        sentencePair = dataManager.getData("currentPair")
+        sentencePair = dataManager.getData("currentPair")['sentences']
         predictionResult = self.predictionHook(sentencePair)
         # dataManager.setData("prediction", predictionResult)
         #use raw attention

@@ -14,7 +14,7 @@ class attentionMatrixComponent extends attentionComponent {
     draw() {
         this._updateWidthHeight();
 
-        if (this.data["attention"] !== undefined && this.data["currentPair"] !==
+        if (this.data["attention"] !== undefined && this.data["currentPair"]["sentences"] !==
             undefined) {
 
             //init svg
@@ -35,7 +35,7 @@ class attentionMatrixComponent extends attentionComponent {
             //data
 
             //location of words
-            var pair = this.data["currentPair"];
+            var pair = this.data["currentPair"]["sentences"];
 	    
 	    this.aggregatedMatrix = Object.assign(this.normAttention);
 
@@ -163,7 +163,7 @@ class attentionMatrixComponent extends attentionComponent {
     rectMouseEvent(rects, targtext, srctext){
    	    rects.on('mouseover', (d, i)=>{
     	
-   		    let targWords = this.sen2words(this.data["currentPair"][1]),
+   		    let targWords = this.sen2words(this.data["currentPair"]["sentences"][1]),
 	    col = i % targWords.length,
    		    row = Math.floor(i / this.targWords.length);
 	    
@@ -198,7 +198,7 @@ class attentionMatrixComponent extends attentionComponent {
    		    this.src_dep.highlight(row);		
    	    })
    	     .on('mouseout', (d, i)=>{
-   		    let targWords = this.sen2words(this.data["currentPair"][1]),
+   		    let targWords = this.sen2words(this.data["currentPair"]["sentences"][1]),
 	    col = i % targWords.length,
    		    row = Math.floor(i / this.targWords.length);
 	    
@@ -225,9 +225,9 @@ class attentionMatrixComponent extends attentionComponent {
 	    
 	    let attMatrix = this.aggregatedMatrix;
 	    
-	    let targWords = this.sen2words(this.data["currentPair"][1]);
+	    let targWords = this.sen2words(this.data["currentPair"]["sentences"][1]);
 	    
-	    let srcWords = this.sen2words(this.data["currentPair"][0]);
+	    let srcWords = this.sen2words(this.data["currentPair"]["sentences"][0]);
 	    
 	    let w = this.width * 3/4 / (targWords.length -  this.targIndexMaskSet.size);
 	    
@@ -274,7 +274,7 @@ class attentionMatrixComponent extends attentionComponent {
 	    
 	    let srcText = [];
 	
-	    let srcWords = this.sen2words(this.data["currentPair"][0]);
+	    let srcWords = this.sen2words(this.data["currentPair"]["sentences"][0]);
 	    
 	    let h = (this.height * 0.75) / (srcWords.length - this.srcIndexMaskSet.size);
 	    
@@ -299,7 +299,7 @@ class attentionMatrixComponent extends attentionComponent {
 	    
 	    let targText = [];
 	    
-	    let targWords = this.sen2words(this.data["currentPair"][1]);
+	    let targWords = this.sen2words(this.data["currentPair"]["sentences"][1]);
 	    
 	    let w = (this.width * 0.75) / (targWords.length - this.targIndexMaskSet.size);
 	    
@@ -388,8 +388,8 @@ class attentionMatrixComponent extends attentionComponent {
 	    
 	    
 	     ///////////////// dependency tree animation ///////////////////
-	    this.srcWords = this.collapSenBySet(this.sen2words(this.data["currentPair"][0]),this.srcIndexMaskSet);
-	    this.targWords = this.collapSenBySet(this.sen2words(this.data["currentPair"][1]),this.targIndexMaskSet);
+	    this.srcWords = this.collapSenBySet(this.sen2words(this.data["currentPair"]["sentences"][0]),this.srcIndexMaskSet);
+	    this.targWords = this.collapSenBySet(this.sen2words(this.data["currentPair"]["sentences"][1]),this.targIndexMaskSet);
 	    this.computeWordPosition(this.srcWords, this.targWords);
 	    this.drawDepTree();
     }

@@ -19,7 +19,7 @@ class attentionGraphComponent extends attentionComponent {
             // init svg
             this.initSvg();
 
-            var pair = this.data["currentPair"];
+            var pair = this.data["currentPair"]["sentences"];
             //draw attention
             var attMatrix = this.normAttention;
             //var attMatrix = this.data["attention"];
@@ -420,7 +420,7 @@ class attentionGraphComponent extends attentionComponent {
                     this.targDepTreeData = undefined;
 
                     this.draw();
-                    var pair = this.data["currentPair"];
+                    var pair = this.data["currentPair"]["sentences"];
 
                     this.callFunc("parseSentence", {
                         "sentence": pair[0]
@@ -446,9 +446,9 @@ class attentionGraphComponent extends attentionComponent {
 
     /////////////// handler /////////////////
     handleParsedSentence(parseResult) {
-        if (parseResult["sentence"] == this.data["currentPair"][0]) {
+        if (parseResult["sentence"] == this.data["currentPair"]["sentences"][0]) {
             this.srcDepTreeData = parseResult["depTree"];
-        } else if (parseResult["sentence"] == this.data["currentPair"][1]) {
+        } else if (parseResult["sentence"] == this.data["currentPair"]["sentences"][1]) {
             this.targDepTreeData = parseResult["depTree"];
         }
         this.draw();
