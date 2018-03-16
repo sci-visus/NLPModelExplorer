@@ -144,6 +144,7 @@ class attentionComponent extends baseComponent {
                 this.targWords = pair[1].match(/\S+/g);
                 this.oldPair = pair.slice();
 
+                this.draw();
                 break;
         }
     }

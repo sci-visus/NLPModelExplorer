@@ -22,7 +22,13 @@ sio = socketio.Server()
 fApp = socketio.Middleware(sio, app)
 dataManager = socketioManager(sio)
 
-exampleData = [{
+exampleData = [
+{"index":4,
+    "src": "A couple is taking a break from bicycling .\n",
+    "targ":"a couple sit next to their bikes .\n",
+    "pred":"neutral"
+},
+{
     "index":0,
     "src": "Two women are embracing while holding to go packages .\n",
     "targ": "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n",
@@ -158,18 +164,26 @@ class textEntailVisModule(visModule):
     def setPredictionUpdateHook(self, callback):
         self.predictionUpdateHook = callback
 
+    def setAttentionUpdateHook(self, callback):
+        self.attentionUpdateHook = callback
+
     #get sentence parse tree
     def parseSentence(self, sentence):
         if self.parserHook:
             depTree = self.parserHook(sentence)
             return {"depTree": depTree, "sentence":sentence}
 
-    def predictUpdate(self, newLabel):
-        sentencePair = dataManager.getData("currentPair")
-        att, pred = self.predictionUpdateHook(sentencePair, newLabel)
-        # print att, pred
-        dataManager.setData("attention", att)
+    def predictUpdate(self, newLabel, iteration, encoderFlag, attFlag, classFlag ):
+        print "predictUpdate", newLabel, iteration, encoderFlag, attFlag, classFlag
+        sentencePair = dataManager.getData("currentPair")['sentences']
+        att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, encoderFlag, attFlag, classFlag)
+        print att, pred
+
+        # dataManager.setData("attention", att)
         dataManager.setData("predictionUpdate", pred)
+
+        #update other predictions
+        self.predictAll()
 
     def predict(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
@@ -191,17 +205,18 @@ class textEntailVisModule(visModule):
     def predictAll(self):
         allSourceSens = None
         allTargetSens = None
+        sentencePair = dataManager.getData("currentPair")['sentences'];
         if dataManager.getData("allSourceSens") is not None:
             allSourceSens = dataManager.getData("allSourceSens")
         else:
-            allSourceSens = [dataManager.getData("currentPair")[0]]
+            allSourceSens = [sentencePair[0]]
         if dataManager.getData("allTargetSens") is not None:
             allTargetSens = dataManager.getData("allTargetSens")
         else:
-            allTargetSens = [dataManager.getData("currentPair")[1]]
+            allTargetSens = [sentencePair[1]]
         # print "original s, t:"
         # print allSourceSens, allTargetSens
-        if len(allSourceSens) == 0 and len(allTargetSens):
+        if len(allSourceSens) <= 1 and len(allTargetSens) <= 1:
             return
 
         allPairsPrediction = np.zeros( (len(allSourceSens), len(allTargetSens), 3) )

@@ -20,11 +20,14 @@ visLayout = {
 
 #setup interface
 modelVis = textEntailVisModule(visLayout)
+
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
+modelVis.setPredictionUpdateHook(model.updatePrediction)
+modelVis.setAttentionUpdateHook(model.updateAttention)
+
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
 modelVis.setSentenceParserHook(dep.getDependencyTree)
-# modelVis.predictionChangeHook()
 
 #open browser for visualization
 # modelVis.show()
