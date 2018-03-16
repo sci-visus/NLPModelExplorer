@@ -20,7 +20,8 @@ from embeddings import *
 
 
 parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--res', help="Path to resource files, separated by comma.", default="")
+print type(parser)
+# parser.add_argument('--res', help="Path to resource files, separated by comma.", default="")
 parser.add_argument('--load_file', help="Path from where model to be loaded.", default="model")
 
 ## pipeline specs
@@ -91,6 +92,7 @@ def overfit_to_ex(opt, shared, wv, optim, m, ex):
 	# zero out previous gradient and do backward pass
 	m.zero_grad()
 	loss.backward()
+	print loss
 
 	# zero out some gradients before update
 	if opt.zero_out_encoder == 1:
@@ -102,9 +104,9 @@ def overfit_to_ex(opt, shared, wv, optim, m, ex):
 
 	# update
 	optim.step(shared)
-
 	total_loss = loss.data[0]
-
+	# print "total_loss", total_loss
+	y_dist = m.forward(word_vecs1, word_vecs2)
 	# return the updated model, and y prediction (probabilities)
 	return m, y_dist.data.exp()
 
@@ -112,6 +114,7 @@ def overfit_to_ex(opt, shared, wv, optim, m, ex):
 
 def main(args):
 	opt = parser.parse_args(args)
+	print opt, type(opt)
 	shared = Holder()
 
 	torch.manual_seed(opt.seed)
@@ -134,7 +137,7 @@ def main(args):
 		optim.cuda()
 
 	# loading data
-	res_files = None if opt.res == '' else opt.res.split(',')
+	# res_files = None if opt.res == '' else opt.res.split(',')
 
 
 	################### some options
@@ -157,8 +160,8 @@ def main(args):
 	m, y = overfit_to_ex(opt, shared, embeddings, optim, pipeline, ex)
 	print(y)
 	# print(shared.att_soft1.grad)
-	m, y = overfit_to_ex(opt, shared, embeddings, optim, pipeline, ex)
-	print(y)
+	# m, y = overfit_to_ex(opt, shared, embeddings, optim, pipeline, ex)
+	# print(y)
 	# print(shared.att_soft1.grad)
 
 

@@ -58,28 +58,26 @@ class modelInterface:
             word_vecs='../data/glove.hdf5')
         '''
         opt = argparse.Namespace()
-        opt.att_output=''
+        # opt.att_output=''
         opt.attention=attention
         opt.classifier=classifier
-        opt.constr=''
-        opt.data = '../data/snli_1.0/snli_1.0-val.hdf5' #validation dataset
+        # opt.constr=''
+        # opt.data = '../data/snli_1.0/snli_1.0-val.hdf5' #validation dataset
         opt.dropout = dropout
         opt.encoder = encoder
         opt.fix_word_vecs=1
-        opt.forward_hooks = ""
+        # opt.forward_hooks = ""
 
         opt.gpuid=-1
         opt.hidden_size=200
         opt.load_file=model
-        opt.num_att_labels=1
+        # opt.num_att_labels=1
         opt.num_labels=3
         opt.seed=3435
         opt.word_vec_size=300
         opt.word_vecs=wordVec
 
-        #for MIRO optimization
-        opt.seed = 3435
-        opt.dropout = 0.0
+        #for MIRA optimization
         opt.learning_rate = 0.05
         opt.zero_out_encoder = 0
         opt.zero_out_attention = 0
@@ -88,6 +86,7 @@ class modelInterface:
         ##### whether or not using raw attention #####
         opt.customize_att = 0
         self.opt = opt
+        print opt, type(opt)
 
         #read the wordDict
         self.tokenMap = {}
@@ -97,19 +96,20 @@ class modelInterface:
                 toks = l.split(" ")
                 self.tokenMap[toks[0]] = int(toks[1])-1
 
-        torch.manual_seed(opt.seed)
+        self.shared = Holder()
+
+        torch.manual_seed(self.opt.seed)
         if opt.gpuid != -1:
-            torch.cuda.set_device(opt.gpuid)
-            torch.cuda.manual_seed_all(opt.seed)
+            torch.cuda.set_device(self.opt.gpuid)
+            torch.cuda.manual_seed_all(self.opt.seed)
 
         #evaluate
-        self.shared = Holder()
-        self.embeddings = WordVecLookup(opt)
+        self.embeddings = WordVecLookup(self.opt)
         self.pipeline = Pipeline(self.opt, self.shared)
 
         # initialize
-        print('initializing model from {0}'.format(opt.load_file))
-        param_dict = load_param_dict('{0}.hdf5'.format(opt.load_file))
+        print('initializing model from {0}'.format(self.opt.load_file))
+        param_dict = load_param_dict('{0}.hdf5'.format(self.opt.load_file))
         self.pipeline.set_param_dict(param_dict)
 
         self.optim = Adagrad(self.pipeline, self.opt)
@@ -122,6 +122,7 @@ class modelInterface:
         if opt.gpuid != -1:
             self.embeddings.cuda()
             self.pipeline = self.pipeline.cuda()
+            self.optim = self.optim.cuda()
 
 
     def mapToToken(self, sentence):
@@ -213,14 +214,15 @@ class modelInterface:
     ############ pipeline update ################
 
     '''
-        update pipeline based on user assign new prediction
+        update pipeline based on user assigned new prediction
     '''
     def updatePrediction(self, sentences, newLabel, encoderFlag=True, attFlag=True, classFlag=True):
 
-        self.opt.zero_out_encoder = 1 if encoderFlag else 0
-        self.opt.zero_out_attention = 1 if attFlag else 0
-        self.opt.zero_out_classifier = 1 if classFlag else 0
+        self.opt.zero_out_encoder = 0 if encoderFlag else 1
+        self.opt.zero_out_attention = 0 if attFlag else 1
+        self.opt.zero_out_classifier = 0 if classFlag else 1
         y_gold = torch.LongTensor([newLabel])
+        # print "y_gold", y_gold
 
         #map to token
         sourceSen = sentences[0]
@@ -229,23 +231,19 @@ class modelInterface:
         target = self.mapToToken(targetSen)
 
         # print source, target
-        wv_idx1 = Variable(source, requires_grad=False)
-        wv_idx2 = Variable(target, requires_grad=False)
-
         # Variable(torch.from_numpy(indices).cuda(), requires_grad=False)
         sent_l1 = source.shape[1]
         sent_l2 = target.shape[1]
-        word_vecs1 = self.embeddings(wv_idx1)
-        word_vecs2 = self.embeddings(wv_idx2)
 
         ex = (source, target, None, 1, sent_l1, sent_l2, y_gold)
+        # print ex
 
-        m, pred = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
-        print pred
-        m, pred = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
-        print pred
-        m, pred = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
-        print pred
+        m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
+        print y
+        # m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
+        # print y
+        # m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
+        # print y
 
     def updateAttention(self, attMatrix):
         self.opt.customized = 1
