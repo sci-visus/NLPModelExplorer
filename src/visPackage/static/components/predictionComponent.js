@@ -90,18 +90,17 @@ class predictionComponent extends baseComponent {
             case "allPairsPrediction":
                 this.onUpdateAllPairPrediction();
                 break;
-            case "groundTruthLabel":
-                console.log(this.data['groundTruthLabel']);
-                this.onUpdateGroundTruth(this.data['groundTruthLabel']);
-                break;
             case "currentPair":
                 this.clear();
+                console.log(this.data['currentPair']);
+                this.onUpdateGroundTruth(this.data['currentPair']["label"]);
                 break;
         }
     }
 
     clear() {
         if (this.svg) {
+            this.onUpdateGroundTruth("");
             this.svg.select(this.div + "overlay").remove();
             this.svg.selectAll("circle").remove();
             this.svg.selectAll(".dotPredPath").remove();
@@ -131,6 +130,7 @@ class predictionComponent extends baseComponent {
     }
 
     onUpdateGroundTruth(label) {
+        // console.log(label);
         if (label === "neutral") {
             this.Neutral.style("fill", "mediumseagreen");
             this.Contradiction.style("fill", "grey");
@@ -235,14 +235,15 @@ class predictionComponent extends baseComponent {
                     else return 3;
                 })
                 .style("fill", (d, i) => {
-                    if (i === pLen - 1) {
-                        if (pLen === 1)
-                            return '#3F3F3F';
-                        else
-                            return 'red';
-                    } else {
-                        return '#3F3F3F';
-                    }
+                    return "#3F3F3F";
+                    // if (i === pLen - 1) {
+                    //     if (pLen === 1)
+                    //         return '#3F3F3F';
+                    //     else
+                    //         return 'grey';
+                    // } else {
+                    //     return '#3F3F3F';
+                    // }
                 })
                 .style("stroke", "white")
                 // .style("stroke", 'black')

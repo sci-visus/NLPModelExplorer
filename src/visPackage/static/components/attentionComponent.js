@@ -152,13 +152,11 @@ class attentionComponent extends baseComponent {
     }
 
     handleParsedSentence(parseResult) {
-        if (parseResult["sentence"] === this.data["currentPair"][
-                "sentences"
-            ][0]) {
+        let parsedSen = parseResult["sentence"];
+        if (parsedSen == this.data["currentPair"]["sentences"][0]) {
             //draw structure
             this.srcDepTreeData = parseResult["depTree"];
-        } else if (parseResult["sentence"] === this.data[
-                "currentPair"]["sentences"][1]) {
+        } else if (parsedSen == this.data["currentPair"]["sentences"][1]) {
             this.targDepTreeData = parseResult["depTree"];
         }
         this.draw();

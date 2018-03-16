@@ -118,7 +118,10 @@ class sentenceComponent extends baseComponent {
         // var groundTruthLabel = this.data["sentenceList"][index]["pred"]
         // console.log(groundTruthLabel);
         // this.onReceiveCurrentPair()
-        this.data["currentPair"]["sentences"] = currentPair;
+        this.data["currentPair"] = {
+            "sentences": currentPair,
+            "label": this.data["sentenceList"][index]["pred"]
+        };
         d3.select(this.div + "src").property("value", currentPair[0]);
         d3.select(this.div + "targ").property("value", currentPair[1]);
 
