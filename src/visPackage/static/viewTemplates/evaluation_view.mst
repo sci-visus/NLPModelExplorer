@@ -1,5 +1,5 @@
-<div style="margin-top: 10px; margin-left:10px; margin-right:10px; margin-bottom:10px" >
-    <div class="input-group input-group-sm mb-3">
+<div style="margin-top: 5px; margin-left:5px; margin-right:5px; margin-bottom:5px">
+    <div  class="input-group input-group-sm mb-3">
         <div class="input-group-prepend ">
             <label class="input-group-text" for="inputGroupSelect01">Data</label>
         </div>
@@ -7,6 +7,6 @@
         <select id="{{id}}selectData" class="form-control">
         </select>
     </div>
-    <div id='{{id}}' class="content">
-    </div>
+</div>
+<div id='{{id}}' class="content">
 </div>

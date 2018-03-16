@@ -108,6 +108,12 @@ class treeMapPlot {
                     .attr("stroke", "white")
                     .on("click", _ => {
                         this.selectCell(d);
+                    }).on("mouseover", function(_) {
+                        d3.select(this).attr("fill", "lightgrey");
+                    })
+                    .on("mouseout", function(_) {
+                        d3.select(this).attr("fill", colormap(d.data
+                            .key));
                     });
                 g.append("text")
                     .attr("x", (d.x0 + d.x1) * 0.5)

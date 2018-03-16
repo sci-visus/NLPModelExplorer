@@ -10,4 +10,4 @@ model = modelInterface(
 pair = ["Two women are embracing while holding to go packages .\n",
 "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n"]
 
-model.updatePrediction(pair, 0)
+model.updatePrediction(pair, 0, 4, True, True, False)

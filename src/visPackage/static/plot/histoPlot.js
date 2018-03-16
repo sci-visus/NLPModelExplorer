@@ -21,7 +21,8 @@ class histoPlot {
         this.draw();
     }
 
-    setSample(sample) {
+    setSample(sample, accessor) {
+        this.accessor = accessor;
         this.sample = sample;
         this.draw();
     }
@@ -45,8 +46,8 @@ class histoPlot {
             if (samples.length === 0)
                 return;
             // Generate a histogram using twenty uniformly-spaced bins.
-            var minS = Math.min.apply(null, samples);
-            var maxS = Math.max.apply(null, samples);
+            var minS = Math.min.apply(null, samples.map(this.accessor));
+            var maxS = Math.max.apply(null, samples.map(this.accessor));
             // console.log("Sample range:", minS, maxS);
             x = d3.scaleLinear()
                 .domain([minS, maxS])
@@ -54,6 +55,7 @@ class histoPlot {
             var histogram = d3.histogram()
                 .domain([minS, maxS])
                 .thresholds(x.ticks(binNum))
+                .value(this.accessor);
             bins = histogram(samples);
             y = d3.scaleLinear()
                 .domain([0, d3.max(bins, function(d) {
@@ -84,8 +86,17 @@ class histoPlot {
                 return width;
             })
             .attr("height", function(d) {
-                console.log(pos[1] + height - y(d.length));
+                // console.log(pos[1] + height - y(d.length));
                 return pos[1] + height - y(d.length);
+            })
+            .on("click", (d, i) => {
+                this.callback(d);
+            })
+            .on("mouseover", function(d) {
+                d3.select(this).attr("fill", "lightgrey");
+            })
+            .on("mouseout", function(d) {
+                d3.select(this).attr("fill", "grey");
             });
         // add the x Axis
         if (this.axisXflag) {

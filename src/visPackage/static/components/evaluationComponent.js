@@ -51,11 +51,11 @@ class evaluationComponent extends baseComponent {
             this.histo.bindSelectionCallback(this.updateScatterplot.bind(
                 this));
 
-            // this.scatter = new scatterPlot(this.svg, [this.width * 0.5, 0], [
-            //     this.width * 0.5, this.height
-            // ]);
-            // this.scatter.bindSelectionCallback(this.senetenceSelection.bind(
-            //     this));
+            this.scatter = new scatterPlot(this.svg, [this.width * 0.5, 0], [
+                this.width * 0.5, this.height
+            ]);
+            this.scatter.bindSelectionCallback(this.senetenceSelection.bind(
+                this));
 
 
         } else {
@@ -70,9 +70,9 @@ class evaluationComponent extends baseComponent {
             this.histo.update([0, this.height * 0.6], [
                 this.width * 0.5, this.height * 0.4
             ]);
-            // this.scatter.update([this.width * 0.5, 0], [
-            //     this.width * 0.5, this.height
-            // ]);
+            this.scatter.update([this.width * 0.5, 0], [
+                this.width * 0.5, this.height
+            ]);
             // this.svgSave.updatePos([this.width - 10, 10])
             // this.svgSave.draw();
         }
@@ -93,14 +93,15 @@ class evaluationComponent extends baseComponent {
     }
 
     updateHisto(data) {
-        var stabilities = data.map(d => d.stability);
+        // var stabilities = data.map(d => d.stability);
         // console.log(stabilities);
-        this.histo.setSample(stabilities);
+        this.histo.setSample(data, d => d.stability);
     }
 
     updateScatterplot(data) {
         //index get data
-        var data = [];
+        // var data = [];
+        console.log(data);
         // this.scatterplot.setData();
     }
 

@@ -78,7 +78,7 @@ class modelInterface:
         opt.word_vecs=wordVec
 
         #for MIRA optimization
-        opt.learning_rate = 0.05
+        opt.learning_rate = 0.02
         opt.zero_out_encoder = 0
         opt.zero_out_attention = 0
         opt.zero_out_classifier = 0
@@ -216,7 +216,7 @@ class modelInterface:
     '''
         update pipeline based on user assigned new prediction
     '''
-    def updatePrediction(self, sentences, newLabel, encoderFlag=True, attFlag=True, classFlag=True):
+    def updatePrediction(self, sentences, newLabel, interation=1, encoderFlag=True, attFlag=True, classFlag=True):
 
         self.opt.zero_out_encoder = 0 if encoderFlag else 1
         self.opt.zero_out_attention = 0 if attFlag else 1
@@ -237,9 +237,9 @@ class modelInterface:
 
         ex = (source, target, None, 1, sent_l1, sent_l2, y_gold)
         # print ex
-
-        m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
-        print y
+        for i in range(interation):
+            m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
+            print y
         # m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
         # print y
         # m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
