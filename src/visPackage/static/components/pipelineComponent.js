@@ -84,6 +84,25 @@ class pipelineComponent extends baseComponent {
         this.draw();
     }
 
+    parseDataUpdate(msg) {
+        super.parseDataUpdate(msg);
+        switch (msg["name"]) {
+            case "pipelineState":
+                states = this.data["pipelineState"]
+                this.updatePipelineState(states)
+                break
+        }
+    }
+
+    updatePipelineState(states) {
+        if (this.items) {
+            for (var i = 0; this.items.length; i++) {
+                this.items[i].setState(states[i] === 0 ? false : true);
+            }
+        }
+    }
+
+
     draw() {
         this._updateWidthHeight();
 

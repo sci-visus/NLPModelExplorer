@@ -12,6 +12,7 @@ class predictionComponent extends baseComponent {
         //subscribe to data
         this.subscribeDatabyNames(["allSourceSens", "allTargetSens",
             "prediction", "allPairsPrediction", "originalPair",
+            "groundTruthLabel", "currentPair"
         ]);
 
         this.margin = {
@@ -41,7 +42,7 @@ class predictionComponent extends baseComponent {
 
         this.svg.select(this.div + "label").remove();
         var label = this.svg.append("g").attr("id", this.uuid + "label");
-        label.append('text')
+        this.Neutral = label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 112 - 20)
             .attr("y", -7)
@@ -50,7 +51,7 @@ class predictionComponent extends baseComponent {
             .style("fill", "grey");
 
         //neutral
-        label.append('text')
+        this.Contradiction = label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 0 - 10)
             .attr("y", 194 + 17)
@@ -59,7 +60,7 @@ class predictionComponent extends baseComponent {
             .style("fill", "grey");
 
         //contradiction
-        label.append('text')
+        this.Entailment = label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 224 - 55)
             .attr("y", 194 + 17)
@@ -89,6 +90,22 @@ class predictionComponent extends baseComponent {
             case "allPairsPrediction":
                 this.onUpdateAllPairPrediction();
                 break;
+            case "groundTruthLabel":
+                console.log(this.data['groundTruthLabel']);
+                this.onUpdateGroundTruth(this.data['groundTruthLabel']);
+                break;
+            case "currentPair":
+                this.clear();
+                break;
+        }
+    }
+
+    clear() {
+        if (this.svg) {
+            this.svg.select(this.div + "overlay").remove();
+            this.svg.selectAll("circle").remove();
+            this.svg.selectAll(".dotPredPath").remove();
+            this.svg.selectAll(".predPath").remove();
         }
     }
 
@@ -110,6 +127,43 @@ class predictionComponent extends baseComponent {
 
     //trigger when python return optimized
     onUpdateOptimizedPrediction() {
+
+    }
+
+    onUpdateGroundTruth(label) {
+        if (label === "neutral") {
+            this.Neutral.style("fill", "mediumseagreen");
+            this.Contradiction.style("fill", "grey");
+            this.Entailment.style("fill", "grey");
+
+            this.Neutral.style("font-weight", "bold");
+            this.Contradiction.style("font-weight", "normal");
+            this.Entailment.style("font-weight", "normal");
+        } else if (label === "contradiction") {
+            this.Neutral.style("fill", "grey");
+            this.Contradiction.style("fill", "mediumseagreen");
+            this.Entailment.style("fill", "grey");
+
+            this.Neutral.style("font-weight", "normal");
+            this.Contradiction.style("font-weight", "bold");
+            this.Entailment.style("font-weight", "normal");
+        } else if (label === "entailment") {
+            this.Neutral.style("fill", "grey");
+            this.Contradiction.style("fill", "grey");
+            this.Entailment.style("fill", "mediumseagreen");
+
+            this.Neutral.style("font-weight", "normal");
+            this.Contradiction.style("font-weight", "normal");
+            this.Entailment.style("font-weight", "bold");
+        } else {
+            this.Neutral.style("fill", "grey");
+            this.Contradiction.style("fill", "grey");
+            this.Entailment.style("fill", "grey");
+
+            this.Neutral.style("font-weight", "normal");
+            this.Contradiction.style("font-weight", "normal");
+            this.Entailment.style("font-weight", "normal");
+        }
 
     }
 

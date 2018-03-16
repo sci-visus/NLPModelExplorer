@@ -115,14 +115,16 @@ class sentenceComponent extends baseComponent {
         var currentPair = [this.data["sentenceList"][index]["src"],
             this.data["sentenceList"][index]["targ"]
         ];
-        // console.log(currentPair);
-        // this.onReceiveCurrentPair()
+        var groundTruthLabel = this.data["sentenceList"][index]["pred"]
+            // console.log(groundTruthLabel);
+            // this.onReceiveCurrentPair()
         this.data["currentPair"] = currentPair;
         d3.select(this.div + "src").property("value", currentPair[0]);
         d3.select(this.div + "targ").property("value", currentPair[1]);
 
         //update rest of the views
         this.setData("currentPair", currentPair);
+        this.setData("groundTruthLabel", groundTruthLabel);
 
         this.clearDropdown(this.div + "srcInput");
         this.clearDropdown(this.div + "targInput");
