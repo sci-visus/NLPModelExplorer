@@ -57,7 +57,6 @@ class evaluationComponent extends baseComponent {
             this.scatter.bindSelectionCallback(this.senetenceSelection.bind(
                 this));
 
-
         } else {
             this.svgContainer
                 .attr("width", this.pwidth)
@@ -100,9 +99,15 @@ class evaluationComponent extends baseComponent {
 
     updateScatterplot(data) {
         //index get data
-        // var data = [];
+        var plotData = [];
         console.log(data);
-        // this.scatterplot.setData();
+
+        plotData.push(data.map(d => d.stability));
+        plotData.push(data.map(d => d.perturbCount));
+
+        this.scatter.setData(plotData, ["stability", "perturbCount"], [
+            0, 1
+        ], [0]);
     }
 
     senetenceSelection(indice) {

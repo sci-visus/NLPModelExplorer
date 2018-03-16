@@ -45,7 +45,6 @@ class scatterPlot {
 
     bindSelectionCallback(func) {
         this.selectionCallback = func;
-
     }
 
     bindSubselectionCallback(func) {
@@ -60,9 +59,18 @@ class scatterPlot {
 
     }
 
+
     drawD3() {
-        if (this._isValid()) {
+        if (this.data) {
+            // console.log(this.data);
             // this._updateWidthHeight();
+            var zip = function(data) {
+                let a = data[0];
+                let b = data[1];
+                let c = data[2];
+                // console.log(a, b, c);
+                return a.map((e, i) => [e, b[i], c[i]])
+            }
 
             this.plotData = zip([this.data[this.xIndex],
                 this.data[this.yIndex],
