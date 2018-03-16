@@ -122,6 +122,7 @@ class pipelineComponent extends baseComponent {
                 var item = new pipelineItemPlot(this.svg,
                     pos, size, pipelineData[i]["name"]
                 );
+                item.setGraidentHisto([1, 2, 4, 5, 3, 1]);
                 item.draw();
                 this.items.push(item);
             }

@@ -24,6 +24,13 @@ class histoPlot {
     setSample(sample, accessor) {
         this.accessor = accessor;
         this.sample = sample;
+        this.mode = "sample";
+        this.draw();
+    }
+
+    setHisto(histoList) {
+        this.hist = histoList;
+        this.mode = "hist";
         this.draw();
     }
 
@@ -63,40 +70,72 @@ class histoPlot {
                 })])
                 .range([height + pos[1], pos[1]]);
             // console.log(bins);
+            // console.log(bins);
+            var bar = this.svg.selectAll(".bar")
+                .data(bins)
+                .enter().append("rect")
+                .attr("class", "bar")
+                // .attr("x", 1)
+                .attr("fill", "lightgrey")
+                .attr("transform", function(d) {
+                    return "translate(" + x(d.x0) + "," + y(d.length) +
+                        ")";
+                })
+                .attr("width", function(d) {
+                    var width = x(d.x1) - x(d.x0) - 1;
+                    if (width < 0)
+                        width == 0;
+                    // console.log(width);
+                    return width;
+                })
+                .attr("height", function(d) {
+                    // console.log(pos[1] + height - y(d.length));
+                    return pos[1] + height - y(d.length);
+                })
+                .on("click", (d, i) => {
+                    this.callback(d);
+                })
+                .on("mouseover", function(d) {
+                    d3.select(this).style("fill", "grey");
+                })
+                .on("mouseout", function(d) {
+                    d3.select(this).style("fill", "lightgrey");
+                });
         } else if (this.mode === "hist") {
             //directly provide the histogram bin size
+            let barWidth = width / this.hist.length - 2;
+            x = d3.scaleLinear()
+                .domain([0, this.hist.length])
+                .range([this.pos[0], this.pos[0] + width]);
+            y = d3.scaleLinear()
+                .domain([0, d3.max(this.hist)])
+                .range([height + pos[1], pos[1]]);
+            var bar = this.svg.selectAll(".bar")
+                .data(this.hist)
+                .enter().append("rect")
+                .attr("class", "bar")
+                .attr("fill", "lightgrey")
+                .attr("x", function(d, i) {
+                    return x(i);
+                })
+                .attr("width", barWidth)
+                .attr("y", function(d) {
+                    return y(d);
+                })
+                .attr("height", function(d) {
+                    return pos[1] + height - y(d);
+                }).on("click", (d, i) => {
+                    this.callback(d);
+                })
+                .on("mouseover", function(d) {
+                    d3.select(this).style("fill", "grey");
+                })
+                .on("mouseout", function(d) {
+                    d3.select(this).style("fill", "lightgrey");
+                });
         }
 
-        // console.log(bins);
-        var bar = this.svg.selectAll(".bar")
-            .data(bins)
-            .enter().append("rect")
-            .attr("class", "bar")
-            // .attr("x", 1)
-            .attr("fill", "lightgrey")
-            .attr("transform", function(d) {
-                return "translate(" + x(d.x0) + "," + y(d.length) + ")";
-            })
-            .attr("width", function(d) {
-                var width = x(d.x1) - x(d.x0) - 1;
-                if (width < 0)
-                    width == 0;
-                // console.log(width);
-                return width;
-            })
-            .attr("height", function(d) {
-                // console.log(pos[1] + height - y(d.length));
-                return pos[1] + height - y(d.length);
-            })
-            .on("click", (d, i) => {
-                this.callback(d);
-            })
-            .on("mouseover", function(d) {
-                d3.select(this).style("fill", "grey");
-            })
-            .on("mouseout", function(d) {
-                d3.select(this).style("fill", "lightgrey");
-            });
+
         // add the x Axis
         if (this.axisXflag) {
             this.svg.append("g")

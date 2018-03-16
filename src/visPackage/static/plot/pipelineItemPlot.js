@@ -14,6 +14,10 @@ class pipelineItemPlot {
         this.draw();
     }
 
+    setGraidentHisto(histo) {
+        this.histoList = histo;
+    }
+
     draw() {
         // console.log("draw pipeline item");
         if (this.svg.select("rect").empty()) {
@@ -89,13 +93,14 @@ class pipelineItemPlot {
                 .style("pointer-events", "none");
 
             //create histogram to disable distribution of value update
-            let hist = new histoPlot(this.svg, [
+            this.hist = new histoPlot(this.svg, [
                 hiddenLayerBoxPos[0] + 2.5,
                 hiddenLayerBoxPos[1] + 2.5
             ], [
                 hiddenLayerBoxSize[0] - 5,
                 hiddenLayerBoxSize[1] - 30
             ]);
+            this.hist.setHisto(this.histoList);
 
         } else {
             this.svg.select("rect")
