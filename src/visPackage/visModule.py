@@ -118,7 +118,7 @@ class textEntailVisModule(visModule):
     def loadSummaryStatistic(self, filename):
         with open(filename) as json_data:
             statistics = json.load(json_data)
-            print "loadSummaryStatistic: ", type(statistics), type(statistics[0])
+            # print "loadSummaryStatistic: ", type(statistics), type(statistics[0])
             dataManager.setData("evaluationStatistics", statistics)
 
     # an sentence pair index (self.index) is used as handle for the correspondence
@@ -167,7 +167,7 @@ class textEntailVisModule(visModule):
     def predictUpdate(self, newLabel):
         sentencePair = dataManager.getData("currentPair")
         att, pred = self.predictionUpdateHook(sentencePair, newLabel)
-        print att, pred
+        # print att, pred
         dataManager.setData("attention", att)
         dataManager.setData("predictionUpdate", pred)
 
@@ -200,7 +200,7 @@ class textEntailVisModule(visModule):
         else:
             allTargetSens = [dataManager.getData("currentPair")[1]]
         # print "original s, t:"
-        print allSourceSens, allTargetSens
+        # print allSourceSens, allTargetSens
         if len(allSourceSens) == 0 and len(allTargetSens):
             return
 

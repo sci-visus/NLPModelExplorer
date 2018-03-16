@@ -8,7 +8,7 @@ Based class for attention visualization
 class attentionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["attention", "currentPair"]);
+        this.subscribeDatabyNames(["attention", "currentPair", "highlight"]);
 
         this.margin = {
             top: 10,
@@ -109,31 +109,36 @@ class attentionComponent extends baseComponent {
 
                 this.draw();
 
+                //parse the sentence
+                let currentPair = this.data["currentPair"]["sentences"];
+                if (this.srcDepTreeData === undefined) {
+                    this.callFunc("parseSentence", {
+                        "sentence": currentPair[0]
+                    });
+                }
+                if (this.targDepTreeData === undefined) {
+                    this.callFunc("parseSentence", {
+                        "sentence": currentPair[1]
+                    });
+                }
+
                 break;
 
             case "currentPair":
                 let pair = msg["data"]["data"]["sentences"];
-                // console.log(pair);
-
                 if (this.oldPair) {
                     //clear the current dependency
                     if (this.oldPair[0].length !== pair[0].length) {
-                        this.callFunc("parseSentence", {
-                            "sentence": pair[0]
-                        });
+                        this.srcDepTreeData = undefined;
                     }
                     if (this.oldPair[1].length !== pair[1].length) {
-                        this.callFunc("parseSentence", {
-                            "sentence": pair[1]
-                        });
+                        this.targDepTreeData = undefined;
                     }
                 }
 
-                if (pair) {
-                    this.srcWords = pair[0].match(/\S+/g);
-                    this.targWords = pair[1].match(/\S+/g);
-                    this.oldPair = pair;
-                }
+                this.srcWords = pair[0].match(/\S+/g);
+                this.targWords = pair[1].match(/\S+/g);
+                this.oldPair = pair;
 
                 break;
         }
@@ -153,7 +158,7 @@ class attentionComponent extends baseComponent {
             //draw structure
             this.srcDepTreeData = parseResult["depTree"];
         } else if (parseResult["sentence"] === this.data[
-                "currentPair"][1]) {
+                "currentPair"]["sentences"][1]) {
             this.targDepTreeData = parseResult["depTree"];
         }
         this.draw();

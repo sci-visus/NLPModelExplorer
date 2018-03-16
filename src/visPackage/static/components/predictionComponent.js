@@ -269,10 +269,12 @@ class predictionComponent extends baseComponent {
 
                         this.callFunc("updateAttention");
 
-                        this.setData("currentPair", [
+                        this.data["currentPair"]["sentences"] = [
                             source,
                             target
-                        ]);
+                        ];
+                        this.setData("currentPair", this.data[
+                            "currentPair"]);
                     }
                 })
                 .call(d3.drag()
