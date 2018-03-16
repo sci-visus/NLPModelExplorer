@@ -102,6 +102,7 @@ class textEntailVisModule(visModule):
         dataManager.setData("sentenceList", exampleData)
         dataManager.setData("originalPair", [exampleData[0]['src'], exampleData[0]['targ']])
         dataManager.setData("currentPair", [exampleData[0]['src'], exampleData[0]['targ']])
+        dataManager.setData("groundTruthLabel", exampleData[0]['pred'])
         return app.send_static_file('index.html')
 
     @app.route('/<name>')
