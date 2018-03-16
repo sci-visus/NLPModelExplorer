@@ -216,6 +216,8 @@ class textEntailVisModule(visModule):
             allTargetSens = [sentencePair[1]]
         # print "original s, t:"
         # print allSourceSens, allTargetSens
+
+        ###### if there is only one pair #####
         if len(allSourceSens) <= 1 and len(allTargetSens) <= 1:
             return
 
@@ -223,6 +225,7 @@ class textEntailVisModule(visModule):
         # allAttention = [None]
         for i, source in enumerate(allSourceSens):
             for j, target in enumerate(allTargetSens):
+                ######### only one perturbation is allow in each pair #######
                 if i==0 or j==0:
                     predResult = self.predictionHook([source, target])
                     allPairsPrediction[i,j,:] = predResult

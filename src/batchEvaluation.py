@@ -11,6 +11,7 @@ from sentenceGenerator import *
 import pickle
 import itertools
 # from __future__ import print_function
+labels = ["entailment", "neutral", "contradiction"]
 
 class batchEvaluation:
     def __init__(self, srcFile, targFile, labelFile, saveFileName=None):
@@ -78,28 +79,11 @@ class batchEvaluation:
 
         # json output only have per original pair information
         self.jsonOut = []
-        labels = ["entailment", "neutral", "contradiction"]
+
         for index, origIndex in enumerate(self.storage["mapToOrigIndex"]):
 
             # if index > 200:
             #     break
-
-            pred = labels[np.argmax(self.storage["pred"][index])]
-            # print  self.storage["mapToOrigIndex"]
-            # origIndex = self.storage["mapToOrigIndex"][index]
-            # print len(self.storage["origLabel"]), origIndex
-            # print len(self.storage["origPred"])
-            origLabel = self.storage["origLabel"][origIndex]
-            # print origLabel, pred
-            count = count + 1
-            if pred != origLabel:
-                wrongPred = wrongPred + 1
-                # print wrongPred
-
-            allPred = allPred + 1
-
-            #store the string for both the ground truth and pred label
-            self.storage["predCase"].append(origLabel+'-'+pred)
 
             if preOrigIndex and preOrigIndex != origIndex:
                 # self.storage["origPerturbCount"] = count
@@ -119,14 +103,31 @@ class batchEvaluation:
                     "predict": origLabel+'-'+predLabel,
                     "correctness": origLabel == predLabel,
                     "trueLabel":origLabel,
-                    "perturbCount":count
+                    "perturbCount":allPred
                 }
                 self.jsonOut.append(item)
 
                 #### reset variable ####
-                count = 0
                 wrongPred = 0
                 allPred = 0
+            else:
+                pred = labels[np.argmax(self.storage["pred"][index])]
+                # print  self.storage["mapToOrigIndex"]
+                # origIndex = self.storage["mapToOrigIndex"][index]
+                # print len(self.storage["origLabel"]), origIndex
+                # print len(self.storage["origPred"])
+                origLabel = self.storage["origLabel"][origIndex]
+                # print origLabel, pred
+
+                #store the string for both the ground truth and pred label
+                self.storage["predCase"].append(origLabel+'-'+pred)
+
+                if pred != origLabel:
+                    print pred, origLabel
+                    wrongPred = wrongPred + 1
+                    # print wrongPred
+
+                allPred = allPred + 1
 
             preOrigIndex = origIndex
 
@@ -155,7 +156,7 @@ class batchEvaluation:
 
         num_lines = sum(1 for line in open(self.labelFile))
         index = 0
-        labels = ["entailment", "neutral", "contradiction"]
+
         for _, (src_orig, targ_orig, label_orig) in \
             enumerate(itertools.izip(open(self.srcFile,'r'),
             open(self.targFile,'r'),open(self.labelFile,'r'))):

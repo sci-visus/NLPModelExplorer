@@ -66,16 +66,27 @@ class treeMapPlot {
             "contradiction-neutral",
 
         ]).range([
-            "#00B31A",
-            "#59D966",
-            "#B3FFB3",
+            // "#00B31A",
+            // "#59D966",
+            // "#B3FFB3",
 
-            "#FF5C05",
-            "#FF7726",
+            "#59D966",
+            "#59D966",
+            "#59D966",
+
+            // "#FF5C05",
+            // "#FF7726",
+            // "#FF9248",
+            // "#FFAA69",
+            // "#FFC08B",
+            // "#FFD4AD"
+
             "#FF9248",
-            "#FFAA69",
-            "#FFC08B",
-            "#FFD4AD"
+            "#FF9248",
+            "#FF9248",
+            "#FF9248",
+            "#FF9248",
+            "#FF9248"
         ]);
         const treemap = d3.treemap().size([width, height]);
 
@@ -119,7 +130,7 @@ class treeMapPlot {
                     .attr("x", (d.x0 + d.x1) * 0.5)
                     .attr("y", (d.y0 + d.y1) * 0.5 + 5)
                     .text(_ => {
-                        var str = d.data.key.replace("-", "->");
+                        var str = d.data.key.replace("-", "/");
                         str = str.replace(/neutral/g, "N");
                         str = str.replace(/entailment/g, "E");
                         str = str.replace(/contradiction/g, "C");

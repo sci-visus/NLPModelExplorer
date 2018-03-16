@@ -11,7 +11,7 @@ class predictionComponent extends baseComponent {
         //dict for prediction (groundTruth, p[3])
         //subscribe to data
         this.subscribeDatabyNames(["allSourceSens", "allTargetSens",
-            "prediction", "allPairsPrediction", "originalPair",
+            "prediction", "allPairsPrediction",
             "predictionUpdate", "currentPair"
         ]);
 
