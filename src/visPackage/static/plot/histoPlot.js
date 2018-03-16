@@ -68,13 +68,12 @@ class histoPlot {
         }
 
         // console.log(bins);
-
         var bar = this.svg.selectAll(".bar")
             .data(bins)
             .enter().append("rect")
             .attr("class", "bar")
             // .attr("x", 1)
-            .attr("fill", "grey")
+            .attr("fill", "lightgrey")
             .attr("transform", function(d) {
                 return "translate(" + x(d.x0) + "," + y(d.length) + ")";
             })
@@ -93,10 +92,10 @@ class histoPlot {
                 this.callback(d);
             })
             .on("mouseover", function(d) {
-                d3.select(this).attr("fill", "lightgrey");
+                d3.select(this).style("fill", "grey");
             })
             .on("mouseout", function(d) {
-                d3.select(this).attr("fill", "grey");
+                d3.select(this).style("fill", "lightgrey");
             });
         // add the x Axis
         if (this.axisXflag) {

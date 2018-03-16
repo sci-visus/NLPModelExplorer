@@ -24,6 +24,8 @@ class evaluationComponent extends baseComponent {
     }
 
     initSvg() {
+        this.pheight = this.pheight - this.topOffset;
+        this.height = this.height - this.topOffset;
         //create svg
         if (this.svgContainer === undefined) {
             this.svgContainer = d3.select(this.div).append("svg")
@@ -31,10 +33,10 @@ class evaluationComponent extends baseComponent {
                 .attr("height", this.pheight);
             this.svg = this.svgContainer
                 .append("g")
-                .attr("transform", "translate(" + this.margin.left + "," +
-                    this.margin.top + ")")
                 .attr("width", this.width)
                 .attr("height", this.height);
+            // .attr("transform", "translate(" + this.margin.left + "," +
+            //     this.margin.top + ")")
 
             // this.svgSave = new svgExporter(this.svgContainer, [this.width -
             //     10, 10
@@ -51,16 +53,21 @@ class evaluationComponent extends baseComponent {
             this.histo.bindSelectionCallback(this.updateScatterplot.bind(
                 this));
 
-            this.scatter = new scatterPlot(this.svg, [this.width * 0.5, 0], [
-                this.width * 0.5, this.height
-            ]);
+            this.scatter = new simpleScatterPlot(this.svg, [this.width *
+                0.5, 0
+            ], [this.width * 0.5, this.height]);
+
             this.scatter.bindSelectionCallback(this.senetenceSelection.bind(
                 this));
 
         } else {
             this.svgContainer
                 .attr("width", this.pwidth)
-                .attr("height", this.pheight)
+                .attr("height", this.pheight);
+
+            this.svg
+                .attr("width", this.width)
+                .attr("height", this.height);
 
             // this.svg.selectAll("text,rect,path").remove();
             this.treeMap.update([0, 0], [
@@ -80,9 +87,6 @@ class evaluationComponent extends baseComponent {
     draw() {
         this._updateWidthHeight();
         //apply top offset
-        this.pheight = this.pheight - this.topOffset;
-        this.height = this.height - this.topOffset;
-
         this.initSvg();
 
         if (this.statistic) {
@@ -95,31 +99,17 @@ class evaluationComponent extends baseComponent {
         // var stabilities = data.map(d => d.stability);
         // console.log(stabilities);
         this.histo.setSample(data, d => d.stability);
+        this.scatter.setData(data, ["stability", "perturb Count"],
+            d => [d.stability, d.perturbCount]);
     }
 
     updateScatterplot(data) {
-        //index get data
-        var plotData = [];
+        this.scatter.setData(data, ["stability", "perturbCount"],
+            d => [d.stability, d.perturbCount]);
+    }
+
+    senetenceSelection(data) {
         console.log(data);
-
-        plotData.push(data.map(d => d.stability));
-        plotData.push(data.map(d => d.perturbCount));
-
-        this.scatter.setData(plotData, ["stability", "perturbCount"], [
-            0, 1
-        ], [0]);
-    }
-
-    senetenceSelection(indice) {
-        for (var i = 0; i < indice.length; i++) {
-            // indice[i]
-
-        }
-
-    }
-
-    getDataFromIndex(index) {
-
     }
 
     resize() {
@@ -154,7 +144,6 @@ class evaluationComponent extends baseComponent {
 
     parseDataUpdate(msg) {
         super.parseDataUpdate(msg);
-
         switch (msg['name']) {
             case "evaluationStatistics":
                 this.statistic = this.data["evaluationStatistics"];
@@ -162,7 +151,6 @@ class evaluationComponent extends baseComponent {
                 this.draw();
                 break;
         }
-
     }
 
     // parseFunctionReturn(msg) {
