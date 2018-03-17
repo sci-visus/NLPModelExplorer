@@ -164,10 +164,12 @@ class batchEvaluation:
                 self.storage["origSrc"].append(src_orig)
                 self.storage["origTarg"].append(targ_orig)
                 self.storage["origLabel"].append(label_orig)
-                self.storage["origPred"].append(self.predict([src_orig,targ_orig]))
+                prediction = self.predict([src_orig,targ_orig])
+                self.storage["origPred"].append(prediction)
+                predLabel = labels[np.argmax(prediction)]
 
                 originCount = originCount+1
-                if label_orig == prediction:
+                if label_orig == predLabel:
                     correctPred = correctPred+1
 
                 ### only perturb target ####
