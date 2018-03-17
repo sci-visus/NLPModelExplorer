@@ -244,6 +244,8 @@ class modelInterface:
         # print y
         # m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
         # print y
+        print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
+        return "att", y.numpy()[0]
 
     def updateAttention(self, attMatrix):
         self.opt.customized = 1

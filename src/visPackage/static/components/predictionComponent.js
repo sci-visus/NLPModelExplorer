@@ -11,8 +11,8 @@ class predictionComponent extends baseComponent {
         //dict for prediction (groundTruth, p[3])
         //subscribe to data
         this.subscribeDatabyNames(["allSourceSens", "allTargetSens",
-            "prediction", "allPairsPrediction", "originalPair",
-            "groundTruthLabel", "currentPair"
+            "prediction", "allPairsPrediction",
+            "predictionUpdate", "currentPair"
         ]);
 
         this.margin = {
@@ -95,6 +95,10 @@ class predictionComponent extends baseComponent {
                 console.log(this.data['currentPair']);
                 this.onUpdateGroundTruth(this.data['currentPair']["label"]);
                 break;
+            case "predictionUpdate":
+                let pred = this.data["predictionUpdate"];
+                this.onUpdateOptimizedPrediction(pred);
+                break;
         }
     }
 
@@ -120,13 +124,22 @@ class predictionComponent extends baseComponent {
     }
 
     //trigger request to reassign prediction
-    onPredictionReassign() {
+    onPredictionReassign(label) {
+        console.log(label);
         //call python side
+        this.callFunc("predictUpdate", {
+            "newLabel": label,
+            "iteration": 3,
+            "encoderFlag": true,
+            "attFlag": true,
+            "classFlag": false
+        })
     }
 
     //trigger when python return optimized
-    onUpdateOptimizedPrediction() {
-
+    onUpdateOptimizedPrediction(predictionUpdate) {
+        console.log(predictionUpdate, this.selectPred);
+        this.drawPredictPath([this.selectPred, predictionUpdate], "solid");
     }
 
     onUpdateGroundTruth(label) {
@@ -168,6 +181,10 @@ class predictionComponent extends baseComponent {
     }
 
     onUpdatePrediction() {
+        //cleanup
+        this.drawPredictPath();
+        this.drawDensityOverlay([]);
+
         //clone prediction
         var prediction = this.data['prediction'][0].slice(0);
         //add sentence index
@@ -175,7 +192,6 @@ class predictionComponent extends baseComponent {
         //reverse prediction
         // prediction = prediction.reverse();
         // console.log(prediction);
-        this.drawDensityOverlay([])
         this.updatePredictDisplay([prediction]);
     }
 
@@ -212,11 +228,12 @@ class predictionComponent extends baseComponent {
         // (112,0) (0,194) (224,194)
         if (data !== undefined) {
             // console.log(data);
-            this.svg.selectAll("circle").remove();
-            this.svg.selectAll("circle")
+            this.svg.selectAll(".predCircle").remove();
+            this.svg.selectAll(".predCircle")
                 .data(data)
                 .enter()
                 .append("circle")
+                .attr("class", "predCircle")
                 .attr("id", (d, i) => {
                     return "circle" + i;
                 })
@@ -285,15 +302,33 @@ class predictionComponent extends baseComponent {
         }
     }
 
-    drawCurrentAssignedPred() {
-        if (this.reassignedPred) {
-            this.drawPredictPath([
-                this.selectPred,
-                this.reassignedPred
-            ], "dotted");
 
-        } else {
-            this.drawPredictPath();
+    //triangle range: 224, 194
+    drawDensityOverlay(dataPoints) {
+        this.svg.select(this.div + "overlay").remove();
+        if (dataPoints.length > 1) {
+            this.svg.append("g")
+                .attr("id", this.uuid + "overlay")
+                .attr("fill", "none")
+                .attr("stroke", "grey")
+                .attr("stroke-width", 0.8)
+                .attr("stroke-linejoin", "round")
+                .selectAll("path")
+                .data(d3.contourDensity()
+                    .x(function(d) {
+                        return d[0];
+                    })
+                    .y(function(d) {
+                        return d[1];
+                    })
+                    .size([224, 194])
+                    .bandwidth(4)
+                    .thresholds(12)
+                    (dataPoints))
+                .enter().append("path")
+                .attr("clip-path", "url(#triClip)")
+                .attr("opacity", 0.5)
+                .attr("d", d3.geoPath());
         }
     }
 
@@ -341,7 +376,6 @@ class predictionComponent extends baseComponent {
                     that.reassignedPred = undefined;
                     that.drawCurrentAssignedPred();
                 })
-                .on("click", this.onPredictionReassign.bind(this));
             neutralRect.append("text")
                 .attr("x", pos[0])
                 .attr("y", pos[1] - 20)
@@ -359,7 +393,7 @@ class predictionComponent extends baseComponent {
                 .attr("height", h)
                 .attr("fill", "lightgrey")
                 .attr("stroke", "black")
-                .on("mouseover", function(d) {
+                .on("mouseover", function(d, i) {
                     d3.select(this).attr("fill", "grey");
                     that.reassignedPred = [1, 0, 0];
                     that.drawCurrentAssignedPred();
@@ -369,7 +403,7 @@ class predictionComponent extends baseComponent {
                     that.reassignedPred = undefined;
                     that.drawCurrentAssignedPred();
                 })
-                .on("click", this.onPredictionReassign.bind(this));
+
             entailRect.append("text")
                 .attr("x", pos[0] + 20)
                 .attr("y", pos[1] + 15)
@@ -397,7 +431,7 @@ class predictionComponent extends baseComponent {
                     that.reassignedPred = undefined;
                     that.drawCurrentAssignedPred();
                 })
-                .on("click", this.onPredictionReassign.bind(this));
+
             contractRect.append("text")
                 .attr("x", pos[0] - 20)
                 .attr("y", pos[1] + 15)
@@ -423,47 +457,32 @@ class predictionComponent extends baseComponent {
     }
 
     dragended(d) {
-        console.log("dragended", d);
+        // console.log("dragended", this.reassignedPred);
         //check the location
         this.svg.select("#reassignPredict").remove();
-
         //trigger optimizaton on the python side
-        this.onPredictionReassign();
+        if (this.reassignedPred) {
+            var i = this.reassignedPred.indexOf(Math.max(...this.reassignedPred));
+            this.onPredictionReassign(i);
+        }
     }
 
-    //triangle range: 224, 194
-    drawDensityOverlay(dataPoints) {
-        this.svg.select(this.div + "overlay").remove();
-        if (dataPoints.length > 1) {
-            this.svg.append("g")
-                .attr("id", this.uuid + "overlay")
-                .attr("fill", "none")
-                .attr("stroke", "grey")
-                .attr("stroke-width", 0.8)
-                .attr("stroke-linejoin", "round")
-                .selectAll("path")
-                .data(d3.contourDensity()
-                    .x(function(d) {
-                        return d[0];
-                    })
-                    .y(function(d) {
-                        return d[1];
-                    })
-                    .size([224, 194])
-                    .bandwidth(4)
-                    .thresholds(12)
-                    (dataPoints))
-                .enter().append("path")
-                .attr("clip-path", "url(#triClip)")
-                .attr("opacity", 0.5)
-                .attr("d", d3.geoPath());
+
+    drawCurrentAssignedPred() {
+        if (this.reassignedPred) {
+            this.drawPredictPath([
+                this.selectPred,
+                this.reassignedPred
+            ], "dotted");
+
+        } else {
+            this.drawPredictPath();
         }
     }
 
     //drawing a series of predictions
     //the old prediction circle with dotted line
     //the new prediction is solid
-
     drawPredictPath(path, type = "dotted") {
         if (path === undefined) {
             this.svg.selectAll(".dotPredPath").remove();
@@ -483,16 +502,15 @@ class predictionComponent extends baseComponent {
 
             if (type === "dotted") {
                 this.svg.selectAll(".dotPredPath").remove();
-                this.svg.append("rect")
+
+                this.svg.append("circle")
                     .attr("class", "dotPredPath")
-                    .attr("x", line[1][0] - 5)
-                    .attr("y", line[1][1] - 5)
-                    .attr("width", 10)
-                    .attr("height", 10)
+                    .attr("cx", line[1][0])
+                    .attr("cy", line[1][1])
+                    .attr("r", 6)
                     .style("stroke-dasharray", ("2, 2"))
                     .style('stroke', 'grey')
                     .style("fill", "none");
-                // .attr("fill", "grey");
 
                 this.svg.append('path')
                     .attr("class", "dotPredPath")
@@ -501,31 +519,33 @@ class predictionComponent extends baseComponent {
                     .style('stroke', 'grey')
                     .attr("marker-end", "url(#arrowhead)")
                     .attr("d", d => d3line(line));
-            } else {
+            } else if (type === "solid") {
+                // console.log("draw path line");
+                this.svg.selectAll(".predCircle").remove();
                 this.svg.selectAll(".predPath").remove();
+
                 this.svg.append("circle")
                     .attr("class", "predPath")
                     .attr("cx", line[0][0])
                     .attr("cy", line[0][1])
-                    .attr("r", 5)
-                    .style("stroke-dasharray", ("2, 2"))
+                    .attr("r", 6)
+                    // .style("stroke-dasharray", ("2, 2"))
                     .style('stroke', 'grey')
                     .style("fill", "none");
-                this.svg.append("rect")
+
+                this.svg.append("circle")
                     .attr("class", "predPath")
-                    .attr("x", line[1][0] - 5)
-                    .attr("y", line[1][1] - 5)
-                    .attr("width", 10)
-                    .attr("height", 10)
+                    .attr("cx", line[1][0])
+                    .attr("cy", line[1][1])
+                    .attr("r", 6)
                     // .style("stroke-dasharray", ("2, 2"))
-                    // .style('stroke', 'grey')
+                    .style('stroke', 'white')
                     .attr("fill", "grey");
 
                 this.svg.append('path')
                     .attr("class", "predPath")
                     .attr('fill', '#999')
-                    // .style("stroke-dasharray", ("2, 2"))
-                    .style('stroke', 'black')
+                    .style('stroke', 'grey')
                     .attr("marker-end", "url(#arrowhead)")
                     .attr("d", d => d3line(line));
             }
