@@ -40,18 +40,14 @@ class attentionGraphComponent extends attentionComponent {
                     this.attList.push([i, j, attMatrix[i][j]]);
                 }
 
-            // console.log(srcAtt, targAtt);
-
             var src = this.sen2words(pair[0]);
             var targ = this.sen2words(pair[1]);
             this.collapSrcTarg(src, targ, srcAtt, targAtt);
 
             //drawing sentence
-            // console.log(this.srcWords);
             var srcWidth = this.width / (this.srcWords.length + 1);
             var targWidth = this.width / (this.targWords.length + 1);
             this.rectHeight = this.height / 3.0 * 0.5;
-            // console.log(srcWidth, targWidth);
 
             //sentence position
             this.computeWordPosition(this.srcWords, this.targWords);
@@ -59,8 +55,7 @@ class attentionGraphComponent extends attentionComponent {
 
             this.svg.append("text")
                 .attr("x", 2)
-                .attr("y", this.startRange / 3 * this.height + this.rectHeight /
-                    2.0)
+                .attr("y", this.startRange / 3 * this.height + this.rectHeight / 2.0)
                 .attr("font-family", "sans-serif")
                 .attr("font-size", 15)
                 .attr("fill", "black")
@@ -70,10 +65,8 @@ class attentionGraphComponent extends attentionComponent {
                 .style("text-anchor", "middle");
 
             this.svg.append("text")
-                //.attr("class", "text")
                 .attr("x", 2)
-                .attr("y", this.endRange / 3 * this.height - this.rectHeight /
-                    2.0)
+                .attr("y", this.endRange / 3 * this.height - this.rectHeight / 2.0)
                 .attr("font-family", "sans-serif")
                 .attr("font-size", 15)
                 .attr("fill", "black")
@@ -114,10 +107,8 @@ class attentionGraphComponent extends attentionComponent {
                 .style("fill", "#87CEFA")
                 .style("opacity", (d, i) => this.targAtt[i] * 0.5);
 
-
             ///////////////////// drawing text ////////////////////
-            let srcWords = this.svg.selectAll(
-                    ".attentionGraphComponentSrcText")
+            let srcWords = this.svg.selectAll(".attentionGraphComponentSrcText")
                 .data(this.srcWords)
                 .enter()
                 .append("text")
@@ -138,12 +129,11 @@ class attentionGraphComponent extends attentionComponent {
                     this.highlight_and_linkAlignTarg('clean');
                 })
                 .on("click", (d, i) => {
-                    this.src_dep.collapse(i);
+                    this.src_dep.collapse(this.src_dep.display_index[i]);
+		    this.draw();
                 });
 
-
-            let targWords = this.svg.selectAll(
-                    ".attentionGraphComponentTargText")
+            let targWords = this.svg.selectAll(".attentionGraphComponentTargText")
                 .data(this.targWords)
                 .enter()
                 .append("text")
@@ -165,7 +155,8 @@ class attentionGraphComponent extends attentionComponent {
                     this.highlight_and_linkAlignSrc('clean');
                 })
                 .on("click", (d, i) => {
-                    this.targ_dep.collapse(i);
+                    this.targ_dep.collapse(this.targ_dep.display_index[i]);
+		    this.draw()
                 });
         }
     }
@@ -371,11 +362,9 @@ class attentionGraphComponent extends attentionComponent {
             .y(function(d) {
                 return d[1];
             });
-        // .curve("d3.curveLinear");
-        // console.log(this.attList);
+
         this.svg.selectAll(".attentionGraphComponentAttConnect").remove();
-        let connections = this.svg.selectAll(
-                ".attentionGraphComponentAttConnect")
+        let connections = this.svg.selectAll(".attentionGraphComponentAttConnect")
             .data(this.attList)
             .enter()
             .append("path")
@@ -399,7 +388,7 @@ class attentionGraphComponent extends attentionComponent {
                             this.rectHeight
                         ]
                     ];
-                    // console.log(d, lineData);
+
                     return d3line(lineData);
                 }
             })
@@ -427,7 +416,6 @@ class attentionGraphComponent extends attentionComponent {
             };
         });
     }
-
 
     /*
         parseDataUpdate(msg) {
