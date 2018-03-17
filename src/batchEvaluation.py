@@ -91,7 +91,7 @@ class batchEvaluation:
                 if allPred != 0:
                     ratio = 1.0-float(wrongPred)/float(allPred)
                 else:
-                    ratio = 1.0
+                    ratio = 0.0
 
                 predLabel = labels[np.argmax(self.storage["origPred"][preOrigIndex])]
                 #record previous entry
