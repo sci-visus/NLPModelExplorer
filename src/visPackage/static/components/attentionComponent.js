@@ -24,6 +24,12 @@ class attentionComponent extends baseComponent {
         this.aggregationIndex = {};
     }
 
+    clear() {
+        // console.log("clear: based class");
+        if (this.svgContainer)
+            d3.select(this.svgContainer).remove();
+    }
+
     initSvg() {
         //create svg
         if (this.svgContainer === undefined) {
@@ -72,8 +78,6 @@ class attentionComponent extends baseComponent {
                 this.srcIndexMaskSet.add(i)
             }
         });
-
-        //this.drawDepTree();
     }
 
     collapseTarget(mask) {
@@ -83,8 +87,6 @@ class attentionComponent extends baseComponent {
                 this.targIndexMaskSet.add(i);
             }
         });
-
-        //this.drawDepTree();
     }
 
     resize() {
@@ -129,7 +131,6 @@ class attentionComponent extends baseComponent {
 
                 // console.log(this.rawAttention);
                 console.log(this.normAttention);
-                // this.normAttention =
 
                 this.draw();
 
@@ -150,18 +151,19 @@ class attentionComponent extends baseComponent {
 
             case "currentPair":
                 let pair = msg["data"]["data"]["sentences"];
-                // console.log(pair, this.oldPair);
+
                 if (this.oldPair) {
                     //clear the current dependency
-                    if (this.oldPair[0].split().length !== pair[0].split().length ||
-                        this.oldPair[1].split().length !== pair[1].split().length
+                    if (this.oldPair[0].split(" ").length !== pair[0].split(
+                            " ").length ||
+                        this.oldPair[1].split(" ").length !== pair[1].split(
+                            " ").length
                     ) {
+                        console.log("new pair loaded, clear tree/att");
                         this.srcDepTreeData = undefined;
                         this.src_dep = undefined;
                         this.targDepTreeData = undefined;
                         this.targ_dep = undefined;
-
-                        console.log("new pair loaded, clear tree/att");
                         this.normAttention = undefined;
                     }
                 } else {
@@ -211,7 +213,8 @@ class attentionComponent extends baseComponent {
 
         //TODO: aggregate the information base on this.normAttention
         for (const root in this.aggregationIndex) {
-            this.aggregationMatrixHelper(root, this.aggregationIndex[root]);
+            this.aggregationMatrixHelper(root, this.aggregationIndex[
+                root]);
         }
 
     }
