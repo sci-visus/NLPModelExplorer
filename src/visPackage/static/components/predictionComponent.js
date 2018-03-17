@@ -284,15 +284,17 @@ class predictionComponent extends baseComponent {
                             target = this.data["allTargetSens"][d[4]];
                         else
                             target = this.data["originalPair"][1];
-
-                        this.callFunc("updateAttention");
-
                         this.data["currentPair"]["sentences"] = [
                             source,
                             target
                         ];
+                        //update the pair
+                        console.log("update pair/att");
                         this.setData("currentPair", this.data[
                             "currentPair"]);
+
+                        //then update the current attention
+                        this.callFunc("updateAttention");
                     }
                 })
                 .call(d3.drag()
@@ -335,8 +337,7 @@ class predictionComponent extends baseComponent {
     /////////////// drag ////////////////
 
     dragstarted(d) {
-        console.log("dragStarted:", d);
-
+        // console.log("dragStarted:", d);
     }
 
     dragged(d) {
