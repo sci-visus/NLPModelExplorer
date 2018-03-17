@@ -1,12 +1,12 @@
 class pipelineItemPlot {
-    constructor(svg, pos, size, label, state = "enable") {
+    constructor(svg, pos, size, index, label, state) {
         this.svg = svg.append("g");
         this.pos = pos;
         this.size = size;
         this.label = label;
-
+        this.index = index;
         //store whether the layer can be updated
-        this.updateFlag = true;
+        this.updateFlag = state;
     }
 
     setState(state) {
@@ -15,11 +15,18 @@ class pipelineItemPlot {
     }
 
     setGraidentHisto(histo) {
-        this.histoList = histo;
+        if (histo) {
+            this.histoList = histo;
+        }
+    }
+
+    bindSelectionCallback(callback) {
+        this.callback = callback;
     }
 
     draw() {
         // console.log("draw pipeline item");
+        let that = this;
         if (this.svg.select("rect").empty()) {
             this.svg.append("rect")
                 .attr("x", this.pos[0] - this.size[0] * 0.5)
@@ -37,13 +44,15 @@ class pipelineItemPlot {
                     // console.log(d3.select(this).attr("fill"));
                     if (d3.select(this).attr("fill") ===
                         "lightblue") {
-                        this.updateFlag = false;
+                        that.updateFlag = false;
                         d3.select(this).attr("fill",
                             "url(#stripe)");
+                        that.callback(that.index, that.updateFlag);
                     } else {
-                        this.updateFlag = true;
+                        that.updateFlag = true;
                         d3.select(this).attr("fill",
                             "lightblue");
+                        that.callback(that.index, that.updateFlag);
                     }
                 });
 
@@ -100,7 +109,9 @@ class pipelineItemPlot {
                 hiddenLayerBoxSize[0] - 5,
                 hiddenLayerBoxSize[1] - 30
             ]);
-            this.hist.setHisto(this.histoList);
+            if (this.histoList) {
+                this.hist.setHisto(this.histoList);
+            }
 
         } else {
             this.svg.select("rect")

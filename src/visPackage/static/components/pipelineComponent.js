@@ -1,25 +1,16 @@
 class pipelineComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
+
+        this.subscribeDatabyNames(["pipeline"]);
+
         this.margin = {
             top: 10,
             right: 10,
             bottom: 10,
             left: 10
         };
-        this.data["pipeline"] = [{
-            "name": "encoder",
-            "layerChange": [1, 5, 6, 4, 7],
-            "arrow": [1]
-        }, {
-            "name": "attention",
-            "layerChange": [1, 5, 6, 4, 7],
-            "arrow": [2]
-        }, {
-            "name": "classifier",
-            "layerChange": [1, 5, 6, 4, 7],
-            "arrow": []
-        }];
+
         this.draw();
     }
 
@@ -87,32 +78,36 @@ class pipelineComponent extends baseComponent {
     parseDataUpdate(msg) {
         super.parseDataUpdate(msg);
         switch (msg["name"]) {
-            case "pipelineState":
-                states = this.data["pipelineState"]
-                this.updatePipelineState(states)
+            case "pipeline":
+                // states = this.data["pipelineState"]
+                // this.updatePipelineState(states)
+                this.draw();
                 break
         }
     }
 
-    updatePipelineState(states) {
-        if (this.items) {
-            for (var i = 0; this.items.length; i++) {
-                this.items[i].setState(states[i] === 0 ? false : true);
-            }
-        }
+    updatePipelineState(index, state) {
+        let pipeline = this.data["pipeline"];
+        pipeline[index]["state"] = state;
+        // console.log("updatePipeline: ", index, state, pipeline);
+        this.setData("pipeline", pipeline);
+        // if (this.items) {
+        //     for (var i = 0; this.items.length; i++) {
+        //         this.items[i].setState(states[i] === 0 ? false : true);
+        //     }
+        // }
     }
-
 
     draw() {
         this._updateWidthHeight();
-
-        console.log("draw pipeline");
+        // console.log("draw pipeline");
         if (this.data["pipeline"] !== undefined) {
             this.initSvg();
             this.drawLegend();
             this.items = [];
             var pipelineData = this.data["pipeline"];
 
+            // if (this.items === undefined) {
             var len = pipelineData.length;
             var size = [this.width / (len + 1), 45];
             for (var i = 0; i < pipelineData.length; i++) {
@@ -120,9 +115,14 @@ class pipelineComponent extends baseComponent {
                     0.5
                 ];
                 var item = new pipelineItemPlot(this.svg,
-                    pos, size, pipelineData[i]["name"]
+                    pos, size, pipelineData[i]["index"], pipelineData[i]
+                    ["name"], pipelineData[i]["state"]
                 );
-                item.setGraidentHisto(pipelineData[i]["layerChange"]);
+                item.bindSelectionCallback(this.updatePipelineState.bind(
+                    this));
+                if (pipelineData[i]["layerChange"]) {
+                    item.setGraidentHisto(pipelineData[i]["layerChange"]);
+                }
                 item.draw();
                 this.items.push(item);
             }
@@ -134,6 +134,13 @@ class pipelineComponent extends baseComponent {
                     this.drawArrow(start, end);
                 }
             }
+            // }
+            // else {
+            //     //update pipeline
+            //     for(let i=0; i<this.items.length; i++){
+            //         this.items[i]
+            //     }
+            // }
         }
     }
 

@@ -12,7 +12,7 @@ class predictionComponent extends baseComponent {
         //subscribe to data
         this.subscribeDatabyNames(["allSourceSens", "allTargetSens",
             "prediction", "allPairsPrediction",
-            "predictionUpdate", "currentPair"
+            "predictionUpdate", "currentPair", "pipeline"
         ]);
 
         this.margin = {
@@ -125,14 +125,16 @@ class predictionComponent extends baseComponent {
 
     //trigger request to reassign prediction
     onPredictionReassign(label) {
-        // console.log(label);
+
+        let pipeline = this.data["pipeline"];
+        console.log(pipeline);
         //call python side
         this.callFunc("predictUpdate", {
             "newLabel": label,
             "iteration": 3,
-            "encoderFlag": true,
-            "attFlag": true,
-            "classFlag": false
+            "encoderFlag": pipeline[0]["state"],
+            "attFlag": pipeline[1]["state"],
+            "classFlag": pipeline[2]["state"]
         })
     }
 
@@ -177,7 +179,6 @@ class predictionComponent extends baseComponent {
             this.Contradiction.style("font-weight", "normal");
             this.Entailment.style("font-weight", "normal");
         }
-
     }
 
     onUpdatePrediction() {
