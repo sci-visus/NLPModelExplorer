@@ -15,7 +15,7 @@ class attentionGraphComponent extends attentionComponent {
     draw() {
         this._updateWidthHeight();
 
-        if (this.data["attention"] !== undefined) {
+        if (this.normAttention !== undefined) {
             // init svg
             this.initSvg();
 
@@ -55,7 +55,8 @@ class attentionGraphComponent extends attentionComponent {
 
             this.svg.append("text")
                 .attr("x", 2)
-                .attr("y", this.startRange / 3 * this.height + this.rectHeight / 2.0)
+                .attr("y", this.startRange / 3 * this.height + this.rectHeight /
+                    2.0)
                 .attr("font-family", "sans-serif")
                 .attr("font-size", 15)
                 .attr("fill", "black")
@@ -66,7 +67,8 @@ class attentionGraphComponent extends attentionComponent {
 
             this.svg.append("text")
                 .attr("x", 2)
-                .attr("y", this.endRange / 3 * this.height - this.rectHeight / 2.0)
+                .attr("y", this.endRange / 3 * this.height - this.rectHeight /
+                    2.0)
                 .attr("font-family", "sans-serif")
                 .attr("font-size", 15)
                 .attr("fill", "black")
@@ -108,7 +110,8 @@ class attentionGraphComponent extends attentionComponent {
                 .style("opacity", (d, i) => this.targAtt[i] * 0.5);
 
             ///////////////////// drawing text ////////////////////
-            let srcWords = this.svg.selectAll(".attentionGraphComponentSrcText")
+            let srcWords = this.svg.selectAll(
+                    ".attentionGraphComponentSrcText")
                 .data(this.srcWords)
                 .enter()
                 .append("text")
@@ -130,10 +133,11 @@ class attentionGraphComponent extends attentionComponent {
                 })
                 .on("click", (d, i) => {
                     this.src_dep.collapse(this.src_dep.display_index[i]);
-		    this.draw();
+                    this.draw();
                 });
 
-            let targWords = this.svg.selectAll(".attentionGraphComponentTargText")
+            let targWords = this.svg.selectAll(
+                    ".attentionGraphComponentTargText")
                 .data(this.targWords)
                 .enter()
                 .append("text")
@@ -155,8 +159,9 @@ class attentionGraphComponent extends attentionComponent {
                     this.highlight_and_linkAlignSrc('clean');
                 })
                 .on("click", (d, i) => {
-                    this.targ_dep.collapse(this.targ_dep.display_index[i]);
-		    this.draw()
+                    this.targ_dep.collapse(this.targ_dep.display_index[
+                        i]);
+                    this.draw()
                 });
         }
     }
@@ -364,7 +369,8 @@ class attentionGraphComponent extends attentionComponent {
             });
 
         this.svg.selectAll(".attentionGraphComponentAttConnect").remove();
-        let connections = this.svg.selectAll(".attentionGraphComponentAttConnect")
+        let connections = this.svg.selectAll(
+                ".attentionGraphComponentAttConnect")
             .data(this.attList)
             .enter()
             .append("path")

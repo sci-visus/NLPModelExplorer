@@ -92,7 +92,7 @@ class predictionComponent extends baseComponent {
                 break;
             case "currentPair":
                 this.clear();
-                console.log(this.data['currentPair']);
+                // console.log(this.data['currentPair']);
                 this.onUpdateGroundTruth(this.data['currentPair']["label"]);
                 break;
             case "predictionUpdate":
@@ -125,7 +125,7 @@ class predictionComponent extends baseComponent {
 
     //trigger request to reassign prediction
     onPredictionReassign(label) {
-        console.log(label);
+        // console.log(label);
         //call python side
         this.callFunc("predictUpdate", {
             "newLabel": label,

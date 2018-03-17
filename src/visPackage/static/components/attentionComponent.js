@@ -92,6 +92,25 @@ class attentionComponent extends baseComponent {
         this.draw();
     }
 
+    //convert raw attention to normalized attention
+    //orientation specifiy whether we can normalize row / col
+    convertRawAtt(raw, orientation = "row") {
+        let normAttention;
+        let transpose = m => m[0].map((x, i) => m.map(x => x[i]));
+        if (orientation === "row") {
+            normAttention = raw.map(d => this.softmax(d));
+        } else if (orientation === "col") {
+            // normAttention = raw.map(d => this.softmax(d));
+            let raw_T = transpose(raw);
+            let norm_T = raw_T.map(d => this.softmax(d));
+            normAttention = transpose(norm_T);
+        } else {
+            //if no option is specifiy return raw
+            normAttention = raw;
+        }
+        return normAttention;
+    }
+
     parseDataUpdate(msg) {
         super.parseDataUpdate(msg);
         switch (msg["name"]) {
@@ -100,11 +119,16 @@ class attentionComponent extends baseComponent {
                 // this.srcDepTreeData = undefined;
                 // this.targDepTreeData = undefined;
                 //normalize att
+                if (this.rawAttention) {
+                    //clone the raw attention
+                    this.preRawAtt = JSON.parse(JSON.stringify(this.rawAttention));
+                }
                 this.rawAttention = this.data["attention"];
-                this.normAttention = this.rawAttention.map(d => this.softmax(
-                    d));
+                this.normAttention = this.convertRawAtt(this.rawAttention,
+                    'row');
+
                 // console.log(this.rawAttention);
-                // console.log(this.normAttention);
+                console.log(this.normAttention);
                 // this.normAttention =
 
                 this.draw();
@@ -136,15 +160,17 @@ class attentionComponent extends baseComponent {
                         this.src_dep = undefined;
                         this.targDepTreeData = undefined;
                         this.targ_dep = undefined;
-                        console.log("new pair loaded clear tree");
+
+                        console.log("new pair loaded, clear tree/att");
+                        this.normAttention = undefined;
                     }
+                } else {
+
                 }
 
                 this.srcWords = pair[0].match(/\S+/g);
                 this.targWords = pair[1].match(/\S+/g);
                 this.oldPair = pair.slice();
-
-                this.draw();
                 break;
         }
     }
