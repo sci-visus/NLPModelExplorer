@@ -12,7 +12,7 @@ class predictionComponent extends baseComponent {
         //subscribe to data
         this.subscribeDatabyNames(["allSourceSens", "allTargetSens",
             "prediction", "allPairsPrediction",
-            "predictionUpdate", "currentPair"
+            "predictionUpdate", "currentPair", "pipeline"
         ]);
 
         this.margin = {
@@ -125,14 +125,16 @@ class predictionComponent extends baseComponent {
 
     //trigger request to reassign prediction
     onPredictionReassign(label) {
-        // console.log(label);
+
+        let pipeline = this.data["pipeline"];
+        console.log(pipeline);
         //call python side
         this.callFunc("predictUpdate", {
             "newLabel": label,
             "iteration": 3,
-            "encoderFlag": true,
-            "attFlag": true,
-            "classFlag": false
+            "encoderFlag": pipeline[0]["state"],
+            "attFlag": pipeline[1]["state"],
+            "classFlag": pipeline[2]["state"]
         })
     }
 
@@ -177,7 +179,6 @@ class predictionComponent extends baseComponent {
             this.Contradiction.style("font-weight", "normal");
             this.Entailment.style("font-weight", "normal");
         }
-
     }
 
     onUpdatePrediction() {
@@ -534,14 +535,14 @@ class predictionComponent extends baseComponent {
                     .style('stroke', 'grey')
                     .style("fill", "none");
 
-                this.svg.append("circle")
-                    .attr("class", "predPath")
-                    .attr("cx", line[1][0])
-                    .attr("cy", line[1][1])
-                    .attr("r", 6)
-                    // .style("stroke-dasharray", ("2, 2"))
-                    .style('stroke', 'white')
-                    .attr("fill", "grey");
+                // this.svg.append("circle")
+                //     .attr("class", "predPath")
+                //     .attr("cx", line[1][0])
+                //     .attr("cy", line[1][1])
+                //     .attr("r", 6)
+                //     // .style("stroke-dasharray", ("2, 2"))
+                //     .style('stroke', 'white')
+                //     .attr("fill", "grey");
 
                 this.svg.append('path')
                     .attr("class", "predPath")
@@ -549,6 +550,12 @@ class predictionComponent extends baseComponent {
                     .style('stroke', 'grey')
                     .attr("marker-end", "url(#arrowhead)")
                     .attr("d", d => d3line(line));
+
+                //update prediction
+                var prediction = path[1];
+                //add sentence index
+                prediction.concat([0, 0]);
+                this.updatePredictDisplay([prediction]);
             }
         }
     }

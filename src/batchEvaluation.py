@@ -220,16 +220,16 @@ def main(args):
     gen = sentenceGenerator()
 
     ###### test set ######
-    # evaluator = batchEvaluation("../data/snli_1.0/src-test.txt",
-    #                        "../data/snli_1.0/targ-test.txt",
-    #                        "../data/snli_1.0/label-test.txt",
-    #                        "../data/test-pred-statistic.pkl" )
+    evaluator = batchEvaluation("../data/snli_1.0/src-test.txt",
+                           "../data/snli_1.0/targ-test.txt",
+                           "../data/snli_1.0/label-test.txt",
+                           "../data/test-pred-statistic.pkl" )
 
     ###### dev set ######
-    evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
-                           "../data/snli_1.0/targ-dev.txt",
-                           "../data/snli_1.0/label-dev.txt",
-                           "../data/dev-pred-statistic.pkl" )
+    # evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
+    #                        "../data/snli_1.0/targ-dev.txt",
+    #                        "../data/snli_1.0/label-dev.txt",
+    #                        "../data/dev-pred-statistic.pkl" )
 
     evaluator.setPredictionHook(model.predict)
     evaluator.setAttentionHook(model.attention)
@@ -238,8 +238,8 @@ def main(args):
 
     evaluator.initialize()
     print "finish load pkl ..."
-    evaluator.generateStatistic('../data/dev-set-statistic.json')
-    # evaluator.generateStatistic('../data/test-set-statistic.json')
+    # evaluator.generateStatistic('../data/dev-set-statistic.json')
+    evaluator.generateStatistic('../data/test-set-statistic.json')
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))

@@ -50,6 +50,26 @@ exampleData = [
     "pred": "neutral"
 }
 ]
+pipelineState = [{
+    "index":0,
+    "name": "encoder",
+    # "layerChange": [1, 5, 6, 4, 7],
+    "state": True,
+    "arrow": [1]
+    }, {
+    "index":1,
+    "name": "attention",
+    "state": True,
+    # "layerChange": [1, 5, 6, 4, 7],
+    "arrow": [2]
+    }, {
+    "index":2,
+    "name": "classifier",
+    "state": False,
+    # "layerChange": [1, 5, 6, 4, 7],
+    "arrow": []
+    }
+];
 
 #################### server control ######################
 class visModule:
@@ -106,6 +126,7 @@ class textEntailVisModule(visModule):
         dataManager.clear()
         dataManager.setData("componentLayout", layoutConfig)
         dataManager.setData("sentenceList", exampleData)
+        dataManager.setData("pipeline", pipelineState)
         dataManager.setData("currentPair", {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']})
         return app.send_static_file('index.html')
 
