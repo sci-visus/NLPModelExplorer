@@ -93,7 +93,7 @@ class batchEvaluation:
                 else:
                     ratio = 1.0
 
-                predLabel = self.storage["origPred"][preOrigIndex]
+                predLabel = labels[np.argmax(self.storage["origPred"][preOrigIndex])]
                 #record previous entry
                 item = {
                     "index": preOrigIndex,
@@ -164,9 +164,7 @@ class batchEvaluation:
                 self.storage["origSrc"].append(src_orig)
                 self.storage["origTarg"].append(targ_orig)
                 self.storage["origLabel"].append(label_orig)
-                ### fixme ###
-                prediction = labels[np.argmax(self.predict([src_orig,targ_orig]))]
-                self.storage["origPred"].append(prediction)
+                self.storage["origPred"].append(self.predict([src_orig,targ_orig]))
 
                 originCount = originCount+1
                 if label_orig == prediction:
