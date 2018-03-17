@@ -22,7 +22,13 @@ sio = socketio.Server()
 fApp = socketio.Middleware(sio, app)
 dataManager = socketioManager(sio)
 
-exampleData = [{
+exampleData = [
+{"index":4,
+    "src": "A couple is taking a break from bicycling .\n",
+    "targ":"a couple sit next to their bikes .\n",
+    "pred":"neutral"
+},
+{
     "index":0,
     "src": "Two women are embracing while holding to go packages .\n",
     "targ": "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n",
@@ -100,9 +106,7 @@ class textEntailVisModule(visModule):
         dataManager.clear()
         dataManager.setData("componentLayout", layoutConfig)
         dataManager.setData("sentenceList", exampleData)
-        dataManager.setData("originalPair", [exampleData[0]['src'], exampleData[0]['targ']])
-        dataManager.setData("currentPair", [exampleData[0]['src'], exampleData[0]['targ']])
-        dataManager.setData("groundTruthLabel", exampleData[0]['pred'])
+        dataManager.setData("currentPair", {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']})
         return app.send_static_file('index.html')
 
     @app.route('/<name>')
@@ -120,7 +124,7 @@ class textEntailVisModule(visModule):
     def loadSummaryStatistic(self, filename):
         with open(filename) as json_data:
             statistics = json.load(json_data)
-            print "loadSummaryStatistic: ", type(statistics), type(statistics[0])
+            # print "loadSummaryStatistic: ", type(statistics), type(statistics[0])
             dataManager.setData("evaluationStatistics", statistics)
 
     # an sentence pair index (self.index) is used as handle for the correspondence
@@ -138,7 +142,7 @@ class textEntailVisModule(visModule):
             sentenceList.append(pair)
         dataManager.setData("sentenceList", sentenceList)
         dataManager.setData("originalPair", [data[0]['src'], data[0]['targ']])
-        dataManager.setData("currentPair", [data[0]['src'], data[0]['targ']])
+        dataManager.setData("currentPair", {"sentences":[data[0]['src'], data[0]['targ']],"label":data[0]['pred']})
 
     # called when the user change the prediction, the attention need to be
     # recomputed by python model
@@ -160,21 +164,29 @@ class textEntailVisModule(visModule):
     def setPredictionUpdateHook(self, callback):
         self.predictionUpdateHook = callback
 
+    def setAttentionUpdateHook(self, callback):
+        self.attentionUpdateHook = callback
+
     #get sentence parse tree
     def parseSentence(self, sentence):
         if self.parserHook:
             depTree = self.parserHook(sentence)
             return {"depTree": depTree, "sentence":sentence}
 
-    def predictUpdate(self, newLabel):
-        sentencePair = dataManager.getData("currentPair")
-        att, pred = self.predictionUpdateHook(sentencePair, newLabel)
+    def predictUpdate(self, newLabel, iteration, encoderFlag, attFlag, classFlag ):
+        print "predictUpdate", newLabel, iteration, encoderFlag, attFlag, classFlag
+        sentencePair = dataManager.getData("currentPair")['sentences']
+        att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, encoderFlag, attFlag, classFlag)
         print att, pred
-        dataManager.setData("attention", att)
+
+        # dataManager.setData("attention", att)
         dataManager.setData("predictionUpdate", pred)
 
+        #update other predictions
+        self.predictAll()
+
     def predict(self):
-        sentencePair = dataManager.getData("currentPair")
+        sentencePair = dataManager.getData("currentPair")['sentences']
         predictionResult = self.predictionHook(sentencePair)
         dataManager.setData("prediction", predictionResult)
         #use raw attention
@@ -183,7 +195,7 @@ class textEntailVisModule(visModule):
         dataManager.setData("attention", attentionMatrix)
 
     def updateAttention(self):
-        sentencePair = dataManager.getData("currentPair")
+        sentencePair = dataManager.getData("currentPair")['sentences']
         predictionResult = self.predictionHook(sentencePair)
         # dataManager.setData("prediction", predictionResult)
         #use raw attention
@@ -193,23 +205,27 @@ class textEntailVisModule(visModule):
     def predictAll(self):
         allSourceSens = None
         allTargetSens = None
+        sentencePair = dataManager.getData("currentPair")['sentences'];
         if dataManager.getData("allSourceSens") is not None:
             allSourceSens = dataManager.getData("allSourceSens")
         else:
-            allSourceSens = [dataManager.getData("currentPair")[0]]
+            allSourceSens = [sentencePair[0]]
         if dataManager.getData("allTargetSens") is not None:
             allTargetSens = dataManager.getData("allTargetSens")
         else:
-            allTargetSens = [dataManager.getData("currentPair")[1]]
+            allTargetSens = [sentencePair[1]]
         # print "original s, t:"
-        print allSourceSens, allTargetSens
-        if len(allSourceSens) == 0 and len(allTargetSens):
+        # print allSourceSens, allTargetSens
+
+        ###### if there is only one pair #####
+        if len(allSourceSens) <= 1 and len(allTargetSens) <= 1:
             return
 
         allPairsPrediction = np.zeros( (len(allSourceSens), len(allTargetSens), 3) )
         # allAttention = [None]
         for i, source in enumerate(allSourceSens):
             for j, target in enumerate(allTargetSens):
+                ######### only one perturbation is allow in each pair #######
                 if i==0 or j==0:
                     predResult = self.predictionHook([source, target])
                     allPairsPrediction[i,j,:] = predResult

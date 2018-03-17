@@ -35,7 +35,7 @@ class sentenceComponent extends baseComponent {
         //     this.onReceiveSentenceList();
         // }
         //update currentPair display
-        if (this.data["currentPair"] !== undefined) {
+        if (this.data["currentPair"]["sentences"] !== undefined) {
             this.onReceiveCurrentPair();
         }
     }
@@ -48,7 +48,7 @@ class sentenceComponent extends baseComponent {
                 this.onReceiveSentenceList();
                 break;
             case "currentPair":
-                // console.log(msg, this.data["currentPair"]);
+                // console.log(msg, this.data["currentPair"]["sentences"]);
                 this.onReceiveCurrentPair();
                 break;
         }
@@ -83,8 +83,8 @@ class sentenceComponent extends baseComponent {
     }
 
     onReceiveCurrentPair() {
-        var currentPair = this.data['currentPair'];
-        // console.log(this.data["currentPair"]);
+        var currentPair = this.data['currentPair']["sentences"];
+        // console.log(this.data["currentPair"]["sentences"]);
 
         d3.select(this.div + "src").property("value", currentPair[0]);
         d3.select(this.div + "targ").property("value", currentPair[1]);
@@ -115,16 +115,19 @@ class sentenceComponent extends baseComponent {
         var currentPair = [this.data["sentenceList"][index]["src"],
             this.data["sentenceList"][index]["targ"]
         ];
-        var groundTruthLabel = this.data["sentenceList"][index]["pred"]
-            // console.log(groundTruthLabel);
-            // this.onReceiveCurrentPair()
-        this.data["currentPair"] = currentPair;
+        // var groundTruthLabel = this.data["sentenceList"][index]["pred"]
+        // console.log(groundTruthLabel);
+        // this.onReceiveCurrentPair()
+        this.data["currentPair"] = {
+            "sentences": currentPair,
+            "label": this.data["sentenceList"][index]["pred"]
+        };
         d3.select(this.div + "src").property("value", currentPair[0]);
         d3.select(this.div + "targ").property("value", currentPair[1]);
 
         //update rest of the views
-        this.setData("currentPair", currentPair);
-        this.setData("groundTruthLabel", groundTruthLabel);
+        this.setData("currentPair", this.data["currentPair"]);
+        // this.setData("groundTruthLabel", groundTruthLabel);
 
         this.clearDropdown(this.div + "srcInput");
         this.clearDropdown(this.div + "targInput");
@@ -138,15 +141,16 @@ class sentenceComponent extends baseComponent {
             d3.select(this.div + "targ").property("value")
         ];
         // console.log(currentPair);
-        this.setData("currentPair", currentPair);
+        this.data["currentPair"]["sentences"] = currentPair;
+        this.setData("currentPair", this.data["currentPair"]["sentences"]);
     }
 
     updatePerturbedSentences(sentences) {
-        if (this.data["currentPair"][0] == sentences[0]) {
+        if (this.data["currentPair"]["sentences"][0] == sentences[0]) {
             this.setData("allSourceSens", sentences);
             this.addDropdown(this.div + "srcInput", sentences, this.div +
                 "src");
-        } else if (this.data["currentPair"][1] == sentences[0]) {
+        } else if (this.data["currentPair"]["sentences"][1] == sentences[0]) {
             this.setData("allTargetSens", sentences);
             this.addDropdown(this.div + "targInput", sentences, this.div +
                 "targ");
@@ -154,19 +158,19 @@ class sentenceComponent extends baseComponent {
     }
 
     perturbSource() {
-        if (this.data["currentPair"] !== undefined) {
+        if (this.data["currentPair"]["sentences"] !== undefined) {
             this.isPerturbSource = true;
             this.callFunc("perturbSentence", {
-                "sentence": this.data["currentPair"][0]
+                "sentence": this.data["currentPair"]["sentences"][0]
             });
         }
     }
 
     perturbTarget() {
-        if (this.data["currentPair"] !== undefined) {
+        if (this.data["currentPair"]["sentences"] !== undefined) {
             this.isPerturbTarget = true;
             this.callFunc("perturbSentence", {
-                "sentence": this.data["currentPair"][1]
+                "sentence": this.data["currentPair"]["sentences"][1]
             });
         }
     }

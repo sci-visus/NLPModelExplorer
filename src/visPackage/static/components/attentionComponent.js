@@ -8,7 +8,7 @@ Based class for attention visualization
 class attentionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["attention", "currentPair"]);
+        this.subscribeDatabyNames(["attention", "currentPair", "highlight"]);
 
         this.margin = {
             top: 10,
@@ -20,8 +20,8 @@ class attentionComponent extends baseComponent {
         //init member
         this.srcIndexMaskSet = new Set();
         this.targIndexMaskSet = new Set();
-	
-	this.aggregationIndex = {};
+
+        this.aggregationIndex = {};
     }
 
     initSvg() {
@@ -72,8 +72,8 @@ class attentionComponent extends baseComponent {
                 this.srcIndexMaskSet.add(i)
             }
         });
-	
-	//this.drawDepTree();
+
+        //this.drawDepTree();
     }
 
     collapseTarget(mask) {
@@ -83,8 +83,8 @@ class attentionComponent extends baseComponent {
                 this.targIndexMaskSet.add(i);
             }
         });
-	
-	//this.drawDepTree();
+
+        //this.drawDepTree();
     }
 
     resize() {
@@ -110,32 +110,41 @@ class attentionComponent extends baseComponent {
                 this.draw();
 
                 //parse the sentence
+                let currentPair = this.data["currentPair"]["sentences"];
                 if (this.srcDepTreeData === undefined) {
-                    let currentPair = this.data["currentPair"];
                     this.callFunc("parseSentence", {
                         "sentence": currentPair[0]
                     });
+                }
+                if (this.targDepTreeData === undefined) {
                     this.callFunc("parseSentence", {
                         "sentence": currentPair[1]
                     });
                 }
+
                 break;
+
             case "currentPair":
-                let pair = msg["data"]["data"];
+                let pair = msg["data"]["data"]["sentences"];
+                // console.log(pair, this.oldPair);
                 if (this.oldPair) {
-                    if (this.oldPair[0].length !== pair[0].length ||
-                        this.oldPair[1].length !== pair[1].length
+                    //clear the current dependency
+                    if (this.oldPair[0].split().length !== pair[0].split().length ||
+                        this.oldPair[1].split().length !== pair[1].split().length
                     ) {
-                        //clear the current dependency
                         this.srcDepTreeData = undefined;
+                        this.src_dep = undefined;
                         this.targDepTreeData = undefined;
+                        this.targ_dep = undefined;
+                        console.log("new pair loaded clear tree");
                     }
                 }
 
                 this.srcWords = pair[0].match(/\S+/g);
                 this.targWords = pair[1].match(/\S+/g);
-                this.oldPair = pair;
+                this.oldPair = pair.slice();
 
+                this.draw();
                 break;
         }
     }
@@ -148,50 +157,53 @@ class attentionComponent extends baseComponent {
     }
 
     handleParsedSentence(parseResult) {
-        if (parseResult["sentence"] == this.data["currentPair"][0]) {
+        let parsedSen = parseResult["sentence"];
+        if (parsedSen == this.data["currentPair"]["sentences"][0]) {
             //draw structure
             this.srcDepTreeData = parseResult["depTree"];
-        } else if (parseResult["sentence"] == this.data[
-                "currentPair"][1]) {
-            this.targDepTreeData = parseResult["depTree"];
+            this.drawDepTree();
         }
-        this.draw();
+
+        if (parsedSen == this.data["currentPair"]["sentences"][1]) {
+            this.targDepTreeData = parseResult["depTree"];
+            this.drawDepTree();
+        }
     }
 
-    aggregationMatrix(root, nodes){
-	    //check whether the aggregate root already exist 
-	    if(root in this.aggregationIndex){
-	    	    delete this.aggregationIndex[root];
-	    }else{
-		    this.aggregationIndex[root] = nodes;
-	    }  
-	    
-	    //clone object
-	    this.aggregatedMatrix = this.normAttention.map(function(arr){
-		    return arr.slice();
-	    })
-	    
-	    //TODO: aggregate the information base on this.normAttention
-	    for(const root in this.aggregationIndex){
-		    this.aggregationMatrixHelper(root, this.aggregationIndex[root]);
-	    }
-	    
+    aggregationMatrix(root, nodes) {
+        //check whether the aggregate root already exist
+        if (root in this.aggregationIndex) {
+            delete this.aggregationIndex[root];
+        } else {
+            this.aggregationIndex[root] = nodes;
+        }
+
+        //clone object
+        this.aggregatedMatrix = this.normAttention.map(function(arr) {
+            return arr.slice();
+        })
+
+        //TODO: aggregate the information base on this.normAttention
+        for (const root in this.aggregationIndex) {
+            this.aggregationMatrixHelper(root, this.aggregationIndex[root]);
+        }
+
     }
-    
-    aggregationMatrixHelper(root, indexs){
-    	
-	    for(let i = 0; i < this.aggregatedMatrix.length; i++){
-		    let maxvalue = this.aggregatedMatrix[i][root];
-		    for(let j = 0; j < this.aggregatedMatrix[i].length; j++){
-			    if(indexs.includes(j)){
-				if(maxvalue < this.aggregatedMatrix[i][j]){
-					maxvalue = this.aggregatedMatrix[i][j];
-				}
-				this.aggregatedMatrix[i][j] = 0;
-			    }
-		    }
-		    this.aggregatedMatrix[i][root] = maxvalue;
-	    }
+
+    aggregationMatrixHelper(root, indexs) {
+
+        for (let i = 0; i < this.aggregatedMatrix.length; i++) {
+            let maxvalue = this.aggregatedMatrix[i][root];
+            for (let j = 0; j < this.aggregatedMatrix[i].length; j++) {
+                if (indexs.includes(j)) {
+                    if (maxvalue < this.aggregatedMatrix[i][j]) {
+                        maxvalue = this.aggregatedMatrix[i][j];
+                    }
+                    this.aggregatedMatrix[i][j] = 0;
+                }
+            }
+            this.aggregatedMatrix[i][root] = maxvalue;
+        }
     }
 
     softmax(arr) {

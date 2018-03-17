@@ -19,7 +19,7 @@ class attentionGraphComponent extends attentionComponent {
             // init svg
             this.initSvg();
 
-            var pair = this.data["currentPair"];
+            var pair = this.data["currentPair"]["sentences"];
             //draw attention
             var attMatrix = this.normAttention;
             //var attMatrix = this.data["attention"];
@@ -92,20 +92,20 @@ class attentionGraphComponent extends attentionComponent {
                 .data(this.srcWords)
                 .enter()
                 .append("rect")
-	    	.attr('class', 'attentionGraphComponentSrcRect')
+                .attr('class', 'attentionGraphComponentSrcRect')
                 .attr("x", (d, i) => this.srcPos[i].x - srcWidth / 2.0)
                 .attr("y", (d, i) => this.srcPos[i].y)
                 .attr("width", srcWidth)
                 .attr("height", this.rectHeight)
                 .attr("class", "srcRect")
                 .style("fill", "#87CEFA")
-	        .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
+                .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
 
             this.svg.selectAll(".attentionGraphComponentTargRect")
                 .data(this.targWords)
                 .enter()
                 .append("rect")
-		.attr('class', 'attentionGraphComponentTargRect')
+                .attr('class', 'attentionGraphComponentTargRect')
                 .attr("x", (d, i) => this.targPos[i].x - targWidth / 2.0)
                 .attr("y", (d, i) => this.targPos[i].y - this.rectHeight)
                 .attr("width", targWidth)
@@ -113,38 +113,41 @@ class attentionGraphComponent extends attentionComponent {
                 .attr("class", "targRect")
                 .style("fill", "#87CEFA")
                 .style("opacity", (d, i) => this.targAtt[i] * 0.5);
-		
+
 
             ///////////////////// drawing text ////////////////////
-            let srcWords = this.svg.selectAll(".attentionGraphComponentSrcText")
+            let srcWords = this.svg.selectAll(
+                    ".attentionGraphComponentSrcText")
                 .data(this.srcWords)
                 .enter()
                 .append("text")
-		.attr('class', 'attentionGraphComponentSrcText')
+                .attr('class', 'attentionGraphComponentSrcText')
                 .text(d => d)
                 .attr("x", (d, i) => this.srcPos[i].x)
-                .attr("y", (d, i) => this.srcPos[i].y + this.rectHeight * 0.5)
+                .attr("y", (d, i) => this.srcPos[i].y + this.rectHeight *
+                    0.5)
                 .style("font-size", this.checkFontSize.bind(this))
                 .style("writing-mode", this.checkSrcOrientation.bind(this))
                 .style("text-anchor", "middle")
-		.on('mouseover', (d, i, nodes)=>{
-			d3.select(nodes[i]).style('fill', 'orange');
-			this.highlight_and_linkAlignTarg(i);
-		})
-		.on('mouseout', (d, i, nodes)=>{
-			d3.select(nodes[i]).style('fill', 'black');
-			this.highlight_and_linkAlignTarg('clean');
-		})
-		.on("click", (d, i) => {
-	                this.src_dep.collapse(i);
-	        });
-                
+                .on('mouseover', (d, i, nodes) => {
+                    d3.select(nodes[i]).style('fill', 'orange');
+                    this.highlight_and_linkAlignTarg(i);
+                })
+                .on('mouseout', (d, i, nodes) => {
+                    d3.select(nodes[i]).style('fill', 'black');
+                    this.highlight_and_linkAlignTarg('clean');
+                })
+                .on("click", (d, i) => {
+                    this.src_dep.collapse(i);
+                });
 
-            let targWords = this.svg.selectAll(".attentionGraphComponentTargText")
+
+            let targWords = this.svg.selectAll(
+                    ".attentionGraphComponentTargText")
                 .data(this.targWords)
                 .enter()
                 .append("text")
-		.attr('class', 'attentionGraphComponentTargText')
+                .attr('class', 'attentionGraphComponentTargText')
                 .text(d => d)
                 .attr("x", (d, i) => this.targPos[i].x)
                 .attr("y", (d, i) => this.targPos[i].y - this.rectHeight *
@@ -153,162 +156,178 @@ class attentionGraphComponent extends attentionComponent {
                 .style("writing-mode", this.checkTargOrientation.bind(this))
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
-		.on('mouseover', (d, i, nodes)=>{
-			d3.select(nodes[i]).style('fill', 'orange');
-			this.highlight_and_linkAlignSrc(i);
-		})
-		.on('mouseout', (d, i, nodes)=>{
-			d3.select(nodes[i]).style('fill', 'black');
-			this.highlight_and_linkAlignSrc('clean');
-		})
-		.on("click", (d, i) => {
-			this.targ_dep.collapse(i);
+                .on('mouseover', (d, i, nodes) => {
+                    d3.select(nodes[i]).style('fill', 'orange');
+                    this.highlight_and_linkAlignSrc(i);
+                })
+                .on('mouseout', (d, i, nodes) => {
+                    d3.select(nodes[i]).style('fill', 'black');
+                    this.highlight_and_linkAlignSrc('clean');
+                })
+                .on("click", (d, i) => {
+                    this.targ_dep.collapse(i);
                 });
         }
     }
 
-    highlight_and_linkAlignSrc(index){
-	    
-	 if(index == 'clean'){
-		 this.targ_dep.highlight(-1);
-		 this.src_dep.highlight(-1);
-		 
-		 d3.selectAll('.attentionGraphComponentSrcText').style('fill', 'black');
-		 d3.selectAll('.attentionGraphComponentSrcRect').style('fill', '#87CEFA');
-		 d3.selectAll('.attentionGraphComponentAttConnect').style('stroke', '#87CEFA');
-	 }
-	 else{   
-	    	this.targ_dep.highlight(index);
-	    	this.currentMatrix = this.normAttention;
-		
-	    	//maximum value index
-	    	let max = -1;
-	    	let maxindex = -1;
-	    	for(let i = 0; i < this.currentMatrix.length; i++){
-	    		if (max < this.currentMatrix[i][index]){
-				max = this.currentMatrix[i][index];
-				maxindex = i;
-			}
-	    	}
-		
-		d3.selectAll('.attentionGraphComponentSrcText').filter((d,i)=>{return i == maxindex;})
-		.style('fill', 'orange');
-		d3.selectAll('.attentionGraphComponentSrcRect').filter((d,i)=>{return i == maxindex;})
-		.style('fill', 'orange');
-		d3.selectAll('.attentionGraphComponentAttConnect').filter((d,i)=>{
-			return i == (maxindex * this.currentMatrix[0].length + index);
-		})
-		.style('stroke', 'orange');
-	    	this.src_dep.highlight(maxindex);
-	}
+    highlight_and_linkAlignSrc(index) {
+
+        if (index == 'clean') {
+            this.targ_dep.highlight(-1);
+            this.src_dep.highlight(-1);
+
+            d3.selectAll('.attentionGraphComponentSrcText').style('fill',
+                'black');
+            d3.selectAll('.attentionGraphComponentSrcRect').style('fill',
+                '#87CEFA');
+            d3.selectAll('.attentionGraphComponentAttConnect').style(
+                'stroke', '#87CEFA');
+        } else {
+            this.targ_dep.highlight(index);
+            this.currentMatrix = this.normAttention;
+
+            //maximum value index
+            let max = -1;
+            let maxindex = -1;
+            for (let i = 0; i < this.currentMatrix.length; i++) {
+                if (max < this.currentMatrix[i][index]) {
+                    max = this.currentMatrix[i][index];
+                    maxindex = i;
+                }
+            }
+
+            d3.selectAll('.attentionGraphComponentSrcText').filter((d, i) => {
+                    return i == maxindex;
+                })
+                .style('fill', 'orange');
+            d3.selectAll('.attentionGraphComponentSrcRect').filter((d, i) => {
+                    return i == maxindex;
+                })
+                .style('fill', 'orange');
+            d3.selectAll('.attentionGraphComponentAttConnect').filter((d, i) => {
+                    return i == (maxindex * this.currentMatrix[0].length +
+                        index);
+                })
+                .style('stroke', 'orange');
+            this.src_dep.highlight(maxindex);
+        }
     }
-    
-    highlight_and_linkAlignTarg(index){
-	    
-   	 if(index == 'clean'){
-   		 this.targ_dep.highlight(-1);
-   		 this.src_dep.highlight(-1);
- 		 
-		 d3.selectAll('.attentionGraphComponentTargText').style('fill', 'black');
-		 d3.selectAll('.attentionGraphComponentTargRect').style('fill', '#87CEFA');
-		 d3.selectAll('.attentionGraphComponentAttConnect').style('stroke', '#87CEFA');
-   	 }
-   	 else{
-		this.src_dep.highlight(index);
-	    	this.currentMatrix = this.normAttention;
-		
-	    	//maximum value index
-	    	let max = -1;
-	    	let maxindex = -1;
-	    	for(let i = 0; i < this.currentMatrix[index].length; i++){
-		    if(max < this.currentMatrix[index][i]){
-			    max = this.currentMatrix[index][i];
-			    maxindex = i;
-		    }
-	    	}
-		
-		d3.selectAll('.attentionGraphComponentTargText').filter((d,i)=>{return i == maxindex;})
-		.style('fill', 'orange');
-		d3.selectAll('.attentionGraphComponentTargRect').filter((d,i)=>{return i == maxindex;})
-		.style('fill', 'orange');
-		d3.selectAll('.attentionGraphComponentAttConnect').filter((d,i)=>{
-			return i == (index * this.currentMatrix[0].length + maxindex);
-		})
-		.style('stroke', 'orange');
-		
-	    	this.targ_dep.highlight(maxindex);
-    	}
+
+    highlight_and_linkAlignTarg(index) {
+
+        if (index == 'clean') {
+            this.targ_dep.highlight(-1);
+            this.src_dep.highlight(-1);
+
+            d3.selectAll('.attentionGraphComponentTargText').style('fill',
+                'black');
+            d3.selectAll('.attentionGraphComponentTargRect').style('fill',
+                '#87CEFA');
+            d3.selectAll('.attentionGraphComponentAttConnect').style(
+                'stroke', '#87CEFA');
+        } else {
+            this.src_dep.highlight(index);
+            this.currentMatrix = this.normAttention;
+
+            //maximum value index
+            let max = -1;
+            let maxindex = -1;
+            for (let i = 0; i < this.currentMatrix[index].length; i++) {
+                if (max < this.currentMatrix[index][i]) {
+                    max = this.currentMatrix[index][i];
+                    maxindex = i;
+                }
+            }
+
+            d3.selectAll('.attentionGraphComponentTargText').filter((d, i) => {
+                    return i == maxindex;
+                })
+                .style('fill', 'orange');
+            d3.selectAll('.attentionGraphComponentTargRect').filter((d, i) => {
+                    return i == maxindex;
+                })
+                .style('fill', 'orange');
+            d3.selectAll('.attentionGraphComponentAttConnect').filter((d, i) => {
+                    return i == (index * this.currentMatrix[0].length +
+                        maxindex);
+                })
+                .style('stroke', 'orange');
+
+            this.targ_dep.highlight(maxindex);
+        }
     }
-    
-    generateTextGeometry(){
-    	
-	    ////////// src words ////////////////
-	    let srcText = [];
-	    
-	    let srcRect = [];
-	    
-	    let srcWords = this.sen2word2(this.data['currentPair'][0]);
-	    
-	    let text_loc = this.width / (srcWords.length + 1);
-	    
-	    for(let i = 0 ; i < srcWords.length; i++){
-		    let textitem = {};
-		    let rectitem = {};
-		    
-		    textitem['x'] = text_loc;
-		    
-		    textitem['y'] = this.height / 3 * this.startRange + this.rectHeight * 0.5;
-		    
-		    textitem['text'] = srcWords[i];
-		    
-		    if(!this.srcIndexMaskSet.has(i)){
-			    textitem['display'] = 'block'
-			    text_loc += this.width / (src.length + 1);
-		    }
-		    else{
-			    textitem['display'] = 'none'; 
-		    }
-		    srcText.push(textitem);
-	    }
-	    
-	    
-	    ////////// targ words ////////////////
-	    let targText = [];
-	    
-	    let targWords = this.sen2words(this.data['currentPair'][1]);
-	    
-	    text_loc = this.width / (targWords.length + 1);
-	    
-	    for(let i = 0; i < targWords.length; i++){
-		    let item = {};
-		    
-		    item['x'] = text_loc;
-		    
-		    item['y'] = this.height / 3 * this.endRange;
-		    
-		    item['text'] = targWords[i];
-		    
-		    if(!this.targIndexMaskSet.has(i)){	    
-			    item['display'] = 'block';
-			    text_loc += this.width / (src.length + 1);
-		    }else{		    
-			    item['display'] = 'none';
-		    }
-		    
-		    targText.push(item);  	
-	    }
-	    
-	    return {'src':srcText, 'targ':targText};
+
+    generateTextGeometry() {
+
+        ////////// src words ////////////////
+        let srcText = [];
+
+        let srcRect = [];
+
+        let srcWords = this.sen2word2(this.data['currentPair'][0]);
+
+        let text_loc = this.width / (srcWords.length + 1);
+
+        for (let i = 0; i < srcWords.length; i++) {
+            let textitem = {};
+            let rectitem = {};
+
+            textitem['x'] = text_loc;
+
+            textitem['y'] = this.height / 3 * this.startRange + this.rectHeight *
+                0.5;
+
+            textitem['text'] = srcWords[i];
+
+            if (!this.srcIndexMaskSet.has(i)) {
+                textitem['display'] = 'block'
+                text_loc += this.width / (src.length + 1);
+            } else {
+                textitem['display'] = 'none';
+            }
+            srcText.push(textitem);
+        }
+
+
+        ////////// targ words ////////////////
+        let targText = [];
+
+        let targWords = this.sen2words(this.data['currentPair'][1]);
+
+        text_loc = this.width / (targWords.length + 1);
+
+        for (let i = 0; i < targWords.length; i++) {
+            let item = {};
+
+            item['x'] = text_loc;
+
+            item['y'] = this.height / 3 * this.endRange;
+
+            item['text'] = targWords[i];
+
+            if (!this.targIndexMaskSet.has(i)) {
+                item['display'] = 'block';
+                text_loc += this.width / (src.length + 1);
+            } else {
+                item['display'] = 'none';
+            }
+
+            targText.push(item);
+        }
+
+        return {
+            'src': srcText,
+            'targ': targText
+        };
     }
-    
-    generateMatrixGeometry(){
-    	
+
+    generateMatrixGeometry() {
+
     }
 
     drawDepTree() {
         if (this.srcDepTreeData) {
-            if (this.src_dep === undefined || this.src_dep.getDepTreeData() !==
-                this.srcDepTreeData) {
+            if (this.src_dep === undefined) {
 
                 this.src_dep = new dependencyTreePlot(this.svg, 'h-top',
                     this.srcWords,
@@ -322,8 +341,7 @@ class attentionGraphComponent extends attentionComponent {
         }
 
         if (this.targDepTreeData) {
-            if (this.targ_dep === undefined || this.targ_dep.getDepTreeData() !==
-                this.targDepTreeData) {
+            if (this.targ_dep === undefined) {
 
                 this.targ_dep = new dependencyTreePlot(this.svg, 'h-bottom',
                     this.targWords,
@@ -340,11 +358,11 @@ class attentionGraphComponent extends attentionComponent {
             }
         }
     }
-    
-    collapseAnimation(){
-	    
+
+    collapseAnimation() {
+
     }
-	 
+
     drawConnection() {
         var d3line = d3.line()
             .x(function(d) {
@@ -356,7 +374,8 @@ class attentionGraphComponent extends attentionComponent {
         // .curve("d3.curveLinear");
         // console.log(this.attList);
         this.svg.selectAll(".attentionGraphComponentAttConnect").remove();
-        let connections = this.svg.selectAll(".attentionGraphComponentAttConnect")
+        let connections = this.svg.selectAll(
+                ".attentionGraphComponentAttConnect")
             .data(this.attList)
             .enter()
             .append("path")
@@ -389,8 +408,8 @@ class attentionGraphComponent extends attentionComponent {
             .style("stroke", "#87CEFA")
             .style("opacity", d => 0.1 + d[2])
             .style("fill", "none");
-	    
-	    return connections;
+
+        return connections;
     }
 
     computeWordPosition(src, targ) {
@@ -408,7 +427,7 @@ class attentionGraphComponent extends attentionComponent {
             };
         });
     }
- 
+
 
     /*
         parseDataUpdate(msg) {
@@ -420,7 +439,7 @@ class attentionGraphComponent extends attentionComponent {
                     this.targDepTreeData = undefined;
 
                     this.draw();
-                    var pair = this.data["currentPair"];
+                    var pair = this.data["currentPair"]["sentences"];
 
                     this.callFunc("parseSentence", {
                         "sentence": pair[0]
@@ -446,9 +465,9 @@ class attentionGraphComponent extends attentionComponent {
 
     /////////////// handler /////////////////
     handleParsedSentence(parseResult) {
-        if (parseResult["sentence"] == this.data["currentPair"][0]) {
+        if (parseResult["sentence"] == this.data["currentPair"]["sentences"][0]) {
             this.srcDepTreeData = parseResult["depTree"];
-        } else if (parseResult["sentence"] == this.data["currentPair"][1]) {
+        } else if (parseResult["sentence"] == this.data["currentPair"]["sentences"][1]) {
             this.targDepTreeData = parseResult["depTree"];
         }
         this.draw();
@@ -529,7 +548,7 @@ class attentionGraphComponent extends attentionComponent {
             return "hortizontal-rl";
 
     }
-    
+
     checkTargOrientation(d) {
         var cbbox = this.svg.select(".targRect").node().getBBox();
         // console.log(cbbox);

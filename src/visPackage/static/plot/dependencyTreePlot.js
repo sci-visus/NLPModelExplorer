@@ -23,8 +23,8 @@ class dependencyTreePlot {
         this.text_box_height = Math.min(this.height * 0.1, 10);
 
         this.collapseIndex = new Set();
-	
-	this.highlight_indexs = [];
+
+        this.highlight_indexs = [];
 
         this.filter(); //init the display index
         // console.log(dep_triples);
@@ -32,7 +32,7 @@ class dependencyTreePlot {
     }
 
     clear() {
-        this.svg.html('');
+        this.svg.selectAll("*").remove();
     }
 
     getDepTreeData() {
@@ -73,7 +73,7 @@ class dependencyTreePlot {
     collapse(i) {
         // this.display_index.indexOf(d[0])
         //if (this.display_index[i] !== i) {
-            //correct index, when the not all words are displayed
+        //correct index, when the not all words are displayed
         //    i = this.display_index[i];
         //}
 
@@ -84,21 +84,21 @@ class dependencyTreePlot {
         }
 
         this.filter();
-	
-	//this.draw();
+
+        //this.draw();
         //callback called, this will trigger a redraw
         this.onHandleCollapse();
-	//this.draw();
+        //this.draw();
     }
 
     //i: index of word in sentence
-    highlight(i){
-	    
-	    this.highlight_indexs = [];
-	    if(i != -1)
-	    	this.highlight_indexs = this.getChild(i);
-	    
-	    this.draw();
+    highlight(i) {
+
+        this.highlight_indexs = [];
+        if (i != -1)
+            this.highlight_indexs = this.getChild(i);
+
+        this.draw();
     }
 
     //support function for collapse: filter
@@ -109,9 +109,9 @@ class dependencyTreePlot {
         // console.log("collapseIndex:", this.collapseIndex);
 
         this.collapseIndex.forEach(d => {
-		let collapseChildren = this.getChild(d);
-                // console.log(d, collapseChildren);
-		childs = childs.concat(collapseChildren);
+            let collapseChildren = this.getChild(d);
+            // console.log(d, collapseChildren);
+            childs = childs.concat(collapseChildren);
         });
 
         let childs_set = new Set(childs);
@@ -141,7 +141,8 @@ class dependencyTreePlot {
         do {
             l = filter.size;
             for (let i = 0; i < this.dep_triples.length; i++) {
-                if (filter.has(this.dep_triples[i][0]) && !(filter.has(this.dep_triples[i][2]))) {
+                if (filter.has(this.dep_triples[i][0]) && !(filter.has(this
+                        .dep_triples[i][2]))) {
                     filter.add(this.dep_triples[i][2]);
                     childs.push(this.dep_triples[i][2]);
                 }
@@ -175,18 +176,19 @@ class dependencyTreePlot {
         this.clear();
 
         //arrow
-        let arrowid = uuidv1()
+        // let arrowid = uuidv1()
+        let arrowid = "depArrow";
         this.svg
-            .append("svg:defs")
-            .append("svg:marker")
-            .attr("id", arrowid)
+            .append("defs")
+            .append("marker")
+            .attr("id", "depArrow")
             .attr('viewBox', '0 0 10 10')
             .attr("refX", 1)
             .attr("refY", 5)
             .attr("markerWidth", 5)
             .attr("markerHeight", 5)
             .attr("orient", "auto")
-            .append("svg:path")
+            .append("path")
             .attr("d", "M 0 0 L 10 5 L 0 10 z")
             .style('fill', 'steelblue');
 
@@ -210,11 +212,11 @@ class dependencyTreePlot {
                 return lineFunction(d.data);
             })
             .attr("fill", "none")
-            .attr("stroke", (d)=>{ 
-		    return d.highlight?'orange':"gray";
-	    })
-            .attr("stroke-opacity", (d)=>{
-		    return d.highlight? 1:0.5;
+            .attr("stroke", (d) => {
+                return d.highlight ? 'orange' : "gray";
+            })
+            .attr("stroke-opacity", (d) => {
+                return d.highlight ? 1 : 0.5;
             })
             .attr("stroke-linejoin", "round")
             .attr("stroke-linecap", "round")
@@ -239,21 +241,27 @@ class dependencyTreePlot {
             .attr('y', function(d, i) {
                 return d.y;
             })
-	    .attr('font-weight', (d)=>{return d.highlight?'bold':'normal';})
-            .attr('font-size', (d, i)=>{
-		    return Math.min(12, d['width'] * 0.3) +'px';
+            .attr('font-weight', (d) => {
+                return d.highlight ? 'bold' : 'normal';
             })
-	    .style('writing-mode',(d)=>{
-		    return this.orientation == 'v-left'?'vertical-lr':'horizontal-tb';
-	    })
+            .attr('font-size', (d, i) => {
+                return Math.min(12, d['width'] * 0.3) + 'px';
+            })
+            .style('writing-mode', (d) => {
+                return this.orientation == 'v-left' ? 'vertical-lr' :
+                    'horizontal-tb';
+            })
             .attr("text-anchor", "middle")
             .attr("dominant-baseline", "central")
-	    .on('mouseover', function(){
-		    d3.select(this).attr('font-size', 12);
-	    })
-	    .on('mouseout', function(){
-	    	    d3.select(this).attr('font-size', function(d){return Math.min(12, d['width'] * 0.3) +'px';});
-	    })
+            .on('mouseover', function() {
+                d3.select(this).attr('font-size', 12);
+            })
+            .on('mouseout', function() {
+                d3.select(this).attr('font-size', function(d) {
+                    return Math.min(12, d['width'] * 0.3) +
+                        'px';
+                });
+            })
     }
 
 
@@ -295,7 +303,7 @@ class dependencyTreePlot {
                     word2_loc = this.pos[this.display_index.indexOf(d[2])],
                     item = {
                         'text': d[1],
-			'highlight':this.highlight_indexs.includes(d[2])
+                        'highlight': this.highlight_indexs.includes(d[2])
                     },
                     depth = this.PathDepth(d[0], d[2]);
                 //depth = this.nodeDepth(d[2]);
@@ -305,17 +313,17 @@ class dependencyTreePlot {
                     item['x'] = (word1_loc.x + word2_loc.x) / 2;
                     item['y'] = word1_loc.y - depth * this.text_box_height -
                         this.text_box_height * 1.5;
-		    item['width'] = Math.abs(word1_loc.x - word2_loc.x)
+                    item['width'] = Math.abs(word1_loc.x - word2_loc.x)
                 } else if (this.orientation == 'h-bottom') {
                     item['x'] = (word1_loc.x + word2_loc.x) / 2;
                     item['y'] = word1_loc.y + depth * this.text_box_height +
                         this.text_box_height * 1.5;
-		    item['width'] = Math.abs(word1_loc.x - word2_loc.x)
+                    item['width'] = Math.abs(word1_loc.x - word2_loc.x)
                 } else if (this.orientation == 'v-left') {
                     item['x'] = word1_loc.x - depth * this.text_box_width -
                         this.text_box_width * 1.5;
                     item['y'] = (word1_loc.y + word2_loc.y) / 2;
-		    item['width'] = Math.abs(word1_loc.y - word2_loc.y)
+                    item['width'] = Math.abs(word1_loc.y - word2_loc.y)
                 }
                 data.push(item)
             }
@@ -333,9 +341,12 @@ class dependencyTreePlot {
                     d[2])) {
                 let word1_loc = this.pos[this.display_index.indexOf(d[0])],
                     word2_loc = this.pos[this.display_index.indexOf(d[2])],
-		    item = {'data':[], 'highlight':this.highlight_indexs.includes(d[2])},
+                    item = {
+                        'data': [],
+                        'highlight': this.highlight_indexs.includes(d[2])
+                    },
                     depth = this.PathDepth(d[0], d[2]);
-                
+
                 if (this.orientation == 'h-top') {
                     //first point
                     item.data.push({
@@ -343,7 +354,7 @@ class dependencyTreePlot {
                         'y': word1_loc.y - this.text_box_height *
                             1.5
                     });
-		    		    
+
                     //second point
                     item.data.push({
                         'x': word1_loc.x * 5 / 6 + word2_loc.x * 1 /
