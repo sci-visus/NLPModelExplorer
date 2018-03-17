@@ -66,10 +66,10 @@ class batchEvaluation:
     '''
     def generateStatistic(self,outputPath):
         ## per original pair ##
-        self.storage["perturbErrorRatio"] = []
+        # self.storage["perturbErrorRatio"] = []
         ## self.storage["originPredCase"] = []
         ## per all(perturbed+original) pairs ##
-        self.storage["predCase"] = []
+        # self.storage["predCase"] = []
         preOrigIndex = None
         origIndex = None
 
@@ -80,29 +80,29 @@ class batchEvaluation:
         # json output only have per original pair information
         self.jsonOut = []
 
+        trueLabel = None
+        currentPredLabel = None
+        predLabel = None
+        ratio = 0
         for index, origIndex in enumerate(self.storage["mapToOrigIndex"]):
 
-            # if index > 200:
-            #     break
+            if preOrigIndex != None and preOrigIndex != origIndex:
+                count = count + 1
+                if allPred != 0:
+                    ratio = 1.0-float(wrongPred)/float(allPred)
+                else:
+                    ratio = 1.0
 
-            if preOrigIndex and preOrigIndex != origIndex:
-                # self.storage["origPerturbCount"] = count
-
-                predLabel = self.storage["origPred"][origIndex]
-                # print origPred
-                # predLabel = labels[np.argmax(origPred)]
-                ratio = 1.0-float(wrongPred)/float(allPred)
-                # self.storage["perturbErrorRatio"].append(ratio)
-                # print ratio
-
+                predLabel = self.storage["origPred"][preOrigIndex]
+                #record previous entry
                 item = {
-                    "index": origIndex,
-                    "src": self.storage["origSrc"][origIndex],
-                    "targ": self.storage["origTarg"][origIndex],
+                    "index": preOrigIndex,
+                    "src": self.storage["origSrc"][preOrigIndex],
+                    "targ": self.storage["origTarg"][preOrigIndex],
                     "stability": ratio,
-                    "predict": origLabel+'-'+predLabel,
-                    "correctness": origLabel == predLabel,
-                    "trueLabel":origLabel,
+                    "predict": trueLabel+'-'+predLabel,
+                    "correctness": trueLabel == predLabel,
+                    "trueLabel":trueLabel,
                     "perturbCount":allPred
                 }
                 self.jsonOut.append(item)
@@ -111,26 +111,19 @@ class batchEvaluation:
                 wrongPred = 0
                 allPred = 0
             else:
-                pred = labels[np.argmax(self.storage["pred"][index])]
-                # print  self.storage["mapToOrigIndex"]
-                # origIndex = self.storage["mapToOrigIndex"][index]
-                # print len(self.storage["origLabel"]), origIndex
-                # print len(self.storage["origPred"])
-                origLabel = self.storage["origLabel"][origIndex]
-                # print origLabel, pred
+                currentPredLabel = labels[np.argmax(self.storage["pred"][index])]
+                trueLabel = self.storage["origLabel"][origIndex]
 
-                #store the string for both the ground truth and pred label
-                self.storage["predCase"].append(origLabel+'-'+pred)
-
-                if pred != origLabel:
-                    print pred, origLabel
+                if currentPredLabel != trueLabel:
                     wrongPred = wrongPred + 1
-                    # print wrongPred
 
                 allPred = allPred + 1
 
             preOrigIndex = origIndex
 
+            # print "original pair count: ", count
+            # if count > 1:
+            #     break
         ####### output json ##########
         import json
         with open(outputPath, 'w') as outfile:
@@ -171,6 +164,7 @@ class batchEvaluation:
                 self.storage["origSrc"].append(src_orig)
                 self.storage["origTarg"].append(targ_orig)
                 self.storage["origLabel"].append(label_orig)
+                ### fixme ###
                 prediction = labels[np.argmax(self.predict([src_orig,targ_orig]))]
                 self.storage["origPred"].append(prediction)
 
@@ -226,24 +220,26 @@ def main(args):
     gen = sentenceGenerator()
 
     ###### test set ######
-    evaluator = batchEvaluation("../data/snli_1.0/src-test.txt",
-                           "../data/snli_1.0/targ-test.txt",
-                           "../data/snli_1.0/label-test.txt",
-                           "../data/test-pred-statistic.pkl" )
+    # evaluator = batchEvaluation("../data/snli_1.0/src-test.txt",
+    #                        "../data/snli_1.0/targ-test.txt",
+    #                        "../data/snli_1.0/label-test.txt",
+    #                        "../data/test-pred-statistic.pkl" )
 
     ###### dev set ######
-    # evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
-    #                        "../data/snli_1.0/targ-dev.txt",
-    #                        "../data/snli_1.0/label-dev.txt",
-    #                        "../data/dev-pred-statistic.pkl" )
+    evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
+                           "../data/snli_1.0/targ-dev.txt",
+                           "../data/snli_1.0/label-dev.txt",
+                           "../data/dev-pred-statistic.pkl" )
+
     evaluator.setPredictionHook(model.predict)
     evaluator.setAttentionHook(model.attention)
     evaluator.setSentencePerturbationHook(gen.perturbSentence)
-    evaluator.setSentenceVerifyHook(gen.verifySentence)
+    # evaluator.setSentenceVerifyHook(gen.verifySentence)
 
     evaluator.initialize()
-    # evaluator.generateStatistic('../data/dev-set-statistic.json')
-    evaluator.generateStatistic('../data/test-set-statistic.json')
+    print "finish load pkl ..."
+    evaluator.generateStatistic('../data/dev-set-statistic.json')
+    # evaluator.generateStatistic('../data/test-set-statistic.json')
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))

@@ -22,7 +22,7 @@ class socketioManager:
 
     def callFunc(self, funcName, params):
         func = getattr(self.object,funcName)
-        print func, params
+        # print func, params
         #params is a dict for storing function parameters
         return func(**params)
 

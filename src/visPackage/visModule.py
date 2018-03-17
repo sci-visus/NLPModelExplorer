@@ -205,7 +205,7 @@ class textEntailVisModule(visModule):
     def predictAll(self):
         allSourceSens = None
         allTargetSens = None
-        sentencePair = dataManager.getData("currentPair")['sentences'];
+        sentencePair = dataManager.getData("currentPair")['sentences']
         if dataManager.getData("allSourceSens") is not None:
             allSourceSens = dataManager.getData("allSourceSens")
         else:
@@ -215,7 +215,7 @@ class textEntailVisModule(visModule):
         else:
             allTargetSens = [sentencePair[1]]
         # print "original s, t:"
-        # print allSourceSens, allTargetSens
+        print "all sens length:", len(allSourceSens), len(allTargetSens)
 
         ###### if there is only one pair #####
         if len(allSourceSens) <= 1 and len(allTargetSens) <= 1:
@@ -223,14 +223,22 @@ class textEntailVisModule(visModule):
 
         allPairsPrediction = np.zeros( (len(allSourceSens), len(allTargetSens), 3) )
         # allAttention = [None]
+        wrongPred = 0
+        allPred = 0
+        labels = ["entailment", "neutral", "contradiction"]
+        groundTruth = dataManager.getData("currentPair")['label']
         for i, source in enumerate(allSourceSens):
             for j, target in enumerate(allTargetSens):
                 ######### only one perturbation is allow in each pair #######
                 if i==0 or j==0:
                     predResult = self.predictionHook([source, target])
+                    if groundTruth != labels[np.argmax(predResult)]:
+                        wrongPred = wrongPred + 1
+                    allPred = allPred + 1
                     allPairsPrediction[i,j,:] = predResult
                     # allPairsPrediction[j,i,:] = predResult
         # print allPairsPrediction
+        print "##### ratio:", 1.0-float(wrongPred)/float(allPred), wrongPred, allPred
         dataManager.setData("allPairsPrediction", allPairsPrediction)
         # dataManager.setData("allAttention", allAttention)
 

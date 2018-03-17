@@ -104,7 +104,7 @@ class attentionComponent extends baseComponent {
                 this.normAttention = this.rawAttention.map(d => this.softmax(
                     d));
                 // console.log(this.rawAttention);
-                console.log(this.normAttention);
+                // console.log(this.normAttention);
                 // this.normAttention =
 
                 this.draw();
