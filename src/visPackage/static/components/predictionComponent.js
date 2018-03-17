@@ -535,14 +535,14 @@ class predictionComponent extends baseComponent {
                     .style('stroke', 'grey')
                     .style("fill", "none");
 
-                this.svg.append("circle")
-                    .attr("class", "predPath")
-                    .attr("cx", line[1][0])
-                    .attr("cy", line[1][1])
-                    .attr("r", 6)
-                    // .style("stroke-dasharray", ("2, 2"))
-                    .style('stroke', 'white')
-                    .attr("fill", "grey");
+                // this.svg.append("circle")
+                //     .attr("class", "predPath")
+                //     .attr("cx", line[1][0])
+                //     .attr("cy", line[1][1])
+                //     .attr("r", 6)
+                //     // .style("stroke-dasharray", ("2, 2"))
+                //     .style('stroke', 'white')
+                //     .attr("fill", "grey");
 
                 this.svg.append('path')
                     .attr("class", "predPath")
@@ -550,6 +550,12 @@ class predictionComponent extends baseComponent {
                     .style('stroke', 'grey')
                     .attr("marker-end", "url(#arrowhead)")
                     .attr("d", d => d3line(line));
+
+                //update prediction
+                var prediction = path[1];
+                //add sentence index
+                prediction.concat([0, 0]);
+                this.updatePredictDisplay([prediction]);
             }
         }
     }
