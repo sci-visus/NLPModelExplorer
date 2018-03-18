@@ -97,31 +97,13 @@ class attentionMatrixComponent extends attentionComponent {
                 .attr('text-anchor', 'middle')
                 .classed('attentionMatrixComponent_text_normal', true)
                 .on('mouseover', (d, i, nodes) => {
-                    this.targ_dep.highlight(i);
-                    this.setData("highlight", i);
+			this.highlight(i);
                 })
                 .on('mouseout', (d, i, nodes) => {
-                    this.targ_dep.highlight(-1);
-                    this.setData("highlight", -1);
+			this.highlight(-1);
                 })
                 .on('click', (d, i, nodes) => {
-                    d3.select(nodes[i])
-                        .classed('attentionMatrixComponent_text_normal', !
-                            d3.select(nodes[i]).classed(
-                                "attentionMatrixComponent_text_normal")
-                        )
-                        .classed(
-                            'attentionMatrixComponent_text_collapse', !
-                            d3.select(nodes[i]).classed(
-                                "attentionMatrixComponent_text_collapse"
-                            ));
-
-                    //get the child node of i and aggregate the data
-                    this.aggregationMatrix(i, this.targ_dep.getChild(i));
-                    //TODO: get all the child node and do softmax
-
-                    this.targ_dep.collapse(i);
-                    this.collapse_Animation('vertical');
+			this.collapse(i, nodes);
                 });
 
             //Draw src text
@@ -180,6 +162,29 @@ class attentionMatrixComponent extends attentionComponent {
                 })
                 .classed('attentionMatrixComponent_background_text', true);
         }
+    }
+
+    highlight(i){
+            this.targ_dep.highlight(i);
+            this.setData("highlight", i);
+    }
+    
+    
+    collapse(i, nodes){
+    	d3.select(nodes[i])
+        .classed('attentionMatrixComponent_text_normal', !
+            d3.select(nodes[i]).classed(
+                "attentionMatrixComponent_text_normal")
+        )
+        .classed(
+            'attentionMatrixComponent_text_collapse', !
+            d3.select(nodes[i]).classed(
+                "attentionMatrixComponent_text_collapse"
+            ));
+    	this.aggregationMatrix(i, this.targ_dep.getChild(i));
+
+    	this.targ_dep.collapse(i);
+    	this.collapse_Animation('vertical');
     }
 
     ////////////// rect mouse over event ///////////////
