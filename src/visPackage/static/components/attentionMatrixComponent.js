@@ -77,16 +77,18 @@ class attentionMatrixComponent extends attentionComponent {
                 .style('fill', d => {
                     return this.colorbar.lookup(d.value);
                 })
-		.call(d3.drag()
-		.on('start', (d, i, nodes)=>{
-			this.dragEventX = d3.event.x;
-		})
-		.on('drag', (d, i, nodes)=>{
-			this.rectDragEvent(i, d, nodes);
-		})
-		.on('end', (d, i)=>{
-			this.dragEventX == undefined;
-		}));
+                .call(d3.drag()
+                    .on('start', (d, i, nodes) => {
+                        this.dragEventX = d3.event.x;
+                    })
+                    .on('drag', (d, i, nodes) => {
+                        this.rectDragEvent(i, d, nodes);
+                    })
+                    .on('end', (d, i) => {
+                        this.dragEventX == undefined;
+                        console.log("trigger attention update");
+                        this.attUpdate();
+                    }));
             /////////////////////// draw text /////////////////////////
             let texts = this.generateTextGeometry();
             //Draw targ text
@@ -107,13 +109,13 @@ class attentionMatrixComponent extends attentionComponent {
                 .attr('text-anchor', 'middle')
                 .classed('attentionMatrixComponent_text_normal', true)
                 .on('mouseover', (d, i, nodes) => {
-			this.highlight(i);
+                    this.highlight(i);
                 })
                 .on('mouseout', (d, i, nodes) => {
-			this.highlight(-1);
+                    this.highlight(-1);
                 })
                 .on('click', (d, i, nodes) => {
-			this.collapse(i, nodes, 'vertical');
+                    this.collapse(i, nodes, 'vertical');
                 });
 
             //Draw src text
@@ -162,73 +164,72 @@ class attentionMatrixComponent extends attentionComponent {
         }
     }
 
-    rectDragEvent(i, d, nodes){
-	    
-	    if(this.dragEventX < d3.event.x){
-		    if(d.value + 0.1 <= 1){
-			    d.value += 0.1;
-		    	d3.select(nodes[i])
-			    .style('fill', (d)=>{
-				    return this.colorbar.lookup(d.value);
-			    });
-		    }
-	    }
-	    else if(this.dragEventX > d3.event.x){
-		    if(d.value - 0.1 >= 0){
-			    d.value  -= 0.1;
-		    	d3.select(nodes[i])
-			    .style('fill', (d)=>{
-				    return this.colorbar.lookup(d.value);
-			    });
-		    }
-	    }
-	    
-    	    //renormalize current row.
-	    let row = Math.floor(i / this.normAttention[0].length);
-	    let col = i % this.normAttention[0].length;
-	
-	    this.normAttention[row][col] = d.value;
-	    //this.aggregatedMatrix[row] = 
-	    //TODO: this may be a bug if you try to renormalize the the matrix after collaspe
-	    this.normAttention[row] = this.normalization(this.normAttention[row]);
-	    
-	    d3.selectAll(nodes).style('fill', (d, i)=>{
-		    let r = Math.floor(i / this.normAttention[0].length);
-		    let c = i % this.normAttention[0].length;
-    
-		    if(r == row){
-			    d.value = this.normAttention[row][c];
-		    }
-		    return this.colorbar.lookup(d.value);
-	    });
+    rectDragEvent(i, d, nodes) {
+
+        if (this.dragEventX < d3.event.x) {
+            if (d.value + 0.1 <= 1) {
+                d.value += 0.1;
+                d3.select(nodes[i])
+                    .style('fill', (d) => {
+                        return this.colorbar.lookup(d.value);
+                    });
+            }
+        } else if (this.dragEventX > d3.event.x) {
+            if (d.value - 0.1 >= 0) {
+                d.value -= 0.1;
+                d3.select(nodes[i])
+                    .style('fill', (d) => {
+                        return this.colorbar.lookup(d.value);
+                    });
+            }
+        }
+
+        //renormalize current row.
+        let row = Math.floor(i / this.normAttention[0].length);
+        let col = i % this.normAttention[0].length;
+
+        this.normAttention[row][col] = d.value;
+        //this.aggregatedMatrix[row] =
+        //TODO: this may be a bug if you try to renormalize the the matrix after collaspe
+        this.normAttention[row] = this.normalization(this.normAttention[row]);
+
+        d3.selectAll(nodes).style('fill', (d, i) => {
+            let r = Math.floor(i / this.normAttention[0].length);
+            let c = i % this.normAttention[0].length;
+
+            if (r == row) {
+                d.value = this.normAttention[row][c];
+            }
+            return this.colorbar.lookup(d.value);
+        });
     }
 
-    highlight(i){
-            this.targ_dep.highlight(i);
-            this.setData("highlight", i);
+    highlight(i) {
+        this.targ_dep.highlight(i);
+        this.setData("highlight", i);
     }
-    
-    collapse(i, nodes, orientation){
-    	d3.select(nodes[i])
-        .classed('attentionMatrixComponent_text_normal', !
-            d3.select(nodes[i]).classed(
-                "attentionMatrixComponent_text_normal")
-        )
-        .classed(
-            'attentionMatrixComponent_text_collapse', !
-            d3.select(nodes[i]).classed(
-                "attentionMatrixComponent_text_collapse"
-            ));
-	
-	    if(orientation == 'vertical'){
-    		    this.aggregationMatrix(i, this.targ_dep.getChild(i));
-		    this.targ_dep.collapse(i);
-    		
-	    }else if(orientation == 'horizontal'){
-		    this.src_dep.collapse(i);    
-	    }
-	    
-	    this.collapse_Animation(orientation);
+
+    collapse(i, nodes, orientation) {
+        d3.select(nodes[i])
+            .classed('attentionMatrixComponent_text_normal', !
+                d3.select(nodes[i]).classed(
+                    "attentionMatrixComponent_text_normal")
+            )
+            .classed(
+                'attentionMatrixComponent_text_collapse', !
+                d3.select(nodes[i]).classed(
+                    "attentionMatrixComponent_text_collapse"
+                ));
+
+        if (orientation == 'vertical') {
+            this.aggregationMatrix(i, this.targ_dep.getChild(i));
+            this.targ_dep.collapse(i);
+
+        } else if (orientation == 'horizontal') {
+            this.src_dep.collapse(i);
+        }
+
+        this.collapse_Animation(orientation);
     }
 
     ////////////// rect mouse over event ///////////////

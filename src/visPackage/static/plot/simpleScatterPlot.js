@@ -3,7 +3,9 @@ class simpleScatterPlot {
         this.svg = svg.append("g");
         this.update(pos, size);
         this.axisXflag = axisX;
-        this.axisYflag = axisY
+        this.axisYflag = axisY;
+
+        /// small button
     }
 
     draw() {

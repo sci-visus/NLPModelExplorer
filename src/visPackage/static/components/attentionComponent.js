@@ -56,6 +56,8 @@ class attentionComponent extends baseComponent {
         }
     }
 
+
+
     sen2words(sen) {
         var words = sen.match(/\S+/g);
         // words.unshift("\<s\>");
@@ -94,6 +96,13 @@ class attentionComponent extends baseComponent {
         this.draw();
     }
 
+    attUpdate() {
+        console.log(this.normAttention);
+        this.callFunc("attentionUpdate", {
+            "attMatrix": this.normAttention
+        });
+    }
+
     //convert raw attention to normalized attention
     //orientation specifiy whether we can normalize row / col
     convertRawAtt(raw, orientation = "row") {
@@ -130,7 +139,7 @@ class attentionComponent extends baseComponent {
                     'row');
 
                 // console.log(this.rawAttention);
-                console.log(this.normAttention);
+                // console.log(this.normAttention);
 
                 this.draw();
 
@@ -244,14 +253,14 @@ class attentionComponent extends baseComponent {
             })
         })
     }
-    
-    normalization(arr){
-         return arr.map(function(value, index) {
-                return value / arr.map(function(y /*value*/ ) {
-			return y;
-                }).reduce(function(a, b) {
-			return a + b;
-                })
-         });
+
+    normalization(arr) {
+        return arr.map(function(value, index) {
+            return value / arr.map(function(y /*value*/ ) {
+                return y;
+            }).reduce(function(a, b) {
+                return a + b;
+            })
+        });
     }
 }

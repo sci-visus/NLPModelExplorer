@@ -247,7 +247,7 @@ class modelInterface:
         print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
         return "att", y.numpy()[0]
 
-    def updateAttention(self, sentences, attMatrix):
+    def updateAttention(self, sentencePair, attMatrix):
         #map to token
         sourceSen = sentencePair[0]
         targetSen = sentencePair[1]
@@ -263,7 +263,10 @@ class modelInterface:
 
         ####### set the flag ############
         self.opt.customized = 1
+        self.pipeline = Pipeline(self.opt, self.shared)
         self.shared.customized_att1 = torch.Tensor(attMatrix)
+        print self.shared.customized_att1
+        self.shared.customized_att2 = torch.Tensor(attMatrix).transpose(0,1)
 
         # print source.shape[1], target.shape[1]
         self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
@@ -277,6 +280,7 @@ class modelInterface:
 
         ####### restore the flag ########
         self.opt.customized = 0
+        self.pipeline = Pipeline(self.opt, self.shared)
         return pred
 
 

@@ -217,6 +217,7 @@ class textEntailVisModule(visModule):
 
     def attentionUpdate(self, attMatrix):
         sentencePair = dataManager.getData("currentPair")['sentences']
+        print sentencePair
         pred = self.attentionUpdateHook(sentencePair, attMatrix)
         dataManager.setData("prediction", pred)
 
