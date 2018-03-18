@@ -124,12 +124,10 @@ class attentionGraphComponent extends attentionComponent {
                 .style("writing-mode", this.checkSrcOrientation.bind(this))
                 .style("text-anchor", "middle")
                 .on('mouseover', (d, i, nodes) => {
-                    d3.select(nodes[i]).style('fill', 'orange');
-                    this.highlight_and_linkAlignTarg(i);
+                    this.highlight_and_linkAlignTarg('highlight', i,  nodes);
                 })
                 .on('mouseout', (d, i, nodes) => {
-                    d3.select(nodes[i]).style('fill', 'black');
-                    this.highlight_and_linkAlignTarg('clean');
+                    this.highlight_and_linkAlignTarg('clean', i,  nodes);
                 })
                 .on("click", (d, i) => {
                     this.src_dep.collapse(this.src_dep.display_index[i]);
@@ -151,12 +149,10 @@ class attentionGraphComponent extends attentionComponent {
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
                 .on('mouseover', (d, i, nodes) => {
-                    d3.select(nodes[i]).style('fill', 'orange');
-                    this.highlight_and_linkAlignSrc(i);
+                    this.highlight_and_linkAlignSrc('highlight', i, nodes);
                 })
                 .on('mouseout', (d, i, nodes) => {
-                    d3.select(nodes[i]).style('fill', 'black');
-                    this.highlight_and_linkAlignSrc('clean');
+                    this.highlight_and_linkAlignSrc('clean', i,  nodes);
                 })
                 .on("click", (d, i) => {
                     this.targ_dep.collapse(this.targ_dep.display_index[
@@ -166,24 +162,29 @@ class attentionGraphComponent extends attentionComponent {
         }
     }
 
-    highlight_and_linkAlignSrc(index) {
+    highlight_and_linkAlignSrc(opt, index, nodes) {
+	
+        if (opt == 'clean') {
+		d3.select(nodes[index]).style('fill', 'black');
+            
+		this.targ_dep.highlight(-1);
+		this.src_dep.highlight(-1);
 
-        if (index == 'clean') {
-            this.targ_dep.highlight(-1);
-            this.src_dep.highlight(-1);
-
-            d3.selectAll('.attentionGraphComponentSrcText').style('fill',
-                'black');
-            d3.selectAll('.attentionGraphComponentSrcRect').style('fill',
-                '#87CEFA');
-            d3.selectAll('.attentionGraphComponentAttConnect').style(
-                'stroke', '#87CEFA');
+            	d3.selectAll('.attentionGraphComponentSrcText').style('fill',
+                	'black');
+            	d3.selectAll('.attentionGraphComponentSrcRect').style('fill',
+                	'#87CEFA');
+            	d3.selectAll('.attentionGraphComponentAttConnect').style(
+                	'stroke', '#87CEFA');
         } else {
-            this.targ_dep.highlight(index);
-            this.currentMatrix = this.normAttention;
-
+		d3.select(nodes[index]).style('fill', 'orange');
+		this.targ_dep.highlight(index);
+		this.currentMatrix = this.normAttention;
+		
+		//shift index to actual index
+		index = this.targ_dep.display_index[index];
             //maximum value index
-            let max = -1;
+            let max = -1
             let maxindex = -1;
             for (let i = 0; i < this.currentMatrix.length; i++) {
                 if (max < this.currentMatrix[i][index]) {
@@ -209,9 +210,10 @@ class attentionGraphComponent extends attentionComponent {
         }
     }
 
-    highlight_and_linkAlignTarg(index) {
-
-        if (index == 'clean') {
+    highlight_and_linkAlignTarg(opt, index, nodes) {
+	    
+        if (opt == 'clean') {
+	    d3.select(nodes[index]).style('fill', 'black');
             this.targ_dep.highlight(-1);
             this.src_dep.highlight(-1);
 
@@ -222,9 +224,14 @@ class attentionGraphComponent extends attentionComponent {
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
         } else {
+	    
+	    d3.select(nodes[index]).style('fill', 'orange');
             this.src_dep.highlight(index);
             this.currentMatrix = this.normAttention;
-
+	    
+	    //shift index to actual index
+	    index = this.src_dep.display_index[index];
+	
             //maximum value index
             let max = -1;
             let maxindex = -1;
@@ -355,9 +362,6 @@ class attentionGraphComponent extends attentionComponent {
         }
     }
 
-    collapseAnimation() {
-
-    }
 
     drawConnection() {
         var d3line = d3.line()
