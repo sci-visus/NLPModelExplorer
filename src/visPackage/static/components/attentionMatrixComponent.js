@@ -76,7 +76,13 @@ class attentionMatrixComponent extends attentionComponent {
                 .style('stroke-width', '1px')
                 .style('fill', d => {
                     return this.colorbar.lookup(d.value);
-                });
+                })
+		.call(d3.drag().on('drag', (d, i, nodes)=>{
+			this.rectDragEvent(i, d, nodes);
+		})
+		.on('end', (d, i)=>{
+			this.dragEventX == undefined;
+		}));
             /////////////////////// draw text /////////////////////////
             let texts = this.generateTextGeometry();
             //Draw targ text
@@ -103,7 +109,7 @@ class attentionMatrixComponent extends attentionComponent {
 			this.highlight(-1);
                 })
                 .on('click', (d, i, nodes) => {
-			this.collapse(i, nodes);
+			this.collapse(i, nodes, 'vertical');
                 });
 
             //Draw src text
@@ -125,19 +131,7 @@ class attentionMatrixComponent extends attentionComponent {
                     this.src_dep.highlight(-1);
                 })
                 .on('click', (d, i, nodes) => {
-                    d3.select(nodes[i])
-                        .classed('attentionMatrixComponent_text_normal', !
-                            d3.select(nodes[i]).classed(
-                                "attentionMatrixComponent_text_normal")
-                        )
-                        .classed(
-                            'attentionMatrixComponent_text_collapse', !
-                            d3.select(nodes[i]).classed(
-                                "attentionMatrixComponent_text_collapse"
-                            ));
-
-                    this.src_dep.collapse(i);
-                    this.collapse_Animation('horizontal');
+                    this.collapse(i, nodes, 'horizontal');
                 });
 
             ////////////// rect mouse over event ///////////////
@@ -164,13 +158,38 @@ class attentionMatrixComponent extends attentionComponent {
         }
     }
 
+    rectDragEvent(i, d, nodes){
+	    
+	    if( this.dragEventX == undefined){
+		    this.dragEventX = d3.event.x;
+	    }
+	    else if(this.dragEventX < d3.event.x){
+		    if(d.value + 0.1 <= 1){
+			    d.value += 0.1;
+		    	d3.select(nodes[i])
+			    .style('fill', (d)=>{
+				    return this.colorbar.lookup(d.value);
+			    });
+		    }
+	    }
+	    else if(this.dragEventX > d3.event.x){
+		    if(d.value - 0.1 >= 0){
+			    d.value  -= 0.1;
+		    	d3.select(nodes[i])
+			    .style('fill', (d)=>{
+				    return this.colorbar.lookup(d.value);
+			    });
+		    }
+	    }
+    	
+    }
+
     highlight(i){
             this.targ_dep.highlight(i);
             this.setData("highlight", i);
     }
     
-    
-    collapse(i, nodes){
+    collapse(i, nodes, orientation){
     	d3.select(nodes[i])
         .classed('attentionMatrixComponent_text_normal', !
             d3.select(nodes[i]).classed(
@@ -181,10 +200,16 @@ class attentionMatrixComponent extends attentionComponent {
             d3.select(nodes[i]).classed(
                 "attentionMatrixComponent_text_collapse"
             ));
-    	this.aggregationMatrix(i, this.targ_dep.getChild(i));
-
-    	this.targ_dep.collapse(i);
-    	this.collapse_Animation('vertical');
+	
+	    if(orientation == 'vertical'){
+    		    this.aggregationMatrix(i, this.targ_dep.getChild(i));
+		    this.targ_dep.collapse(i);
+    		
+	    }else if(orientation == 'horizontal'){
+		    this.src_dep.collapse(i);    
+	    }
+	    
+	    this.collapse_Animation(orientation);
     }
 
     ////////////// rect mouse over event ///////////////
