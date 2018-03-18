@@ -182,7 +182,25 @@ class attentionMatrixComponent extends attentionComponent {
 			    });
 		    }
 	    }
-    	
+	    
+    	    //renormalize current row.
+	    let row = Math.floor(i / this.normAttention[0].length);
+	    let col = i % this.normAttention[0].length;
+	
+	    this.normAttention[row][col] = d.value;
+	    //this.aggregatedMatrix[row] = 
+	    //TODO: this may be a bug if you try to renormalize the the matrix after collaspe
+	    this.normAttention[row] = this.normalization(this.normAttention[row]);
+	    
+	    d3.selectAll(nodes).style('fill', (d, i)=>{
+		    let r = Math.floor(i / this.normAttention[0].length);
+		    let c = i % this.normAttention[0].length;
+    
+		    if(r == row){
+			    d.value = this.normAttention[row][c];
+		    }
+		    return this.colorbar.lookup(d.value);
+	    });
     }
 
     highlight(i){

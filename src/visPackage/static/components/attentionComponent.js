@@ -244,4 +244,14 @@ class attentionComponent extends baseComponent {
             })
         })
     }
+    
+    normalization(arr){
+         return arr.map(function(value, index) {
+                return value / arr.map(function(y /*value*/ ) {
+			return y;
+                }).reduce(function(a, b) {
+			return a + b;
+                })
+         });
+    }
 }
