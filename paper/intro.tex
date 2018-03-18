@@ -20,11 +20,16 @@ On the one hand, the standard evaluation approach provides limited information. 
 which require the ability to peek inside the model and understand the relationship between the
 model input, critical internal mechanisms, as well the output predictions.
 
+%%%%%%%%% accessing internal states are important %%%%%%%%%%%%
 Making sense and explaining predictions made by neural networks is also becoming a necessity with increasing demands for model accountability (e.g., what is the evidence for making the decision) and model fairness (e.g., is the prediction affected by the bias in the training data).
 %
 Due to these demands, many works have been dedicated to providing intuitive explanations for a given prediction. Such a system often approach the problem from a model agnostic approach that made them applicable to different applications (i.e., by fitting a simplier linear model near the prediction of interests).
 %
 However, despite being invaluable for the prediction interpretation task these methods often cannot adequately address the challenge in the model diagnostic process. More importantly, due to the model agnostic nature, they lack of the ability to access and explore the internal states of the model, which is vitally important to make sense of why a model fail.
+
+%%%%%%%%%% interrogate relationship between different componenet, modified different componenets %%%%%%%%%%%
+Beside looking into the internal states, understanding how each of the component interact with each other provide more insight about the mechanism of the model.
+[figure here]
 
 In this work, we introduce a visualization system that through a tight yet flexible integration between visual analytic elements and the underlying model, allow a user to interrogate the model by perturbing the input, the internal state, as well as prediction while observing changes in other parts of the pipeline.
 We use textual entailment task~\cite{BowmanAngeliPotts2015} as an example to illustrate how this system help natural language processing (NLP) researchers quickly identify the potential limitation of an NLP model, probe the inner states of the model for interpreting key mechanism such as attention, and ultimately come up with hypothesis on why the model fails.
