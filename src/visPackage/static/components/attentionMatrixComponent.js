@@ -77,7 +77,11 @@ class attentionMatrixComponent extends attentionComponent {
                 .style('fill', d => {
                     return this.colorbar.lookup(d.value);
                 })
-		.call(d3.drag().on('drag', (d, i, nodes)=>{
+		.call(d3.drag()
+		.on('start', (d, i, nodes)=>{
+			this.dragEventX = d3.event.x;
+		})
+		.on('drag', (d, i, nodes)=>{
 			this.rectDragEvent(i, d, nodes);
 		})
 		.on('end', (d, i)=>{
@@ -160,10 +164,7 @@ class attentionMatrixComponent extends attentionComponent {
 
     rectDragEvent(i, d, nodes){
 	    
-	    if( this.dragEventX == undefined){
-		    this.dragEventX = d3.event.x;
-	    }
-	    else if(this.dragEventX < d3.event.x){
+	    if(this.dragEventX < d3.event.x){
 		    if(d.value + 0.1 <= 1){
 			    d.value += 0.1;
 		    	d3.select(nodes[i])
