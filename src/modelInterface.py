@@ -247,8 +247,39 @@ class modelInterface:
         print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
         return "att", y.numpy()[0]
 
-    def updateAttention(self, attMatrix):
+    def updateAttention(self, sentences, attMatrix):
+        #map to token
+        sourceSen = sentencePair[0]
+        targetSen = sentencePair[1]
+        source = self.mapToToken(sourceSen)
+        target = self.mapToToken(targetSen)
+
+        wv_idx1 = Variable(source, requires_grad=False)
+        wv_idx2 = Variable(target, requires_grad=False)
+        # Variable(torch.from_numpy(indices).cuda(), requires_grad=False)
+
+        word_vecs1 = self.embeddings(wv_idx1)
+        word_vecs2 = self.embeddings(wv_idx2)
+
+        ####### set the flag ############
         self.opt.customized = 1
+        self.shared.customized_att1 = torch.Tensor(attMatrix)
+
+        # print source.shape[1], target.shape[1]
+        self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
+
+        y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
+
+        p = y_dist.exp()
+        # print "prediction result:", p
+        # pred = dict()
+        pred = p.data.numpy()
+
+        ####### restore the flag ########
+        self.opt.customized = 0
+        return pred
+
+
 
 
     ################ helper #################

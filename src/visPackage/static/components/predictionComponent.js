@@ -295,7 +295,7 @@ class predictionComponent extends baseComponent {
                             "currentPair"]);
 
                         //then update the current attention
-                        this.callFunc("updateAttention");
+                        this.callFunc("attention");
                     }
                 })
                 .call(d3.drag()
