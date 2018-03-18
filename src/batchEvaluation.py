@@ -62,6 +62,8 @@ class batchEvaluation:
 
         Value Filter
             - Perturbation Change Percentage
+            - Prediction deviation (KL divergence) mean
+            - Prediction deviation (KL divergence) variance
 
     '''
     def generateStatistic(self,outputPath):
