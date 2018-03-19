@@ -2,15 +2,23 @@
 
 \section{Background}
 
+
 \begin{itemize}
-    \item Motivation for TE: reading comprehension, similarity of senten ce
+    \item Motivation for : reading comprehension, similarity of sentennce
     \item what is it?
     \item its connection with other NLP tasks (one of the key)
     \item
 \end{itemize}
 
-The grand challenge in natural language processing (NLP) such as
-machine reading require a deeper understanding the
+The grand challenge in Natural Language Processing (NLP) is to have machine to acquire
+deep comprehension of textual information. Major tasks include Natural Language Inference,
+Machine Translation, Questions Answering, Summarization, and etc. 
+Recently, neural networks models have performed strongly on these tasks. 
+
+Therefore, making sense and explaining predictions made by deep neural networks is not only 
+essential for validating and improving the model, but also becoming a necessity with 
+increasing demands for model accountability (e.g., what is the evidence for making the decision) 
+and model fairness (e.g., is the prediction affected by the bias in the training data).
 
 % Recently, with the wide adoption of long-short term memory
 % (LSTM) network and the introduction of attention mechanism,
@@ -23,14 +31,49 @@ machine reading require a deeper understanding the
 % Due to the opaque nature of the neural network model, interpret and making sense
 % of many internal model mechanisms can be extremely challenging.
 
-The discrete nature of words and sentences presents additional challenge for
-interpreting the model, since many visualization technique often employed
-for images rely on continues nature of the input space (e.g., one can interpolate
-real values much easier than interplolate between words/sentences).
 %
 
-% \subsection{Natural Language Inference}
 
+
+\subsection{Interprebilty Challenges}
+
+Compared with Conputer Vision, the discrete nature of words and sentences 
+presents additional challenge for
+interpreting the model, since many visualization technique often employed
+for images rely on continuous nature of the input space (e.g., one can interpolate
+real values much easier than interplolate between words/sentences).
+
+On the other hand, a majority of recent NLP neural networks share the nature of 
+end-to-end model, where the entire model operates as a black-box that takes 
+vectorized input and yields final prediction for a specific task.
+Therefore, to study the inside of end-to-end neural models, it is important to 
+explore the interaction between intermediate representations and predictions.
+
+The introduction of attention mechanism~\cite{bahdanau2014neural} allows 
+pairwise interaction between hidden states. This interaction can be naturally explained
+as a form of alignment which exposes an interpretable layer in end-to-end neural networks. 
+Recently attention has contributed to many strongly-performed NLP models
+~\cite{parikh2016emnlp},~\cite{rush2015neural},~\cite{yang2016hierarchical},
+~\cite{seo2016bidirectional},~\cite{schwartz2017high}. 
+We will focus on its application in Natural Language Inference task as proposed in~\cite{parikh2016emnlp}.
+However notice that our visualization can be generalized to other attention models as well.
+
+
+% The introduction of attention mechanism~\cite{} allow simpler models to match or even outperform more complex / deeper models by exploiting the alignment of bits of local text between sentences. The new challenges
+
+
+\subsection{Natural Language Inference}
+Natural Language Inference(cite?) is an important machine understanding task in NLP. 
+The problem definition is to classify the relationship between a premise sentence and a hypothesis sentence. 
+The prediction must fall in one of three catergories: $\{Entailment, Contradiction, Neutral\}$. 
+$Entailment$ refers to that the textual information of hypothesis is embedded in premise; 
+$Contradiction$ means the textuals of hypothesis opposes that of premise; 
+and $Neutral$ implies no conclusion can be made on either $Entailment$ or $Contradiction$.
+
+Recently ~\cite{BowmanAngeliPotts2015} proposed a large dataset for this task. We will examine 
+the decomposable attention model~\cite{parikh2016emnlp} on this dataset with perturbation. 
+
+% showing an example??
 
 % \begin{itemize}
 %     \item what is the textaul entailment problem
@@ -38,10 +81,4 @@ real values much easier than interplolate between words/sentences).
 %     \item how easily can the visualization method extends other NLP problem
 % \end{itemize}
 
-Textual entailment is one of major natural language tasks, namely translation, summarization, question
 
-% \subsection{Interprebilty Challenges}
-
-The introduction of attention mechanism~\cite{} allow simpler models to match or even outperform more complex / deeper models by exploiting the alignment of bits of local text between sentences. The new challenges
-
-Making sense and explaining predictions made by deep neural networks is not only essential for validating and improving the model, but also becoming a necessity with increasing demands for model accountability (e.g., what is the evidence for making the decision) and model fairness (e.g., is the prediction affected by the bias in the training data).
