@@ -77,6 +77,33 @@ class attentionGraphComponent extends attentionComponent {
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle");
 
+            // swap attention normalization button
+            this.swapButton = this.svg.append("g");
+            this.swapButton.append("rect")
+                .attr("rx", 3)
+                .attr("ry", 3)
+                .attr("x", this.width - 20)
+                .attr("y", this.height * 0.5 - 24)
+                .attr("width", 20)
+                .attr("height", 40)
+                .style("fill", "lightgrey")
+                .style("stroke", "grey")
+                .on("click", this.swapAttDirection.bind(this))
+                .on("mouseover", function(d) {
+                    d3.select(this).style("fill", "grey");
+                }).on("mouseout", function(d) {
+                    d3.select(this).style("fill", "lightgrey");
+                });
+            this.swapButton.append("text")
+                .attr("x", this.width - 10)
+                .attr("y", this.height * 0.5)
+                .text("swap")
+                .style("text-anchor", "middle")
+                .style("writing-mode", "vertical-rl")
+                .style("alignment-baseline", "middle")
+                .style("pointer-events", "none");
+
+
             ///////////////////// draw dependency tree //////////////////
             this.drawDepTree();
             ///////////////////// drawing line //////////////////////
@@ -124,10 +151,11 @@ class attentionGraphComponent extends attentionComponent {
                 .style("writing-mode", this.checkSrcOrientation.bind(this))
                 .style("text-anchor", "middle")
                 .on('mouseover', (d, i, nodes) => {
-                    this.highlight_and_linkAlignTarg('highlight', i,  nodes);
+                    this.highlight_and_linkAlignTarg('highlight', i,
+                        nodes);
                 })
                 .on('mouseout', (d, i, nodes) => {
-                    this.highlight_and_linkAlignTarg('clean', i,  nodes);
+                    this.highlight_and_linkAlignTarg('clean', i, nodes);
                 })
                 .on("click", (d, i) => {
                     this.src_dep.collapse(this.src_dep.display_index[i]);
@@ -149,10 +177,11 @@ class attentionGraphComponent extends attentionComponent {
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
                 .on('mouseover', (d, i, nodes) => {
-                    this.highlight_and_linkAlignSrc('highlight', i, nodes);
+                    this.highlight_and_linkAlignSrc('highlight', i,
+                        nodes);
                 })
                 .on('mouseout', (d, i, nodes) => {
-                    this.highlight_and_linkAlignSrc('clean', i,  nodes);
+                    this.highlight_and_linkAlignSrc('clean', i, nodes);
                 })
                 .on("click", (d, i) => {
                     this.targ_dep.collapse(this.targ_dep.display_index[
@@ -163,26 +192,26 @@ class attentionGraphComponent extends attentionComponent {
     }
 
     highlight_and_linkAlignSrc(opt, index, nodes) {
-	
-        if (opt == 'clean') {
-		d3.select(nodes[index]).style('fill', 'black');
-            
-		this.targ_dep.highlight(-1);
-		this.src_dep.highlight(-1);
 
-            	d3.selectAll('.attentionGraphComponentSrcText').style('fill',
-                	'black');
-            	d3.selectAll('.attentionGraphComponentSrcRect').style('fill',
-                	'#87CEFA');
-            	d3.selectAll('.attentionGraphComponentAttConnect').style(
-                	'stroke', '#87CEFA');
+        if (opt == 'clean') {
+            d3.select(nodes[index]).style('fill', 'black');
+
+            this.targ_dep.highlight(-1);
+            this.src_dep.highlight(-1);
+
+            d3.selectAll('.attentionGraphComponentSrcText').style('fill',
+                'black');
+            d3.selectAll('.attentionGraphComponentSrcRect').style('fill',
+                '#87CEFA');
+            d3.selectAll('.attentionGraphComponentAttConnect').style(
+                'stroke', '#87CEFA');
         } else {
-		d3.select(nodes[index]).style('fill', 'orange');
-		this.targ_dep.highlight(index);
-		this.currentMatrix = this.normAttention;
-		
-		//shift index to actual index
-		index = this.targ_dep.display_index[index];
+            d3.select(nodes[index]).style('fill', 'orange');
+            this.targ_dep.highlight(index);
+            this.currentMatrix = this.normAttention;
+
+            //shift index to actual index
+            index = this.targ_dep.display_index[index];
             //maximum value index
             let max = -1
             let maxindex = -1;
@@ -211,9 +240,9 @@ class attentionGraphComponent extends attentionComponent {
     }
 
     highlight_and_linkAlignTarg(opt, index, nodes) {
-	    
+
         if (opt == 'clean') {
-	    d3.select(nodes[index]).style('fill', 'black');
+            d3.select(nodes[index]).style('fill', 'black');
             this.targ_dep.highlight(-1);
             this.src_dep.highlight(-1);
 
@@ -224,14 +253,14 @@ class attentionGraphComponent extends attentionComponent {
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
         } else {
-	    
-	    d3.select(nodes[index]).style('fill', 'orange');
+
+            d3.select(nodes[index]).style('fill', 'orange');
             this.src_dep.highlight(index);
             this.currentMatrix = this.normAttention;
-	    
-	    //shift index to actual index
-	    index = this.src_dep.display_index[index];
-	
+
+            //shift index to actual index
+            index = this.src_dep.display_index[index];
+
             //maximum value index
             let max = -1;
             let maxindex = -1;

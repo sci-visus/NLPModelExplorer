@@ -122,6 +122,20 @@ class attentionComponent extends baseComponent {
         return normAttention;
     }
 
+    swapAttDirection() {
+        if (this.attentionDirection === 'row') {
+            this.normAttention = this.convertRawAtt(this.rawAttention,
+                'col');
+            this.attentionDirection = 'col';
+            this.draw();
+        } else if (this.attentionDirection === 'col') {
+            this.normAttention = this.convertRawAtt(this.rawAttention,
+                'row');
+            this.attentionDirection = 'row';
+            this.draw();
+        }
+    }
+
     parseDataUpdate(msg) {
         super.parseDataUpdate(msg);
         switch (msg["name"]) {
@@ -135,8 +149,9 @@ class attentionComponent extends baseComponent {
                     this.preRawAtt = JSON.parse(JSON.stringify(this.rawAttention));
                 }
                 this.rawAttention = this.data["attention"];
+                this.attentionDirection = 'row';
                 this.normAttention = this.convertRawAtt(this.rawAttention,
-                    'row');
+                    this.attentionDirection);
 
                 // console.log(this.rawAttention);
                 // console.log(this.normAttention);

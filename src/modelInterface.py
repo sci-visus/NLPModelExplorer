@@ -263,10 +263,10 @@ class modelInterface:
 
         ####### set the flag ############
         self.opt.customized = 1
-        self.pipeline = Pipeline(self.opt, self.shared)
+        # self.pipeline = Pipeline(self.opt, self.shared)
         self.shared.customized_att1 = torch.Tensor(attMatrix)
-        print self.shared.customized_att1
-        self.shared.customized_att2 = torch.Tensor(attMatrix).transpose(0,1)
+        # print self.shared.customized_att1
+        self.shared.customized_att2 = torch.Tensor(attMatrix).transpose(1,2).contiguous()
 
         # print source.shape[1], target.shape[1]
         self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
@@ -280,7 +280,7 @@ class modelInterface:
 
         ####### restore the flag ########
         self.opt.customized = 0
-        self.pipeline = Pipeline(self.opt, self.shared)
+        # self.pipeline = Pipeline(self.opt, self.shared)
         return pred
 
 
