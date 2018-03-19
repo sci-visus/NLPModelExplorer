@@ -1,6 +1,6 @@
 class d3UIcolorMap {
     constructor(svg, id, range = [0, 1], pos = [15, 15], size = [150, 20],
-        ticks = 4) {
+        ticks = 4, colorMapIndex = 0) {
         // this.svgTag = "#" + svgTag;
         this.svgContainer = svg;
         this._pos = pos;
@@ -44,7 +44,7 @@ class d3UIcolorMap {
                 "#e6f598", "#99d594", "#3288bd"
             ]
         });
-        this.cmIndex = 0;
+        this.cmIndex = colorMapIndex;
         this.currentColormap = this.colorMap[this.cmIndex];
 
         ///// first draw /////

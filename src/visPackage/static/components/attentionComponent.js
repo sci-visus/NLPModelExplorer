@@ -308,8 +308,9 @@ class attentionComponent extends baseComponent {
             if (this.preRawAtt) {
                 this.normAttention = this.attDiff(this.convertRawAtt(this.rawAttention),
                     this.convertRawAtt(this.preRawAtt));
-
+                this.comparisonFlag = true;
                 this.draw();
+                this.comparisonFlag = false;
             }
         }
     }
