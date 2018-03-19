@@ -23,7 +23,7 @@ class attentionMatrixComponent extends attentionComponent {
 
             //attention matrix
             let attMatrix = this.normAttention;
-            console.log(attMatrix);
+            // console.log(attMatrix);
             ////////////////////add colormap //////////////////////
             this.colorbar =
                 new d3UIcolorMap(this.svg, this.uuid, [0, 1], [10, 10], [
@@ -89,6 +89,7 @@ class attentionMatrixComponent extends attentionComponent {
                         console.log("trigger attention update");
                         this.attUpdate();
                     }));
+            this.rectCell = rects;
             /////////////////////// draw text /////////////////////////
             let texts = this.generateTextGeometry();
             //Draw targ text
@@ -109,14 +110,17 @@ class attentionMatrixComponent extends attentionComponent {
                 .attr('text-anchor', 'middle')
                 .classed('attentionMatrixComponent_text_normal', true)
                 .on('mouseover', (d, i, nodes) => {
-                    this.highlight(i);
+                    // this.highlight(i);
+                    this.targ_dep.highlight(i);
                 })
                 .on('mouseout', (d, i, nodes) => {
-                    this.highlight(-1);
+                    // this.highlight(-1);
+                    this.targ_dep.highlight(-1);
                 })
                 .on('click', (d, i, nodes) => {
                     this.collapse(i, nodes, 'vertical');
                 });
+            this.targtext = targtext;
 
             //Draw src text
             let srctext = this.svg.selectAll('.attentionComponent_srcWords')
@@ -139,28 +143,34 @@ class attentionMatrixComponent extends attentionComponent {
                 .on('click', (d, i, nodes) => {
                     this.collapse(i, nodes, 'horizontal');
                 });
+            this.srctext = srctext;
 
             ////////////// rect mouse over event ///////////////
             this.rectMouseEvent(rects, targtext, srctext);
 
-            //draw text background
-            this.svg.selectAll('.attentionMatrixComponent_background_text')
-                .data(['Premise', 'Hypothesis'])
-                .enter()
-                .append('text')
-                .text(d => d)
-                .attr('x', (d, i) => {
-                    return i == 0 ? this.width / 32 : this.width * 5 /
-                        8;
-                })
-                .attr("y", (d, i) => {
-                    return i == 0 ? this.height * 5 / 8 : this.width /
-                        16;
-                })
-                .style('writing-mode', (d, i) => {
-                    return i == 0 ? 'vertical-lr' : 'horizontal-tb';
-                })
-                .classed('attentionMatrixComponent_background_text', true);
+            //draw text background only when depTree do not exist
+            if (this.srcDepTreeData === undefined) {
+                this.svg.selectAll(
+                        '.attentionMatrixComponent_background_text')
+                    .data(['Premise', 'Hypothesis'])
+                    .enter()
+                    .append('text')
+                    .text(d => d)
+                    .attr('x', (d, i) => {
+                        return i == 0 ? this.width / 32 : this.width *
+                            5 /
+                            8;
+                    })
+                    .attr("y", (d, i) => {
+                        return i == 0 ? this.height * 5 / 8 : this.width /
+                            16;
+                    })
+                    .style('writing-mode', (d, i) => {
+                        return i == 0 ? 'vertical-lr' : 'horizontal-tb';
+                    })
+                    .classed('attentionMatrixComponent_background_text',
+                        true);
+            }
         }
     }
 
@@ -204,10 +214,9 @@ class attentionMatrixComponent extends attentionComponent {
         });
     }
 
-    highlight(i) {
-        this.targ_dep.highlight(i);
-        this.setData("highlight", i);
-    }
+    // highlight(i) {
+    //     this.targ_dep.highlight(i);
+    // }
 
     collapse(i, nodes, orientation) {
         d3.select(nodes[i])
@@ -241,13 +250,24 @@ class attentionMatrixComponent extends attentionComponent {
                     col = i % targWords.length,
                     row = Math.floor(i / this.targWords.length);
 
-                rects.style('stroke', (data, index) => {
+                // rects.style('stroke', (data, index) => {
+                //     if (col == index % targWords.length || row ==
+                //         Math.floor(index / targWords.length))
+                //         return 'orange';
+                //     else
+                //         return 'black';
+                // });
+                rects.style('opacity', (data, index) => {
                     if (col == index % targWords.length || row ==
-                        Math.floor(index / targWords.length))
-                        return 'orange';
-                    else
-                        return 'black';
+                        Math.floor(index / targWords.length)) {
+                        return 1.0;
+                    } else {
+                        return 0.5;
+                    }
                 });
+
+                //update highlight
+                this.setData("highlight", [row, col]);
 
                 targtext
                     .classed('attentionMatrixComponent_text_normal', (d,
@@ -310,10 +330,30 @@ class attentionMatrixComponent extends attentionComponent {
                     .classed('attentionMatrixComponent_text_highlight',
                         false);
 
-                rects.style('stroke', 'black');
+                // rects.style('stroke', 'black');
+                rects.style('opacity', 1.0);
+                this.setData("highlight", [-1, -1]);
                 this.targ_dep.highlight(-1);
                 this.src_dep.highlight(-1);
             });
+    }
+
+    handleHighlightEvent(srcIndex, targIndex) {
+        let targWords = this.sen2words(this.data["currentPair"]
+            ["sentences"][1]);
+
+        this.rectCell.style('opacity', (data, index) => {
+            if (targIndex == index % targWords.length || srcIndex ==
+                Math.floor(index / targWords.length)) {
+                return 1.0;
+            } else {
+                return 0.5;
+            }
+        });
+
+        if (srcIndex === -1 || targIndex === -1) {
+            this.rectCell.style('opacity', 1.0);
+        }
     }
 
     //define each rect's width, height, x, y and color map value

@@ -208,6 +208,12 @@ class attentionComponent extends baseComponent {
                 if (this.attentionDirection !== direction) {
                     this.swapAttDirection();
                 }
+                break;
+
+            case "highlight":
+                let srcIndex = msg["data"]["data"][0];
+                let targIndex = msg["data"]["data"][1];
+                this.handleHighlightEvent(srcIndex, targIndex);
         }
     }
 
