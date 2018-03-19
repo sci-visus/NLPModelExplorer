@@ -41,7 +41,7 @@
 \fi%
 
 %% it is recomended to use ``\autoref{sec:bla}'' instead of ``Fig.~\ref{sec:bla}''
-\graphicspath{{figures/}{pictures/}{images/}{./}} % where to search for the images
+\graphicspath{{figures/}{pictures/}{figs/}{./}} % where to search for the images
 
 \usepackage{microtype}                 % use micro-typography (slightly more compact, better to read)
 \PassOptionsToPackage{warn}{textcomp}  % to address font issues with \textrightarrow
@@ -73,7 +73,7 @@
 %% * evaluation
 %% * system
 %% * theory/model
-\vgtcpapertype{please specify}
+\vgtcpapertype{application}
 
 %% Paper title.
 \title{How Do Models Fail? A Visual Exploration Tool for Analyzing and Interpreting Natural Language Inference}
@@ -125,6 +125,17 @@ Visual Analytics}
 %   \caption{In the Clouds: Vancouver from Cypress Mountain. Note that the teaser may not be wider than the abstract block.}
 % 	\label{fig:teaser}
 % }
+\teaser{
+% \vspace{-8mm}
+ % \includegraphics[width=0.78\linewidth]{teaser}
+ \includegraphics[width=.96\linewidth]{teaser.pdf}
+ \centering
+ % \vspace{-3mm}
+  \caption{
+ System overview.
+  }
+\label{fig:teaser}
+}
 
 %% Uncomment below to disable the manuscript note
 %\renewcommand{\manuscriptnotetxt}{}

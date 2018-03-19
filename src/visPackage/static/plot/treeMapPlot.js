@@ -50,6 +50,7 @@ class treeMapPlot {
         this.svg.selectAll("*").remove();
         var width = this.size[0];
         var height = this.size[1];
+        var pos = this.pos;
 
         var data = this.data;
         var svg = this.svg;
@@ -111,8 +112,8 @@ class treeMapPlot {
                 var g = svg.append("g");
                 g.append("rect")
                     .attr("class", "node")
-                    .attr("x", d.x0)
-                    .attr("y", d.y0)
+                    .attr("x", pos[0] + d.x0)
+                    .attr("y", pos[1] + d.y0)
                     .attr("width", Math.max(0, d.x1 - d.x0 - 1))
                     .attr("height", Math.max(0, d.y1 - d.y0 - 1))
                     .attr("fill", colormap(d.data.key))
@@ -127,8 +128,8 @@ class treeMapPlot {
                             .key));
                     });
                 g.append("text")
-                    .attr("x", (d.x0 + d.x1) * 0.5)
-                    .attr("y", (d.y0 + d.y1) * 0.5 + 5)
+                    .attr("x", pos[0] + (d.x0 + d.x1) * 0.5)
+                    .attr("y", pos[1] + (d.y0 + d.y1) * 0.5 + 5)
                     .text(_ => {
                         var str = d.data.key.replace("-", "/");
                         str = str.replace(/neutral/g, "N");

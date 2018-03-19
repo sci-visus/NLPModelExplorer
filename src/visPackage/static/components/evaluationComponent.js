@@ -41,13 +41,13 @@ class evaluationComponent extends baseComponent {
             // this.svgSave = new svgExporter(this.svgContainer, [this.width -
             //     10, 10
             // ]);
-            this.treeMap = new treeMapPlot(this.svg, [0, 0], [
+            this.treeMap = new treeMapPlot(this.svg, [10, 0], [
                 this.width * 0.5, this.height * 0.5
             ]);
             this.treeMap.bindSelectionCallback(this.updateHisto.bind(
                 this));
 
-            this.histo = new histoPlot(this.svg, [0, this.height * 0.5], [
+            this.histo = new histoPlot(this.svg, [10, this.height * 0.5], [
                 this.width * 0.5, this.height * 0.5
             ], true);
             this.histo.bindSelectionCallback(this.updateScatterplot.bind(
@@ -70,14 +70,14 @@ class evaluationComponent extends baseComponent {
                 .attr("height", this.height);
 
             // this.svg.selectAll("text,rect,path").remove();
-            this.treeMap.update([0, 0], [
-                this.width * 0.5, this.height * 0.5
+            this.treeMap.update([5, 0], [
+                this.width * 0.5 - 5, this.height * 0.5
             ]);
-            this.histo.update([0, this.height * 0.6], [
-                this.width * 0.5, this.height * 0.4
+            this.histo.update([8, this.height * 0.6], [
+                this.width * 0.5 - 8, this.height * 0.4
             ]);
-            this.scatter.update([this.width * 0.5, 0], [
-                this.width * 0.5, this.height
+            this.scatter.update([this.width * 0.5 + 5, 0], [
+                this.width * 0.5 - 5, this.height
             ]);
             // this.svgSave.updatePos([this.width - 10, 10])
             // this.svgSave.draw();
