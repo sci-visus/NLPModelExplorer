@@ -30,7 +30,16 @@ However, despite being invaluable for the prediction interpretation task these m
 
 %%%%%%%%%% interrogate relationship between different componenet, modified different componenets %%%%%%%%%%%
 Beside looking into the internal states, understanding how each of the component interact with each other provide more insight about the mechanism of the model.
-[figure here]
+
+\begin{figure}[htbp]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=1.0\linewidth]{pipeline}
+ \caption{Language Inference Model Pipeline.}
+\label{fig:projTransition}
+\vspace{-5mm}
+\end{figure}
+
 
 In this work, we introduce a visualization system that through a tight yet flexible integration between visual analytic elements and the underlying model, allow a user to interrogate the model by perturbing the input, the internal state, as well as prediction while observing changes in other parts of the pipeline.
 We use textual entailment task~\cite{BowmanAngeliPotts2015} as an example to illustrate how this system help natural language processing (NLP) researchers quickly identify the potential limitation of an NLP model, probe the inner states of the model for interpreting key mechanism such as attention, and ultimately come up with hypothesis on why the model fails.

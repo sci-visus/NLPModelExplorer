@@ -99,7 +99,7 @@ class attentionComponent extends baseComponent {
     }
 
     attUpdate() {
-        console.log(this.normAttention);
+        // console.log(this.normAttention);
         this.callFunc("attentionUpdate", {
             "attMatrix": this.normAttention
         });
@@ -300,12 +300,17 @@ class attentionComponent extends baseComponent {
             this.normAttention = this.convertRawAtt(this.rawAttention);
             this.draw();
         } else if (mode === "P") { //previous
-            this.normAttention = this.convertRawAtt(this.preRawAtt);
-            this.draw();
+            if (this.preRawAtt) {
+                this.normAttention = this.convertRawAtt(this.preRawAtt);
+                this.draw();
+            }
         } else if (mode === "D") { //difference
-            this.normAttention = this.attDiff(this.convertRawAtt(this.rawAttention),
-                this.convertRawAtt(this.preRawAtt));
-            this.draw();
+            if (this.preRawAtt) {
+                this.normAttention = this.attDiff(this.convertRawAtt(this.rawAttention),
+                    this.convertRawAtt(this.preRawAtt));
+
+                this.draw();
+            }
         }
     }
 
@@ -336,6 +341,10 @@ class attentionComponent extends baseComponent {
             .attr("fill", "lightgrey")
             .on("click", d => {
                 this.toggleAttMode(d);
+            }).on("mouseover", function(d) {
+                d3.select(this).attr("fill", "grey");
+            }).on("mouseout", function(d) {
+                d3.select(this).attr("fill", "lightgrey");
             });
 
         toggle.selectAll(".toggleLabel")

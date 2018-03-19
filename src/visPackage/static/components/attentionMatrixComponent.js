@@ -24,12 +24,17 @@ class attentionMatrixComponent extends attentionComponent {
             //attention matrix
             let attMatrix = this.normAttention;
             // console.log(attMatrix);
+            var attMax = d3.max(attMatrix.map(function(array) {
+                return d3.max(array);
+            }));
+            var attMin = d3.min(attMatrix.map(function(array) {
+                return d3.min(array);
+            }));
             ////////////////////add colormap //////////////////////
             this.colorbar =
-                new d3UIcolorMap(this.svg, this.uuid, [0, 1], [10, 10], [
-                    this
-                    .width * 0.22, 24
-                ], 2);
+                new d3UIcolorMap(this.svg, this.uuid, [attMin, attMax], [10,
+                    10
+                ], [this.width * 0.22, 24], 2);
             this.colorbar.draw();
             this.colorbar.callback(this.updateMatrixColormap.bind(this));
 

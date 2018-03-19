@@ -89,7 +89,7 @@ class attentionGraphComponent extends attentionComponent {
                 .attr("width", 20)
                 .attr("height", 40)
                 .style("fill", "lightgrey")
-                .style("stroke", "grey")
+                // .style("stroke", "grey")
                 .on("click", this.swapAttDirection.bind(this))
                 .on("mouseover", function(d) {
                     d3.select(this).style("fill", "grey");
