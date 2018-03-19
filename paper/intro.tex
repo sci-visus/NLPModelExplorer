@@ -16,20 +16,22 @@ why does the model fail is critical to the design and application of various mod
 However, providing meaningful answers to these questions is an extremely challenging task.
 % Naturally the identification of failure scenarios is an essential first step in diagnosing procedure.
 %the potential limitation of the test dataset
-On the one hand, the standard evaluation approach provides limited information. The performance number (i.e., prediction accuracy on the test set) alone often cannot answer many important questions in the model diagnostic process. Understanding what the often made mistakes are, and how sensitive are the model concerning perturbation in the input, etc., are instrumental. On the other hand, infer why the model fails is challenging as well (i.e., models are often referred to as black boxes),
+On the one hand, recognize where the model fail is non trivial. The standard evaluation approach provides limited information. i.e., the performance number (e.g., prediction accuracy on the test set) alone cannot answer many important questions in the model diagnostic process, such as what the often made mistakes are, and how sensitive are the model concerning small perturbation in the input, etc. On the other hand, infer why the model fails is challenging as well (i.e., models are often referred to as black boxes),
 which require the ability to peek inside the model and understand the relationship between the
 model input, critical internal mechanisms, as well the output predictions.
 
 %%%%%%%%% accessing internal states are important %%%%%%%%%%%%
-Making sense and explaining predictions made by neural networks is also becoming a necessity with increasing demands for model accountability (e.g., what is the evidence for making the decision) and model fairness (e.g., is the prediction affected by the bias in the training data).
+The wide application of machine learning models also call for increasing demands for model accountability (e.g., what is the evidence for making the decision) and model fairness (e.g., is the prediction affected by the bias in the training data).
+% Making sense and explaining predictions made by neural networks is also becoming a necessity.
 %
-Due to these demands, many works have been dedicated to providing intuitive explanations for a given prediction. Such a system often approach the problem from a model agnostic approach that made them applicable to different applications (i.e., by fitting a simplier linear model near the prediction of interests).
+Many works~\cite{RibeiroSinghGuestrin2016} have been dedicated to providing intuitive explanations for a given prediction, several of which approach the problem from a model agnostic approach that made them applicable to different applications (i.e., by fitting a simplier linear model near the prediction of interests).
 %
-However, despite being invaluable for the prediction interpretation task these methods often cannot adequately address the challenge in the model diagnostic process. More importantly, due to the model agnostic nature, they lack of the ability to access and explore the internal states of the model, which is vitally important to make sense of why a model fail.
-
+Despite being invaluable for the providing human understandable explaination, the lack of the ability to access and explore the internal states of the model, which is vitally important to make sense of why a model fail, limits their ability for more in depth exploration and evaluation of the model.
 
 %%%%%%%%%% interrogate relationship between different componenet, modified different componenets %%%%%%%%%%%
-Beside looking into the internal states, understanding how each of the component interact with each other provide more insight about the mechanism of the model.
+Beside looking into the internal states, understanding how each of the component of the model interact with input and output as well as with each other is the crucial for truly exmaine the mechanism of the model.
+%
+Look at how the model work in action and interrogate relationship between different component, i.e., how the change made to one part of model affect the other pieces present, is the key to gain the full picture.
 
 \begin{figure}[htbp]
 \centering
@@ -62,21 +64,3 @@ The key contributions of the proposed works is summarized as the following:
     \item Enable the interrogation of the relationship between input sentences, attention, and the prediction by interactively exploring how the change in one of these elements affect other parts of the model.
 
 \end{itemize}
-
-% NLP application using attention
-% \begin{itemize}
-%     \item Neural translation
-%     \item Text summarization
-%     \item Text entailment
-%     \item Text comprehension (question answering)
-% \end{itemize
-%
-%
-% Attention type:
-% \begin{itemize}
-%     \item soft vs. hard
-%     \item local vs. global
-%     \item hierarchical
-%     \item attention over attention
-%     \item gated
-% \end{itemize}
