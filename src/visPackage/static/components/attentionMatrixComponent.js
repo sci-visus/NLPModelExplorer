@@ -47,6 +47,7 @@ class attentionMatrixComponent extends attentionComponent {
 
             this.computeWordPosition(this.srcWords, this.targWords);
 
+            this.drawAttToggle(this.svg, [2, 50]);
             this.drawDepTree();
 
             //matrix

@@ -294,4 +294,60 @@ class attentionComponent extends baseComponent {
             })
         });
     }
+
+    toggleAttMode(mode) {
+        if (mode === "C") { //current
+            this.normAttention = this.convertRawAtt(this.rawAttention);
+            this.draw();
+        } else if (mode === "P") { //previous
+            this.normAttention = this.convertRawAtt(this.preRawAtt);
+            this.draw();
+        } else if (mode === "D") { //difference
+            this.normAttention = this.attDiff(this.convertRawAtt(this.rawAttention),
+                this.convertRawAtt(this.preRawAtt));
+            this.draw();
+        }
+    }
+
+    //assume mat1, mat2 have the same dimension
+    attDiff(mat1, mat2) {
+        var mat = JSON.parse(JSON.stringify(mat1));
+        for (let i = 0; i < mat1.length; i++)
+            for (let j = 0; j < mat1[i].length; j++) {
+                mat[i][j] = mat1[i][j] - mat2[i][j];
+            }
+        return mat;
+    }
+
+    drawAttToggle(svg, pos) {
+        let label = ["C", "P", "D"]
+        let toggle = svg.append("g");
+        toggle.selectAll(".attToggle")
+            .data(label)
+            .enter()
+            .append("rect")
+            .attr("class", "attToggle")
+            .attr("rx", 3)
+            .attr("ry", 3)
+            .attr("x", (d, i) => pos[0] + i * 22)
+            .attr("y", pos[1])
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("fill", "lightgrey")
+            .on("click", d => {
+                this.toggleAttMode(d);
+            });
+
+        toggle.selectAll(".toggleLabel")
+            .data(label)
+            .enter()
+            .append("text")
+            .attr("class", "toggleLabel")
+            .attr("x", (d, i) => pos[0] + 10 + i * 22)
+            .attr("y", pos[1] + 10)
+            .text(d => d)
+            .style("text-anchor", "middle")
+            .style("alignment-baseline", "middle")
+            .style("pointer-events", "none");
+    }
 }

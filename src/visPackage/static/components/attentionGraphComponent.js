@@ -105,7 +105,7 @@ class attentionGraphComponent extends attentionComponent {
                 .style("alignment-baseline", "middle")
                 .style("pointer-events", "none");
 
-
+            this.drawAttToggle(this.svg, [2, 2]);
             ///////////////////// draw dependency tree //////////////////
             this.drawDepTree();
             ///////////////////// drawing line //////////////////////
@@ -181,7 +181,7 @@ class attentionGraphComponent extends attentionComponent {
                 .style("text-anchor", "middle")
                 .on('mouseover', (d, i, nodes) => {
                     // console.log(nodes);
-                    console.log(this.targWordsText);
+                    // console.log(this.targWordsText);
                     this.highlight_and_linkAlignSrc('highlight', i,
                         nodes);
                 })
@@ -198,7 +198,7 @@ class attentionGraphComponent extends attentionComponent {
     }
 
     handleHighlightEvent(srcIndex, targIndex) {
-        console.log(srcIndex, targIndex);
+        // console.log(srcIndex, targIndex);
         if (srcIndex === -1) {
             this.src_dep.highlight(-1);
             this.srcWordsText.style('fill', 'black');
