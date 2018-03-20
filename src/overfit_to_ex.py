@@ -96,6 +96,7 @@ def overfit_to_ex(opt, shared, wv, optim, m, ex):
 	print loss
 
 	# zero out some gradients before update
+	print "zero out setting: ", opt.zero_out_encoder, opt.zero_out_attention, opt.zero_out_classifier
 	if opt.zero_out_encoder == 1:
 		m.encoder.zero_grad()
 	if opt.zero_out_attention == 1:
@@ -107,7 +108,7 @@ def overfit_to_ex(opt, shared, wv, optim, m, ex):
 	optim.step(shared)
 	total_loss = loss.data[0]
 	# print "total_loss", total_loss
-	y_dist = m.forward(word_vecs1, word_vecs2)
+	# y_dist = m.forward(word_vecs1, word_vecs2)
 	# return the updated model, and y prediction (probabilities)
 	return m, y_dist.data.exp()
 

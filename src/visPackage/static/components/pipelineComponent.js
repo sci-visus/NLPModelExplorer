@@ -161,6 +161,7 @@ class pipelineComponent extends baseComponent {
             this.drawLegend();
             this.items = [];
             var pipelineData = this.data["pipeline"];
+            console.log(pipelineData);
 
             // if (this.items === undefined) {
             var len = pipelineData.length;

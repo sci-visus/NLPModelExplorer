@@ -242,6 +242,7 @@ class modelInterface:
         self.opt.zero_out_encoder = 0 if encoderFlag else 1
         self.opt.zero_out_attention = 0 if attFlag else 1
         self.opt.zero_out_classifier = 0 if classFlag else 1
+
         y_gold = torch.LongTensor([newLabel])
         # print "y_gold", y_gold
 
@@ -260,7 +261,7 @@ class modelInterface:
         # print ex
         for i in range(interation):
             m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
-            print y
+            # print y
         # print 'att_soft1', self.shared.att_soft1.data[0, 0:, 0:].numpy()
         # print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
         batch_att = self.shared.score1
@@ -323,7 +324,7 @@ class modelInterface:
             attentionG.append(grad.numpy().flatten())
 
         classifierG = []
-        for i, p in enumerate(self.pipeline.attention.parameters()):
+        for i, p in enumerate(self.pipeline.classifier.parameters()):
             grad = p.grad.data.div(1)
             classifierG.append(grad.numpy().flatten())
 
@@ -337,16 +338,22 @@ class modelInterface:
         gmax = max(np.max(gradEncoder), np.max(gradAttention), np.max(gradClassifier))
         gmin = min(np.min(gradEncoder), np.min(gradAttention), np.min(gradClassifier))
         print "gradient range", gmax, gmin
+        print "gradEncoder range", np.max(gradEncoder), np.min(gradEncoder)
+        print "gradAttention range", np.max(gradAttention), np.min(gradAttention)
+        print "gradClassifier range", np.max(gradClassifier), np.min(gradClassifier)
         # normEncoder = (gradEncoder-gmin)/(gmax-gmin)
         # print "normEncoder range:", np.min(normEncoder), np.max(normEncoder)
-        histEncoder = np.histogram( (gradEncoder-gmin)/(gmax-gmin), np.arange(0.0,1.0,0.1))[0]
-        histAttention = np.histogram( (gradAttention-gmin)/(gmax-gmin), np.arange(0.0,1.0,0.1))[0]
-        histClassifier = np.histogram( (gradClassifier-gmin)/(gmax-gmin), np.arange(0.0,1.0,0.1))[0]
+        histEncoder = np.histogram( gradEncoder, np.arange(gmin,gmax, (gmax-gmin)/15.0 ))
+        histAttention = np.histogram( gradAttention, np.arange(gmin,gmax, (gmax-gmin)/15.0 ))
+        histClassifier = np.histogram( gradClassifier, np.arange(gmin,gmax, (gmax-gmin)/15.0 ))
 
-        histEncoder = np.ma.log(histEncoder).filled(0).tolist()
-        histAttention = np.ma.log(histAttention).filled(0).tolist()
-        histClassifier = np.ma.log(histAttention).filled(0).tolist()
-        
+        histEncoder = [np.ma.log(histEncoder[0]).filled(0).tolist(),
+            histEncoder[1].tolist()]
+        histAttention = [np.ma.log(histAttention[0]).filled(0).tolist(),
+            histAttention[1].tolist()]
+        histClassifier = [np.ma.log(histClassifier[0]).filled(0).tolist(),
+            histClassifier[1].tolist()]
+
         print histEncoder, histAttention, histClassifier
         # print type(self.pipeline.classifier.parameters())
 

@@ -105,12 +105,12 @@ class pipelineItemPlot {
 
             //create histogram to disable distribution of value update
             this.hist = new histoPlot(this.svg, [
-                hiddenLayerBoxPos[0] + 2.5,
-                hiddenLayerBoxPos[1] + 2.5
+                hiddenLayerBoxPos[0] + 4,
+                hiddenLayerBoxPos[1] + 4
             ], [
-                hiddenLayerBoxSize[0] - 5,
-                hiddenLayerBoxSize[1] - 30
-            ]);
+                hiddenLayerBoxSize[0] - 8,
+                hiddenLayerBoxSize[1] - 25
+            ], true);
             if (this.histoList) {
                 this.hist.setHisto(this.histoList);
             }
