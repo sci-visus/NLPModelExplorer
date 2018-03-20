@@ -53,22 +53,22 @@ exampleData = [
 pipelineState = [{
     "index":0,
     "name": "encoder",
-    "histName": "Gradient",
-    "hist": [1, 5, 6, 4, 7],
+    "histName": "Gradient Histo",
+    # "hist": [1, 5, 6, 4, 7],
     "state": True,
     "arrow": [1]
     }, {
     "index":1,
     "name": "attention",
-    "histName": "Gradient",
-    "hist": [1, 5, 6, 4, 7],
+    "histName": "Gradient Histo",
+    # "hist": [1, 5, 6, 4, 7],
     "state": True,
     "arrow": [2]
     }, {
     "index":2,
     "name": "classifier",
-    "histName": "Gradient",
-    "hist": [1, 5, 6, 4, 7],
+    "histName": "Gradient Histo",
+    # "hist": [1, 5, 6, 4, 7],
     "state": False,
     "arrow": []
     }
@@ -215,6 +215,8 @@ class textEntailVisModule(visModule):
         #update other predictions
         self.predictAll()
 
+        self.pipelineStatistic()
+
     def predict(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
         predictionResult = self.predictionHook(sentencePair)
@@ -292,7 +294,8 @@ class textEntailVisModule(visModule):
     def pipelineStatistic(self):
         pipelineData = self.pipelineStatisticCallback()
         pipeline = dataManager.getData("pipeline")
+        print pipeline
         for index, component in enumerate(pipeline):
-            pipeline[index]["hist"] = pipelineData[index]["hist"]
+            pipeline[index]["hist"] = pipelineData[index]
 
         dataManager.setData("pipeline", pipeline)

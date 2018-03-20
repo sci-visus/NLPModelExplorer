@@ -307,11 +307,50 @@ class modelInterface:
 
 
     def pipelineStatistic(self):
-        self.opt
+
         encoder = [1,2,3,7]
         attention = [1,2,3,7]
         classifer = [1,2,3,7]
-        return [encoder, attention, classifer]
+
+        encoderG = []
+        for i, p in enumerate(self.pipeline.encoder.parameters()):
+            grad = p.grad.data.div(1)
+            encoderG.append(grad.numpy().flatten())
+
+        attentionG = []
+        for i, p in enumerate(self.pipeline.attention.parameters()):
+            grad = p.grad.data.div(1)
+            attentionG.append(grad.numpy().flatten())
+
+        classifierG = []
+        for i, p in enumerate(self.pipeline.attention.parameters()):
+            grad = p.grad.data.div(1)
+            classifierG.append(grad.numpy().flatten())
+
+        gradEncoder = np.concatenate(encoderG)
+        print "gradEncoder", gradEncoder.shape
+        gradAttention = np.concatenate(attentionG)
+        print "gradEncoder", gradAttention.shape
+        gradClassifier = np.concatenate(classifierG)
+        print "gradClassifier", gradClassifier.shape
+        # exit(0)
+        gmax = max(np.max(gradEncoder), np.max(gradAttention), np.max(gradClassifier))
+        gmin = min(np.min(gradEncoder), np.min(gradAttention), np.min(gradClassifier))
+        print "gradient range", gmax, gmin
+        # normEncoder = (gradEncoder-gmin)/(gmax-gmin)
+        # print "normEncoder range:", np.min(normEncoder), np.max(normEncoder)
+        histEncoder = np.histogram( (gradEncoder-gmin)/(gmax-gmin), np.arange(0.0,1.0,0.1))[0]
+        histAttention = np.histogram( (gradAttention-gmin)/(gmax-gmin), np.arange(0.0,1.0,0.1))[0]
+        histClassifier = np.histogram( (gradClassifier-gmin)/(gmax-gmin), np.arange(0.0,1.0,0.1))[0]
+
+        histEncoder = np.ma.log(histEncoder).filled(0).tolist()
+        histAttention = np.ma.log(histAttention).filled(0).tolist()
+        histClassifier = np.ma.log(histAttention).filled(0).tolist()
+        
+        print histEncoder, histAttention, histClassifier
+        # print type(self.pipeline.classifier.parameters())
+
+        return [histEncoder, histAttention, histClassifier]
 
 
     ################ helper #################
