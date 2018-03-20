@@ -88,6 +88,7 @@ def overfit_to_ex(opt, shared, wv, optim, m, ex):
 	# e.g. retain_grad(shared, 'att_soft1')
 	#	then after backward pass, shared.att_soft1.grad will has its gradient
 	retain_grad(shared, 'att_soft1')
+	retain_grad(shared, 'att1')
 
 	# zero out previous gradient and do backward pass
 	m.zero_grad()

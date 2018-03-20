@@ -187,6 +187,7 @@ class attentionComponent extends baseComponent {
 
             case "currentPair":
                 let pair = msg["data"]["data"]["sentences"];
+                // console.log(msg["data"]["data"]);
 
                 if (this.oldPair) {
                     //clear the current dependency
@@ -355,10 +356,9 @@ class attentionComponent extends baseComponent {
             .attr("width", 20)
             .attr("height", 20)
             .attr("fill", "lightgrey")
-            .on("click", d => {
-                this.toggleAttMode(d);
-            }).on("mouseover", function(d) {
+            .on("mouseover", function(d) {
                 d3.select(this).attr("fill", "grey");
+                this.toggleAttMode(d);
             }).on("mouseout", function(d) {
                 d3.select(this).attr("fill", "lightgrey");
             });

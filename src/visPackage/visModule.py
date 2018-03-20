@@ -222,6 +222,9 @@ class textEntailVisModule(visModule):
         # print pred
         dataManager.setData("prediction", pred)
 
+        #update other predictions if available
+        self.predictAll()
+
     def attention(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
         predictionResult = self.predictionHook(sentencePair)

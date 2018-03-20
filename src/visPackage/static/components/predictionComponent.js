@@ -69,7 +69,6 @@ class predictionComponent extends baseComponent {
                 .style("font-size", 10);
         }
 
-
         //entailment
         //neutral, Contradiction, Entailment
         //112,0 0,194 224,194
