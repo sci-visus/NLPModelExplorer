@@ -124,6 +124,12 @@ class modelInterface:
             self.pipeline = self.pipeline.cuda()
             self.optim = self.optim.cuda()
 
+    def reloadModel(self):
+        print('initializing model from {0}'.format(self.opt.load_file))
+        param_dict = load_param_dict('{0}.hdf5'.format(self.opt.load_file))
+        self.pipeline.set_param_dict(param_dict)
+        print('loaded model')
+
     def mapToToken_without_s(self, sentence):
         tokenList = []
         sentence = sentence.rstrip().split(" ")

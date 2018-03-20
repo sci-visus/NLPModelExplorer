@@ -85,11 +85,13 @@ class pipelineComponent extends baseComponent {
                 .attr("width", 50)
                 .attr("height", 30)
                 .attr("fill", "lightgrey")
-                .on("click", this.resetPipeline.bind(this)).on("mouseover",
-                    function(d) {
-                        d3.select(this).attr("fill", "grey");
-                    }).on("mouseout", function(d) {
+                .on("click", this.resetPipeline.bind(this))
+                .on("mouseover", function(d) {
+                    d3.select(this).attr("fill", "grey");
+                })
+                .on("mouseout", function(d) {
                     d3.select(this).attr("fill", "lightgrey");
+
                 });
             this.reset.append("text")
                 .text("reset")
@@ -120,7 +122,8 @@ class pipelineComponent extends baseComponent {
     }
 
     resetPipeline() {
-        // this.call()
+        console.log("reset model");
+        this.callFunc("reloadModel");
     }
 
     resize() {

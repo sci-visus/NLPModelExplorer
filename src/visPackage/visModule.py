@@ -194,6 +194,9 @@ class textEntailVisModule(visModule):
     def setPipelineStatisticHook(self, callback):
         self.pipelineStatisticCallback = callback
 
+    def setReloadModelCallback(self, callback):
+        self.reloadModelCallback=callback
+
     #get sentence parse tree
     def parseSentence(self, sentence):
         if self.parserHook:
@@ -282,6 +285,9 @@ class textEntailVisModule(visModule):
     def perturbSentence(self, sentence):
         perturbed = self.sentencePerturbationHook(sentence)
         return [sentence] + perturbed
+
+    def reloadModel(self):
+        self.reloadModelCallback();
 
     def pipelineStatistic(self):
         pipelineData = self.pipelineStatisticCallback()

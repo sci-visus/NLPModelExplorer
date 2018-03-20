@@ -25,6 +25,8 @@ modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
 modelVis.setPredictionUpdateHook(model.updatePrediction)
 modelVis.setAttentionUpdateHook(model.updateAttention)
+modelVis.setReloadModelCallback(model.reloadModel)
+
 modelVis.setPipelineStatisticHook(model.pipelineStatistic)
 
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
