@@ -156,7 +156,6 @@ class sentenceComponent extends baseComponent {
         var currentPair = [d3.select(this.div + "src").property("value"),
             d3.select(this.div + "targ").property("value")
         ];
-        console.log(currentPair);
         this.data["currentPair"]["sentences"] = currentPair;
         this.setData("currentPair", this.data["currentPair"]);
     }

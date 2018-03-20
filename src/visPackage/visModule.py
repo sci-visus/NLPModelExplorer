@@ -200,7 +200,7 @@ class textEntailVisModule(visModule):
         att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, encoderFlag, attFlag, classFlag)
         # print att, pred
 
-        # dataManager.setData("attention", att)
+        dataManager.setData("attention", att)
         dataManager.setData("predictionUpdate", pred)
 
         #update other predictions
