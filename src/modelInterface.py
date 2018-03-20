@@ -124,6 +124,20 @@ class modelInterface:
             self.pipeline = self.pipeline.cuda()
             self.optim = self.optim.cuda()
 
+    def mapToToken_without_s(self, sentence):
+        tokenList = []
+        sentence = sentence.rstrip().split(" ")
+        for word in sentence:
+            if word in self.tokenMap.keys():
+                tokenList.append(self.tokenMap[word])
+            else:
+                tokenList.append(self.tokenMap["<unk>"])
+        #1XN array
+        # tokenList.append(self.tokenMap["<s>"])
+        # print tokenList
+        token = torch.LongTensor(tokenList).view(1, len(tokenList))
+        # print token
+        return token
 
     def mapToToken(self, sentence):
         tokenList = [self.tokenMap["<s>"]]
@@ -205,6 +219,7 @@ class modelInterface:
         # for i in xrange(self.shared.batch_l):
         #     ex_id = self.shared.batch_ex_idx[i]
         #remove the attention corresponds to <s>
+        # att = batch_att.data[0, 0:, 0:]
         att = batch_att.data[0, 1:, 1:]
         att = att.numpy()
         print "attention range:", att.min(), att.max()
@@ -244,6 +259,7 @@ class modelInterface:
         # print y
         # m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
         # print y
+        # print 'att_soft1', self.shared.att_soft1.data[0, 0:, 0:].numpy()
         print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
         return "att", y.numpy()[0]
 
@@ -251,8 +267,8 @@ class modelInterface:
         #map to token
         sourceSen = sentencePair[0]
         targetSen = sentencePair[1]
-        source = self.mapToToken(sourceSen)
-        target = self.mapToToken(targetSen)
+        source = self.mapToToken_without_s(sourceSen)
+        target = self.mapToToken_without_s(targetSen)
 
         wv_idx1 = Variable(source, requires_grad=False)
         wv_idx2 = Variable(target, requires_grad=False)
@@ -264,9 +280,11 @@ class modelInterface:
         ####### set the flag ############
         self.opt.customize_att = 1
         # self.pipeline = Pipeline(self.opt, self.shared)
+        ##### pad att to correct size to fix <s> ####
+
         self.shared.customized_att1 = torch.Tensor([att_soft1])
         # print self.shared.customized_att1
-        self.shared.customized_att2 = torch.Tensor([att_soft2])
+        self.shared.customized_att2 = torch.Tensor([att_soft2]).transpose(1,2)
         # print self.shared.customized_att2
 
         print source.shape[1], target.shape[1]

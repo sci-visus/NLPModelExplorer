@@ -200,7 +200,7 @@ class attentionMatrixComponent extends attentionComponent {
         let col = i % this.normAttention[0].length;
 
         if (this.dragEventX < d3.event.x) {
-            if (d.value + 0.1 <= 1) {
+            if (d.value <= 1) {
                 d.value += 0.1;
             }
 
@@ -208,11 +208,13 @@ class attentionMatrixComponent extends attentionComponent {
                 this.normAttentionCol[row][col] += 0.1;
             }
         } else if (this.dragEventX > d3.event.x) {
-            if (d.value - 0.1 >= 0) {
+            if (d.value >= 0) {
                 d.value -= 0.1;
             }
-            if (this.normAttentionCol[row][col] >= 1.0) {
+            if (this.normAttentionCol[row][col] >= 0.0) {
                 this.normAttentionCol[row][col] -= 0.1;
+                if (this.normAttentionCol[row][col] < 0.0)
+                    this.normAttentionCol[row][col] = 0.0;
             }
 
         }
