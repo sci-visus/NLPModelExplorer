@@ -196,10 +196,10 @@ class attentionGraphComponent extends attentionComponent {
     }
 
     handleHighlightEvent(srcIndex, targIndex) {
-	 
-	//actual index   
-	srcIndex = this.src_dep.display_index.indexOf(srcIndex);   
-	targIndex = this.targ_dep.display_index.indexOf(targIndex);    
+
+        //actual index
+        srcIndex = this.src_dep.display_index.indexOf(srcIndex);
+        targIndex = this.targ_dep.display_index.indexOf(targIndex);
         // console.log(srcIndex, targIndex);
         if (srcIndex === -1) {
             this.src_dep.highlight(-1);
@@ -256,13 +256,13 @@ class attentionGraphComponent extends attentionComponent {
                 'stroke', '#87CEFA');
         } else {
             d3.select(nodes[index]).style('fill', 'orange');
-           
+
             this.currentMatrix = this.normAttention;
 
             //shift index to actual index
             index = this.targ_dep.display_index[index];
-	    
-	    this.targ_dep.highlight(index);
+
+            this.targ_dep.highlight(index);
             //maximum value index
             let max = -1
             let maxindex = -1;
@@ -272,8 +272,8 @@ class attentionGraphComponent extends attentionComponent {
                     maxindex = i;
                 }
             }
-	    
-	    let actualindex = this.src_dep.display_index.indexOf(maxindex);
+
+            let actualindex = this.src_dep.display_index.indexOf(maxindex);
 
             d3.selectAll('.attentionGraphComponentSrcText').filter((d, i) => {
                     return i == actualindex;
@@ -297,8 +297,10 @@ class attentionGraphComponent extends attentionComponent {
 
         if (opt == 'clean') {
             d3.select(nodes[index]).style('fill', 'black');
-            this.targ_dep.highlight(-1);
-            this.src_dep.highlight(-1);
+            if (this.targ_dep)
+                this.targ_dep.highlight(-1);
+            if (this.src_dep)
+                this.src_dep.highlight(-1);
 
             d3.selectAll('.attentionGraphComponentTargText').style('fill',
                 'black');
@@ -308,13 +310,16 @@ class attentionGraphComponent extends attentionComponent {
                 'stroke', '#87CEFA');
         } else {
 
+
             d3.select(nodes[index]).style('fill', 'orange');
             this.currentMatrix = this.normAttention;
 
             //shift index to actual index
+            if (this.src_dep === undefined || this.targ_dep === undefined)
+                return;
             index = this.src_dep.display_index[index];
-	    
-	    this.src_dep.highlight(index);
+
+            this.src_dep.highlight(index);
 
             //maximum value index
             let max = -1;
@@ -325,9 +330,9 @@ class attentionGraphComponent extends attentionComponent {
                     maxindex = i;
                 }
             }
-	    
-	    //relign the index
-	    let actualindex = this.targ_dep.display_index.indexOf(maxindex);
+
+            //relign the index
+            let actualindex = this.targ_dep.display_index.indexOf(maxindex);
             d3.selectAll('.attentionGraphComponentTargText').filter((d, i) => {
                     return i == actualindex;
                 })

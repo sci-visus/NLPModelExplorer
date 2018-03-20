@@ -131,11 +131,13 @@ class attentionMatrixComponent extends attentionComponent {
                 .classed('attentionMatrixComponent_text_normal', true)
                 .on('mouseover', (d, i, nodes) => {
                     // this.highlight(i);
-                    this.targ_dep.highlight(i);
+                    if (this.targ_dep)
+                        this.targ_dep.highlight(i);
                 })
                 .on('mouseout', (d, i, nodes) => {
                     // this.highlight(-1);
-                    this.targ_dep.highlight(-1);
+                    if (this.targ_dep)
+                        this.targ_dep.highlight(-1);
                 })
                 .on('click', (d, i, nodes) => {
                     this.collapse(i, nodes, 'vertical');
@@ -155,10 +157,12 @@ class attentionMatrixComponent extends attentionComponent {
                 .attr('text-anchor', 'middle')
                 .classed('attentionMatrixComponent_text_normal', true)
                 .on('mouseover', (d, i) => {
-                    this.src_dep.highlight(i);
+                    if (this.src_dep)
+                        this.src_dep.highlight(i);
                 })
                 .on('mouseout', (d, i) => {
-                    this.src_dep.highlight(-1);
+                    if (this.src_dep)
+                        this.src_dep.highlight(-1);
                 })
                 .on('click', (d, i, nodes) => {
                     this.collapse(i, nodes, 'horizontal');
@@ -325,8 +329,10 @@ class attentionMatrixComponent extends attentionComponent {
                         return i == row ? true : false;
                     });
 
-                this.targ_dep.highlight(col);
-                this.src_dep.highlight(row);
+                if (this.targ_dep)
+                    this.targ_dep.highlight(col);
+                if (this.src_dep)
+                    this.src_dep.highlight(row);
             })
             .on('mouseout', (d, i) => {
                 let targWords = this.sen2words(this.data["currentPair"]
@@ -357,8 +363,10 @@ class attentionMatrixComponent extends attentionComponent {
                 // rects.style('stroke', 'black');
                 rects.style('opacity', 1.0);
                 this.setData("highlight", [-1, -1]);
-                this.targ_dep.highlight(-1);
-                this.src_dep.highlight(-1);
+                if (this.targ_dep)
+                    this.targ_dep.highlight(-1);
+                if (this.src_dep)
+                    this.src_dep.highlight(-1);
             });
     }
 
