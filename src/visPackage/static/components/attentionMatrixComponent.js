@@ -270,7 +270,7 @@ class attentionMatrixComponent extends attentionComponent {
                 let targWords = this.sen2words(this.data["currentPair"]
                         ["sentences"][1]),
                     col = i % targWords.length,
-                    row = Math.floor(i / this.targWords.length);
+                    row = Math.floor(i / targWords.length);
 
                 // rects.style('stroke', (data, index) => {
                 //     if (col == index % targWords.length || row ==
@@ -330,7 +330,7 @@ class attentionMatrixComponent extends attentionComponent {
                 let targWords = this.sen2words(this.data["currentPair"]
                         ["sentences"][1]),
                     col = i % targWords.length,
-                    row = Math.floor(i / this.targWords.length);
+                    row = Math.floor(i / targWords.length);
 
                 targtext
                     .classed('attentionMatrixComponent_text_normal', (d,

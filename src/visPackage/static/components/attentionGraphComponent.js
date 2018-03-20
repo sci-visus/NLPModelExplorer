@@ -180,8 +180,6 @@ class attentionGraphComponent extends attentionComponent {
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "middle")
                 .on('mouseover', (d, i, nodes) => {
-                    // console.log(nodes);
-                    // console.log(this.targWordsText);
                     this.highlight_and_linkAlignSrc('highlight', i,
                         nodes);
                 })
@@ -198,6 +196,10 @@ class attentionGraphComponent extends attentionComponent {
     }
 
     handleHighlightEvent(srcIndex, targIndex) {
+	 
+	//actual index   
+	srcIndex = this.src_dep.display_index.indexOf(srcIndex);   
+	targIndex = this.targ_dep.display_index.indexOf(targIndex);    
         // console.log(srcIndex, targIndex);
         if (srcIndex === -1) {
             this.src_dep.highlight(-1);
@@ -254,11 +256,13 @@ class attentionGraphComponent extends attentionComponent {
                 'stroke', '#87CEFA');
         } else {
             d3.select(nodes[index]).style('fill', 'orange');
-            this.targ_dep.highlight(index);
+           
             this.currentMatrix = this.normAttention;
 
             //shift index to actual index
             index = this.targ_dep.display_index[index];
+	    
+	    this.targ_dep.highlight(index);
             //maximum value index
             let max = -1
             let maxindex = -1;
@@ -268,17 +272,19 @@ class attentionGraphComponent extends attentionComponent {
                     maxindex = i;
                 }
             }
+	    
+	    let actualindex = this.src_dep.display_index.indexOf(maxindex);
 
             d3.selectAll('.attentionGraphComponentSrcText').filter((d, i) => {
-                    return i == maxindex;
+                    return i == actualindex;
                 })
                 .style('fill', 'orange');
             d3.selectAll('.attentionGraphComponentSrcRect').filter((d, i) => {
-                    return i == maxindex;
+                    return i == actualindex;
                 })
                 .style('fill', 'orange');
             d3.selectAll('.attentionGraphComponentAttConnect').filter((d, i) => {
-                    return i == (maxindex * this.currentMatrix[0].length +
+                    return i == (actualindex * this.currentMatrix[0].length +
                         index);
                 })
                 .style('stroke', 'orange');
@@ -303,11 +309,12 @@ class attentionGraphComponent extends attentionComponent {
         } else {
 
             d3.select(nodes[index]).style('fill', 'orange');
-            this.src_dep.highlight(index);
             this.currentMatrix = this.normAttention;
 
             //shift index to actual index
             index = this.src_dep.display_index[index];
+	    
+	    this.src_dep.highlight(index);
 
             //maximum value index
             let max = -1;
@@ -318,18 +325,20 @@ class attentionGraphComponent extends attentionComponent {
                     maxindex = i;
                 }
             }
-
+	    
+	    //relign the index
+	    let actualindex = this.targ_dep.display_index.indexOf(maxindex);
             d3.selectAll('.attentionGraphComponentTargText').filter((d, i) => {
-                    return i == maxindex;
+                    return i == actualindex;
                 })
                 .style('fill', 'orange');
             d3.selectAll('.attentionGraphComponentTargRect').filter((d, i) => {
-                    return i == maxindex;
+                    return i == actualindex;
                 })
                 .style('fill', 'orange');
             d3.selectAll('.attentionGraphComponentAttConnect').filter((d, i) => {
                     return i == (index * this.currentMatrix[0].length +
-                        maxindex);
+                        actualindex);
                 })
                 .style('stroke', 'orange');
 
@@ -403,9 +412,6 @@ class attentionGraphComponent extends attentionComponent {
         };
     }
 
-    generateMatrixGeometry() {
-
-    }
 
     drawDepTree() {
         if (this.srcDepTreeData) {
