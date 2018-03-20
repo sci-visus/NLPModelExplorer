@@ -33,6 +33,9 @@ class attentionGraphComponent extends attentionComponent {
                     sum += attMatrix[j][i];
                 return sum;
             });
+            let targAttMax = Math.max(...targAtt);
+            targAtt = targAtt.map(d => d / targAttMax);
+            // console.log(srcAtt, targAtt, targAttMax);
 
             this.attList = [];
             for (var i = 0; i < attMatrix.length; i++)
