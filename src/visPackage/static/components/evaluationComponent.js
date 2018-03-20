@@ -99,7 +99,7 @@ class evaluationComponent extends baseComponent {
         // var stabilities = data.map(d => d.stability);
         // console.log(stabilities);
         this.histo.setSample(data, d => d.stability);
-        this.scatter.setData(data, ["stability", "perturb Count"],
+        this.scatter.setData(data, ["stability", "perturbCount"],
             d => [d.stability, d.perturbCount]);
     }
 

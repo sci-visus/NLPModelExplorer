@@ -198,7 +198,7 @@ class textEntailVisModule(visModule):
         print "predictUpdate", newLabel, iteration, encoderFlag, attFlag, classFlag
         sentencePair = dataManager.getData("currentPair")['sentences']
         att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, encoderFlag, attFlag, classFlag)
-        print att, pred
+        # print att, pred
 
         # dataManager.setData("attention", att)
         dataManager.setData("predictionUpdate", pred)
@@ -217,9 +217,9 @@ class textEntailVisModule(visModule):
 
     def attentionUpdate(self, att_soft1, att_soft2):
         sentencePair = dataManager.getData("currentPair")['sentences']
-        print sentencePair
+        # print sentencePair
         pred = self.attentionUpdateHook(sentencePair, att_soft1, att_soft2)
-        print pred
+        # print pred
         dataManager.setData("prediction", pred)
 
     def attention(self):
