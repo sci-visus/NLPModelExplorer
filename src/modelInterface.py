@@ -130,7 +130,7 @@ class modelInterface:
         self.pipeline.set_param_dict(param_dict)
         print('loaded model')
 
-    def mapToToken_without_s(self, sentence):
+    def mapToToken(self, sentence):
         tokenList = []
         sentence = sentence.rstrip().split(" ")
         for word in sentence:
@@ -145,20 +145,20 @@ class modelInterface:
         # print token
         return token
 
-    def mapToToken(self, sentence):
-        tokenList = [self.tokenMap["<s>"]]
-        sentence = sentence.rstrip().split(" ")
-        for word in sentence:
-            if word in self.tokenMap.keys():
-                tokenList.append(self.tokenMap[word])
-            else:
-                tokenList.append(self.tokenMap["<unk>"])
-        #1XN array
-        # tokenList.append(self.tokenMap["<s>"])
-        # print tokenList
-        token = torch.LongTensor(tokenList).view(1, len(tokenList))
-        # print token
-        return token
+    # def mapToToken(self, sentence):
+    #     tokenList = [self.tokenMap["<s>"]]
+    #     sentence = sentence.rstrip().split(" ")
+    #     for word in sentence:
+    #         if word in self.tokenMap.keys():
+    #             tokenList.append(self.tokenMap[word])
+    #         else:
+    #             tokenList.append(self.tokenMap["<unk>"])
+    #     #1XN array
+    #     # tokenList.append(self.tokenMap["<s>"])
+    #     # print tokenList
+    #     token = torch.LongTensor(tokenList).view(1, len(tokenList))
+    #     # print token
+    #     return token
 
     #evaluate model
 
@@ -226,7 +226,7 @@ class modelInterface:
         #     ex_id = self.shared.batch_ex_idx[i]
         #remove the attention corresponds to <s>
         # att = batch_att.data[0, 0:, 0:]
-        att = batch_att.data[0, 1:, 1:]
+        att = batch_att.data[0, 0:, 0:]
         att = att.numpy()
         # print "attention range:", att.min(), att.max()
         # att = att/att.max()
@@ -264,7 +264,7 @@ class modelInterface:
         # print 'att_soft1', self.shared.att_soft1.data[0, 0:, 0:].numpy()
         # print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
         batch_att = self.shared.score1
-        att = batch_att.data[0, 1:, 1:]
+        att = batch_att.data[0, 0:, 0:]
         att = att.numpy()
         return att, y.numpy()[0]
 
@@ -272,8 +272,8 @@ class modelInterface:
         #map to token
         sourceSen = sentencePair[0]
         targetSen = sentencePair[1]
-        source = self.mapToToken_without_s(sourceSen)
-        target = self.mapToToken_without_s(targetSen)
+        source = self.mapToToken(sourceSen)
+        target = self.mapToToken(targetSen)
 
         wv_idx1 = Variable(source, requires_grad=False)
         wv_idx2 = Variable(target, requires_grad=False)

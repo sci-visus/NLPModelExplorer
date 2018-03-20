@@ -111,7 +111,7 @@ class evaluationComponent extends baseComponent {
     senetenceSelection(data) {
         // console.log(data);
         this.setData("currentPair", {
-            "sentences": [data.src, data.targ],
+            "sentences": ["<s> " + data.src, "<s> " + data.targ],
             "label": data.predict.split("-")[0]
         });
     }
