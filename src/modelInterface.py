@@ -214,7 +214,7 @@ class modelInterface:
         #get the current attention, this seems to be reading attention from file
         batch_att = getattr(self.shared, att_name)
         print self.shared.keys()
-        print "get attention: ", att_name
+        # print "get attention: ", att_name
         # print('printing {0} for {1} examples...'.format(att_name, self.shared.batch_l))
         # for i in xrange(self.shared.batch_l):
         #     ex_id = self.shared.batch_ex_idx[i]
@@ -222,7 +222,7 @@ class modelInterface:
         # att = batch_att.data[0, 0:, 0:]
         att = batch_att.data[0, 1:, 1:]
         att = att.numpy()
-        print "attention range:", att.min(), att.max()
+        # print "attention range:", att.min(), att.max()
         # att = att/att.max()
         return att
 
