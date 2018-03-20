@@ -173,7 +173,7 @@ class predictionComponent extends baseComponent {
 
     //trigger when python return optimized
     onUpdateOptimizedPrediction(predictionUpdate) {
-        console.log(predictionUpdate, this.selectPred);
+        // console.log(predictionUpdate, this.selectPred);
         this.drawPredictPath([this.selectPred, predictionUpdate], "solid");
     }
 
@@ -499,6 +499,8 @@ class predictionComponent extends baseComponent {
         if (this.reassignedPred) {
             var i = this.reassignedPred.indexOf(Math.max(...this.reassignedPred));
             this.onPredictionReassign(i);
+            //reset reassignPred so it won't be trigger when click on the point
+            this.reassignedPred = undefined;
         }
     }
 
