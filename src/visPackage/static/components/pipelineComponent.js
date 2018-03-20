@@ -35,18 +35,42 @@ class pipelineComponent extends baseComponent {
                 .attr("y2", 20)
                 .attr("stroke", "lightgrey")
                 .attr("stroke-width", 10);
+
             this.defs.append("marker")
                 .attr("id", "arrow")
-                .attr("markerUnits", "strokeWidth")
-                .attr("markerWidth", "12")
-                .attr("markerHeight", "12")
-                .attr("viewBox", "0 0 12 12")
-                .attr("refX", "6")
-                .attr("refY", "6")
+                // .attr("markerUnits", "strokeWidth")
+                .attr("markerWidth", 5)
+                .attr("markerHeight", 5)
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 5)
+                .attr("refY", 0)
                 .attr("orient", "auto")
+                // .attr({
+                //     "id": "arrow",
+                //     "viewBox": "0 -5 10 10",
+                //     "refX": 5,
+                //     "refY": 0,
+                //     "markerWidth": 4,
+                //     "markerHeight": 4,
+                //     "orient": "auto"
+                // })
                 .append("path")
-                .attr("d", "M2,2 L10,6 L2,10 L6,6 L2,2")
+                .attr("d", "M0,-5L10,0L0,5")
+                // .attr("class", "arrowHead")
                 .style("fill", "grey");
+
+            // this.defs.append("marker")
+            //     .attr("id", "arrow")
+            //     .attr("markerUnits", "strokeWidth")
+            //     .attr("markerWidth", "10")
+            //     .attr("markerHeight", "10")
+            //     .attr("viewBox", "0 0 10 10")
+            //     .attr("refX", "6")
+            //     .attr("refY", "6")
+            //     .attr("orient", "auto")
+            //     .append("path")
+            //     .attr("d", "M2,2 L10,6 L2,10 L6,6 L2,2")
+            //     .style("fill", "grey");
 
             //draw legend
             this.legend = this.svgContainer.append("g").attr("id", "legend");
@@ -120,8 +144,9 @@ class pipelineComponent extends baseComponent {
                 );
                 item.bindSelectionCallback(this.updatePipelineState.bind(
                     this));
-                if (pipelineData[i]["layerChange"]) {
-                    item.setGraidentHisto(pipelineData[i]["layerChange"]);
+                if (pipelineData[i]["hist"]) {
+                    item.setGraidentHisto(pipelineData[i]["hist"],
+                        pipelineData[i]["histName"]);
                 }
                 item.draw();
                 this.items.push(item);
@@ -147,7 +172,7 @@ class pipelineComponent extends baseComponent {
     drawArrow(start, end) {
         // console.log("drawArrow", start, end)
         //align the arrow head with rect
-        end[0] = end[0] - 7;
+        end[0] = end[0] - 4;
         //draw curved arrow
         let start1 = [start[0] + (end[0] - start[0]) * 0.2, start[1]];
         let end1 = [start[0] + (end[0] - start[0]) * 0.8, end[1]];

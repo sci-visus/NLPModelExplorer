@@ -25,6 +25,7 @@ modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
 modelVis.setPredictionUpdateHook(model.updatePrediction)
 modelVis.setAttentionUpdateHook(model.updateAttention)
+modelVis.setPipelineStatisticHook(model.pipelineStatistic)
 
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
 modelVis.setSentenceParserHook(dep.getDependencyTree)

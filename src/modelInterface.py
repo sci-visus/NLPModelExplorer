@@ -300,6 +300,12 @@ class modelInterface:
         return pred
 
 
+    def pipelineStatistic(self):
+        self.opt
+        encoder = [1,2,3,7]
+        attention = [1,2,3,7]
+        classifer = [1,2,3,7]
+        return [encoder, attention, classifer]
 
 
     ################ helper #################

@@ -53,20 +53,23 @@ exampleData = [
 pipelineState = [{
     "index":0,
     "name": "encoder",
-    # "layerChange": [1, 5, 6, 4, 7],
+    "histName": "Gradient",
+    "hist": [1, 5, 6, 4, 7],
     "state": True,
     "arrow": [1]
     }, {
     "index":1,
     "name": "attention",
+    "histName": "Gradient",
+    "hist": [1, 5, 6, 4, 7],
     "state": True,
-    # "layerChange": [1, 5, 6, 4, 7],
     "arrow": [2]
     }, {
     "index":2,
     "name": "classifier",
+    "histName": "Gradient",
+    "hist": [1, 5, 6, 4, 7],
     "state": False,
-    # "layerChange": [1, 5, 6, 4, 7],
     "arrow": []
     }
 ];
@@ -188,6 +191,9 @@ class textEntailVisModule(visModule):
     def setAttentionUpdateHook(self, callback):
         self.attentionUpdateHook = callback
 
+    def setPipelineStatisticHook(self, callback):
+        self.pipelineStatisticCallback = callback
+
     #get sentence parse tree
     def parseSentence(self, sentence):
         if self.parserHook:
@@ -276,3 +282,11 @@ class textEntailVisModule(visModule):
     def perturbSentence(self, sentence):
         perturbed = self.sentencePerturbationHook(sentence)
         return [sentence] + perturbed
+
+    def pipelineStatistic(self):
+        pipelineData = self.pipelineStatisticCallback()
+        pipeline = dataManager.getData("pipeline")
+        for index, component in enumerate(pipeline):
+            pipeline[index]["hist"] = pipelineData[index]["hist"]
+
+        dataManager.setData("pipeline", pipeline)

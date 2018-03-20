@@ -14,9 +14,10 @@ class pipelineItemPlot {
         this.draw();
     }
 
-    setGraidentHisto(histo) {
+    setGraidentHisto(histo, histName) {
         if (histo) {
             this.histoList = histo;
+            this.histName = histName;
         }
     }
 
@@ -97,7 +98,8 @@ class pipelineItemPlot {
             this.svg.append("text")
                 .attr("x", this.pos[0])
                 .attr("y", this.pos[1] + 2.30 * this.size[1])
-                .text("layer")
+                .text(this.histName)
+                .style("font-size", 12)
                 .style("text-anchor", "middle")
                 .style("pointer-events", "none");
 
