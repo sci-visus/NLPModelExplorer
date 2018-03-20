@@ -75,6 +75,30 @@ class pipelineComponent extends baseComponent {
             //draw legend
             this.legend = this.svgContainer.append("g").attr("id", "legend");
 
+            //reset
+            this.reset = this.svgContainer.append("g");
+            this.reset.append("rect")
+                .attr("rx", 3)
+                .attr("ry", 3)
+                .attr("x", 20)
+                .attr("y", 20)
+                .attr("width", 50)
+                .attr("height", 30)
+                .attr("fill", "lightgrey")
+                .on("click", this.resetPipeline.bind(this)).on("mouseover",
+                    function(d) {
+                        d3.select(this).attr("fill", "grey");
+                    }).on("mouseout", function(d) {
+                    d3.select(this).attr("fill", "lightgrey");
+                });
+            this.reset.append("text")
+                .text("reset")
+                .attr("x", 20 + 25)
+                .attr("y", 20 + 15)
+                .style("text-anchor", "middle")
+                .style("alignment-baseline", "middle")
+                .style("pointer-events", "none");
+
             this.svg = this.svgContainer
                 .append("g")
                 .attr("transform", "translate(" + this.margin.left + "," +
@@ -93,6 +117,10 @@ class pipelineComponent extends baseComponent {
             this.svgSave.updatePos([this.width - 10, 10])
             this.svgSave.draw();
         }
+    }
+
+    resetPipeline() {
+        // this.call()
     }
 
     resize() {
