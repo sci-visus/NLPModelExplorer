@@ -247,7 +247,7 @@ class modelInterface:
         print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
         return "att", y.numpy()[0]
 
-    def updateAttention(self, sentencePair, attMatrix):
+    def updateAttention(self, sentencePair, att_soft1, att_soft2):
         #map to token
         sourceSen = sentencePair[0]
         targetSen = sentencePair[1]
@@ -262,24 +262,23 @@ class modelInterface:
         word_vecs2 = self.embeddings(wv_idx2)
 
         ####### set the flag ############
-        self.opt.customized = 1
+        self.opt.customize_att = 1
         # self.pipeline = Pipeline(self.opt, self.shared)
-        self.shared.customized_att1 = torch.Tensor(attMatrix)
+        self.shared.customized_att1 = torch.Tensor([att_soft1])
         # print self.shared.customized_att1
-        self.shared.customized_att2 = torch.Tensor(attMatrix).transpose(1,2).contiguous()
+        self.shared.customized_att2 = torch.Tensor([att_soft2])
+        # print self.shared.customized_att2
 
-        # print source.shape[1], target.shape[1]
-        self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
+        print source.shape[1], target.shape[1]
+        self.pipeline.update_context(None, 1, source.shape[1], target.shape[1])
 
+        # print word_vecs1, word_vecs2
         y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
-
         p = y_dist.exp()
-        # print "prediction result:", p
-        # pred = dict()
         pred = p.data.numpy()
 
         ####### restore the flag ########
-        self.opt.customized = 0
+        self.opt.customize_att = 0
         # self.pipeline = Pipeline(self.opt, self.shared)
         return pred
 

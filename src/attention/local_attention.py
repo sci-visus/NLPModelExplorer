@@ -68,9 +68,11 @@ class LocalAttention(torch.nn.Module):
 			customized2 = self.shared.customized_att2 if self.opt.gpuid == -1 else self.shared.customized_att2.cuda()
 			self.shared.att_soft1 = Variable(customized1, requires_grad=True)
 			self.shared.att_soft2 = Variable(customized2, requires_grad=True)
+			print self.shared.att_soft1, self.shared.att_soft2
 		else:
 			self.shared.att_soft1 = self.score_unview1(self.softmax(self.score_view1(self.shared.score1)))
 			self.shared.att_soft2 = self.score_unview2(self.softmax(self.score_view2(self.shared.score2)))
+			print self.shared.att_soft1, self.shared.att_soft2
 
 		return [self.shared.att_soft1, self.shared.att_soft2]
 

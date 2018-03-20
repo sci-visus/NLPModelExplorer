@@ -196,32 +196,34 @@ class attentionMatrixComponent extends attentionComponent {
 
     rectDragEvent(i, d, nodes) {
 
+        let row = Math.floor(i / this.normAttention[0].length);
+        let col = i % this.normAttention[0].length;
+
         if (this.dragEventX < d3.event.x) {
             if (d.value + 0.1 <= 1) {
                 d.value += 0.1;
-                d3.select(nodes[i])
-                    .style('fill', (d) => {
-                        return this.colorbar.lookup(d.value);
-                    });
+            }
+
+            if (this.normAttentionCol[row][col] <= 1.0) {
+                this.normAttentionCol[row][col] += 0.1;
             }
         } else if (this.dragEventX > d3.event.x) {
             if (d.value - 0.1 >= 0) {
                 d.value -= 0.1;
-                d3.select(nodes[i])
-                    .style('fill', (d) => {
-                        return this.colorbar.lookup(d.value);
-                    });
             }
+            if (this.normAttentionCol[row][col] >= 1.0) {
+                this.normAttentionCol[row][col] -= 0.1;
+            }
+
         }
 
         //renormalize current row.
-        let row = Math.floor(i / this.normAttention[0].length);
-        let col = i % this.normAttention[0].length;
 
         this.normAttention[row][col] = d.value;
         //this.aggregatedMatrix[row] =
         //TODO: this may be a bug if you try to renormalize the the matrix after collaspe
         this.normAttention[row] = this.normalization(this.normAttention[row]);
+        this.normalizeCol(this.normAttentionCol, col);
 
         d3.selectAll(nodes).style('fill', (d, i) => {
             let r = Math.floor(i / this.normAttention[0].length);
@@ -282,7 +284,7 @@ class attentionMatrixComponent extends attentionComponent {
                         Math.floor(index / targWords.length)) {
                         return 1.0;
                     } else {
-                        return 0.5;
+                        return 0.7;
                     }
                 });
 
@@ -367,7 +369,7 @@ class attentionMatrixComponent extends attentionComponent {
                 Math.floor(index / targWords.length)) {
                 return 1.0;
             } else {
-                return 0.5;
+                return 0.7;
             }
         });
 
