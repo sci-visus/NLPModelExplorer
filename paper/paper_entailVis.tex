@@ -103,7 +103,11 @@ p-NLI: a Perturbation-Driven Visual Interrogation Tool for Analyzing and Interpr
 % What are we doing in this paper
 \abstract{
 With the recent advances in deep learning, neural network based models have obtained the state-of-the-art performance for many linguistic tasks in natural language processing. The disruptive progress also brings enormous challenges.
-The opaque nature of neural network model leads to hard to debug system and difficult to interpret mechanisms. In this work, we use natural language inference task as an example to illustrate how a flexible visualization system can not only help NLP researchers quickly identify the potential limitation of a model, but also facilitate the interpretation the model mechanisms by allowing interactive exploration of the interplay between model input, model inner states, and the prediction.
+The opaque nature of neural network model leads to hard to debug system and difficult to interpret mechanisms. 
+%In this work, we use natural language inference task as an example to illustrate how a flexible visualization system can not only help NLP researchers quickly identify the potential limitation of a model, but also facilitate the interpretation the model mechanisms by allowing interactive exploration of the interplay between model input, model inner states, and the prediction.
+In this work, we introduce a visualization system that through a tight yet flexible integration between visualization elements and the underlying model, allow a user to interrogate the model by perturbing the input, the internal state, as well as prediction while observing changes in other parts of the pipeline.
+%
+We use natural language inference task~\cite{BowmanAngeliPotts2015} as an example to illustrate how this system help natural language processing (NLP) researchers quickly identify the potential limitation of an NLP model, probe the inner states of the model for interpreting key mechanism such as attention, and ultimately come up with hypothesis on why the model fails.
 } % end of abstract
 
 %% Keywords that describe your work. Will show as 'Index Terms' in journal
@@ -160,12 +164,14 @@ Visual Analytics}
 
 %% the only exception to this rule is the \firstsection command
 \input{intro.tex}
-\input{background.tex}
 \input{relatedWorks.tex}
-% \input{tasks.tex}
+
+\input{background.tex}
+%\input{tasks.tex}
+\input{pipeline.tex}
 \input{perturbation.tex} % how to do the perturbation
 \input{attention.tex} % how to encode the information
-\input{pipeline.tex}
+
 \input{application.tex}
 %%%%%%%%%%%%% identify errors %%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%% interpret attention %%%%%%%%%%%%%%%%%%%

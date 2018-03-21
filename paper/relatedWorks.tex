@@ -29,6 +29,12 @@ How to interpret classification task
     Use partial dependency (varying along one feature and observer how prediction changes)
     \item “Why Should I Trust You?” Explaining the Predictions of Any Classifier (LIME)
 \end{itemize}
+% Making sense and explaining predictions made by neural networks is also becoming a necessity.
+%
+Many works~\cite{RibeiroSinghGuestrin2016} have been dedicated to providing intuitive explanations for a given prediction, several of which approach the problem from a model agnostic approach that made them applicable to different applications (i.e., by fitting a simplier linear model near the prediction of interests).
+%
+Despite being invaluable for the providing human understandable explanation, the lack of the ability to access and explore the internal states of the model, which is vitally important to make sense of why a model fail, limits their ability for more in depth exploration and evaluation of the model.
+
 
 (Limitation of the state-of-the arts)
 Model independent explanations is useful to gain intuition, but they lack the ability to link the external observation with inner states/mechanism of the model.
