@@ -123,6 +123,13 @@ class pipelineComponent extends baseComponent {
 
     resetPipeline() {
         console.log("reset model");
+        let pipeline = this.data["pipeline"];
+        for (let i = 0; i < pipeline.length; i++) {
+            pipeline[i]["hist"] = undefined;
+        }
+        console.log(pipeline);
+        this.setData("pipeline", pipeline);
+        this.draw();
         this.callFunc("reloadModel");
     }
 

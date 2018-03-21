@@ -16,15 +16,17 @@ why does the model fail is critical to the design and application of various mod
 However, providing meaningful answers to these questions is an extremely challenging task.
 % Naturally the identification of failure scenarios is an essential first step in diagnosing procedure.
 %the potential limitation of the test dataset
-On the one hand, recognize where the model fail is non-trivial. The standard evaluation approach (i.e., the prediction accuracy on the test set) provides limited information and cannot answer many important questions that are essential to the model diagnostic process. Questions such as, how stable predictions are concerning small perturbation in the input, how these predictions arrive (i.e., the model may come up with the correct prediction by pickup unintended feature/alignment), and what are the often made mistakes, are all essential in systematic examination and evaluation of the model. On the other hand, infer why the model fails is even more challenging. Since neural network models are often referred to as black boxes, hypothesizing what happened in prediction process require the ability to peek inside the model and understand the intricate relationships between model inputs, critical internal mechanisms, as well the output predictions.
+On the one hand, recognize where the model fail is non-trivial. The standard evaluation approach (i.e., the prediction accuracy on the test set) provides limited information and cannot answer many important questions that are essential to the model diagnostic process. Questions such as, how stable predictions are concerning small perturbation in the input, how these predictions arrive (i.e., the model may come up with the correct prediction by pickup unintended feature/alignment), and what are the often made mistakes, are all essential in systematic examination and evaluation of the model. On the other hand, infer why the model fails is even more challenging. Since neural network models are often referred to as black boxes, hypothesizing what happened in prediction process require the ability to peek inside the model and understand the intricate relationships among model inputs, critical internal mechanisms, as well the output predictions.
 
 \begin{itemize}
     \item Study the classifier  vs. single instance evaluation
-    \item Model agnostic vs. reveal intern states
+    \item Model agnostic vs. reveal internal states
     \item View model as invariant object vs. interrogate the model via partial/full updates
 \end{itemize}
 
 %%%%%%%%% accessing internal states are important %%%%%%%%%%%%
+Several previous works~\cite{BilalJourablooYe2018} have dedicate to analyzing errors made in analyzing 
+There has been a
 To analyzing the
 Many method has been
 
@@ -47,7 +49,6 @@ Look at how the model work in action and interrogate relationship between differ
  \includegraphics[width=1.0\linewidth]{pipeline}
  \caption{Language Inference Model Pipeline.}
 \label{fig:projTransition}
-\vspace{-5mm}
 \end{figure}
 
 In this work, we introduce a visualization system that through a tight yet flexible integration between visual analytic elements and the underlying model, allow a user to interrogate the model by perturbing the input, the internal state, as well as prediction while observing changes in other parts of the pipeline.

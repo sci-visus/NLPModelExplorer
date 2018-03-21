@@ -21,6 +21,11 @@ class pipelineItemPlot {
         }
     }
 
+    clear() {
+        this.histoList = undefined;
+        // this.histName = undefined;
+    }
+
     bindSelectionCallback(callback) {
         this.callback = callback;
     }
