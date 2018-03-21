@@ -13,20 +13,38 @@ However, providing meaningful answers to these questions are extremely challengi
 
 Recently, substantial research has been developed to combat the model interpretability challenge. Most notably, the works~\cite{SimonyanVedaldiZisserman2013, ZeilerFergus2014, YosinskiCluneNguyen2015, OlahMordvintsevSchubert2017, LiuShiLi2017, OlahSatyanarayanJohnson2018, BilalJourablooYe2018} on interpretation of convolution neural network (CNN) model from both machine learning and visualization community has reveal the enormous potential and instant benefits of model interpretation, yet they also remind us how little we actually know regarding the inner mechanism of these deep neural network models.
 %
-Compare to image classification task, natural language processing systems have a number of innate restriction (e.g., the discrete nature of words) that makes the road to interpretion more treacherous. For example, \emph{feature visualization}~\cite{OlahMordvintsevSchubert2017}, an often deployed technique for illustrating what kind of image feature a given part of the network (e.g., neuron, layer, or channel) captures, can not be easily generalized and applied for natural language due to the requirement of an interpretable continuous solution space, i.e., the image pixel values, in which human user can easily recongized (or the absent of) patterns or shapes. On the other hand, even though we have the ability to encode a word as an vector~\cite{MikolovSutskeverChen2013, PenningtonSocherManning2014}, the word embedding space is still a discretely defined space, where the interpolation between two vectors (i.e., two words) do not corresponds to explicit meaning.
-
-These restrictions that prevent the application of the well-established interprability approach to natural language models motivated us to develop the proposed perturbation-driven technique.
+Compare to image classification task, natural language processing systems have a number of innate restriction (e.g., the discrete nature of words) that makes the road to interpretion more treacherous. For example, \emph{feature visualization}~\cite{OlahMordvintsevSchubert2017}, an often deployed technique for illustrating what image features a given part of the network (e.g., neuron, layer, or channel) capture, can not be easily generalized and applied for natural language due to the requirement of an interpretable continuous solution space, i.e., the image pixel values, in which human user can easily recongized (or the absent of) patterns or shapes. For natural language, even though we have the ability to encode a word as an vector~\cite{MikolovSutskeverChen2013, PenningtonSocherManning2014}, the word embedding space is still a discretely defined space, where the interpolation between two vectors (i.e., two words) do not corresponds to explicit meaning.
 %
-In addition, many of the existing techniques study the model as an invariant object, where the model's behaviors are recorded and analyzed in an offline fashion.
+These restrictions call for new avenues to solve the interpretation challenge of natural langugage models, which motivate the proposed work.
+
+In this work, we focus on model that aim to solve the natural language inference problem. In the simplest form, the inference task ask the question about whether \emph{sentence A} can infer the content of \emph{sentence B}  (\emph{entail}), or they contradict with each other (\emph{contradiction}), or they talk about different/unrelated things (\emph{neutral}). Language inference addresses the fundimental challenge of sentence semantic similarity in natural language understanding, and is one the core natural language process (NLP) tasks (detials in Section~\ref{sec:languageInference}).
 %
-However, the exploratory natural of the model interpretation analysis often lead to \emph{what if ...} types of questions. What if I perturbed the current input? Will the prediction be stable? What if we change one of the key internal states of the model, how would the modification affect the prediction. What if the current prediction is wrong, how and where should we change the model parameters in order to produce the correct result? These type of dynamic queries form a natural way for us to gain understanding and come up with hypothesis of the model mechanisms by \emph{interrogating} what a componenet do by perturb it and then observe the effects on other part of the system. Therotically, we  Yet, we often need to tediously setup specialized experiment to obtain the answers.
+One recent advance in NLP is the introduction of attention mechanisms~\cite{VaswaniShazeerParmar2017} (see details in Section~\ref{sec:attention}). Intuitively, the \emph{attention} captures where in the input the model should focus on in order to produce the prediction. It assigns importance to individual word or a pair of word (i.e., the alignment between two sentences). In this work, we enhance the standard visual encoding (e.g., as a bipariate graph or as an matrix) of the attention matrix by overlaying sentence linguistic structure to allow grammar guided simplification.
+% Understanding the relationship between the input and attention and the between attention and prediction is not only essentail to interpret the language inference problem, but also other NLP model utilized the same/similar mechansims.
+%
+%In the model~\cite{} we focused on, the attention can be described as an matrix where the number of row corresponds to the number of words in sentence A, and the
+%
+Despite our current implementation are geared towards the natural language inference tasks, componenets of our visualization and the overall exploration paradim can be extended to other NLP tasks, such as neural machine translation, and paragram summerization, etc.
 
-relationship between the input, internal states, and output prediction.
-In this work, we aim to provide quick and intuitive answers to these \emph{what if ...} questions. Instead of viewing the model as an invariant entitle, we employ a perturbation centric mentally to probe the model and examine how changes in one part of the pipeline affect others, which in term provide a new perspective to look at the model interpretation problem.
+Beside explore the internal states of the model, understand how different parts of the model work together and how one may affect one another is as or if not more important.
+% Despite many advanced been made to aid in the interpration of neural network models,
+Many existing techniques study the model as an invariant object, where the model's behaviors are recorded and analyzed in an offline fashion.
+%
+However, the exploratory natural of the model interpretation analysis often lead to many \emph{what if ...} types of questions. I.e., what if I perturbed the current input? Will the prediction be stable? What if we change one of the key internal states of the model, how would the modification affect the prediction. What if the current prediction is wrong, how and where should we change the model parameters in order to produce the correct result? These type of queries form a natural way for us to gain understanding and come up with hypothesis of the model mechanisms by \emph{interrogating} how different componenets of the model will behave when other parts of system are altered. Therotically, we can write script for each of these questions, however, manually code up speciallized experiement is not only tedious to setup, but also ignore fact these questions are often not pre-termained. We often come up with new questions as we make judgements and analyzing the previous observations.
+%
+In this work, we aim to provide immediate and informative answers to these \emph{what if ...} questions by exploiting the expressive power of visualization and close yet flexible integration with the underlying model. Instead of viewing models as an invariant object, we approach the interpretability challenge by studying them in a dynamic setting. By employing a perturbation centric approach, we probe the model and examine how changes in one part of the pipeline (the input, internal states, and output prediction. See Fig.~\ref{fig:modelPipeline}) affect others, which in turn provide a new perspective to look at the model interpretation problem.
 
+The key contributions of the proposed works is summarized as the following:
+\begin{itemize}
+    \item Help understand how the model fail by examining stability of the prediction and visual summarization of predictions;
 
+    \item Enhance the visual encoding of the attention by overlaying sentence linguistic structure to allow grammar guided simplification;
 
+    \item Enable the interrogation of the relationship between input sentences, attention, and the prediction by interactively exploring how the change in one place affect other parts of the model.
 
+\end{itemize}
+%
+% In addition,
 
 %\begin{itemize}
 %    \item Study the classifier  vs. single instance evaluation
@@ -50,13 +68,3 @@ In this work, we aim to provide quick and intuitive answers to these \emph{what 
 % Interpret/probe the relationship between attention and the prediction result
 
 % On the one hand, recognize where the model fail is non-trivial. The standard evaluation approach (i.e., the prediction accuracy on the test set) provides limited information and cannot answer many important questions (e.g., how stable the prediction is, which part of the model may contribute to the failure) that are essential to the model diagnostic process. On the other hand, infer the cause of model failure is even more challenging. Neural network models are often referred to as black boxes due to the hard to recognize  difficult to interpret parameter, hypothesizing what happened in prediction process require the ability to peek inside the model and understand the intricate relationships among model inputs, critical internal mechanisms, as well the output predictions.
-
-The key contributions of the proposed works is summarized as the following:
-\begin{itemize}
-    \item Identify the mistakes made by the model through perturbation of input sentences and visual summarization of the predictions;
-
-    \item Enhance the visual representation of attention by overlaying sentence linguistic structure to allow grammar guided simplification;
-
-    \item Enable the interrogation of the relationship between input sentences, attention, and the prediction by interactively exploring how the change in one of these elements affect other parts of the model.
-
-\end{itemize}
