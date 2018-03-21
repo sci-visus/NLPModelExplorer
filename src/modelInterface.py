@@ -28,7 +28,7 @@ from backward_hooks import *
 from util import *
 from eval import pick_label, evaluate
 from itertools import izip
-from overfit_to_ex import overfit_to_ex
+from overfit_to_ex import *
 
 
 class modelInterface:
@@ -82,6 +82,7 @@ class modelInterface:
         opt.zero_out_encoder = 0
         opt.zero_out_attention = 0
         opt.zero_out_classifier = 0
+        opt.mira_c = 1.0
 
         ##### whether or not using raw attention #####
         opt.customize_att = 0
@@ -237,7 +238,7 @@ class modelInterface:
     '''
         update pipeline based on user assigned new prediction
     '''
-    def updatePrediction(self, sentences, newLabel, interation=1, encoderFlag=True, attFlag=True, classFlag=True):
+    def updatePrediction(self, sentences, newLabel, interation=1, encoderFlag=True, attFlag=True, classFlag=True, optimType="mira"):
 
         self.opt.zero_out_encoder = 0 if encoderFlag else 1
         self.opt.zero_out_attention = 0 if attFlag else 1
@@ -259,8 +260,25 @@ class modelInterface:
 
         ex = (source, target, None, 1, sent_l1, sent_l2, y_gold)
         # print ex
-        for i in range(interation):
+        # for i in range(interation):
+        m = None
+        y = None
+        if optimType == "backprop":
             m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
+        elif optimType == "mira":
+            w_start = clone_cur_weights(self.pipeline)
+
+            # get a initial w'
+            # 	here, it's gonna be updated w using sgd
+            # just one pass sgd
+            self.pipeline, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
+            for i in xrange(interation):
+                print('epoch {0}'.format(i))
+                m, y = mirafit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex, w_start)
+                print(y)
+            # get weight offset
+            self.mira_weight_offset = get_weight_offset(self.pipeline, w_start)
+            print "Mira weight:", self.mira_weight_offset.keys()
             # print y
         # print 'att_soft1', self.shared.att_soft1.data[0, 0:, 0:].numpy()
         # print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
@@ -307,26 +325,38 @@ class modelInterface:
         return pred
 
 
-    def pipelineStatistic(self):
+    def pipelineStatistic(self, infoType="mira"):
 
         encoder = [1,2,3,7]
         attention = [1,2,3,7]
         classifer = [1,2,3,7]
 
         encoderG = []
-        for i, p in enumerate(self.pipeline.encoder.parameters()):
-            grad = p.grad.data.div(1)
-            encoderG.append(grad.numpy().flatten())
-
         attentionG = []
-        for i, p in enumerate(self.pipeline.attention.parameters()):
-            grad = p.grad.data.div(1)
-            attentionG.append(grad.numpy().flatten())
-
         classifierG = []
-        for i, p in enumerate(self.pipeline.classifier.parameters()):
-            grad = p.grad.data.div(1)
-            classifierG.append(grad.numpy().flatten())
+
+        if infoType == "backprop":
+            for i, p in enumerate(self.pipeline.encoder.parameters()):
+                grad = p.grad.data.div(1)
+                encoderG.append(grad.numpy().flatten())
+
+            for i, p in enumerate(self.pipeline.attention.parameters()):
+                grad = p.grad.data.div(1)
+                attentionG.append(grad.numpy().flatten())
+
+            for i, p in enumerate(self.pipeline.classifier.parameters()):
+                grad = p.grad.data.div(1)
+                classifierG.append(grad.numpy().flatten())
+        elif infoType == "mira":
+            for key in self.mira_weight_offset.keys():
+                identifier = key.split(".")[0]
+                # print identifier
+                if identifier=="encoder":
+                    encoderG.append(self.mira_weight_offset[key].numpy().flatten())
+                if identifier=="attention":
+                    attentionG.append(self.mira_weight_offset[key].numpy().flatten())
+                if identifier=="classifier":
+                    classifierG.append(self.mira_weight_offset[key].numpy().flatten())
 
         gradEncoder = np.concatenate(encoderG)
         print "gradEncoder", gradEncoder.shape

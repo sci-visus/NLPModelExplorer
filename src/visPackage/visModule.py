@@ -69,7 +69,7 @@ pipelineState = [{
     "name": "classifier",
     "histName": "Gradient Histo",
     # "hist": [1, 5, 6, 4, 7],
-    "state": False,
+    "state": True,
     "arrow": []
     }
 ];
