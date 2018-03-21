@@ -72,6 +72,7 @@ class socketioManager:
             for id in self.data2ID[name]:
                 # print "setData:", name, id
                 if id == uID:
+                    # print "don't update youself"
                     continue
                 mappedData = dataMapper.Py2Js(data)
                 if mappedData:

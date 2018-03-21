@@ -24,49 +24,52 @@ dataManager = socketioManager(sio)
 
 exampleData = [
 {"index":0,
-    "src": "A couple is taking a break from bicycling .\n",
-    "targ":"a couple sit next to their bikes .\n",
+    "src": "<s> A couple is taking a break from bicycling .\n",
+    "targ":"<s> a couple sit next to their bikes .\n",
     "pred":"neutral"
 },
 {
     "index":1,
-    "src": "Two women are embracing while holding to go packages .\n",
-    "targ": "The sisters are hugging goodbye while holding to go packages after just eating lunch .\n",
+    "src": "<s> Two women are embracing while holding to go packages .\n",
+    "targ": "<s> The sisters are hugging goodbye while holding to go packages after just eating lunch .\n",
     "pred": "neutral"
 },{
     "index":2,
-    "src": "Two young children in blue jerseys , one with the number 9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
-    "targ": "Two kids in numbered jerseys wash their hands .\n",
+    "src": "<s> Two young children in blue jerseys , one with the number 9 and one with the number 2 are standing on wooden steps in a bathroom and washing their hands in a sink .\n",
+    "targ": "<s> Two kids in numbered jerseys wash their hands .\n",
     "pred": "entailment"
 },{
     "index":3,
-    "src": "This church choir sings to the masses as they sing joyous songs from the book at a church .",
-    "targ": "The church has cracks in the ceiling .",
+    "src": "<s> This church choir sings to the masses as they sing joyous songs from the book at a church .",
+    "targ": "<s> The church has cracks in the ceiling .",
     "pred": "neutral"
 },{
     "index":4,
-    "src": "A woman with a green headscarf , blue shirt and a very big grin .",
-    "targ": "The woman is young .",
+    "src": "<s> A woman with a green headscarf , blue shirt and a very big grin .",
+    "targ": "<s> The woman is young .",
     "pred": "neutral"
 }
 ]
 pipelineState = [{
     "index":0,
     "name": "encoder",
-    # "layerChange": [1, 5, 6, 4, 7],
+    "histName": "Gradient Histo",
+    # "hist": [1, 5, 6, 4, 7],
     "state": True,
     "arrow": [1]
     }, {
     "index":1,
     "name": "attention",
+    "histName": "Gradient Histo",
+    # "hist": [1, 5, 6, 4, 7],
     "state": True,
-    # "layerChange": [1, 5, 6, 4, 7],
     "arrow": [2]
     }, {
     "index":2,
     "name": "classifier",
+    "histName": "Gradient Histo",
+    # "hist": [1, 5, 6, 4, 7],
     "state": False,
-    # "layerChange": [1, 5, 6, 4, 7],
     "arrow": []
     }
 ];
@@ -188,6 +191,12 @@ class textEntailVisModule(visModule):
     def setAttentionUpdateHook(self, callback):
         self.attentionUpdateHook = callback
 
+    def setPipelineStatisticHook(self, callback):
+        self.pipelineStatisticCallback = callback
+
+    def setReloadModelCallback(self, callback):
+        self.reloadModelCallback=callback
+
     #get sentence parse tree
     def parseSentence(self, sentence):
         if self.parserHook:
@@ -198,13 +207,15 @@ class textEntailVisModule(visModule):
         print "predictUpdate", newLabel, iteration, encoderFlag, attFlag, classFlag
         sentencePair = dataManager.getData("currentPair")['sentences']
         att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, encoderFlag, attFlag, classFlag)
-        print att, pred
+        # print att, pred
 
-        # dataManager.setData("attention", att)
+        dataManager.setData("attention", att)
         dataManager.setData("predictionUpdate", pred)
 
         #update other predictions
         self.predictAll()
+
+        self.pipelineStatistic()
 
     def predict(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
@@ -215,12 +226,15 @@ class textEntailVisModule(visModule):
         # print attentionMatrix
         dataManager.setData("attention", attentionMatrix)
 
-    def attentionUpdate(self, attMatrix):
+    def attentionUpdate(self, att_soft1, att_soft2):
         sentencePair = dataManager.getData("currentPair")['sentences']
-        print sentencePair
-        pred = self.attentionUpdateHook(sentencePair, attMatrix)
-        print pred
+        # print sentencePair
+        pred = self.attentionUpdateHook(sentencePair, att_soft1, att_soft2)
+        # print pred
         dataManager.setData("prediction", pred)
+
+        #update other predictions if available
+        self.predictAll()
 
     def attention(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
@@ -273,3 +287,15 @@ class textEntailVisModule(visModule):
     def perturbSentence(self, sentence):
         perturbed = self.sentencePerturbationHook(sentence)
         return [sentence] + perturbed
+
+    def reloadModel(self):
+        self.reloadModelCallback();
+
+    def pipelineStatistic(self):
+        pipelineData = self.pipelineStatisticCallback()
+        pipeline = dataManager.getData("pipeline")
+        print pipeline
+        for index, component in enumerate(pipeline):
+            pipeline[index]["hist"] = pipelineData[index]
+
+        dataManager.setData("pipeline", pipeline)

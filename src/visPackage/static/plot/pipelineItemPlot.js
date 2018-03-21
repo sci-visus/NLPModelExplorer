@@ -14,10 +14,16 @@ class pipelineItemPlot {
         this.draw();
     }
 
-    setGraidentHisto(histo) {
+    setGraidentHisto(histo, histName) {
         if (histo) {
             this.histoList = histo;
+            this.histName = histName;
         }
+    }
+
+    clear() {
+        this.histoList = undefined;
+        // this.histName = undefined;
     }
 
     bindSelectionCallback(callback) {
@@ -97,18 +103,19 @@ class pipelineItemPlot {
             this.svg.append("text")
                 .attr("x", this.pos[0])
                 .attr("y", this.pos[1] + 2.30 * this.size[1])
-                .text("layer")
+                .text(this.histName)
+                .style("font-size", 12)
                 .style("text-anchor", "middle")
                 .style("pointer-events", "none");
 
             //create histogram to disable distribution of value update
             this.hist = new histoPlot(this.svg, [
-                hiddenLayerBoxPos[0] + 2.5,
-                hiddenLayerBoxPos[1] + 2.5
+                hiddenLayerBoxPos[0] + 4,
+                hiddenLayerBoxPos[1] + 4
             ], [
-                hiddenLayerBoxSize[0] - 5,
-                hiddenLayerBoxSize[1] - 30
-            ]);
+                hiddenLayerBoxSize[0] - 8,
+                hiddenLayerBoxSize[1] - 25
+            ], true);
             if (this.histoList) {
                 this.hist.setHisto(this.histoList);
             }

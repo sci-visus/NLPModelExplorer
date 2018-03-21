@@ -36,6 +36,39 @@ class predictionComponent extends baseComponent {
         this.svgSave.updatePos([this.width, 10])
         this.svgSave.draw();
 
+        //draw tooltip
+        if (this.legend === undefined) {
+            this.legend = this.svg.append("g");
+            this.legend.append("circle")
+                .attr("class", "legend")
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("r", 6)
+                .attr("fill", "grey")
+                .style("stroke", "white");
+            this.legend.append("text")
+                .attr("x", 10)
+                .attr("y", 0)
+                .text("Origin")
+                .style("alignment-baseline", "middle")
+                .style("pointer-events", "none")
+                .style("font-size", 10);
+            this.legend.append("circle")
+                .attr("class", "legend")
+                .attr("cx", 0)
+                .attr("cy", 15)
+                .attr("r", 3)
+                .attr("fill", "grey")
+                .style("stroke", "white");
+            this.legend.append("text")
+                .attr("x", 10)
+                .attr("y", 15)
+                .text("Perturbed")
+                .style("alignment-baseline", "middle")
+                .style("pointer-events", "none")
+                .style("font-size", 10);
+        }
+
         //entailment
         //neutral, Contradiction, Entailment
         //112,0 0,194 224,194
@@ -106,7 +139,7 @@ class predictionComponent extends baseComponent {
         if (this.svg) {
             this.onUpdateGroundTruth("");
             this.svg.select(this.div + "overlay").remove();
-            this.svg.selectAll("circle").remove();
+            this.svg.selectAll(".predCircle").remove();
             this.svg.selectAll(".dotPredPath").remove();
             this.svg.selectAll(".predPath").remove();
         }
@@ -140,7 +173,7 @@ class predictionComponent extends baseComponent {
 
     //trigger when python return optimized
     onUpdateOptimizedPrediction(predictionUpdate) {
-        console.log(predictionUpdate, this.selectPred);
+        // console.log(predictionUpdate, this.selectPred);
         this.drawPredictPath([this.selectPred, predictionUpdate], "solid");
     }
 
@@ -466,6 +499,8 @@ class predictionComponent extends baseComponent {
         if (this.reassignedPred) {
             var i = this.reassignedPred.indexOf(Math.max(...this.reassignedPred));
             this.onPredictionReassign(i);
+            //reset reassignPred so it won't be trigger when click on the point
+            this.reassignedPred = undefined;
         }
     }
 

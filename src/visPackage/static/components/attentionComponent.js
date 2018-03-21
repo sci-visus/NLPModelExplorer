@@ -101,7 +101,8 @@ class attentionComponent extends baseComponent {
     attUpdate() {
         // console.log(this.normAttention);
         this.callFunc("attentionUpdate", {
-            "attMatrix": this.normAttention
+            "att_soft1": this.normAttention,
+            "att_soft2": this.normAttentionCol
         });
     }
 
@@ -126,14 +127,16 @@ class attentionComponent extends baseComponent {
 
     swapAttDirection() {
         if (this.attentionDirection === 'row') {
-            this.normAttention = this.convertRawAtt(this.rawAttention,
-                'col');
+            // this.normAttention = this.convertRawAtt(this.rawAttention,
+            // 'col');
+            this.normAttention = this.normAttentionCol;
             this.attentionDirection = 'col';
             this.setData("attentionDirection", 'col');
             this.draw();
         } else if (this.attentionDirection === 'col') {
-            this.normAttention = this.convertRawAtt(this.rawAttention,
-                'row');
+            // this.normAttention = this.convertRawAtt(this.rawAttention,
+            // 'row');
+            this.normAttention = this.normAttentionRow;
             this.attentionDirection = 'row';
             this.setData("attentionDirection", 'row');
             this.draw();
@@ -144,6 +147,7 @@ class attentionComponent extends baseComponent {
         super.parseDataUpdate(msg);
         switch (msg["name"]) {
             case "attention":
+                console.log(this.data["attention"]);
                 //if attention is updated, redraw attention
                 // this.srcDepTreeData = undefined;
                 // this.targDepTreeData = undefined;
@@ -154,8 +158,13 @@ class attentionComponent extends baseComponent {
                 }
                 this.rawAttention = this.data["attention"];
                 this.attentionDirection = 'row';
-                this.normAttention = this.convertRawAtt(this.rawAttention,
+                this.normAttentionRow = this.convertRawAtt(this.rawAttention,
                     this.attentionDirection);
+
+                this.normAttentionCol = this.convertRawAtt(this.rawAttention,
+                    'col');
+
+                this.normAttention = this.normAttentionRow;
 
                 // console.log(this.rawAttention);
                 // console.log(this.normAttention);
@@ -293,6 +302,13 @@ class attentionComponent extends baseComponent {
                 return a + b;
             })
         });
+    }
+
+    //normalize col of the input matrix
+    normalizeCol(mat, col) {
+        var sum = mat.map(d => d[col]).reduce((a, b) => a + b, 0);
+        for (var i = 0; i < mat.length; i++)
+            mat[i][col] = mat[i][col] / sum;
     }
 
     toggleAttMode(mode) {

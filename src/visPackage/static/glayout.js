@@ -141,7 +141,8 @@ class glayout {
     }
 
     updateSize() {
-        this.layout.updateSize();
+        if (this.layout)
+            this.layout.updateSize();
     }
 }
 

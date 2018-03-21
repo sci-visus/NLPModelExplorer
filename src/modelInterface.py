@@ -124,9 +124,14 @@ class modelInterface:
             self.pipeline = self.pipeline.cuda()
             self.optim = self.optim.cuda()
 
+    def reloadModel(self):
+        print('initializing model from {0}'.format(self.opt.load_file))
+        param_dict = load_param_dict('{0}.hdf5'.format(self.opt.load_file))
+        self.pipeline.set_param_dict(param_dict)
+        print('loaded model')
 
     def mapToToken(self, sentence):
-        tokenList = [self.tokenMap["<s>"]]
+        tokenList = []
         sentence = sentence.rstrip().split(" ")
         for word in sentence:
             if word in self.tokenMap.keys():
@@ -139,6 +144,21 @@ class modelInterface:
         token = torch.LongTensor(tokenList).view(1, len(tokenList))
         # print token
         return token
+
+    # def mapToToken(self, sentence):
+    #     tokenList = [self.tokenMap["<s>"]]
+    #     sentence = sentence.rstrip().split(" ")
+    #     for word in sentence:
+    #         if word in self.tokenMap.keys():
+    #             tokenList.append(self.tokenMap[word])
+    #         else:
+    #             tokenList.append(self.tokenMap["<unk>"])
+    #     #1XN array
+    #     # tokenList.append(self.tokenMap["<s>"])
+    #     # print tokenList
+    #     token = torch.LongTensor(tokenList).view(1, len(tokenList))
+    #     # print token
+    #     return token
 
     #evaluate model
 
@@ -200,14 +220,15 @@ class modelInterface:
         #get the current attention, this seems to be reading attention from file
         batch_att = getattr(self.shared, att_name)
         print self.shared.keys()
-        print "get attention: ", att_name
+        # print "get attention: ", att_name
         # print('printing {0} for {1} examples...'.format(att_name, self.shared.batch_l))
         # for i in xrange(self.shared.batch_l):
         #     ex_id = self.shared.batch_ex_idx[i]
         #remove the attention corresponds to <s>
-        att = batch_att.data[0, 1:, 1:]
+        # att = batch_att.data[0, 0:, 0:]
+        att = batch_att.data[0, 0:, 0:]
         att = att.numpy()
-        print "attention range:", att.min(), att.max()
+        # print "attention range:", att.min(), att.max()
         # att = att/att.max()
         return att
 
@@ -221,6 +242,7 @@ class modelInterface:
         self.opt.zero_out_encoder = 0 if encoderFlag else 1
         self.opt.zero_out_attention = 0 if attFlag else 1
         self.opt.zero_out_classifier = 0 if classFlag else 1
+
         y_gold = torch.LongTensor([newLabel])
         # print "y_gold", y_gold
 
@@ -239,15 +261,15 @@ class modelInterface:
         # print ex
         for i in range(interation):
             m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
-            print y
-        # m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
-        # print y
-        # m, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
-        # print y
-        print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
-        return "att", y.numpy()[0]
+            # print y
+        # print 'att_soft1', self.shared.att_soft1.data[0, 0:, 0:].numpy()
+        # print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
+        batch_att = self.shared.score1
+        att = batch_att.data[0, 0:, 0:]
+        att = att.numpy()
+        return att, y.numpy()[0]
 
-    def updateAttention(self, sentencePair, attMatrix):
+    def updateAttention(self, sentencePair, att_soft1, att_soft2):
         #map to token
         sourceSen = sentencePair[0]
         targetSen = sentencePair[1]
@@ -262,28 +284,80 @@ class modelInterface:
         word_vecs2 = self.embeddings(wv_idx2)
 
         ####### set the flag ############
-        self.opt.customized = 1
+        self.opt.customize_att = 1
         # self.pipeline = Pipeline(self.opt, self.shared)
-        self.shared.customized_att1 = torch.Tensor(attMatrix)
+        ##### pad att to correct size to fix <s> ####
+
+        self.shared.customized_att1 = torch.Tensor([att_soft1])
         # print self.shared.customized_att1
-        self.shared.customized_att2 = torch.Tensor(attMatrix).transpose(1,2).contiguous()
+        self.shared.customized_att2 = torch.Tensor([att_soft2]).transpose(1,2)
+        # print self.shared.customized_att2
 
-        # print source.shape[1], target.shape[1]
-        self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
+        print source.shape[1], target.shape[1]
+        self.pipeline.update_context(None, 1, source.shape[1], target.shape[1])
 
+        # print word_vecs1, word_vecs2
         y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
-
         p = y_dist.exp()
-        # print "prediction result:", p
-        # pred = dict()
         pred = p.data.numpy()
 
         ####### restore the flag ########
-        self.opt.customized = 0
+        self.opt.customize_att = 0
         # self.pipeline = Pipeline(self.opt, self.shared)
         return pred
 
 
+    def pipelineStatistic(self):
+
+        encoder = [1,2,3,7]
+        attention = [1,2,3,7]
+        classifer = [1,2,3,7]
+
+        encoderG = []
+        for i, p in enumerate(self.pipeline.encoder.parameters()):
+            grad = p.grad.data.div(1)
+            encoderG.append(grad.numpy().flatten())
+
+        attentionG = []
+        for i, p in enumerate(self.pipeline.attention.parameters()):
+            grad = p.grad.data.div(1)
+            attentionG.append(grad.numpy().flatten())
+
+        classifierG = []
+        for i, p in enumerate(self.pipeline.classifier.parameters()):
+            grad = p.grad.data.div(1)
+            classifierG.append(grad.numpy().flatten())
+
+        gradEncoder = np.concatenate(encoderG)
+        print "gradEncoder", gradEncoder.shape
+        gradAttention = np.concatenate(attentionG)
+        print "gradEncoder", gradAttention.shape
+        gradClassifier = np.concatenate(classifierG)
+        print "gradClassifier", gradClassifier.shape
+        # exit(0)
+        gmax = max(np.max(gradEncoder), np.max(gradAttention), np.max(gradClassifier))
+        gmin = min(np.min(gradEncoder), np.min(gradAttention), np.min(gradClassifier))
+        print "gradient range", gmax, gmin
+        print "gradEncoder range", np.max(gradEncoder), np.min(gradEncoder)
+        print "gradAttention range", np.max(gradAttention), np.min(gradAttention)
+        print "gradClassifier range", np.max(gradClassifier), np.min(gradClassifier)
+        # normEncoder = (gradEncoder-gmin)/(gmax-gmin)
+        # print "normEncoder range:", np.min(normEncoder), np.max(normEncoder)
+        histEncoder = np.histogram( gradEncoder, np.arange(gmin,gmax, (gmax-gmin)/15.0 ))
+        histAttention = np.histogram( gradAttention, np.arange(gmin,gmax, (gmax-gmin)/15.0 ))
+        histClassifier = np.histogram( gradClassifier, np.arange(gmin,gmax, (gmax-gmin)/15.0 ))
+
+        histEncoder = [np.ma.log(histEncoder[0]).filled(0).tolist(),
+            histEncoder[1].tolist()]
+        histAttention = [np.ma.log(histAttention[0]).filled(0).tolist(),
+            histAttention[1].tolist()]
+        histClassifier = [np.ma.log(histClassifier[0]).filled(0).tolist(),
+            histClassifier[1].tolist()]
+
+        print histEncoder, histAttention, histClassifier
+        # print type(self.pipeline.classifier.parameters())
+
+        return [histEncoder, histAttention, histClassifier]
 
 
     ################ helper #################

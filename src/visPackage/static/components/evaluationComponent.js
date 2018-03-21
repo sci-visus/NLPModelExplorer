@@ -99,7 +99,7 @@ class evaluationComponent extends baseComponent {
         // var stabilities = data.map(d => d.stability);
         // console.log(stabilities);
         this.histo.setSample(data, d => d.stability);
-        this.scatter.setData(data, ["stability", "perturb Count"],
+        this.scatter.setData(data, ["stability", "perturbCount"],
             d => [d.stability, d.perturbCount]);
     }
 
@@ -111,7 +111,7 @@ class evaluationComponent extends baseComponent {
     senetenceSelection(data) {
         // console.log(data);
         this.setData("currentPair", {
-            "sentences": [data.src, data.targ],
+            "sentences": ["<s> " + data.src, "<s> " + data.targ],
             "label": data.predict.split("-")[0]
         });
     }

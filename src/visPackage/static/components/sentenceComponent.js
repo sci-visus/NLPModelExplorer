@@ -49,7 +49,23 @@ class sentenceComponent extends baseComponent {
                 break;
             case "currentPair":
                 // console.log(msg, this.data["currentPair"]["sentences"]);
+                let pair = msg["data"]["data"]["sentences"];
+                if (this.oldPair) {
+                    if (this.oldPair[0].split(" ").length !== pair[0].split(
+                            " ").length ||
+                        this.oldPair[1].split(" ").length !== pair[1].split(
+                            " ").length
+                    ) {
+                        this.clearDropdown(this.div + "srcInput");
+                        this.clearDropdown(this.div + "targInput");
+
+                        this.setData("allSourceSens", [pair[0]]);
+                        this.setData("allTargetSens", [pair[1]]);
+                    }
+                }
+
                 this.onReceiveCurrentPair();
+                this.oldPair = pair.slice();
                 break;
         }
     }
@@ -77,7 +93,7 @@ class sentenceComponent extends baseComponent {
             .data(this.data["sentenceList"]).enter()
             .append('option')
             .text(function(d) {
-                return d["index"] + "-" + d["src"] + "/" + d["targ"];
+                return d["src"] + " | " + d["targ"];
             })
             .property("value", (d, i) => i);
     }
@@ -140,9 +156,8 @@ class sentenceComponent extends baseComponent {
         var currentPair = [d3.select(this.div + "src").property("value"),
             d3.select(this.div + "targ").property("value")
         ];
-        // console.log(currentPair);
         this.data["currentPair"]["sentences"] = currentPair;
-        this.setData("currentPair", this.data["currentPair"]["sentences"]);
+        this.setData("currentPair", this.data["currentPair"]);
     }
 
     updatePerturbedSentences(sentences) {

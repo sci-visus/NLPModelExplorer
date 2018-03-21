@@ -92,20 +92,20 @@ class histoPlot {
                 });
         } else if (this.mode === "hist") {
             //directly provide the histogram bin size
-            let barWidth = width / this.hist.length - 2;
+            let barWidth = width / this.hist[0].length - 1;
             x = d3.scaleLinear()
-                .domain([0, this.hist.length])
+                .domain(d3.extent(this.hist[1]))
                 .range([this.pos[0], this.pos[0] + width]);
             y = d3.scaleLinear()
-                .domain([0, d3.max(this.hist)])
+                .domain([0, d3.max(this.hist[0])])
                 .range([height + pos[1], pos[1]]);
             var bar = this.svg.selectAll(".bar")
-                .data(this.hist)
+                .data(this.hist[0])
                 .enter().append("rect")
                 .attr("class", "bar")
                 .attr("fill", "lightgrey")
-                .attr("x", function(d, i) {
-                    return x(i);
+                .attr("x", (d, i) => {
+                    return x(this.hist[1][i]);
                 })
                 .attr("width", barWidth)
                 .attr("y", function(d) {
@@ -130,13 +130,13 @@ class histoPlot {
             this.svg.append("g")
                 .attr("transform", "translate(0," + (pos[1] + height) +
                     ")")
-                .call(d3.axisBottom(x));
+                .call(d3.axisBottom(x).ticks(4));
         }
         // add the y Axis
         if (this.axisYflag) {
             this.svg.append("g")
                 .attr("transform", "translate(" + this.pos[0] + ",0)")
-                .call(d3.axisLeft(y));
+                .call(d3.axisLeft(y).ticks(4));
         }
     }
 
