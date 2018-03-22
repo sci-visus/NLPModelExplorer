@@ -1,14 +1,11 @@
-
-
 \section{Background}
 \label{sec:languageInference}
 
-\begin{itemize}
-    \item Motivation for : reading comprehension, similarity of sentennce
-    \item what is it?
-    \item its connection with other NLP tasks (one of the key)
-    \item
-\end{itemize}
+In order to full appreciate the technqiue discussed in this paper, certain background
+in neural network and more specifically neural natural language process models are necessary.
+In the following paragraphs, we aim to cover the most relevent backgound knowledge.
+
+\shusen{high level NLP comments}
 
 The grand challenge in Natural Language Processing (NLP) is to have machine to acquire
 deep comprehension of textual information. Major tasks include Natural Language Inference,
@@ -31,18 +28,18 @@ and model fairness (e.g., is the prediction affected by the bias in the training
 % Due to the opaque nature of the neural network model, interpret and making sense
 % of many internal model mechanisms can be extremely challenging.
 
-%
+\subsection{Neural Network Primer}
+\shusen{What is the basic understanding of neural network What is the end-to-end}
 
 
-
-\subsection{Interprebilty Challenges}
-
+\subsection{Neural Network Model in NLP}
+% \subsection{Interprebilty Challenges}
 Compared with Conputer Vision, the discrete nature of words and sentences
 presents additional challenge for
 interpreting the model, since many visualization technique often employed
 for images rely on continuous nature of the input space (e.g., one can interpolate
 real values much easier than interplolate between words/sentences).
-
+%
 On the other hand, a majority of recent NLP neural networks share the nature of
 end-to-end model, where the entire model operates as a black-box that takes
 vectorized input and yields final prediction for a specific task.
@@ -58,10 +55,6 @@ Recently attention has contributed to many strongly-performed NLP models
 We will focus on its application in Natural Language Inference task as proposed in~\cite{parikh2016emnlp}.
 However notice that our visualization can be generalized to other attention models as well.
 
-
-% The introduction of attention mechanism~\cite{} allow simpler models to match or even outperform more complex / deeper models by exploiting the alignment of bits of local text between sentences. The new challenges
-
-
 \subsection{Natural Language Inference}
 Natural Language Inference(cite?) is an important machine understanding task in NLP.
 The problem definition is to classify the relationship between a premise sentence and a hypothesis sentence.
@@ -74,6 +67,8 @@ Recently ~\cite{BowmanAngeliPotts2015} proposed a large dataset for this task. W
 the decomposable attention model~\cite{parikh2016emnlp} on this dataset with perturbation.
 
 % showing an example??
+
+\shusen{What is the most standard example to illustrate NLI problem?}
 
 % \begin{itemize}
 %     \item what is the textaul entailment problem
