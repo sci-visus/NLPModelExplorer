@@ -12,7 +12,8 @@ class predictionComponent extends baseComponent {
         //subscribe to data
         this.subscribeDatabyNames(["allSourceSens", "allTargetSens",
             "prediction", "allPairsPrediction",
-            "predictionUpdate", "currentPair", "pipeline"
+            "predictionUpdate", "currentPair", "pipeline",
+            "predictionBatchUpdate"
         ]);
 
         this.margin = {
@@ -132,6 +133,9 @@ class predictionComponent extends baseComponent {
                 let pred = this.data["predictionUpdate"];
                 this.onUpdateOptimizedPrediction(pred);
                 break;
+            case "predictionBatchUpdate":
+                let preds = this.data["predictionBatchUpdate"];
+                this.onUpdateOptimizedBatchPrediction(preds);
         }
     }
 
@@ -164,7 +168,7 @@ class predictionComponent extends baseComponent {
         //call python side
         this.callFunc("predictUpdate", {
             "newLabel": label,
-            "iteration": 3,
+            "iteration": 5,
             "encoderFlag": pipeline[0]["state"],
             "attFlag": pipeline[1]["state"],
             "classFlag": pipeline[2]["state"]
@@ -175,6 +179,48 @@ class predictionComponent extends baseComponent {
     onUpdateOptimizedPrediction(predictionUpdate) {
         // console.log(predictionUpdate, this.selectPred);
         this.drawPredictPath([this.selectPred, predictionUpdate], "solid");
+    }
+
+    onUpdateOptimizedBatchPrediction(preds) {
+        console.log(preds);
+
+        //draw batch prediction
+        this.updatePredictDisplay();
+        this.svg.selectAll(".predSquare").remove();
+        this.svg.selectAll(".predSquare")
+            .data(preds)
+            .enter()
+            .append("rect")
+            .attr("class", "predSquare")
+            .attr("id", (d, i) => {
+                return "rect" + i;
+            })
+            .attr("x", d => {
+                return d[1] * 112 + d[2] *
+                    0 +
+                    d[0] * 224 - 3;
+            })
+            .attr("y", d => {
+                return d[1] * 0 + d[2] *
+                    194 +
+                    d[0] * 194 - 3;
+            })
+            .attr("width", 6)
+            .attr("height", 6)
+            .style("fill", "#3F3F3F")
+            .style("stroke", "white")
+            .style("opacity", 1.0)
+            .on("click", (d, i) => {
+                this.callFunc("updatePipelineStateFromIndex", {
+                    "index": i
+                });
+            })
+
+        for (var i = 0; i < preds.length; i++) {
+            this.drawPredictPath([this.selectPred, preds[i]],
+                "solid", false);
+        }
+
     }
 
     onUpdateGroundTruth(label) {
@@ -254,15 +300,20 @@ class predictionComponent extends baseComponent {
     }
 
     updatePredictDisplay(data) {
-        var pLen = data.length;
-        data = data.reverse();
+
         // console.log(this.data);
         // neutral, Contradiction, Entailment
         // Entailment, neutral, contradiction
         // (112,0) (0,194) (224,194)
+        this.svg.selectAll(".predCircle").remove();
         if (data !== undefined) {
             // console.log(data);
-            this.svg.selectAll(".predCircle").remove();
+            var pLen = data.length;
+            if (pLen > 1) {
+                data = JSON.parse(JSON.stringify(data));
+                data = data.reverse();
+            }
+
             this.svg.selectAll(".predCircle")
                 .data(data)
                 .enter()
@@ -520,7 +571,7 @@ class predictionComponent extends baseComponent {
     //drawing a series of predictions
     //the old prediction circle with dotted line
     //the new prediction is solid
-    drawPredictPath(path, type = "dotted") {
+    drawPredictPath(path, type = "dotted", clearPrevious = true) {
         if (path === undefined) {
             this.svg.selectAll(".dotPredPath").remove();
             this.svg.selectAll(".predPath").remove();
@@ -558,8 +609,10 @@ class predictionComponent extends baseComponent {
                     .attr("d", d => d3line(line));
             } else if (type === "solid") {
                 // console.log("draw path line");
-                this.svg.selectAll(".predCircle").remove();
-                this.svg.selectAll(".predPath").remove();
+                if (clearPrevious) {
+                    this.svg.selectAll(".predCircle").remove();
+                    this.svg.selectAll(".predPath").remove();
+                }
 
                 this.svg.append("circle")
                     .attr("class", "predPath")
@@ -583,14 +636,16 @@ class predictionComponent extends baseComponent {
                     .attr("class", "predPath")
                     .attr('fill', '#999')
                     .style('stroke', 'grey')
-                    .attr("marker-end", "url(#arrowhead)")
-                    .attr("d", d => d3line(line));
+                    // .attr("marker-end", "url(#arrowhead)")
+                    // .attr("d", d => d3line(line));
 
                 //update prediction
-                var prediction = path[1];
-                //add sentence index
-                prediction.concat([0, 0]);
-                this.updatePredictDisplay([prediction]);
+                if (clearPrevious) {
+                    var prediction = path[1];
+                    //add sentence index
+                    prediction.concat([0, 0]);
+                    this.updatePredictDisplay([prediction]);
+                }
             }
         }
     }

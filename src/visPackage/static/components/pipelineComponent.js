@@ -101,6 +101,71 @@ class pipelineComponent extends baseComponent {
                 .style("alignment-baseline", "middle")
                 .style("pointer-events", "none");
 
+            this.mode = this.svgContainer.append("g");
+            this.updateMode = [{
+                "name": "single",
+                "on": true
+            }, {
+                "name": "batch",
+                "on": false
+            }];
+            //set default mode
+            this.setData("updateMode", "single");
+            let that = this;
+            this.mode.selectAll(".modeSelector")
+                .data(this.updateMode)
+                .enter()
+                .append("rect")
+                .attr("class", "modeSelector")
+                // .attr("rx", 3)
+                // .attr("ry", 3)
+                .attr("x", (d, i) => this.width * 0.5 + i * 50 - 50)
+                .attr("y", this.height - 40)
+                .attr("width", 50)
+                .attr("height", 30)
+                .attr("fill", d => {
+                    if (d.on)
+                        return "lightblue";
+                    else
+                        return "white";
+                })
+                .style("stroke", "lightblue")
+                .style("stroke-width", 2)
+                .on("click", function(d, i) {
+                    //reset the mode
+                    that.mode.selectAll(".modeSelector").attr("fill",
+                        "white");
+                    that.updateMode.map(d => {
+                        d.on = false
+                    });
+
+                    //set the current
+                    d3.select(this).attr("fill", "lightblue");
+                    that.updateMode[i].on = true;
+                    that.setData("updateMode", d.name);
+                })
+                // .on("mouseover", function(d) {
+                //     d3.select(this).attr("fill", "grey");
+                // })
+                // .on("mouseout", function(d) {
+                //     if (d.on)
+                //         d3.select(this).attr("fill", "lightblue");
+                //     else
+                //         d3.select(this).attr("fill", "lightgrey");
+                //
+                // });
+
+            this.mode.selectAll(".modeSelectorLabel")
+                .data(this.updateMode)
+                .enter()
+                .append("text")
+                .text(d => d.name)
+                .attr("x", (d, i) => this.width * 0.5 + i * 50 - 25)
+                .attr("y", this.height - 40 + 15)
+                .style("text-anchor", "middle")
+                .style("alignment-baseline", "middle")
+                .style("pointer-events", "none");
+
             this.svg = this.svgContainer
                 .append("g")
                 .attr("transform", "translate(" + this.margin.left + "," +

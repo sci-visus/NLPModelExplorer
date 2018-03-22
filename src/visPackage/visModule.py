@@ -195,7 +195,7 @@ class textEntailVisModule(visModule):
         self.pipelineStatisticCallback = callback
 
     def setReloadModelCallback(self, callback):
-        self.reloadModelCallback=callback
+        self.reloadModelCallback = callback
 
     #get sentence parse tree
     def parseSentence(self, sentence):
@@ -205,17 +205,50 @@ class textEntailVisModule(visModule):
 
     def predictUpdate(self, newLabel, iteration, encoderFlag, attFlag, classFlag ):
         print "predictUpdate", newLabel, iteration, encoderFlag, attFlag, classFlag
-        sentencePair = dataManager.getData("currentPair")['sentences']
-        att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, encoderFlag, attFlag, classFlag)
-        # print att, pred
+        mode = dataManager.getData("updateMode")
+        print " ===== predict update mode: ", mode
+        if mode == "single":
+            sentencePair = dataManager.getData("currentPair")['sentences']
+            att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, encoderFlag, attFlag, classFlag)
+            # print att, pred
+
+            dataManager.setData("attention", att)
+            dataManager.setData("predictionUpdate", pred)
+
+            #update other predictions
+            self.predictAll()
+            self.pipelineStatistic()
+
+        elif mode == "batch":
+            self.batchRecords = []
+            self.batchPreds = []
+            for encoderFlag in [True, False]:
+                for attFlag in [True, False]:
+                    for classFlag in [True, False]:
+                        if encoderFlag | attFlag | classFlag:
+                            print "batch run:", encoderFlag, attFlag, classFlag
+                            # restore the pipeline
+                            self.reloadModelCallback()
+
+                            sentencePair = dataManager.getData("currentPair")['sentences']
+                            att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, encoderFlag, attFlag, classFlag)
+
+                            self.batchPreds.append(pred.tolist())
+                            pipelineData = self.pipelineStatisticCallback()
+                            self.batchRecords.append( ([encoderFlag, attFlag, classFlag], att, pipelineData) )
+
+            dataManager.setData("predictionBatchUpdate", self.batchPreds);
+
+    def updatePipelineStateFromIndex(self, index):
+        pipeline = dataManager.getData("pipeline")
+        # print pipeline
+        pipeFlagList, att, pipelineData = self.batchRecords[index]
+        for index, component in enumerate(pipeline):
+            pipeline[index]["hist"] = pipelineData[index]
+            pipeline[index]["state"] = pipeFlagList[index]
 
         dataManager.setData("attention", att)
-        dataManager.setData("predictionUpdate", pred)
-
-        #update other predictions
-        self.predictAll()
-
-        self.pipelineStatistic()
+        dataManager.setData("pipeline", pipeline)
 
     def predict(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
