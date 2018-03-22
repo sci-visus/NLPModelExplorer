@@ -93,7 +93,8 @@ class sentenceComponent extends baseComponent {
             .data(this.data["sentenceList"]).enter()
             .append('option')
             .text(function(d) {
-                return d["src"] + " | " + d["targ"];
+                return d["src"].substring(4) + " | " + d["targ"].substring(
+                    4);
             })
             .property("value", (d, i) => i);
     }
@@ -102,23 +103,29 @@ class sentenceComponent extends baseComponent {
         var currentPair = this.data['currentPair']["sentences"];
         // console.log(this.data["currentPair"]["sentences"]);
 
-        d3.select(this.div + "src").property("value", currentPair[0]);
-        d3.select(this.div + "targ").property("value", currentPair[1]);
+        d3.select(this.div + "src").property("value", currentPair[0].substring(
+            4));
+        d3.select(this.div + "targ").property("value", currentPair[1].substring(
+            4));
         // console.log("----------", this.data["allSourceSens"]);
         if (this.data["allSourceSens"]) {
 
             $(this.div + "src").highlightWithinTextarea({
                 highlight: this.getSentenceDiff(
-                    this.data["allSourceSens"][0],
-                    currentPair[0]), //
+                    this.data["allSourceSens"][0].substring(
+                        4),
+                    currentPair[0].substring(
+                        4)), //
                 className: 'blue'
             });
         }
         if (this.data["allTargetSens"]) {
             $(this.div + "targ").highlightWithinTextarea({
                 highlight: this.getSentenceDiff(
-                    this.data["allTargetSens"][0],
-                    currentPair[1]), //
+                    this.data["allTargetSens"][0].substring(
+                        4),
+                    currentPair[1].substring(
+                        4)), //
                 className: 'blue'
             });
         }
@@ -138,8 +145,10 @@ class sentenceComponent extends baseComponent {
             "sentences": currentPair,
             "label": this.data["sentenceList"][index]["pred"]
         };
-        d3.select(this.div + "src").property("value", currentPair[0]);
-        d3.select(this.div + "targ").property("value", currentPair[1]);
+        d3.select(this.div + "src").property("value", currentPair[0].substring(
+            4));
+        d3.select(this.div + "targ").property("value", currentPair[1].substring(
+            4));
 
         //update rest of the views
         this.setData("currentPair", this.data["currentPair"]);
@@ -153,20 +162,23 @@ class sentenceComponent extends baseComponent {
     }
 
     onUpdateCurrentPair() {
-        var currentPair = [d3.select(this.div + "src").property("value"),
-            d3.select(this.div + "targ").property("value")
+        var currentPair = ["<s> " + d3.select(this.div + "src").property(
+                "value"),
+            "<s> " + d3.select(this.div + "targ").property("value")
         ];
         this.data["currentPair"]["sentences"] = currentPair;
         this.setData("currentPair", this.data["currentPair"]);
     }
 
     updatePerturbedSentences(sentences) {
-        if (this.data["currentPair"]["sentences"][0] == sentences[0]) {
-            this.setData("allSourceSens", sentences);
+        if (this.data["currentPair"]["sentences"][0] === "<s> " + sentences[
+                0]) {
+            this.setData("allSourceSens", sentences.map(d => "<s> " + d));
             this.addDropdown(this.div + "srcInput", sentences, this.div +
                 "src");
-        } else if (this.data["currentPair"]["sentences"][1] == sentences[0]) {
-            this.setData("allTargetSens", sentences);
+        } else if (this.data["currentPair"]["sentences"][1] === "<s> " +
+            sentences[0]) {
+            this.setData("allTargetSens", sentences.map(d => "<s> " + d));
             this.addDropdown(this.div + "targInput", sentences, this.div +
                 "targ");
         }
@@ -174,18 +186,18 @@ class sentenceComponent extends baseComponent {
 
     perturbSource() {
         if (this.data["currentPair"]["sentences"] !== undefined) {
-            this.isPerturbSource = true;
             this.callFunc("perturbSentence", {
                 "sentence": this.data["currentPair"]["sentences"][0]
+                    .substring(4)
             });
         }
     }
 
     perturbTarget() {
         if (this.data["currentPair"]["sentences"] !== undefined) {
-            this.isPerturbTarget = true;
             this.callFunc("perturbSentence", {
                 "sentence": this.data["currentPair"]["sentences"][1]
+                    .substring(4)
             });
         }
     }
