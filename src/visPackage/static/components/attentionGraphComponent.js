@@ -209,6 +209,7 @@ class attentionGraphComponent extends attentionComponent {
             this.srcWordsText.style('fill', 'black');
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
+            d3.selectAll('.srcRect').style('fill', '#87CEFA');
         } else {
             this.src_dep.highlight(srcIndex);
             this.srcWordsText.each(function(d, i) {
@@ -216,6 +217,9 @@ class attentionGraphComponent extends attentionComponent {
                     d3.select(this).style('fill', 'orange');
                 }
             });
+            d3.selectAll('.srcRect').filter((d, i) => {
+                 return i == srcIndex; 
+            }).style('fill', 'orange');
         }
 
         if (targIndex === -1) {
@@ -223,6 +227,8 @@ class attentionGraphComponent extends attentionComponent {
             this.targWordsText.style('fill', 'black');
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
+		
+            d3.selectAll('.targRect').style('fill', '#87CEFA');
         } else {
             this.targ_dep.highlight(targIndex);
             this.targWordsText.each(function(d, i) {
@@ -230,6 +236,10 @@ class attentionGraphComponent extends attentionComponent {
                     d3.select(this).style('fill', 'orange');
                 }
             });
+	    
+            d3.selectAll('.targRect').filter((d, i) => {
+                return i == targIndex; 
+            }).style('fill', 'orange');
         }
 
         if (srcIndex !== -1 && targIndex !== -1) {
@@ -253,12 +263,21 @@ class attentionGraphComponent extends attentionComponent {
 
             d3.selectAll('.attentionGraphComponentSrcText').style('fill',
                 'black');
-            d3.selectAll('.attentionGraphComponentSrcRect').style('fill',
+		
+            d3.selectAll('.srcRect').style('fill',
                 '#87CEFA');
+		
+            d3.selectAll('.targRect').filter((d, i) => {
+                        return i == index; 
+    	    }).style('fill', '#87CEFA');
+	    
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
         } else {
             d3.select(nodes[index]).style('fill', 'orange');
+            d3.selectAll('.targRect').filter((d, i) => {
+                    return i == index; 
+	    }).style('fill', 'orange');
 
             this.currentMatrix = this.normAttention;
 
@@ -282,7 +301,7 @@ class attentionGraphComponent extends attentionComponent {
                     return i == actualindex;
                 })
                 .style('fill', 'orange');
-            d3.selectAll('.attentionGraphComponentSrcRect').filter((d, i) => {
+            d3.selectAll('.srcRect').filter((d, i) => {
                     return i == actualindex;
                 })
                 .style('fill', 'orange');
@@ -307,14 +326,25 @@ class attentionGraphComponent extends attentionComponent {
 
             d3.selectAll('.attentionGraphComponentTargText').style('fill',
                 'black');
-            d3.selectAll('.attentionGraphComponentTargRect').style('fill',
+		
+            d3.selectAll('.targRect').style('fill',
                 '#87CEFA');
+		
+            d3.selectAll('.srcRect').filter((d, i) => {
+                            return i == index; 
+            }).style('fill', '#87CEFA');
+		    
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
         } else {
 
 
             d3.select(nodes[index]).style('fill', 'orange');
+	    
+            d3.selectAll('.srcRect').filter((d, i) => {
+                  return i == index; 
+            }).style('fill', 'orange');
+	    
             this.currentMatrix = this.normAttention;
 
             //shift index to actual index
@@ -340,7 +370,7 @@ class attentionGraphComponent extends attentionComponent {
                     return i == actualindex;
                 })
                 .style('fill', 'orange');
-            d3.selectAll('.attentionGraphComponentTargRect').filter((d, i) => {
+            d3.selectAll('.targRect').filter((d, i) => {
                     return i == actualindex;
                 })
                 .style('fill', 'orange');
@@ -420,7 +450,6 @@ class attentionGraphComponent extends attentionComponent {
         };
     }
 
-
     drawDepTree() {
         if (this.srcDepTreeData) {
             if (this.src_dep === undefined) {
@@ -454,7 +483,6 @@ class attentionGraphComponent extends attentionComponent {
             }
         }
     }
-
 
     drawConnection() {
         var d3line = d3.line()
