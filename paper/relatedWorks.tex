@@ -1,56 +1,41 @@
 
 \section{Related Works}
-Due to the significant implication of model interpretability, a wealth of researches of be focused on the explanation and interpretation of deep neural network models.
+With the increasing demands for model accountability (e.g., what is the evidence for making the decision) and model fairness (e.g., is the prediction affected by the bias in the training data),
+the interpretability of the machine learning model held significant implications. As a result, a wealth of researches have be focused on the explanation and interpretation of deep neural network models from both machine learning as well as visualization community.
 
-%%%% summarize analyzing prediction, but not sensitivity %%%%
-Several previous works~\cite{BilalJourablooYe2018} have dedicate to analyzing errors made in classification
+\noindent\textbf{Model Interpretability.}
+What consistitue interpretation for a model learning model
+% The the rising field of explainable AI
 
-With the increasing demands for model accountability (e.g., what is the evidence for making the decision) and model fairness (e.g., is the prediction affected by the bias in the training data), these techniques only provide us a glimpse of what to come. The interpretability of neural network model is one
-
-%%%% summarize analyzing prediction, but not sensitivity %%%%
-%% NLP related vis %%%%
-LSTMvis~\cite{StrobeltGehrmannHuber2016} making sense of internal states of the model
-
-There has been a
-To analyzing the
-Many method has been
-
-%%%% interactive steering of the model %%%%
-
-\subsection{Model Interpretability}
-
+~\cite{Doshi-Velez2017}
+Discussion the underspecification of what interprability means~\cite{Lipton2016}
 How to interpret classification task
-\begin{itemize}
-    \item What feature / dimension / part-of-the-input should change to
-    alter the outcome
-    \item What Examples can you provide that is similar to the current
-    instance
-\end{itemize}
-\begin{itemize}
-    \item Interacting with Predictions: Visual Inspection of Black-box Machine Learning Models,
-    Use partial dependency (varying along one feature and observer how prediction changes)
-    \item “Why Should I Trust You?” Explaining the Predictions of Any Classifier (LIME)
-\end{itemize}
-% Making sense and explaining predictions made by neural networks is also becoming a necessity.
-%
-Many works~\cite{RibeiroSinghGuestrin2016} have been dedicated to providing intuitive explanations for a given prediction, several of which approach the problem from a model agnostic approach that made them applicable to different applications (i.e., by fitting a simplier linear model near the prediction of interests).
+
+Many works have been dedicated to providing intuitive explanations for a given prediction, several~\cite{RibeiroSinghGuestrin2016, KrausePererNg2016} of which approach the problem from a model agnostic approach that made them applicable to different applications (i.e., by fitting a simplier linear model near the prediction of interests).
 %
 Despite being invaluable for the providing human understandable explanation, the lack of the ability to access and explore the internal states of the model, which is vitally important to make sense of why a model fail, limits their ability for more in depth exploration and evaluation of the model.
+% (Limitation of the state-of-the arts)
+% Model independent explanations is useful to gain intuition, but they lack the ability to link the external observation with inner states/mechanism of the model.
 
+\noindent\textbf{Visual Interpration.}
+Visual analytics has demonstrate its effectiveness in the exploration of complex relationship. The application~\cite{TzengMa2005} has long been adopted for a
+~\cite{KrausePererNg2016}
+Several previous works~\cite{BilalJourablooYe2018} have dedicate to analyzing errors made in classification
 
-(Limitation of the state-of-the arts)
-Model independent explanations is useful to gain intuition, but they lack the ability to link the external observation with inner states/mechanism of the model.
-
-\subsection{Visualization and HCI}
 Depth learning vis
-\begin{itemize}
-    \item ActiVis: Visual Exploration of Industry-Scale Deep Neural Network Models
-    \item Analyzing the Training Processes of Deep Generative Models
-    \item Visual Diagnosis of Tree Boosting Methods
-    \item TreePOD: Sensitivity-Aware Selection of Pareto-Optimal Decision Trees
-    \item LSTMVis: A Tool for Visual Analysis of Hidden State Dynamics in Recurrent Neural Networks
-    \item Do Convolutional Neural Networks learn Class Hierarchy?
-    \item DeepEyes: Progressive Visual Analytics for Designing Deep Neural Networks
-\end{itemize}
+% \begin{itemize}
+%     \item ActiVis: Visual Exploration of Industry-Scale Deep Neural Network Models
+%     \item Analyzing the Training Processes of Deep Generative Models
+%     \item Visual Diagnosis of Tree Boosting Methods
+%     \item TreePOD: Sensitivity-Aware Selection of Pareto-Optimal Decision Trees
+%     \item LSTMVis: A Tool for Visual Analysis of Hidden State Dynamics in Recurrent Neural Networks
+%     \item Do Convolutional Neural Networks learn Class Hierarchy?
+%     \item DeepEyes: Progressive Visual Analytics for Designing Deep Neural Networks
+% \end{itemize}
 
-Less emphasis on where does the fail
+\noindent\textbf{Visualization of Neural Linguistic Model.}
+Compare to the multitude of researchs on making sense of convolutional neural networks, relatively less works has been dedicated to the neural linguistic model.
+%
+However, the previous works~\cite{KarpathyJohnson2015, LiChenHovy2015, StrobeltGehrmannPfister2018, LiuBremerJayaraman2018} not only demonstrated the benefit of visualization in understanding NLP models, but also illuminated many possibility with the application of visual analytics in understanding neural linguistic models.
+% There is many unresolve challenge and the
+The LSTMvis~\cite{StrobeltGehrmannPfister2018} work utilized a line plot style visual encoding to visualize the time varying hidden states of recurent neutural network. The word embedding visualization work~\cite{LiuBremerJayaraman2018} illustrate how semantic relationship can be recovered by linear projection in the high-dimensional word embedding space produced by word2vec~\cite{MikolovSutskeverChen2013} or glove~\cite{PenningtonSocherManning2014}.

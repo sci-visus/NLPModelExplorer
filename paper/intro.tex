@@ -34,18 +34,19 @@ One recent advance in neural natural language process models is the introduction
 %
 There has been many speculation on how attention works in various models. In this work, by utilizing the the proposed system, we are able to perturb the attention and observer the change in the prediction, perturb the sentence input and observe the effects on the attention. And more importantly, we also allow user to change prediction, where we apply an constrained optimization to find the least amount of parameter update to produce the user assign label. Another word, the user can explore how changes in sentence input, attention, or prediction affect each other. Such type of exploration is not only essential to interpret the language inference problem, but can also be easily generated to other NLP model utilized the attention mechanisms.
 %
-In addition, we also enhanced the standard visual encoding (e.g., as a bipartite graph or as an matrix) of the attention matrix by overlaying sentence linguistic structure to allow grammar guided simplification of the visual represent.
+In addition, we also enhanced the standard visual encoding (e.g., as a bipartite graph or as an matrix) of the attention matrix by overlaying sentence linguistic structure to allow grammar guided simplification of the visual representation.
+%
 Finally, as discussed in Section~\ref{sec:caseStudy}, the ability to examine how attention corresponds to grammatical structure also help domain expert speculate the potential benefit of including sentence linguistic structure in the design of attention component of the model.
-
 
 The key contributions of the proposed works is summarized as the following:
 \begin{itemize}
+    \item Identify the visualization tasks for making sense of the role of attention in natural langage inference (section~\ref{sec:task});
+
     \item Help understand how the model fail by examining stability of the prediction and visual summarization of predictions;
 
     \item Enhance the visual encoding of the attention by overlaying sentence linguistic structure to allow grammar guided simplification;
 
     \item Enable the interrogation of the relationship between input sentences, attention, and the prediction by interactively exploring how the change in one place affect other parts of the model.
-
 \end{itemize}
 %
 % In addition,
