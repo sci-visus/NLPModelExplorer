@@ -4,25 +4,27 @@ With the increasing demands for model accountability (e.g., what is the evidence
 the interpretability of the machine learning model held significant implications. As a result, a wealth of researches have be focused on the explanation and interpretation of deep neural network models from both machine learning as well as visualization community.
 
 \noindent\textbf{Model Interpretability.}
-What consistitue interpretation for a model learning model
-% The the rising field of explainable AI
+Before one can solve the model interpertability challenge, we first need to understand what constitute an explaination or interpretation of a machine learning model.
+As discussed in ~\cite{Lipton2016, Doshi-Velez2017}, the concept of interprebale is inherently subjective, since the recipients of the explaination are always human.
+% And the discussion of interpretability quickly become philosophical.
+However, despite the underspecification nature of the problem, we can still refine the concept and provide certain guideline~\cite{Doshi-Velez2017}.
 
-~\cite{Doshi-Velez2017}
-Discussion the underspecification of what interprability means~\cite{Lipton2016}
-How to interpret classification task
-
+One of the most studied aread in model interpretability is the explanation of a given prediction.
 Many works have been dedicated to providing intuitive explanations for a given prediction, several~\cite{RibeiroSinghGuestrin2016, KrausePererNg2016} of which approach the problem from a model agnostic approach that made them applicable to different applications (i.e., by fitting a simplier linear model near the prediction of interests).
 %
 Despite being invaluable for the providing human understandable explanation, the lack of the ability to access and explore the internal states of the model, which is vitally important to make sense of why a model fail, limits their ability for more in depth exploration and evaluation of the model.
 % (Limitation of the state-of-the arts)
 % Model independent explanations is useful to gain intuition, but they lack the ability to link the external observation with inner states/mechanism of the model.
 
-\noindent\textbf{Visual Interpration.}
-Visual analytics has demonstrate its effectiveness in the exploration of complex relationship. The application~\cite{TzengMa2005} has long been adopted for a
-~\cite{KrausePererNg2016}
-Several previous works~\cite{BilalJourablooYe2018} have dedicate to analyzing errors made in classification
+\noindent\textbf{Visual Interpration of Neural Networks.}
+The effectiveness in the exploration of complex relationships, visualization have long been adopted for interpreting neural network models (e.g., the early works such as~\cite{TzengMa2005})
+Recently, many visualization works has dedicated to the neural network model interpretability challenges.
+% The classification~\cite{KrausePererNg2016}
+In the work~\cite{BilalJourablooYe2018} by Bilal et al., the authors analyzing classification errors in convolutional neural networks and answer the question on whether class hierarchy is learn in the network.
+Liu et al.~\cite{LiuShiCao2018} explore the possiblility of understanding the training process of deep generative models.
+The ActiVis~\cite{KahngAndrewsKalro2018} focus on large scale network in real world setting.
+The DeepEyes~\cite{Pezzotti2018} focuses on the analyzing the training procss, so they can provide design guideline to the deep neutral network architect.
 
-Depth learning vis
 % \begin{itemize}
 %     \item ActiVis: Visual Exploration of Industry-Scale Deep Neural Network Models
 %     \item Analyzing the Training Processes of Deep Generative Models
@@ -33,9 +35,10 @@ Depth learning vis
 %     \item DeepEyes: Progressive Visual Analytics for Designing Deep Neural Networks
 % \end{itemize}
 
-\noindent\textbf{Visualization of Neural Linguistic Model.}
-Compare to the multitude of researchs on making sense of convolutional neural networks, relatively less works has been dedicated to the neural linguistic model.
+\noindent\textbf{Neural Linguistic Model Visualization.}
+Compare to the multitude of researchs for making sense of convolutional neural networks, relatively less works has been dedicated to neural linguistic models.
 %
-However, the previous works~\cite{KarpathyJohnson2015, LiChenHovy2015, StrobeltGehrmannPfister2018, LiuBremerJayaraman2018} not only demonstrated the benefit of visualization in understanding NLP models, but also illuminated many possibility with the application of visual analytics in understanding neural linguistic models.
+However, the previous works~\cite{KarpathyJohnson2015, LiChenHovy2015, StrobeltGehrmannPfister2018, LiuBremerJayaraman2018} not only demonstrated the benefit of visualization in understanding NLP models, but also revealed enoumous possibility for future applications.
 % There is many unresolve challenge and the
-The LSTMvis~\cite{StrobeltGehrmannPfister2018} work utilized a line plot style visual encoding to visualize the time varying hidden states of recurent neutural network. The word embedding visualization work~\cite{LiuBremerJayaraman2018} illustrate how semantic relationship can be recovered by linear projection in the high-dimensional word embedding space produced by word2vec~\cite{MikolovSutskeverChen2013} or glove~\cite{PenningtonSocherManning2014}.
+The early work on charactor level recurrent network~\cite{KarpathyJohnson2015} demonstrates effectness of the hidden state in capturing the unique pattern in training text. The compositionality exibited in neural linguistic model (i.e., build sentence from meaing of words and phrases) are examined in the work by Li et al. ~\cite{LiChenHovy2015}, by utilizing methods inspired by similar work in computer vision.
+The LSTMvis~\cite{StrobeltGehrmannPfister2018} work utilized a line plot style visual encoding to visualize the time varying hidden states of recurent neutural network. The word embedding visualization work~\cite{LiuBremerJayaraman2018} illustrate how semantic relationship can be recovered by linear projections in the high-dimensional word embedding space produced by word2vec~\cite{MikolovSutskeverChen2013} or glove~\cite{PenningtonSocherManning2014}.
