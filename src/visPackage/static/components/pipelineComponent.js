@@ -80,11 +80,30 @@ class pipelineComponent extends baseComponent {
             this.svgContainer.select("#resetButton").selectAll("*")
             .remove();
 
+        //
+        this.Cslider = new sliderPlot(this.mode, [50, 50], [70, 15],
+            "C_mira", [1.0, 10.0], 5.0, ".0f");
+        this.Cslider.bindUpdateCallback(d => {
+            this.setData("C_mira", this.Cslider.value)
+        });
+
+        this.learnRate = new sliderPlot(this.mode, [50, 70], [70, 15],
+            "l_rate", [0.005, 0.1], 0.02, ".4f");
+        this.learnRate.bindUpdateCallback(d => {
+            this.setData("learningRate", Number(this.learnRate.value))
+        });
+
+        this.iteration = new sliderPlot(this.mode, [50, 90], [70, 15],
+            "iter", [5, 20], 15, ".0f");
+        this.iteration.bindUpdateCallback(d => {
+            this.setData("iteration", Number(this.iteration.value));
+        });
+
         this.reset.append("rect")
             .attr("rx", 3)
             .attr("ry", 3)
-            .attr("x", 20)
-            .attr("y", 20)
+            .attr("x", 10)
+            .attr("y", 10)
             .attr("width", 100)
             .attr("height", 30)
             .attr("fill", "lightgrey")
@@ -98,8 +117,8 @@ class pipelineComponent extends baseComponent {
             });
         this.reset.append("text")
             .text("reset model")
-            .attr("x", 20 + 50)
-            .attr("y", 20 + 15)
+            .attr("x", 10 + 50)
+            .attr("y", 10 + 15)
             .style("text-anchor", "middle")
             .style("alignment-baseline", "middle")
             .style("pointer-events", "none");
@@ -122,6 +141,7 @@ class pipelineComponent extends baseComponent {
             "mode": "batch",
             "on": false
         }];
+
         //set default mode
         this.setData("updateMode", "single");
         let that = this;
