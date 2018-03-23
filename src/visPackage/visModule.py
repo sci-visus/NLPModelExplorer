@@ -126,7 +126,6 @@ class textEntailVisModule(visModule):
         dataManager.clear()
         dataManager.setData("componentLayout", layoutConfig)
         dataManager.setData("sentenceList", exampleData)
-        # print pipelineState
         dataManager.setData("pipeline", pipelineState)
         dataManager.setData("currentPair", {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']})
         return app.send_static_file('index.html')
@@ -201,8 +200,8 @@ class textEntailVisModule(visModule):
             depTree = self.parserHook(sentence)
             return {"depTree": depTree, "sentence":sentence}
 
-    def predictUpdate(self, newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag ):
-        print "predictUpdate", newLabel, iteration, encoderFlag, attFlag, classFlag
+    def predictUpdate(self, newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag, mira_c ):
+        print "predictUpdate", newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag
         mode = dataManager.getData("updateMode")
         print " ===== predict update mode: ", mode
         if mode == "single":
@@ -229,7 +228,7 @@ class textEntailVisModule(visModule):
                             self.reloadModelCallback()
 
                             sentencePair = dataManager.getData("currentPair")['sentences']
-                            att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, encoderFlag, attFlag, classFlag)
+                            att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag, mira_c)
 
                             self.batchPreds.append(pred.tolist())
                             pipelineData = self.pipelineStatisticCallback()

@@ -13,7 +13,10 @@ class predictionComponent extends baseComponent {
         this.subscribeDatabyNames(["allSourceSens", "allTargetSens",
             "prediction", "allPairsPrediction",
             "predictionUpdate", "currentPair", "pipeline",
-            "predictionBatchUpdate"
+            "predictionBatchUpdate",
+            "learningRate",
+            "C_mira",
+            "iteration"
         ]);
 
         this.margin = {
@@ -164,15 +167,20 @@ class predictionComponent extends baseComponent {
     onPredictionReassign(label) {
 
         let pipeline = this.data["pipeline"];
-        console.log(pipeline);
+        // console.log(pipeline);
+        let learningRate = this.data["learningRate"];
+        let C_mira = this.data["C_mira"];
+        let iteration = this.data["iteration"];
         //call python side
+        console.log(learningRate, C_mira, iteration);
         this.callFunc("predictUpdate", {
             "newLabel": label,
-            "iteration": 20,
-            "learningRate": 0.01,
+            "iteration": iteration,
+            "learningRate": learningRate,
             "encoderFlag": pipeline[0]["state"],
             "attFlag": pipeline[1]["state"],
-            "classFlag": pipeline[2]["state"]
+            "classFlag": pipeline[2]["state"],
+            "mira_c": C_mira
         })
     }
 
@@ -307,6 +315,7 @@ class predictionComponent extends baseComponent {
         // Entailment, neutral, contradiction
         // (112,0) (0,194) (224,194)
         this.svg.selectAll(".predCircle").remove();
+        this.svg.selectAll(".predSquare").remove();
         if (data !== undefined) {
             // console.log(data);
             var pLen = data.length;
