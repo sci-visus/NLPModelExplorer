@@ -38,133 +38,18 @@ class pipelineComponent extends baseComponent {
 
             this.defs.append("marker")
                 .attr("id", "arrow")
-                // .attr("markerUnits", "strokeWidth")
                 .attr("markerWidth", 5)
                 .attr("markerHeight", 5)
                 .attr("viewBox", "0 -5 10 10")
                 .attr("refX", 5)
                 .attr("refY", 0)
                 .attr("orient", "auto")
-                // .attr({
-                //     "id": "arrow",
-                //     "viewBox": "0 -5 10 10",
-                //     "refX": 5,
-                //     "refY": 0,
-                //     "markerWidth": 4,
-                //     "markerHeight": 4,
-                //     "orient": "auto"
-                // })
                 .append("path")
                 .attr("d", "M0,-5L10,0L0,5")
-                // .attr("class", "arrowHead")
                 .style("fill", "grey");
-
-            // this.defs.append("marker")
-            //     .attr("id", "arrow")
-            //     .attr("markerUnits", "strokeWidth")
-            //     .attr("markerWidth", "10")
-            //     .attr("markerHeight", "10")
-            //     .attr("viewBox", "0 0 10 10")
-            //     .attr("refX", "6")
-            //     .attr("refY", "6")
-            //     .attr("orient", "auto")
-            //     .append("path")
-            //     .attr("d", "M2,2 L10,6 L2,10 L6,6 L2,2")
-            //     .style("fill", "grey");
 
             //draw legend
             this.legend = this.svgContainer.append("g").attr("id", "legend");
-
-            //reset
-            this.reset = this.svgContainer.append("g");
-            this.reset.append("rect")
-                .attr("rx", 3)
-                .attr("ry", 3)
-                .attr("x", 20)
-                .attr("y", 20)
-                .attr("width", 50)
-                .attr("height", 30)
-                .attr("fill", "lightgrey")
-                .on("click", this.resetPipeline.bind(this))
-                .on("mouseover", function(d) {
-                    d3.select(this).attr("fill", "grey");
-                })
-                .on("mouseout", function(d) {
-                    d3.select(this).attr("fill", "lightgrey");
-
-                });
-            this.reset.append("text")
-                .text("reset")
-                .attr("x", 20 + 25)
-                .attr("y", 20 + 15)
-                .style("text-anchor", "middle")
-                .style("alignment-baseline", "middle")
-                .style("pointer-events", "none");
-
-            this.mode = this.svgContainer.append("g");
-            this.updateMode = [{
-                "name": "single",
-                "on": true
-            }, {
-                "name": "batch",
-                "on": false
-            }];
-            //set default mode
-            this.setData("updateMode", "single");
-            let that = this;
-            this.mode.selectAll(".modeSelector")
-                .data(this.updateMode)
-                .enter()
-                .append("rect")
-                .attr("class", "modeSelector")
-                // .attr("rx", 3)
-                // .attr("ry", 3)
-                .attr("x", (d, i) => this.width * 0.5 + i * 50 - 50)
-                .attr("y", this.height - 40)
-                .attr("width", 50)
-                .attr("height", 30)
-                .attr("fill", d => {
-                    if (d.on)
-                        return "lightblue";
-                    else
-                        return "white";
-                })
-                .style("stroke", "lightblue")
-                .style("stroke-width", 2)
-                .on("click", function(d, i) {
-                    //reset the mode
-                    that.mode.selectAll(".modeSelector").attr("fill",
-                        "white");
-                    that.updateMode.map(d => {
-                        d.on = false
-                    });
-
-                    //set the current
-                    d3.select(this).attr("fill", "lightblue");
-                    that.updateMode[i].on = true;
-                    that.setData("updateMode", d.name);
-                })
-                // .on("mouseover", function(d) {
-                //     d3.select(this).attr("fill", "grey");
-                // })
-                // .on("mouseout", function(d) {
-                //     if (d.on)
-                //         d3.select(this).attr("fill", "lightblue");
-                //     else
-                //         d3.select(this).attr("fill", "lightgrey");
-                //
-                // });
-
-            this.mode.selectAll(".modeSelectorLabel")
-                .data(this.updateMode)
-                .enter()
-                .append("text")
-                .text(d => d.name)
-                .attr("x", (d, i) => this.width * 0.5 + i * 50 - 25)
-                .attr("y", this.height - 40 + 15)
-                .style("text-anchor", "middle")
-                .style("alignment-baseline", "middle")
-                .style("pointer-events", "none");
 
             this.svg = this.svgContainer
                 .append("g")
@@ -186,13 +71,114 @@ class pipelineComponent extends baseComponent {
         }
     }
 
+    drawResetBotton() {
+        //reset
+        if (this.svgContainer.select("#resetButton").empty())
+            this.reset = this.svgContainer.append("g").attr("id",
+                "resetButton");
+        else
+            this.svgContainer.select("#resetButton").selectAll("*")
+            .remove();
+
+        this.reset.append("rect")
+            .attr("rx", 3)
+            .attr("ry", 3)
+            .attr("x", 20)
+            .attr("y", 20)
+            .attr("width", 100)
+            .attr("height", 30)
+            .attr("fill", "lightgrey")
+            .on("click", this.resetPipeline.bind(this))
+            .on("mouseover", function(d) {
+                d3.select(this).attr("fill", "grey");
+            })
+            .on("mouseout", function(d) {
+                d3.select(this).attr("fill", "lightgrey");
+
+            });
+        this.reset.append("text")
+            .text("reset model")
+            .attr("x", 20 + 50)
+            .attr("y", 20 + 15)
+            .style("text-anchor", "middle")
+            .style("alignment-baseline", "middle")
+            .style("pointer-events", "none");
+    }
+
+    drawConfigurationOption() {
+        if (this.svgContainer.select("#configurationOption").empty())
+            this.mode = this.svgContainer.append("g").attr("id",
+                "configurationOption");
+        else
+            this.svgContainer.select("#configurationOption").selectAll("*")
+            .remove();
+
+        this.updateMode = [{
+            "name": "current configuration",
+            "on": true
+        }, {
+            "name": "all configurations",
+            "on": false
+        }];
+        //set default mode
+        this.setData("updateMode", "single");
+        let that = this;
+        this.mode.selectAll(".modeSelector")
+            .data(this.updateMode)
+            .enter()
+            .append("rect")
+            .attr("class", "modeSelector")
+            // .attr("rx", 3)
+            // .attr("ry", 3)
+            .attr("x", (d, i) => this.width * 0.5 + i * 160 - 160)
+            .attr("y", this.height - 40)
+            .attr("width", 160)
+            .attr("height", 30)
+            .attr("fill", d => {
+                if (d.on)
+                    return "lightblue";
+                else
+                    return "white";
+            })
+            .style("stroke", "lightblue")
+            .style("stroke-width", 2)
+            .on("click", function(d, i) {
+                //reset the mode
+                that.mode.selectAll(".modeSelector").attr("fill",
+                    "white");
+                that.updateMode.map(d => {
+                    d.on = false
+                });
+
+                //set the current
+                d3.select(this).attr("fill", "lightblue");
+                that.updateMode[i].on = true;
+                that.setData("updateMode", d.name);
+            })
+
+
+        this.mode.selectAll(".modeSelectorLabel")
+            .data(this.updateMode)
+            .enter()
+            .append("text")
+            .attr("class", "modeSelectorLabel")
+            .text(d => d.name)
+            .attr("x", (d, i) => this.width * 0.5 + i * 160 -
+                80)
+            .attr("y", this.height - 40 + 15)
+            .style("text-anchor", "middle")
+            .style("alignment-baseline", "middle")
+            .style("pointer-events", "none");
+    }
+
     resetPipeline() {
         console.log("reset model");
         let pipeline = this.data["pipeline"];
         for (let i = 0; i < pipeline.length; i++) {
-            pipeline[i]["hist"] = undefined;
+            delete pipeline[i]["hist"];
+            pipeline[i]['state'] = true;
         }
-        console.log(pipeline);
+        // console.log(pipeline);
         this.setData("pipeline", pipeline);
         this.draw();
         this.callFunc("reloadModel");
@@ -206,8 +192,8 @@ class pipelineComponent extends baseComponent {
         super.parseDataUpdate(msg);
         switch (msg["name"]) {
             case "pipeline":
-                // states = this.data["pipelineState"]
-                // this.updatePipelineState(states)
+                let states = this.data["pipelineState"];
+                console.log(states);
                 this.draw();
                 break
         }
@@ -230,7 +216,9 @@ class pipelineComponent extends baseComponent {
         // console.log("draw pipeline");
         if (this.data["pipeline"] !== undefined) {
             this.initSvg();
+            this.drawConfigurationOption();
             this.drawLegend();
+            this.drawResetBotton();
             this.items = [];
             var pipelineData = this.data["pipeline"];
             console.log(pipelineData);

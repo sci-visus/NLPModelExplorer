@@ -127,14 +127,18 @@ class histoPlot {
 
         // add the x Axis
         if (this.axisXflag) {
+            this.svg.select("#xAxis").remove();
             this.svg.append("g")
+                .attr("id", "xAxis")
                 .attr("transform", "translate(0," + (pos[1] + height) +
                     ")")
                 .call(d3.axisBottom(x).ticks(4));
         }
         // add the y Axis
         if (this.axisYflag) {
+            this.svg.select("#yAxis").remove();
             this.svg.append("g")
+                .attr("id", "yAxis")
                 .attr("transform", "translate(" + this.pos[0] + ",0)")
                 .call(d3.axisLeft(y).ticks(4));
         }

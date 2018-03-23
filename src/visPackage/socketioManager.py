@@ -5,6 +5,7 @@ from sets import Set
 import socketio
 import json
 import numpy as np
+import copy
 
 class socketioManager:
     def __init__(self, sio):
@@ -66,7 +67,7 @@ class socketioManager:
             self.sendToClient(uID, msg)
 
     def setData(self, name, data, uID = None):
-        self.data[name] = data
+        self.data[name] = copy.deepcopy(data)
         #propagate data update
         if name in self.data2ID.keys():
             for id in self.data2ID[name]:

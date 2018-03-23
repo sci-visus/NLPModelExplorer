@@ -50,7 +50,7 @@ class predictionComponent extends baseComponent {
             this.legend.append("text")
                 .attr("x", 10)
                 .attr("y", 0)
-                .text("Origin")
+                .text("Original")
                 .style("alignment-baseline", "middle")
                 .style("pointer-events", "none")
                 .style("font-size", 10);
@@ -168,7 +168,8 @@ class predictionComponent extends baseComponent {
         //call python side
         this.callFunc("predictUpdate", {
             "newLabel": label,
-            "iteration": 5,
+            "iteration": 20,
+            "learningRate": 0.01,
             "encoderFlag": pipeline[0]["state"],
             "attFlag": pipeline[1]["state"],
             "classFlag": pipeline[2]["state"]

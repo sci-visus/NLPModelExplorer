@@ -120,13 +120,15 @@ class pipelineItemPlot {
                 this.hist.setHisto(this.histoList);
             }
 
-        } else {
-            this.svg.select("rect")
-                .attr("x", this.pos[0] - this.size[0] * 0.5)
-                .attr("y", this.pos[1] - this.size[1] * 0.5)
-                .attr("width", this.size[0])
-                .attr("height", this.size[1]);
         }
+        // else {
+        //     this.svg.select("rect")
+        //         .attr("x", this.pos[0] - this.size[0] * 0.5)
+        //         .attr("y", this.pos[1] - this.size[1] * 0.5)
+        //         .attr("width", this.size[0])
+        //         .attr("height", this.size[1]);
+        //     this.hist.update()
+        // }
     }
 
     getOutputPortPos() {

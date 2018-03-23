@@ -82,7 +82,7 @@ class modelInterface:
         opt.zero_out_encoder = 0
         opt.zero_out_attention = 0
         opt.zero_out_classifier = 0
-        opt.mira_c = 1.0
+        opt.mira_c = 10.0
 
         ##### whether or not using raw attention #####
         opt.customize_att = 0
@@ -238,11 +238,13 @@ class modelInterface:
     '''
         update pipeline based on user assigned new prediction
     '''
-    def updatePrediction(self, sentences, newLabel, interation=1, encoderFlag=True, attFlag=True, classFlag=True, optimType="mira"):
+    def updatePrediction(self, sentences, newLabel, interation=1, learningRate=0.02, encoderFlag=True, attFlag=True, classFlag=True, optimType="mira"):
 
         self.opt.zero_out_encoder = 0 if encoderFlag else 1
         self.opt.zero_out_attention = 0 if attFlag else 1
         self.opt.zero_out_classifier = 0 if classFlag else 1
+
+        self.opt.learning_rate = learningRate
 
         y_gold = torch.LongTensor([newLabel])
         # print "y_gold", y_gold
@@ -278,7 +280,7 @@ class modelInterface:
                 print(y)
             # get weight offset
             self.mira_weight_offset = get_weight_offset(self.pipeline, w_start)
-            print "Mira weight:", self.mira_weight_offset.keys()
+            # print "Mira weight:", self.mira_weight_offset.keys()
             # print y
         # print 'att_soft1', self.shared.att_soft1.data[0, 0:, 0:].numpy()
         # print 'att_soft1', self.shared.att_soft1.data[0, 1:, 1:].numpy()
