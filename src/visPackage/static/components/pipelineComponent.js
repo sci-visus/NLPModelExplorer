@@ -115,9 +115,11 @@ class pipelineComponent extends baseComponent {
 
         this.updateMode = [{
             "name": "current configuration",
+            "mode": "single",
             "on": true
         }, {
             "name": "all configurations",
+            "mode": "batch",
             "on": false
         }];
         //set default mode
@@ -153,7 +155,7 @@ class pipelineComponent extends baseComponent {
                 //set the current
                 d3.select(this).attr("fill", "lightblue");
                 that.updateMode[i].on = true;
-                that.setData("updateMode", d.name);
+                that.setData("updateMode", d.mode);
             })
 
 

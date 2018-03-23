@@ -168,11 +168,12 @@ class predictionComponent extends baseComponent {
         //call python side
         this.callFunc("predictUpdate", {
             "newLabel": label,
-            "iteration": 20,
-            "learningRate": 0.01,
+            "iteration": 10,
+            "learningRate": 0.02,
             "encoderFlag": pipeline[0]["state"],
             "attFlag": pipeline[1]["state"],
-            "classFlag": pipeline[2]["state"]
+            "classFlag": pipeline[2]["state"],
+            "mira_c": 4.0
         })
     }
 
@@ -307,6 +308,7 @@ class predictionComponent extends baseComponent {
         // Entailment, neutral, contradiction
         // (112,0) (0,194) (224,194)
         this.svg.selectAll(".predCircle").remove();
+        this.svg.selectAll(".predSquare").remove();
         if (data !== undefined) {
             // console.log(data);
             var pLen = data.length;

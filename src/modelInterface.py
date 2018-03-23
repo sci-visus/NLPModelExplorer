@@ -82,7 +82,8 @@ class modelInterface:
         opt.zero_out_encoder = 0
         opt.zero_out_attention = 0
         opt.zero_out_classifier = 0
-        opt.mira_c = 10.0
+        # opt.mira_c = 10.0
+        opt.mira_c = 1.0
 
         ##### whether or not using raw attention #####
         opt.customize_att = 0
@@ -238,13 +239,15 @@ class modelInterface:
     '''
         update pipeline based on user assigned new prediction
     '''
-    def updatePrediction(self, sentences, newLabel, interation=1, learningRate=0.02, encoderFlag=True, attFlag=True, classFlag=True, optimType="mira"):
+    def updatePrediction(self, sentences, newLabel, interation=1, learningRate=0.02, encoderFlag=True, attFlag=True, classFlag=True, mira_c=10.0, optimType="mira"):
 
         self.opt.zero_out_encoder = 0 if encoderFlag else 1
         self.opt.zero_out_attention = 0 if attFlag else 1
         self.opt.zero_out_classifier = 0 if classFlag else 1
+        # print "zero out setting:", self.opt.zero_out_encoder, self.opt.zero_out_attention, self.opt.zero_out_classifier
 
         self.opt.learning_rate = learningRate
+        self.opt.mira_c = mira_c
 
         y_gold = torch.LongTensor([newLabel])
         # print "y_gold", y_gold
@@ -275,9 +278,9 @@ class modelInterface:
             # just one pass sgd
             self.pipeline, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
             for i in xrange(interation):
-                print('epoch {0}'.format(i))
+                # print('epoch {0}'.format(i))
                 m, y = mirafit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex, w_start)
-                print(y)
+                print(y.numpy().tolist())
             # get weight offset
             self.mira_weight_offset = get_weight_offset(self.pipeline, w_start)
             # print "Mira weight:", self.mira_weight_offset.keys()

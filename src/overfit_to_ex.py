@@ -96,6 +96,7 @@ def get_weight_offset(m, w_start):
 
 # runs multiple passes of learning until fit to the right prediction
 def mirafit_to_ex(opt, shared, wv, optim, m, ex, w_start):
+	print "########## mirafit_to_ex ############"
 	m.train(True)
 	if opt.dropout != 0.0:
 		print('dropout should be 0 during overfitting.')
@@ -161,6 +162,7 @@ def mirafit_to_ex(opt, shared, wv, optim, m, ex, w_start):
 # ex is the pack of information for the batch of examples
 #	i.e. data[i] in train.py or eval.py
 def overfit_to_ex(opt, shared, wv, optim, m, ex):
+	print "########## overfit_to_ex ############"
 	m.train(True)
 	if opt.dropout != 0.0:
 		print('dropout should be 0 during overfitting.')
@@ -204,7 +206,7 @@ def overfit_to_ex(opt, shared, wv, optim, m, ex):
 	#print loss
 
 	# zero out some gradients before update
-	print "zero out setting: ", opt.zero_out_encoder, opt.zero_out_attention, opt.zero_out_classifier
+	# print "zero out setting: ", opt.zero_out_encoder, opt.zero_out_attention, opt.zero_out_classifier
 	if opt.zero_out_encoder == 1:
 		m.encoder.zero_grad()
 	if opt.zero_out_attention == 1:
