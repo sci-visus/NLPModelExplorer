@@ -84,13 +84,13 @@ class pipelineComponent extends baseComponent {
         this.Cslider = new sliderPlot(this.mode, [50, 50], [70, 15],
             "C_mira", [1.0, 10.0], 5.0, ".0f");
         this.Cslider.bindUpdateCallback(d => {
-            this.setData("C_mira", this.Cslider.value)
+            this.setData("C_mira", Number(this.Cslider.value));
         });
 
         this.learnRate = new sliderPlot(this.mode, [50, 70], [70, 15],
             "l_rate", [0.005, 0.1], 0.02, ".4f");
         this.learnRate.bindUpdateCallback(d => {
-            this.setData("learningRate", Number(this.learnRate.value))
+            this.setData("learningRate", Number(this.learnRate.value));
         });
 
         this.iteration = new sliderPlot(this.mode, [50, 90], [70, 15],

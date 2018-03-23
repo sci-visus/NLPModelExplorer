@@ -37,8 +37,9 @@ class sliderPlot {
                     (that.range[1] - that.range[0]);
                 // console.log(that.value);
                 that.bar.attr("width", that.mapValToWidth());
-                that.value = d3.format(that.format)(that.value);
-                that.valText.text(that.value);
+                let val = d3.format(that.format)(that.value);
+                that.value = Number(val);
+                that.valText.text(val);
                 // this.bar.attr("width", )
                 that.callback(that.value);
             });
