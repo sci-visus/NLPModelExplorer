@@ -1,5 +1,4 @@
 \section{Background}
-\label{sec:languageInference}
 
 In order to full appreciate the technqiue discussed in this paper, certain background
 in neural network and more specifically neural natural language process models are necessary.
@@ -39,6 +38,7 @@ and model fairness (e.g., is the prediction affected by the bias in the training
 \end{figure}
 
 \subsection{Neural Network Model in NLP}
+
 \shusen{neural linguistic models?}
 
 \shusen{What is the basic understanding of neural network What is the end-to-end}
@@ -56,6 +56,8 @@ vectorized input and yields final prediction for a specific task.
 Therefore, to study the inside of end-to-end neural models, it is important to
 explore the interaction between intermediate representations and predictions.
 
+\subsection{Attention Mechansim}
+\label{sec:attention}
 The introduction of attention mechanism~\cite{bahdanau2014neural} allows
 pairwise interaction between hidden states. This interaction can be naturally explained
 as a form of alignment which exposes an interpretable layer in end-to-end neural networks.
@@ -66,6 +68,7 @@ We will focus on its application in Natural Language Inference task as proposed 
 However notice that our visualization can be generalized to other attention models as well.
 
 \subsection{Natural Language Inference}
+\label{sec:languageInference}
 Natural Language Inference(cite?) is an important machine understanding task in NLP.
 The problem definition is to classify the relationship between a premise sentence and a hypothesis sentence.
 The prediction must fall in one of three catergories: $\{Entailment, Contradiction, Neutral\}$.
