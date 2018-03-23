@@ -269,15 +269,15 @@ class attentionMatrixComponent extends attentionComponent {
 	    	.on('drag', (_, ix, nds) => {
                		d3.select(nds[ix])
 			.attr('cx', (d)=>{
-				return Math.max(d.x - width/2 + d.width/2, Math.min(d.x + width/2 + d.width/2, d3.event.x));
+				return Math.max(d.x - width/2 + d.width/2, Math.min(d.x + width/2 + d.width/2, d3.mouse(nds[ix])[0]));
 			});
 			
-			let v = scale.invert(Math.max(d.x - width/2 + d.width/2, Math.min(d.x + width/2 + d.width/2, d3.event.x)));
+			let v = scale.invert(Math.max(d.x - width/2 + d.width/2, Math.min(d.x + width/2 + d.width/2, d3.mouse(nds[ix])[0])));
 			
 			this.rectDragEvent(i, v, nodes);
                 })
-                .on('end', () => {
-			let v = scale.invert(Math.max(d.x - width/2 + d.width/2, Math.min(d.x + width/2 + d.width/2, d3.event.x)));
+                .on('end', (_, ix, nds) => {
+			let v = scale.invert(Math.max(d.x - width/2 + d.width/2, Math.min(d.x + width/2 + d.width/2, d3.mouse(nds[ix])[0])));
 			
 			this.rectDragEvent(i, v, nodes);
 			
