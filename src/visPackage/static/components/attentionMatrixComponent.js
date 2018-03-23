@@ -245,9 +245,8 @@ class attentionMatrixComponent extends attentionComponent {
 		.attr('width', width)
 		.attr('height', height)
 		.style('fill', '#cfcbdb')
-		.style('stroke', 'black')
-		.attr('rx',5)
-		.attr('ry',5);
+		.attr('rx',2)
+		.attr('ry',2);
 		
 	   this.slider_bar_axis = this.svg.append('g')
 		.attr('transform', 'translate(0,'+(d.y - d.height + 4)+')')
