@@ -1,10 +1,15 @@
 \section{Background}
-The target audiences of the proposed tool is domain experts who develop learning model for natural language processing tasks. Therefore, certain domain specific background knowledge is required to fully understand and appreciate the technique discussed in this paper. In this section, we first explain the natural language inference (NLI) task and how it fit into the grand challenges in NLP. Then, we examine the common architecture characteristics shared by many state-of-the-art neural linguistic models. Finally, we discuss the role the attention plays in the model and why attention is closely tided to model interpretability.
+The target audiences of the proposed tool is domain experts who develop learning model for natural language processing tasks. Therefore, certain domain specific background knowledge is required to fully understand and appreciate the technique discussed in this paper. In this section, we first explain the natural language inference (NLI) task and how it fit into the grand challenges in NLP. Then, we examine the common architecture characteristics shared by many state-of-the-art neural network models. Finally, we discuss the role the attention plays in the model and why attention is closely tided to model interpretability.
 
 \subsection{Natural Language Inference}
 \label{sec:languageInference}
 Natural Language Inference~\cite{DaganRothSammons2013} is an important machine understanding task in NLP.
-The problem definition is to classify the relationship between a premise sentence and a hypothesis sentence. A simple example is illustrated in Table.~\ref{table:NLI}.
+The problem definition is to classify the relationship between a premise (\textbf{P}) sentence and a hypothesis (\textbf{H}) sentence. 
+The prediction must fall in one of three categories: $\{Entailment, Contradiction, Neutral\}$.
+$Entailment$ refers to that the textual information of hypothesis is embedded in premise;
+$Contradiction$ means the textual of hypothesis opposes that of premise;
+and $Neutral$ implies no conclusion can be made on either $Entailment$ or $Contradiction$.
+A simple example is illustrated in Table.~\ref{table:NLI}.
 
 \begin{table}[htbp]
 \label{table:NLI}
@@ -12,7 +17,7 @@ The problem definition is to classify the relationship between a premise sentenc
 \caption{An illustration of natural language inference.}
  \begin{tabular}{c | c c c c} 
  \hline
-  & sentences & entail & contradict  & neutral \\ [0.5ex] 
+  P / H & sentences & entail & contradict  & neutral \\ [0.5ex] 
  \hline
  premise & Jim ate an apple. &  -  &  -  & - \\ 
  hypothesis & Jim ate a Fuji apple. &   &  & \checkmark \\
@@ -29,26 +34,21 @@ The problem definition is to classify the relationship between a premise sentenc
 \end{tabular}
 \end{table}
 
-However, in the real word the task can be quick challenge especially for learning algorithm. Take the following sentences are an example:  (P) Facebook's IPO electrified the general public. (H1) Facebook went public. (H2) General Electric went public. (H3) People ignored Facebook's IPO.
+However, in real word, the task can be quite challenging, especially for learning algorithms. Take the following sentences as an example (here \textbf{P} refer to premise, \textbf{H} refer to hypothesis):  (\textbf{P}) Facebook's IPO electrified the general public. (\textbf{H1}) Facebook went public. (\textbf{H2}) General Electric went public. (\textbf{H3}) People ignored Facebook's IPO. The literal semantic similarity between ``Electric'' and ``electrified'' will like trick the model to predict \textbf{H2} as \emph{entailment}. The model likely will also not be able to understand the link between ``went public'' and ``IPO'', therefore, mistake \textbf{H1} as \emph{neutral}.
 
-The prediction must fall in one of three categories: $\{Entailment, Contradiction, Neutral\}$.
-$Entailment$ refers to that the textual information of hypothesis is embedded in premise;
-$Contradiction$ means the textual of hypothesis opposes that of premise;
-and $Neutral$ implies no conclusion can be made on either $Entailment$ or $Contradiction$.
-%
-Recently ~\cite{BowmanAngeliPotts2015} proposed a large dataset for this task. We will examine
-the decomposable attention model~\cite{parikh2016emnlp} on this dataset with perturbation.
-
-
+\shusen{How does the NLI related to the other challenges in NLP}
 The grand challenge in Natural Language Processing (NLP) is to have machine to acquire
 deep comprehension of textual information. Major tasks include Natural Language Inference,
 Machine Translation, Questions Answering, Summarization, and etc.
 Recently, neural networks models have performed strongly on these tasks.
-
+%
 Therefore, making sense and explaining predictions made by deep neural networks is not only
 essential for validating and improving the model, but also becoming a necessity with
 increasing demands for model accountability (e.g., what is the evidence for making the decision)
 and model fairness (e.g., is the prediction affected by the bias in the training data).
+%
+Recently ~\cite{BowmanAngeliPotts2015} proposed a large dataset for this task. We will examine
+the decomposable attention model~\cite{parikh2016emnlp} on this dataset with perturbation.
 
 % Recently, with the wide adoption of long-short term memory
 % (LSTM) network and the introduction of attention mechanism,
@@ -99,6 +99,14 @@ Recently attention has contributed to many strongly-performed NLP models
 ~\cite{seo2016bidirectional},~\cite{schwartz2017high}.
 We will focus on its application in Natural Language Inference task as proposed in~\cite{parikh2016emnlp}.
 However notice that our visualization can be generalized to other attention models as well.
+
+\begin{figure}[htbp]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=0.9\linewidth]{attentionIllustration}
+ \caption{Attention illustrate. The soft alignment between two sentences.}
+\label{fig:attention}
+\end{figure}
 
 % \begin{itemize}
 %     \item what is the textaul entailment problem
