@@ -21,6 +21,21 @@
     <marker
        inkscape:isstock="true"
        style="overflow:visible"
+       id="marker114692"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         inkscape:connector-curvature="0"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path114694" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
        id="marker108380"
        refX="0"
        refY="0"
@@ -2060,6 +2075,6 @@
        inkscape:connector-curvature="0"
        id="path7518"
        d="m 229.12475,-139.85987 c 0,0 11.2108,95.784719 -61.66001,147.6026786 C 94.593899,59.560779 -64.227179,76.833439 -64.227179,76.833439"
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4.59611034;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker6954)" />
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4.59611034;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker114692)" />
   </g>
 </svg>
