@@ -6,21 +6,23 @@ The target audiences of the proposed tool is domain experts who develop learning
 Natural Language Inference~\cite{MacCartney2009} is an important machine understanding task in NLP.
 The problem definition is to classify the relationship between a premise sentence and a hypothesis sentence.
 
-\begin{center}
+\begin{table}[htbp]
+\centering
+\caption{An illustration of natural language inference.}
  \begin{tabular}{c | c c c c} 
  \hline
   & sentences & entail & contradict  & neutral \\ [0.5ex] 
  \hline
  premise & Jim ate an apple. &  -  &  -  & - \\ 
+ hypothesis & Jim ate a Fuji apple. &   &  & \checkmark \\
  hypothesis & Jim ate fruits. & \checkmark &   &  \\
  hypothesis & Jim ate an banana. &  & \checkmark & \\
  hypothesis & Tom ate an apple &  &  & \checkmark \\
- hypothesis & Jim ate a Fuji apple. &   &  & \checkmark? \\
  \hline
 \end{tabular}
-\end{center}
+\end{table}
+
 \shusen{What is the most standard example to illustrate NLI problem?}
-\shusen{high level NLP comments}
 
 The prediction must fall in one of three categories: $\{Entailment, Contradiction, Neutral\}$.
 $Entailment$ refers to that the textual information of hypothesis is embedded in premise;
