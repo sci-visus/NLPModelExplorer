@@ -1,8 +1,10 @@
 class treeMapPlot {
-    constructor(svg, pos, size) {
+    constructor(svg, pos, size, title) {
+        this.title = title;
         this.svg = svg.append("g");
         this.pos = pos;
         this.size = size;
+        this.topMargin = 18;
     }
 
     generateNestData(data, levelTag, rootName) {
@@ -28,6 +30,11 @@ class treeMapPlot {
         return data;
     }
 
+    setTitle(title) {
+        this.title = title;
+        this.draw();
+    }
+
     setData(treeData, rootName) {
         //test data
         this.data = this.generateNestData(treeData, ["correctness",
@@ -48,6 +55,16 @@ class treeMapPlot {
 
     drawSimple() {
         this.svg.selectAll("*").remove();
+
+        if (this.title) {
+            this.svg.append("text")
+                .text(this.title)
+                .attr("x", this.pos[0] + 0.5 * this.size[0])
+                .attr("y", this.pos[1] + 13)
+                .attr("fill", "grey")
+                .attr("text-anchor", "middle");
+        }
+
         var width = this.size[0];
         var height = this.size[1];
         var pos = this.pos;
@@ -113,7 +130,7 @@ class treeMapPlot {
                 g.append("rect")
                     .attr("class", "node")
                     .attr("x", pos[0] + d.x0)
-                    .attr("y", pos[1] + d.y0)
+                    .attr("y", pos[1] + this.topMargin + d.y0)
                     .attr("width", Math.max(0, d.x1 - d.x0 - 1))
                     .attr("height", Math.max(0, d.y1 - d.y0 - 1))
                     .attr("fill", colormap(d.data.key))
@@ -129,7 +146,8 @@ class treeMapPlot {
                     });
                 g.append("text")
                     .attr("x", pos[0] + (d.x0 + d.x1) * 0.5)
-                    .attr("y", pos[1] + (d.y0 + d.y1) * 0.5 + 5)
+                    .attr("y", pos[1] + this.topMargin + (d.y0 + d.y1) *
+                        0.5 + 5)
                     .text(_ => {
                         var str = d.data.key.replace("-", "/");
                         str = str.replace(/neutral/g, "N");

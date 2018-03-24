@@ -21,6 +21,11 @@ class histoPlot {
         this.draw();
     }
 
+    setTitle(title) {
+        this.title = title;
+        this.draw();
+    }
+
     setSample(sample, accessor) {
         this.accessor = accessor;
         this.sample = sample;
@@ -48,6 +53,16 @@ class histoPlot {
         // console.log(width, height);
         var binNum = 10;
         var x, y, bins;
+
+        if (this.title) {
+            this.svg.append("text")
+                .text(this.title)
+                .attr("x", this.pos[0] + 0.5 * this.size[0])
+                .attr("y", this.pos[1] + 20)
+                .attr("fill", "grey")
+                .attr("text-anchor", "middle");
+        }
+
         if (this.mode === "sample") {
             var samples = this.sample;
             if (samples.length === 0)
