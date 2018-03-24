@@ -3,10 +3,11 @@ The target audiences of the proposed tool is domain experts who develop learning
 
 \subsection{Natural Language Inference}
 \label{sec:languageInference}
-Natural Language Inference~\cite{MacCartney2009} is an important machine understanding task in NLP.
-The problem definition is to classify the relationship between a premise sentence and a hypothesis sentence.
+Natural Language Inference~\cite{DaganRothSammons2013} is an important machine understanding task in NLP.
+The problem definition is to classify the relationship between a premise sentence and a hypothesis sentence. A simple example is illustrated in Table.~\ref{table:NLI}.
 
 \begin{table}[htbp]
+\label{table:NLI}
 \centering
 \caption{An illustration of natural language inference.}
  \begin{tabular}{c | c c c c} 
@@ -18,11 +19,17 @@ The problem definition is to classify the relationship between a premise sentenc
  hypothesis & Jim ate fruits. & \checkmark &   &  \\
  hypothesis & Jim ate an banana. &  & \checkmark & \\
  hypothesis & Tom ate an apple &  &  & \checkmark \\
+ %\hline
+ %premise & Facebook's IPO electrified the general public. &  -  &  -  & - \\ 
+ %hypothesis & Facebook went public. & \checkmark   &  &  \\
+ %hypothesis & General Electric went public. &  &   & \checkmark \\
+ %hypothesis & People ignored Facebook's IPO. &  & \checkmark & \\
+ 
  \hline
 \end{tabular}
 \end{table}
 
-\shusen{What is the most standard example to illustrate NLI problem?}
+However, in the real word the task can be quick challenge especially for learning algorithm. Take the following sentences are an example:  (P) Facebook's IPO electrified the general public. (H1) Facebook went public. (H2) General Electric went public. (H3) People ignored Facebook's IPO.
 
 The prediction must fall in one of three categories: $\{Entailment, Contradiction, Neutral\}$.
 $Entailment$ refers to that the textual information of hypothesis is embedded in premise;
