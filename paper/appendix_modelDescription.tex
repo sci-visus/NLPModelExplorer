@@ -1,1 +1,171 @@
-\section{Detailed description of the Model}
+% \documentclass[journal]{vgtc}                % final (journal style)
+\documentclass[review,journal]{vgtc}         % review (journal style)
+% \documentclass[review,journal]{vgtc}         % review (journal style)
+%\documentclass[widereview]{vgtc}             % wide-spaced review
+%\documentclass[preprint,journal]{vgtc}       % preprint (journal style)
+
+%% Uncomment one of the lines above depending on where your paper is
+%% in the conference process. ``review'' and ``widereview'' are for review
+%% submission, ``preprint'' is for pre-publication, and the final version
+%% doesn't use a specific qualifier.
+
+%% Please use one of the ``review'' options in combination with the
+%% assigned online id (see below) ONLY if your paper uses a double blind
+%% review process. Some conferences, like IEEE Vis and InfoVis, have NOT
+%% in the past.
+
+%% Please note that the use of figures other than the optional teaser is not permitted on the first page
+%% of the journal version.  Figures should begin on the second page and be
+%% in CMYK or Grey scale format, otherwise, colour shifting may occur
+%% during the printing process.  Papers submitted with figures other than the optional teaser on the
+%% first page will be refused. Also, the teaser figure should only have the
+%% width of the abstract as the template enforces it.
+
+%% These few lines make a distinction between latex and pdflatex calls and they
+%% bring in essential packages for graphics and font handling.
+%% Note that due to the \DeclareGraphicsExtensions{} call it is no longer necessary
+%% to provide the the path and extension of a graphics file:
+%% \includegraphics{diamondrule} is completely sufficient.
+%%
+\ifpdf%                                % if we use pdflatex
+  \pdfoutput=1\relax                   % create PDFs from pdfLaTeX
+  \pdfcompresslevel=9                  % PDF Compression
+  \pdfoptionpdfminorversion=7          % create PDF 1.7
+  \ExecuteOptions{pdftex}
+  \usepackage{graphicx}                % allow us to embed graphics files
+  \DeclareGraphicsExtensions{.pdf,.png,.jpg,.jpeg} % for pdflatex we expect .pdf, .png, or .jpg files
+\else%                                 % else we use pure latex
+  \ExecuteOptions{dvips}
+  \usepackage{graphicx}                % allow us to embed graphics files
+  \DeclareGraphicsExtensions{.eps}     % for pure latex we expect eps files
+\fi%
+
+%% it is recomended to use ``\autoref{sec:bla}'' instead of ``Fig.~\ref{sec:bla}''
+\graphicspath{{figures/}{pictures/}{figs/}{./}} % where to search for the images
+
+\usepackage{microtype}                 % use micro-typography (slightly more compact, better to read)
+\PassOptionsToPackage{warn}{textcomp}  % to address font issues with \textrightarrow
+\usepackage{textcomp}                  % use better special symbols
+\usepackage{mathptmx}                  % use matching math font
+\usepackage{times}                     % we use Times as the main font
+\renewcommand*\ttdefault{txtt}         % a nicer typewriter font
+\usepackage{cite}                      % needed to automatically sort the references
+\usepackage{tabu}                      % only used for the table example
+\usepackage{booktabs}                  % only used for the table example
+%% We encourage the use of mathptmx for consistent usage of times font
+%% throughout the proceedings. However, if you encounter conflicts
+%% with other math-related packages, you may want to disable it.
+
+%% In preprint mode you may define your own headline.
+%\preprinttext{To appear in IEEE Transactions on Visualization and Computer Graphics.}
+
+\usepackage[pdftex,dvipsnames]{xcolor}  % Coloured text etc.
+\usepackage{listings}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    %breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\newcommand{\zhimin}[1]{\textcolor{magenta}{[ZHIMIN: #1]}}
+\newcommand{\shusen}[1]{\textcolor{red}{[#1]}}
+
+\usepackage{tikz}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+
+%% If you are submitting a paper to a conference for review with a double
+%% blind reviewing process, please replace the value ``0'' below with your
+%% OnlineID. Otherwise, you may safely leave it at ``0''.
+\onlineid{1095}
+
+%% declare the category of your paper, only shown in review mode
+\vgtccategory{Research}
+%% please declare the paper type of your paper to help reviewers, only shown in review mode
+%% choices:
+%% * algorithm/technique
+%% * application/design study
+%% * evaluation
+%% * system
+%% * theory/model
+\vgtcpapertype{Application}
+
+%% Paper title.
+\title{
+Supplementary Materials
+%Where and How Do Models Fail? A Visual Exploration Tool for Analyzing and Interpreting Natural Language Inference Models
+}
+\vgtcinsertpkg
+
+\begin{document}
+\firstsection{Appendix 1, Detailed description of the Model}
+\maketitle
+
+\section{Appendix 2, Code Example: Link Visualization with Model}
+\begin{lstlisting}[language=Python, caption=Code for generating the visualization.]
+from visPackage import *
+from modelInterface import *
+from sentenceGenerator import *
+
+#initialize NLP model
+model = modelInterface(
+    wordDict="../data/snli_1.0/snli_1.0.word.dict",
+    wordVec="../data/glove.hdf5", 
+    model="../data/local_300_parikh")
+
+#sentence perturbation
+gen = sentenceGenerator()
+#dependency parsing
+dep = dependencyTree()
+
+#define visualization components
+visLayout = {
+    "column":[{"row":["Selector", 
+                                "Sentence", 
+                                "Pipeline"]},
+            {"row":["AttentionGraph", 
+                       "AttentionMatrix", 
+                       "Prediction"]}]
+    }
+
+#create vis interface
+vis = textEntailVisModule(visLayout)
+
+#setup model callbacks
+vis.setPredictionHook(model.predict)
+vis.setAttentionHook(model.attention)
+vis.setPredictionUpdateHook(model.updatePrediction)
+vis.setAttentionUpdateHook(model.updateAttention)
+vis.setReloadModelCallback(model.reloadModel)
+vis.setPipelineStatisticHook(model.pipelineStatistic)
+
+#setup perturbation and grammar parsing callbacks
+vis.setSentencePerturbationHook(gen.perturbSentence)
+vis.setSentenceParserHook(dep.getDependencyTree)
+
+#open browser to show visualization
+modelVis.show()
+
+\end{lstlisting}
+
+\end{document}
