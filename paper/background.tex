@@ -37,13 +37,13 @@ The hypothesis statement ``Jim ate fruits.'' can be concluded from the premise. 
 
 Considering the ambiguousness  of natural language and polysemy words, the inference task can be quite challenging (especially from learning algorithm's point of view). Take the following sentences as an example (here \textbf{P} refer to premise, \textbf{H} refer to hypothesis):  (\textbf{P}) Facebook's IPO electrified the general public; (\textbf{H1}) Facebook went public; (\textbf{H2}) General Electric went public; (\textbf{H3}) People ignored Facebook's IPO. The literal semantic similarity between ``Electric'' and ``electrified'' may trick the model to predict \textbf{H2} as \emph{entailment}. The model likely will also fail to understand the link between ``went public'' and ``IPO'', therefore, mistake \textbf{H1} as \emph{neutral}.
 %
-At a first glance, the task of natural language inference may seem less practical compared to other common NLP challenges such as machine translation, however, the ability to distinguish entailment and contradiction relationship is fundamental to understanding natural language at large. 
+At the first glance, the task of natural language inference may seem less practical compared to other common NLP challenges such as machine translation, however, the ability to distinguish entailment and contradiction relationship is fundamental to understanding natural language at large. 
 %The grand challenge in Natural Language Processing (NLP) is to have machine to acquire
 %deep comprehension of textual information. Major tasks include Natural Language Inference,
 %Machine Translation, Questions Answering, Summarization, and etc.
 %Recently, neural networks models have performed strongly on these tasks.
 %
-Recently, Bowman et al. introduce a large corpus~\cite{BowmanAngeliPotts2015} for the NLI task, which helps spawn a new wave of effective neural network based models. In this work, we focus on the analysis of the decomposable attention model~\cite{parikh2016emnlp} on this dataset.
+Recently, Bowman et al. introduce a large corpus~\cite{BowmanAngeliPotts2015} for the NLI task, which helps spawn a new wave of effective neural network based NLI models. In this work, we focus on the analysis of the decomposable attention model~\cite{parikh2016emnlp} on this dataset.
 
 % Recently, with the wide adoption of long-short term memory
 % (LSTM) network and the introduction of attention mechanism,
@@ -58,16 +58,7 @@ Recently, Bowman et al. introduce a large corpus~\cite{BowmanAngeliPotts2015} fo
 
 % \subsection{Neural Network Primer}
 
-\begin{figure}[htbp]
-\centering
-\vspace{-2mm}
- \includegraphics[width=1.0\linewidth]{end2end}
- \caption{End-to-end attention based model.}
-\label{fig:modelPipeline}
-\end{figure}
-
 \subsection{Neural Network Model in NLP}
-%\shusen{neural linguistic models?}
 %\shusen{What is the basic understanding of neural network What is the end-to-end}
 There are many connection and distinction between neural network model employed for vision tasks and NLP tasks.
 On the one hand, as discussed in the introduction, the discrete nature of words and sentences presents additional challenge for
@@ -76,22 +67,35 @@ interpreting the NLP model.
 On the other hand, a majority of recent NLP neural networks share the nature of
 end-to-end model, where the entire model operates as a black-box that takes
 vectorized input and yields final prediction for a specific task.
-Therefore, to make sense of how predictions are made inside of end-to-end neural models, it is important to
-explore the interaction between intermediate representations and predictions.
 
-Many of the recent NLP end-to-end neural network models, despite having potentially drastic different network architecture, share a similar high-level design that consist of three distinct stages (encode, attent/align, classify, see Fig.~\ref{fig:modelPipeline}). 
-These models usually take pre-trained word vectors (a numerical vector representation of individual words, where the semantic similarities are encode by distances in the high-dimensional space~\cite{MikolovSutskeverChen2013, PenningtonSocherManning2014}) as input, the 
+\begin{figure}[htbp]
+\centering
+ \includegraphics[width=1.0\linewidth]{end2end}
+ \vspace{-2mm}
+ \caption{End-to-end NLP neural network model.}
+  \vspace{-2mm}
+\label{fig:modelPipeline}
+\end{figure}
+
+Many of the recent NLP end-to-end neural network models, despite having potentially drastic different network architectures, share a similar high-level design that consist of three distinct stages (encode, align, classify, see Fig.~\ref{fig:modelPipeline}). 
+%
+The existence of the similar structures mean the proposed tool, which designed for NLI task, can be generalized for a much broader set of applications.
+
+These end-to-end models usually take pre-trained word vectors (numerical vector representation of individual words, in which the semantic similarities are encode by distances in the high-dimensional vector space~\cite{MikolovSutskeverChen2013, PenningtonSocherManning2014}) as input, and then in the encode stage pre-trained vectors are adjusted to the specialized task at hand. Subsequently, the next stage aim at finding alignment between words in the input sequence. For task like NLI, this means finding the corresponds between words from premise sentence to hypothesis sentence (see details in Fig.~\ref{fig:attention} and Section~\ref{sec:attention}). Finally, in the last stage the alignment information and the encoded vector representations are aggregated and then used as features for a classification network (last part of the end-to-end neural network).
+%
+Since, all these three stages of the model are train jointly in an end-to-end fashion, therefore, to make sense of how predictions are made inside such a models, it is important to explore the interaction between intermediate representations and predictions.
 
 \subsection{Attention Mechanism}
 \label{sec:attention}
+Among the three stages, the second stage often constitutes the most crucial part of the model as it determines where the classifier will focus on for generating a prediction. The operation to compute the alignment between words in the input is refer to as the attention mechanism. 
 The introduction of attention mechanism~\cite{bahdanau2014neural} allows
-pairwise interaction between hidden states. This interaction can be naturally explained
-as a form of alignment which exposes an interpretable layer in end-to-end neural networks.
-Recently attention has contributed to many strongly-performed NLP models
+pairwise interaction between internal representation of words (\shusen{the original text is hidden states, isn't the pairwise interaction between the representation of words, are the hidden states refer to that?}). 
+This interaction can be naturally explained as a form of alignment which exposes an interpretable layer in end-to-end neural networks.
+%
+%As the only interpretable part of the internal state of the network, understanding how attention information 
+Recently, attention has contributed to many strongly-performed NLP models
 ~\cite{parikh2016emnlp},~\cite{rush2015neural},~\cite{yang2016hierarchical},
 ~\cite{seo2016bidirectional},~\cite{schwartz2017high}.
-We will focus on its application in Natural Language Inference task as proposed in~\cite{parikh2016emnlp}.
-However notice that our visualization can be generalized to other attention models as well.
 
 \begin{figure}[htbp]
 \centering
