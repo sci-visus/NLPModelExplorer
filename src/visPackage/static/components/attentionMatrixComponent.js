@@ -9,8 +9,11 @@ class attentionMatrixComponent extends attentionComponent {
 
     constructor(uuid) {
         super(uuid);
-	
-	this.freeze_flag = {'index':-1, 'flag':false};
+
+        this.freeze_flag = {
+            'index': -1,
+            'flag': false
+        };
     }
 
     draw() {
@@ -29,12 +32,6 @@ class attentionMatrixComponent extends attentionComponent {
             let attMax = 1.0;
             let attMin = 0.0;
             if (this.comparisonFlag) {
-                // attMax = d3.max(attMatrix.map(function(array) {
-                //     return d3.max(array);
-                // }));
-                // attMin = d3.min(attMatrix.map(function(array) {
-                //     return d3.min(array);
-                // }));
                 attMax = 1.0;
                 attMin = -1.0;
                 this.colorbar =
@@ -99,16 +96,17 @@ class attentionMatrixComponent extends attentionComponent {
                 .style('fill', d => {
                     return this.colorbar.lookup(d.value);
                 })
-		.on('click', (d, i, nodes)=>{
-			
-			if(!this.freeze_flag.flag){
-				this.freeze_flag.flag = true;
-				this.freeze_flag.index= i;
-				this.popSliderBar(d, i, nodes);
-			}else{
-				this.freeze_flag.flag = !(this.freeze_flag.index == i);
-			}
-		})
+                .on('click', (d, i, nodes) => {
+
+                    if (!this.freeze_flag.flag) {
+                        this.freeze_flag.flag = true;
+                        this.freeze_flag.index = i;
+                        this.popSliderBar(d, i, nodes);
+                    } else {
+                        this.freeze_flag.flag = !(this.freeze_flag.index ==
+                            i);
+                    }
+                })
                 //.call(d3.drag()
                 //    .on('start', (d, i, nodes) => {
                 //        this.dragEventX = d3.event.x;
@@ -204,90 +202,100 @@ class attentionMatrixComponent extends attentionComponent {
                     .style('writing-mode', (d, i) => {
                         return i == 0 ? 'vertical-lr' : 'horizontal-tb';
                     })
-                    .classed('attentionMatrixComponent_background_text', true);
+                    .classed('attentionMatrixComponent_background_text',
+                        true);
             }
         }
     }
-    
-    popSliderBar(d, i, nodes){
-	
-	    let width = Math.min(200, Math.max(this.width * 0.1, 80));
-	    let height = 8;
-	    let x = d.x;
-	    let y = d.y;
-	    let rectw = d.width;
-	    let recth = d.height;
-	    let circle_r = 8;
-	    let scale = d3.scaleLinear().domain([0, 1]).range([d.x - width/2 + d.width/2, d.x + width/2 + d.width/2]);
-	    
-	    
-	    this.slider_bar_background = this.svg.append('rect').datum(d)
-		.attr('x', (d)=>{
-		    return d.x - width/2 + d.width/2 - 10;
-		})
-		.attr('y', (d)=>{
-		    return d.y - d.height * 1.5;
-		})
-		.attr('width', width + 20)
-		.attr('height', recth * 1.5)
-		.attr('fill', 'white')
-		.attr('rx',5)
-		.attr('ry',5)
-		.style('stroke', 'gray');
-		    
-	    this.slider_bar = this.svg.append('rect').datum(d)
-		.attr('x', (d)=>{
-		    return d.x - width/2 + d.width/2;
-		})
-		.attr('y', (d)=>{
-		    return d.y - d.height;
-		})
-		.attr('width', width)
-		.attr('height', height)
-		.style('fill', '#cfcbdb')
-		.attr('rx',2)
-		.attr('ry',2);
-		
-	   this.slider_bar_axis = this.svg.append('g')
-		.attr('transform', 'translate(0,'+(d.y - d.height + 4)+')')
-		.call(d3.axisBottom(scale).ticks(2));
-		    
-	    this.slider_bar_circle = this.svg.append('circle').datum(d)
-		.attr('r', circle_r)
-		.attr('cx', (d)=>{
-		    return scale(d.value);//d.x - width/2 + d.width/2;
-		})
-		.attr('cy', (d)=>{
-		    return d.y - d.height + 4;
-		})
-		.attr('fill', 'white')
-		.attr('stroke', 'gray'); 
-	
-	    
-	    this.slider_bar_circle
-	    	.call(d3.drag()
-	    	.on('drag', (_, ix, nds) => {
-               		d3.select(nds[ix])
-			.attr('cx', (d)=>{
-				return Math.max(d.x - width/2 + d.width/2, Math.min(d.x + width/2 + d.width/2, d3.mouse(nds[ix])[0]));
-			});
-			
-			let v = scale.invert(Math.max(d.x - width/2 + d.width/2, Math.min(d.x + width/2 + d.width/2, d3.mouse(nds[ix])[0])));
-			
-			this.rectDragEvent(i, v, nodes);
+
+    popSliderBar(d, i, nodes) {
+
+        let width = Math.min(200, Math.max(this.width * 0.1, 80));
+        let height = 8;
+        let x = d.x;
+        let y = d.y;
+        let rectw = d.width;
+        let recth = d.height;
+        let circle_r = 8;
+        let scale = d3.scaleLinear().domain([0, 1]).range([d.x - width / 2 +
+            d.width / 2, d.x + width / 2 + d.width / 2
+        ]);
+
+
+        this.slider_bar_background = this.svg.append('rect').datum(d)
+            .attr('x', (d) => {
+                return d.x - width / 2 + d.width / 2 - 10;
+            })
+            .attr('y', (d) => {
+                return d.y - d.height * 1.5;
+            })
+            .attr('width', width + 20)
+            .attr('height', recth * 1.5)
+            .attr('fill', 'white')
+            .attr('rx', 5)
+            .attr('ry', 5)
+            .style('stroke', 'gray');
+
+        this.slider_bar = this.svg.append('rect').datum(d)
+            .attr('x', (d) => {
+                return d.x - width / 2 + d.width / 2;
+            })
+            .attr('y', (d) => {
+                return d.y - d.height;
+            })
+            .attr('width', width)
+            .attr('height', height)
+            .style('fill', '#cfcbdb')
+            .attr('rx', 2)
+            .attr('ry', 2);
+
+        this.slider_bar_axis = this.svg.append('g')
+            .attr('transform', 'translate(0,' + (d.y - d.height + 4) + ')')
+            .call(d3.axisBottom(scale).ticks(2));
+
+        this.slider_bar_circle = this.svg.append('circle').datum(d)
+            .attr('r', circle_r)
+            .attr('cx', (d) => {
+                return scale(d.value); //d.x - width/2 + d.width/2;
+            })
+            .attr('cy', (d) => {
+                return d.y - d.height + 4;
+            })
+            .attr('fill', 'white')
+            .attr('stroke', 'gray');
+
+
+        this.slider_bar_circle
+            .call(d3.drag()
+                .on('drag', (_, ix, nds) => {
+                    d3.select(nds[ix])
+                        .attr('cx', (d) => {
+                            return Math.max(d.x - width / 2 + d.width /
+                                2, Math.min(d.x + width / 2 + d
+                                    .width / 2, d3.mouse(nds[ix])[
+                                        0]));
+                        });
+
+                    let v = scale.invert(Math.max(d.x - width / 2 + d.width /
+                        2, Math.min(d.x + width / 2 + d.width /
+                            2, d3.mouse(nds[ix])[0])));
+
+                    this.rectDragEvent(i, v, nodes);
                 })
                 .on('end', (_, ix, nds) => {
-			let v = scale.invert(Math.max(d.x - width/2 + d.width/2, Math.min(d.x + width/2 + d.width/2, d3.mouse(nds[ix])[0])));
-			
-			this.rectDragEvent(i, v, nodes);
-			
-			this.slider_bar_circle.remove();
-			this.slider_bar_background.remove();
-			this.slider_bar.remove();
-			this.slider_bar_axis.remove();
-			this.freeze_flag.flag = false;
-			
-			 this.attUpdate();
+                    let v = scale.invert(Math.max(d.x - width / 2 + d.width /
+                        2, Math.min(d.x + width / 2 + d.width /
+                            2, d3.mouse(nds[ix])[0])));
+
+                    this.rectDragEvent(i, v, nodes);
+
+                    this.slider_bar_circle.remove();
+                    this.slider_bar_background.remove();
+                    this.slider_bar.remove();
+                    this.slider_bar_axis.remove();
+                    this.freeze_flag.flag = false;
+
+                    this.attUpdate();
                 }));
     }
 
@@ -319,6 +327,7 @@ class attentionMatrixComponent extends attentionComponent {
         //renormalize current row.
 
         this.normAttention[row][col] = d;
+        this.normAttentionCol[row][col] = d;
         //this.aggregatedMatrix[row] =
         //TODO: this may be a bug if you try to renormalize the the matrix after collaspe
         this.normAttention[row] = this.normalization(this.normAttention[row]);
@@ -361,9 +370,9 @@ class attentionMatrixComponent extends attentionComponent {
     ////////////// rect mouse over event ///////////////
     rectMouseEvent(rects, targtext, srctext) {
         rects.on('mouseover', (d, i) => {
-		
-		if(this.freeze_flag.flag)return;
-		
+
+                if (this.freeze_flag.flag) return;
+
                 let targWords = this.sen2words(this.data["currentPair"]
                         ["sentences"][1]),
                     col = i % targWords.length,
@@ -426,9 +435,9 @@ class attentionMatrixComponent extends attentionComponent {
                     this.src_dep.highlight(row);
             })
             .on('mouseout', (d, i) => {
-		if(this.freeze_flag.flag)return;
-                
-		let targWords = this.sen2words(this.data["currentPair"]
+                if (this.freeze_flag.flag) return;
+
+                let targWords = this.sen2words(this.data["currentPair"]
                         ["sentences"][1]),
                     col = i % targWords.length,
                     row = Math.floor(i / targWords.length);
