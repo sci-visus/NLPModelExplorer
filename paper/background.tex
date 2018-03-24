@@ -87,7 +87,7 @@ Since, all these three stages of the model are train jointly in an end-to-end fa
 
 \subsection{Attention Mechanism}
 \label{sec:attention}
-Among the three stages, the second stage often constitutes the most crucial part of the model as it determines where the classifier will focus on for generating a prediction. The operation to compute the alignment between words in the input is refer to as the attention mechanism. 
+Among the three stages, the second stage often constitutes the most crucial part of the model as it determines where the classifier will focus on for generating a prediction. The operation to compute the alignment between words in the input is referred to as the attention mechanism. 
 The introduction of attention mechanism~\cite{bahdanau2014neural} allows
 pairwise interaction between internal representation of words (\shusen{the original text is hidden states, isn't the pairwise interaction between the representation of words, are the hidden states refer to that?}). 
 This interaction can be naturally explained as a form of alignment which exposes an interpretable layer in end-to-end neural networks.
@@ -101,9 +101,11 @@ Recently, attention has contributed to many strongly-performed NLP models
 \centering
 \vspace{-2mm}
  \includegraphics[width=0.9\linewidth]{attentionIllustration}
- \caption{Attention illustrate. The soft alignment between two sentences.}
+ \caption{Attention can be naturally explained as a form of alignment which exposes an interpretable layer in end-to-end neural networks. On the left, the matrix shows the soft alignment between between premise and hypothesis pair.}
 \label{fig:attention}
 \end{figure}
+
+For natural language inference task, as illustrated in Fig.~\ref{fig:attention}, the attention information can be represented as a matrix describing the soft aligned between words in premise and the words in the hypothesis. As we can see in this example, the higher values indicate better alignment between words. The subject, verb, and object between these two sentence are aligned correctly. More importantly, the difference between the subject words does not affect their alignment. The classification stage can then utilize the attention information to determine the subject of the sentence are different, therefore, despite the other part of the sentences are the same, the relationship between premise and hypothesis should be neutral.
 
 % \begin{itemize}
 %     \item what is the textaul entailment problem

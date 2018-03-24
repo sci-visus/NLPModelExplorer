@@ -48,7 +48,7 @@ class predictionComponent extends baseComponent {
                 .attr("cx", 0)
                 .attr("cy", 0)
                 .attr("r", 6)
-                .attr("fill", "grey")
+                .attr("fill", "gold")
                 .style("stroke", "white");
             this.legend.append("text")
                 .attr("x", 10)
@@ -71,6 +71,24 @@ class predictionComponent extends baseComponent {
                 .style("alignment-baseline", "middle")
                 .style("pointer-events", "none")
                 .style("font-size", 10);
+
+            //ground truth
+            this.legend.append("rect")
+                .attr("rx", 3)
+                .attr("ry", 3)
+                .attr("x", -10)
+                .attr("y", 25)
+                .attr("width", 20)
+                .attr("height", 15)
+                .attr("stroke", "none")
+                .attr("fill", "lightgreen");
+            this.legend.append("text")
+                .attr("x", 12)
+                .attr("y", 32.5)
+                .text("Ground Truth")
+                .style("alignment-baseline", "middle")
+                .style("pointer-events", "none")
+                .style("font-size", 10);
         }
 
         //entailment
@@ -79,7 +97,17 @@ class predictionComponent extends baseComponent {
 
         this.svg.select(this.div + "label").remove();
         var label = this.svg.append("g").attr("id", this.uuid + "label");
-        this.Neutral = label.append('text')
+        this.Neutral = label.append('rect')
+            .attr("rx", 3)
+            .attr("ry", 3)
+            .attr("x", 112 - 23)
+            .attr("y", -20)
+            .attr("width", 50)
+            .attr("height", 20)
+            .attr("stroke", "none")
+            .attr("fill", "none");
+
+        label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 112 - 20)
             .attr("y", -7)
@@ -88,7 +116,17 @@ class predictionComponent extends baseComponent {
             .style("fill", "grey");
 
         //neutral
-        this.Contradiction = label.append('text')
+        this.Contradiction = label.append('rect')
+            .attr("rx", 3)
+            .attr("ry", 3)
+            .attr("x", 0 - 10)
+            .attr("y", 194 + 4)
+            .attr("width", 80)
+            .attr("height", 20)
+            .attr("stroke", "none")
+            .attr("fill", "none");
+
+        label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 0 - 10)
             .attr("y", 194 + 17)
@@ -97,7 +135,17 @@ class predictionComponent extends baseComponent {
             .style("fill", "grey");
 
         //contradiction
-        this.Entailment = label.append('text')
+        this.Entailment = label.append('rect')
+            .attr("rx", 3)
+            .attr("ry", 3)
+            .attr("x", 224 - 55)
+            .attr("y", 194 + 4)
+            .attr("width", 63)
+            .attr("height", 20)
+            .attr("stroke", "none")
+            .attr("fill", "none");
+
+        label.append('text')
             // .attr("class", "trilabel")
             .attr("x", 224 - 55)
             .attr("y", 194 + 17)
@@ -235,37 +283,23 @@ class predictionComponent extends baseComponent {
     onUpdateGroundTruth(label) {
         console.log(label);
         if (label === "neutral") {
-            this.Neutral.style("fill", "mediumseagreen");
-            this.Contradiction.style("fill", "grey");
-            this.Entailment.style("fill", "grey");
-
-            this.Neutral.style("font-weight", "bold");
-            this.Contradiction.style("font-weight", "normal");
-            this.Entailment.style("font-weight", "normal");
+            this.Neutral.style("fill", "lightgreen");
+            this.Contradiction.style("fill", "none");
+            this.Entailment.style("fill", "none");
+            // this.Contradiction.style("fill", "lightgreen");
+            // this.Entailment.style("fill", "lightgreen");
         } else if (label === "contradiction") {
-            this.Neutral.style("fill", "grey");
-            this.Contradiction.style("fill", "mediumseagreen");
-            this.Entailment.style("fill", "grey");
-
-            this.Neutral.style("font-weight", "normal");
-            this.Contradiction.style("font-weight", "bold");
-            this.Entailment.style("font-weight", "normal");
+            this.Neutral.style("fill", "none");
+            this.Contradiction.style("fill", "lightgreen");
+            this.Entailment.style("fill", "none");
         } else if (label === "entailment") {
-            this.Neutral.style("fill", "grey");
-            this.Contradiction.style("fill", "grey");
-            this.Entailment.style("fill", "mediumseagreen");
-
-            this.Neutral.style("font-weight", "normal");
-            this.Contradiction.style("font-weight", "normal");
-            this.Entailment.style("font-weight", "bold");
+            this.Neutral.style("fill", "none");
+            this.Contradiction.style("fill", "none");
+            this.Entailment.style("fill", "lightgreen");
         } else {
-            this.Neutral.style("fill", "grey");
-            this.Contradiction.style("fill", "grey");
-            this.Entailment.style("fill", "grey");
-
-            this.Neutral.style("font-weight", "normal");
-            this.Contradiction.style("font-weight", "normal");
-            this.Entailment.style("font-weight", "normal");
+            this.Neutral.style("fill", "none");
+            this.Contradiction.style("fill", "none");
+            this.Entailment.style("fill", "none");
         }
     }
 
@@ -347,18 +381,13 @@ class predictionComponent extends baseComponent {
                     else return 3;
                 })
                 .style("fill", (d, i) => {
-                    return "#3F3F3F";
-                    // if (i === pLen - 1) {
-                    //     if (pLen === 1)
-                    //         return '#3F3F3F';
-                    //     else
-                    //         return 'grey';
-                    // } else {
-                    //     return '#3F3F3F';
-                    // }
+                    if (i === pLen - 1) {
+                        return 'gold';
+                    } else {
+                        return 'grey';
+                    }
                 })
                 .style("stroke", "white")
-                // .style("stroke", 'black')
                 .style("opacity", 0.8)
                 .on("mouseover", function(d) {
 
