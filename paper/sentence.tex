@@ -1,3 +1,13 @@
+\subsection{Sentence View}
+To start an exploration cycle, the experts need to examine the premise and hypothesis sentence the current example. 
+As illustrated in Fig.~\ref{fig:modelPipeline}, the sentence view shows the premise and hypothesis sentence in (c) and (d).
+%
+To facilitate the analysis task (\textbf{T1}), we employ an automate sentence perturbation scheme that replaces nous and verb by their synonymous in the wordNet~\cite{Miller1995} (the standard lexical database for NLP applications).
+%
+When perturbation is applied to either of the sentences, the replaced words are highlight in blue (see Fig~\ref{fig:modelPipeline}(e) ) to indicate the modification to the original sentence.
+%
+%%% sentence perturbation %%%%
+In addition, the user can type any sentences or modified existing text in the (c) and (d) to accommodate customized input when expert want to conduct quick experiment or when the automatic perturbation does not meet expectations.
 
 \begin{figure}[htbp]
 \centering
@@ -6,11 +16,6 @@
  \caption{Sentence view shows the premise and the hypothesis sentence pair.}
 \label{fig:modelPipeline}
 \end{figure}
-
-\subsection{Sentence View}
-The sentence view shows the premise and hypothesis sentences, and in case of the existence of perturbation, highlight the where in the sentence the perturbation happens.
-%
-Add user customized sentences.
 
 \begin{itemize}
 \item Examine perturbed pair
