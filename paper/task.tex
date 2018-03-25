@@ -20,23 +20,21 @@ Such a process is iterative in nature, in which the domain experts go through ma
 %%% iterative process call for interactive visualization
 
 %
-%A stereotypical scenario can be summarized as the follow.
-%
+A stereotypical scenario can be summarized as the follow.
 To assess a model for a specific NLP task, the research start the analysis by looking at the failure cases.
-
 Look at example, perturb the example, see how the perturb the one fails,
-
 learn the limitation and strength from the where and how the errors occurs. iterate 
 
 
-\begin{figure}[htbp]
-\centering
-\vspace{-2mm}
- \includegraphics[width=1.0\linewidth]{errorAnalysis}
- \caption{How domain experts conduct error analysis on the model.}
-\label{fig:modelPipeline}
-\end{figure}
+%\begin{figure}[htbp]
+%\centering
+%\vspace{-2mm}
+% \includegraphics[width=1.0\linewidth]{errorAnalysis}
+% \caption{How domain experts conduct error analysis on the model.}
+%\label{fig:modelPipeline}
+%\end{figure}
 
+Analysis Goal
 \begin{itemize}
 \item \textbf{G1} Understand how attention affect the prediction 
 \item \textbf{G2} Why sentences are misclassified 
@@ -44,6 +42,7 @@ learn the limitation and strength from the where and how the errors occurs. iter
 \item \textbf{G4} 
 \end{itemize}
 
+Visualization Tasks
 \begin{itemize}
 \item \textbf{T1} Encode the internal state \emph{attention} of the model
 \end{itemize}
