@@ -2,22 +2,26 @@
 \centering
 \vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{pipeline}
- \caption{Interact with Language Inference Model with Perturbation.}
+ \caption{
+ Perturbation-Driven Exploration of the Language Inference Model.
+ }
 \label{fig:modelPipeline}
 \end{figure}
 
 \subsection{Perturbation-Driven Exploration}
 
+Fig.~\ref{fig:modelPipeline}
+
 Understand where and how does a model fail is the first step to improve the
 model performance.
-Prediction accuray, i.e., the percentage of the correct prediction according to
+Prediction accuracy, i.e., the percentage of the correct prediction according to
 the ground truth label, is the standard technique to verify the performance
 of a model on a given supervised task.
 %
 The accuracy alone does not tell us the whole story, it provides no
 information on the specific example and the condition that lead to a failure.
 %
-Often, the user need to examine individual failure examples to dignostic the
+Often, the user need to examine individual failure examples to diagnostic the
 issue and identify the weakness of the model.
 %
 However, the model may be unstable and generate the right prediction for the wrong
