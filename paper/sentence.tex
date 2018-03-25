@@ -1,11 +1,22 @@
-\subsection{All Pair Summary View}
-\begin{itemize}
-\item How go from 10k pair to one pair
-\item How constitute interesting example
-\item How to get a sense of overall prediction result
-\end{itemize}
-
 \subsection{Sentence View}
+To start an exploration cycle, the experts need to examine the premise and hypothesis sentence the current example. 
+As illustrated in Fig.~\ref{fig:modelPipeline}, the sentence view shows the premise and hypothesis sentence in (c) and (d).
+%
+To facilitate the analysis task (\textbf{T1}), we employ an automate sentence perturbation scheme that replaces nous and verb by their synonymous in the wordNet~\cite{Miller1995} (the standard lexical database for NLP applications).
+%
+When perturbation is applied to either of the sentences, the replaced words are highlight in blue (see Fig~\ref{fig:modelPipeline}(e) ) to indicate the modification to the original sentence.
+%
+%%% sentence perturbation %%%%
+In addition, the user can type any sentences or modified existing text in the (c) and (d) to accommodate customized input when expert want to conduct quick experiment or when the automatic perturbation does not meet expectations.
+
+\begin{figure}[htbp]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=0.85\linewidth]{sentenceView}
+ \caption{Sentence view shows the premise and the hypothesis sentence pair.}
+\label{fig:modelPipeline}
+\end{figure}
+
 \begin{itemize}
 \item Examine perturbed pair
 \item See which word is perturbed in a sentence
