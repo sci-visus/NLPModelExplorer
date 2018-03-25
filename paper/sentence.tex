@@ -1,16 +1,11 @@
-\subsection{All Pairs Summary View}
-\label{sec:allPairs}
-Since we can only focus on one individual example at a time for detail analysis, 
-how to pick an single pair of sentence from the development or test dataset (for the SNLI dataset, each of the these set consists of close to $10k$ examples) is an obvious challenge.
-%
-In addition, we also want to obtain certain high-level understand of how the whole set behave, beyond the information the prediction accuracy provide.
 
-%The all pair
-\begin{itemize}
-\item How to go from 10k pair to one pair
-\item What constitute interesting example
-\item How to get a sense of overall prediction result
-\end{itemize}
+\begin{figure}[htbp]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=0.85\linewidth]{sentenceView}
+ \caption{Sentence view shows the premise and the hypothesis sentence pair.}
+\label{fig:modelPipeline}
+\end{figure}
 
 \subsection{Sentence View}
 The sentence view shows the premise and hypothesis sentences, and in case of the existence of perturbation, highlight the where in the sentence the perturbation happens.
