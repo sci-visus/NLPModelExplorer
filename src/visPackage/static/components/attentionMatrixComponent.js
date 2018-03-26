@@ -107,18 +107,21 @@ class attentionMatrixComponent extends attentionComponent {
                             i);
                     }
                 })
-                //.call(d3.drag()
-                //    .on('start', (d, i, nodes) => {
-                //        this.dragEventX = d3.event.x;
-                //    })
-                //    .on('drag', (d, i, nodes) => {
-                //       this.rectDragEvent(i, d, nodes);
-                //    })
-                //    .on('end', (d, i) => {
-                //        this.dragEventX == undefined;
-                //        console.log("trigger attention update");
-                //        this.attUpdate();
-                //    }));
+		.on('mouseover', (d, i) => {
+
+                	if (this.freeze_flag.flag) return;
+
+                	let targWords = this.sen2words(this.data["currentPair"]["sentences"][1]),
+                	col = i % targWords.length,
+                	row = Math.floor(i / targWords.length);
+		
+      	  		this.highlight('highlight', row, col);
+            	})
+            	.on('mouseout', (d, i) => {
+               	 	if (this.freeze_flag.flag) return;
+			this.highlight('clean', -1, -1);
+            	});
+                
             this.rectCell = rects;
             /////////////////////// draw text /////////////////////////
             let texts = this.generateTextGeometry();
@@ -180,7 +183,7 @@ class attentionMatrixComponent extends attentionComponent {
             this.srctext = srctext;
 
             ////////////// rect mouse over event ///////////////
-            this.rectMouseEvent(rects, targtext, srctext);
+            //this.rectMouseEvent(rects, targtext, srctext);
 
             //draw text background only when depTree do not exist
             if (this.srcDepTreeData === undefined) {
@@ -346,40 +349,52 @@ class attentionMatrixComponent extends attentionComponent {
 
         this.collapse_Animation(orientation);
     }
-
-    ////////////// rect mouse over event ///////////////
-    rectMouseEvent(rects, targtext, srctext) {
-        rects.on('mouseover', (d, i) => {
-
-                if (this.freeze_flag.flag) return;
-
-                let targWords = this.sen2words(this.data["currentPair"]
-                        ["sentences"][1]),
-                    col = i % targWords.length,
-                    row = Math.floor(i / targWords.length);
-
-                // rects.style('stroke', (data, index) => {
-                //     if (col == index % targWords.length || row ==
-                //         Math.floor(index / targWords.length))
-                //         return 'orange';
-                //     else
-                //         return 'black';
-                // });
-                rects.style('opacity', (data, index) => {
-                    if (col == index % targWords.length || row ==
-                        Math.floor(index / targWords.length)) {
-                        return 1.0;
-                    } else {
-                        return 0.7;
-                    }
-                });
-
-                //update highlight
-                this.setData("highlight", [row, col]);
-
-                targtext
-                    .classed('attentionMatrixComponent_text_normal', (d,
+    
+    highlight(opt, row, col){
+	    
+	    let animationTime = 100;
+	    if(opt =='clean'){
+		    
+		    this.targtext
+		    .classed('attentionMatrixComponent_text_normal', (d, i, nodes) => {
+                        return d3.select(nodes[i]).classed(
+                            "attentionMatrixComponent_text_collapse"
+                        ) ? false : true;
+                    })
+                    .classed('attentionMatrixComponent_text_highlight', false);
+		    
+                    this.srctext
+		    .classed('attentionMatrixComponent_text_normal', (d,
                         i, nodes) => {
+                        return d3.select(nodes[i]).classed(
+                            "attentionMatrixComponent_text_collapse"
+                        ) ? false : true;
+                    })
+                    .classed('attentionMatrixComponent_text_highlight', false);
+		    
+		    this.rectCell.transition().duration(animationTime)
+		    .style('opacity', 1.0);
+                    this.setData("highlight", [row, col]);
+                    if (this.targ_dep)
+                        this.targ_dep.highlight(row);
+                    if (this.src_dep)
+                        this.src_dep.highlight(col);
+	    }else{
+                    
+		    let targWords = this.sen2words(this.data["currentPair"]["sentences"][1]);
+		    
+                    this.rectCell.transition().duration(animationTime).
+		    style('opacity', (data, index) => {
+                        if (col == index % targWords.length || row ==
+                            Math.floor(index / targWords.length)) {
+                            return 1.0;
+                        } else {
+                            return 0.7;
+                        }
+                    });
+		    
+		    this.targtext
+		    .classed('attentionMatrixComponent_text_normal', (d, i, nodes) => {
                         if (d3.select(nodes[i]).classed(
                                 "attentionMatrixComponent_text_collapse"
                             )) return false;
@@ -393,8 +408,8 @@ class attentionMatrixComponent extends attentionComponent {
                         return i == col ? true : false;
                     });
 
-                srctext
-                    .classed('attentionMatrixComponent_text_normal', (d,
+		    this.srctext
+		    .classed('attentionMatrixComponent_text_normal', (d,
                         i, nodes) => {
                         if (d3.select(nodes[i]).classed(
                                 "attentionMatrixComponent_text_collapse"
@@ -408,67 +423,25 @@ class attentionMatrixComponent extends attentionComponent {
                             )) return false;
                         return i == row ? true : false;
                     });
-
-                if (this.targ_dep)
-                    this.targ_dep.highlight(col);
-                if (this.src_dep)
-                    this.src_dep.highlight(row);
-            })
-            .on('mouseout', (d, i) => {
-                if (this.freeze_flag.flag) return;
-
-                let targWords = this.sen2words(this.data["currentPair"]
-                        ["sentences"][1]),
-                    col = i % targWords.length,
-                    row = Math.floor(i / targWords.length);
-
-                targtext
-                    .classed('attentionMatrixComponent_text_normal', (d,
-                        i, nodes) => {
-                        return d3.select(nodes[i]).classed(
-                            "attentionMatrixComponent_text_collapse"
-                        ) ? false : true;
-                    })
-                    .classed('attentionMatrixComponent_text_highlight',
-                        false);
-
-                srctext
-                    .classed('attentionMatrixComponent_text_normal', (d,
-                        i, nodes) => {
-                        return d3.select(nodes[i]).classed(
-                            "attentionMatrixComponent_text_collapse"
-                        ) ? false : true;
-                    })
-                    .classed('attentionMatrixComponent_text_highlight',
-                        false);
-
-                // rects.style('stroke', 'black');
-                rects.style('opacity', 1.0);
-                this.setData("highlight", [-1, -1]);
-                if (this.targ_dep)
-                    this.targ_dep.highlight(-1);
-                if (this.src_dep)
-                    this.src_dep.highlight(-1);
-            });
+		    
+                    if (this.targ_dep)
+			this.targ_dep.highlight(col);
+                    if (this.src_dep)
+                        this.src_dep.highlight(row);
+	    }
+	    
+            //update highlight
+            this.setData("highlight", [row, col]);
     }
 
     handleHighlightEvent(srcIndex, targIndex) {
-        let targWords = this.sen2words(this.data["currentPair"]
-            ["sentences"][1]);
-
-        this.rectCell.style('opacity', (data, index) => {
-            if (targIndex == index % targWords.length || srcIndex ==
-                Math.floor(index / targWords.length)) {
-                return 1.0;
-            } else {
-                return 0.7;
-            }
-        });
-
         if (srcIndex === -1 || targIndex === -1) {
-            this.rectCell.style('opacity', 1.0);
+		this.highlight('clean', srcIndex, targIndex);
+        }else{
+        	this.highlight('highlight', srcIndex, targIndex);
         }
     }
+
 
     //define each rect's width, height, x, y and color map value
     generateMatrixGeometry() {
