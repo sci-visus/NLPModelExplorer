@@ -1,0 +1,8 @@
+\subsection{Implementation}
+\label{sec:implementation}
+We design the tool with flexibility and extensibility in mind. One of the key objectives is to allow easy integration with existing NLP workflow. Therefore, instead of implementing the tool as a standalone application, we encapsulate the visualization functionality as a python library, in which the behavior of the visualization (e.g., what predict to show) can be specified in python using existing model in the expert's workflow. Also, due to the separation between the visualization and the underlying model computation, we can readily adapt to different models or the same model with different configuration or training. 
+
+To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as for generating a prediction or access attention, to link the visualization with their models. The code use to create the visualization in this paper is included in appendix B (consists only a few lines of code).
+%
+The NLP model is implemented in pytorch~\cite{PaszkeGrossChintala2017}.
+The visual elements are implemented in D3.js using javascript, the python server act as glue between the javascript visualization and the pytorch model.

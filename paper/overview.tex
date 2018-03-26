@@ -1,3 +1,14 @@
+\section{NLIZE System}
+In this section, we discuss the design and implementation of the NLIZE (pronounced as ``analyze'', see interface overview in Fig.~\ref{fig:teaser}) system, which address the analysis tasks (\textbf{T1-3}).
+%
+As discussed in the task analysis, the experts often analyze and obtain intuition about the model by studying how altering one part of the model affect other stages of the pipeline.
+%
+Such a process can be generalized as the perturbation-driven paradigm, which is used as guiding principal for designing the proposed tool.
+%
+As illustrated in Fig.~\ref{fig:modelPipeline}, we enables the automated or user-guided perturbation of the input sentence (e.g., replace words), the attention in the model (e.g., alter the alignment between sentences), and the prediction (e.g., adjust the prediction by making updates to the model).
+%
+In the following sections, we describe in detail the five major components of the proposed system, namely, sentence view  (Section~\ref{sec:sentence}), attention view (Section~\ref{sec:attention}), prediction view (Section~\ref{sec:prediction}), pipeline view (Section~\ref{sec:pipeline}), all pair summary view (Section~\ref{sec:allPairs}).
+
 
 \begin{figure}[htbp]
 \centering
@@ -8,17 +19,6 @@ In the proposed tool, we enables the automated or user-guided perturbation of th
 }
 \label{fig:modelPipeline}
 \end{figure}
-
-\section{NLIZE System}
-In this section, we describe the design and implementation of the NLIZE (pronounced as ``analyze'') system, which address the analysis tasks (T1-3).
-%
-As discussed in the task analysis, the experts obtain intuition about the model via guided exploration by studying how various parts of the pipeline behave when certain components are altered.
-%
-This can be generalized as the perturbation-driven paradigm, which formulated the basic guiding principal for designing the proposed tool.
-As illustrated in Fig.~\ref{fig:modelPipeline}, we enables the automated or user-guided perturbation of the input sentence (e.g., replace words), the attention in the model (e.g., alter the alignment between sentences), and the prediction (e.g., adjust the prediction by making updates to the model).
-%
-In the following sections, we describe in detail the five major components of the proposed system, namely, all pair summary view, sentence view, attention view, prediction view, pipeline view.
-
 
 % Beside looking into the internal states, understanding how each of the component of the model interact with input and output as well as with each other is the crucial for truly examine the mechanism of the model.
 %

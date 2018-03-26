@@ -161,7 +161,7 @@ class modelInterface:
     #     token = torch.LongTensor(tokenList).view(1, len(tokenList))
     #     # print token
     #     return token
-
+    
     #evaluate model
 
     def evaluateTestData(self, srcName, targName, groundTruthName):
