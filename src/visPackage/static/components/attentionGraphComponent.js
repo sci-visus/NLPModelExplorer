@@ -126,7 +126,18 @@ class attentionGraphComponent extends attentionComponent {
                 .attr("height", this.rectHeight)
                 .attr("class", "srcRect")
                 .style("fill", "#87CEFA")
-                .style("opacity", (d, i) => this.srcAtt[i] * 0.5);
+                .style("opacity", (d, i) => this.srcAtt[i] * 0.5)
+            	.on('mouseover', (d, i, nodes) => {
+                	this.highlight_and_linkAlignTarg('highlight', i, nodes);
+            	})
+            	.on('mouseout', (d, i, nodes) => {
+                	this.highlight_and_linkAlignTarg('clean', i, nodes);
+                	this.setData("highlight", [-1, -1]);
+           	})
+            	.on("click", (d, i) => {
+                	this.src_dep.collapse(this.src_dep.display_index[i]);
+                	this.draw();
+           	});
 
             this.svg.selectAll(".attentionGraphComponentTargRect")
                 .data(this.targWords)
@@ -139,7 +150,20 @@ class attentionGraphComponent extends attentionComponent {
                 .attr("height", this.rectHeight)
                 .attr("class", "targRect")
                 .style("fill", "#87CEFA")
-                .style("opacity", (d, i) => this.targAtt[i] * 0.5);
+                .style("opacity", (d, i) => this.targAtt[i] * 0.5)
+                .on('mouseover', (d, i, nodes) => {
+                    this.highlight_and_linkAlignSrc('highlight', i,
+                        nodes);
+                })
+                .on('mouseout', (d, i, nodes) => {
+                    this.highlight_and_linkAlignSrc('clean', i, nodes);
+                    this.setData("highlight", [-1, -1]);
+                })
+                .on("click", (d, i) => {
+                    this.targ_dep.collapse(this.targ_dep.display_index[
+                        i]);
+                    this.draw()
+                });
 
             ///////////////////// drawing text ////////////////////
             this.srcWordsText = this.svg.selectAll(
@@ -154,19 +178,9 @@ class attentionGraphComponent extends attentionComponent {
                     0.5)
                 .style("font-size", this.checkFontSize.bind(this))
                 .style("writing-mode", this.checkSrcOrientation.bind(this))
-                .style("text-anchor", "middle")
-                .on('mouseover', (d, i, nodes) => {
-                    this.highlight_and_linkAlignTarg('highlight', i,
-                        nodes);
-                })
-                .on('mouseout', (d, i, nodes) => {
-                    this.highlight_and_linkAlignTarg('clean', i, nodes);
-                    this.setData("highlight", [-1, -1]);
-                })
-                .on("click", (d, i) => {
-                    this.src_dep.collapse(this.src_dep.display_index[i]);
-                    this.draw();
-                });
+		.style("text-anchor", "middle")
+		.style('pointer-events', 'none');
+                
 
             this.targWordsText = this.svg.selectAll(
                     ".attentionGraphComponentTargText")
@@ -181,20 +195,9 @@ class attentionGraphComponent extends attentionComponent {
                 .style("font-size", this.checkFontSize.bind(this))
                 .style("writing-mode", this.checkTargOrientation.bind(this))
                 .style("alignment-baseline", "middle")
-                .style("text-anchor", "middle")
-                .on('mouseover', (d, i, nodes) => {
-                    this.highlight_and_linkAlignSrc('highlight', i,
-                        nodes);
-                })
-                .on('mouseout', (d, i, nodes) => {
-                    this.highlight_and_linkAlignSrc('clean', i, nodes);
-                    this.setData("highlight", [-1, -1]);
-                })
-                .on("click", (d, i) => {
-                    this.targ_dep.collapse(this.targ_dep.display_index[
-                        i]);
-                    this.draw()
-                });
+		.style("text-anchor", "middle")
+		.style('pointer-events', 'none');
+                
         }
     }
 
@@ -256,7 +259,7 @@ class attentionGraphComponent extends attentionComponent {
     highlight_and_linkAlignSrc(opt, index, nodes) {
 
         if (opt == 'clean') {
-            d3.select(nodes[index]).style('fill', 'black');
+            d3.select(nodes[index]).style('fill', '#87CEFA');
 
             this.targ_dep.highlight(-1);
             this.src_dep.highlight(-1);
@@ -267,15 +270,15 @@ class attentionGraphComponent extends attentionComponent {
             d3.selectAll('.srcRect').style('fill',
                 '#87CEFA');
 		
-            d3.selectAll('.targRect').filter((d, i) => {
+            d3.selectAll('.attentionGraphComponentTargText').filter((d, i) => {
                         return i == index; 
-    	    }).style('fill', '#87CEFA');
+    	    }).style('fill', 'black');
 	    
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
         } else {
             d3.select(nodes[index]).style('fill', 'orange');
-            d3.selectAll('.targRect').filter((d, i) => {
+            d3.selectAll('.attentionGraphComponentTargText').filter((d, i) => {
                     return i == index; 
 	    }).style('fill', 'orange');
 
@@ -318,7 +321,7 @@ class attentionGraphComponent extends attentionComponent {
     highlight_and_linkAlignTarg(opt, index, nodes) {
 
         if (opt == 'clean') {
-            d3.select(nodes[index]).style('fill', 'black');
+            d3.select(nodes[index]).style('fill', '#87CEFA');
             if (this.targ_dep)
                 this.targ_dep.highlight(-1);
             if (this.src_dep)
@@ -330,9 +333,9 @@ class attentionGraphComponent extends attentionComponent {
             d3.selectAll('.targRect').style('fill',
                 '#87CEFA');
 		
-            d3.selectAll('.srcRect').filter((d, i) => {
+            d3.selectAll('.attentionGraphComponentSrcText').filter((d, i) => {
                             return i == index; 
-            }).style('fill', '#87CEFA');
+            }).style('fill', 'black');
 		    
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
@@ -341,7 +344,7 @@ class attentionGraphComponent extends attentionComponent {
 
             d3.select(nodes[index]).style('fill', 'orange');
 	    
-            d3.selectAll('.srcRect').filter((d, i) => {
+            d3.selectAll('.attentionGraphComponentSrcText').filter((d, i) => {
                   return i == index; 
             }).style('fill', 'orange');
 	    
