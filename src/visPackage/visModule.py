@@ -320,6 +320,8 @@ class textEntailVisModule(visModule):
 
     def reloadModel(self):
         self.reloadModelCallback();
+        self.predict()
+        self.predictAll()
 
     def pipelineStatistic(self):
         pipelineData = self.pipelineStatisticCallback()
