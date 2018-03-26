@@ -116,10 +116,18 @@ class attentionMatrixComponent extends attentionComponent {
                 	row = Math.floor(i / targWords.length);
 		
       	  		this.highlight('highlight', row, col);
+	                //update highlight
+	                this.setData("highlight", [row, col]);
             	})
             	.on('mouseout', (d, i) => {
                	 	if (this.freeze_flag.flag) return;
+			
+			let targWords = this.sen2words(this.data["currentPair"]["sentences"][1]),
+                	col = i % targWords.length,
+                	row = Math.floor(i / targWords.length);
 			this.highlight('clean', -1, -1);
+	                //update highlight
+	                this.setData("highlight", [-1, -1]);
             	});
                 
             this.rectCell = rects;
@@ -374,7 +382,7 @@ class attentionMatrixComponent extends attentionComponent {
 		    
 		    this.rectCell.transition().duration(animationTime)
 		    .style('opacity', 1.0);
-                    this.setData("highlight", [row, col]);
+		    
                     if (this.targ_dep)
                         this.targ_dep.highlight(row);
                     if (this.src_dep)
@@ -429,9 +437,6 @@ class attentionMatrixComponent extends attentionComponent {
                     if (this.src_dep)
                         this.src_dep.highlight(row);
 	    }
-	    
-            //update highlight
-            this.setData("highlight", [row, col]);
     }
 
     handleHighlightEvent(srcIndex, targIndex) {

@@ -8,8 +8,9 @@ class attentionGraphComponent extends attentionComponent {
     constructor(uuid) {
         super(uuid);
 
-        this.startRange = 0.6;
+        this.startRange = 0.9;
         this.endRange = 2.3;
+	this.widthscale = d3.scaleLinear().domain([0, 1]).range([0, 5]);
     }
 
     draw() {
@@ -114,6 +115,11 @@ class attentionGraphComponent extends attentionComponent {
             ///////////////////// drawing line //////////////////////
             let connections = this.drawConnection();
 
+
+
+	    ///////////////////// drawing scale//////////////////////
+	    this.drawWidthScale();
+	    
             ///////////////////// drawing rect //////////////////////
             this.svg.selectAll(".attentionGraphComponentSrcRect")
                 .data(this.srcWords)
@@ -132,7 +138,6 @@ class attentionGraphComponent extends attentionComponent {
             	})
             	.on('mouseout', (d, i, nodes) => {
                 	this.highlight_and_linkAlignTarg('clean', i, nodes);
-                	this.setData("highlight", [-1, -1]);
            	})
             	.on("click", (d, i) => {
                 	this.src_dep.collapse(this.src_dep.display_index[i]);
@@ -152,22 +157,18 @@ class attentionGraphComponent extends attentionComponent {
                 .style("fill", "#87CEFA")
                 .style("opacity", (d, i) => this.targAtt[i] * 0.5)
                 .on('mouseover', (d, i, nodes) => {
-                    this.highlight_and_linkAlignSrc('highlight', i,
-                        nodes);
+			this.highlight_and_linkAlignSrc('highlight', i, nodes);
                 })
                 .on('mouseout', (d, i, nodes) => {
-                    this.highlight_and_linkAlignSrc('clean', i, nodes);
-                    this.setData("highlight", [-1, -1]);
+			this.highlight_and_linkAlignSrc('clean', i, nodes);
                 })
                 .on("click", (d, i) => {
-                    this.targ_dep.collapse(this.targ_dep.display_index[
-                        i]);
-                    this.draw()
+			this.targ_dep.collapse(this.targ_dep.display_index[i]);
+			this.draw();
                 });
 
             ///////////////////// drawing text ////////////////////
-            this.srcWordsText = this.svg.selectAll(
-                    ".attentionGraphComponentSrcText")
+            this.srcWordsText = this.svg.selectAll(".attentionGraphComponentSrcText")
                 .data(this.srcWords)
                 .enter()
                 .append("text")
@@ -182,8 +183,7 @@ class attentionGraphComponent extends attentionComponent {
 		.style('pointer-events', 'none');
                 
 
-            this.targWordsText = this.svg.selectAll(
-                    ".attentionGraphComponentTargText")
+            this.targWordsText = this.svg.selectAll(".attentionGraphComponentTargText")
                 .data(this.targWords)
                 .enter()
                 .append("text")
@@ -276,6 +276,8 @@ class attentionGraphComponent extends attentionComponent {
 	    
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
+	    
+	    this.setData("highlight", [-1, -1]);
         } else {
             d3.select(nodes[index]).style('fill', 'orange');
             d3.selectAll('.attentionGraphComponentTargText').filter((d, i) => {
@@ -339,6 +341,8 @@ class attentionGraphComponent extends attentionComponent {
 		    
             d3.selectAll('.attentionGraphComponentAttConnect').style(
                 'stroke', '#87CEFA');
+	    
+	    this.setData("highlight", [-1, -1]);
         } else {
 
 
@@ -497,6 +501,7 @@ class attentionGraphComponent extends attentionComponent {
             });
 
         this.svg.selectAll(".attentionGraphComponentAttConnect").remove();
+	
         let connections = this.svg.selectAll(
                 ".attentionGraphComponentAttConnect")
             .data(this.attList)
@@ -527,14 +532,41 @@ class attentionGraphComponent extends attentionComponent {
                 }
             })
             .attr("class", 'attentionGraphComponentAttConnect')
-            .style("stroke-width", d => d[2] * 5)
+            .style("stroke-width", d => this.widthscale(d[2]))
             .style("stroke", "#87CEFA")
             .style("opacity", d => 0.1 + d[2])
             .style("fill", "none");
 
         return connections;
     }
-
+    
+    drawWidthScale(){
+    	
+	    this.svg.selectAll('.attentionGraphComponentWidthScale').data([1, 0.5, 0.1]).enter()
+	    .append('rect')
+	    .attr('x', this.width * 0.7)
+	    .attr('y', (d, i)=>{	
+		    return 2 + i * 10;
+	    })
+	    .attr('width', this.width * 0.1)
+	    .attr('height', (d)=>{ 
+		    return this.widthscale(d);
+	    })
+	    .style('fill', '#87CEFA');
+	    
+	    this.svg.selectAll('.attentionGraphComponentWidthScale_text').data([1, 0.5, 0.1]).enter()
+	    .append('text')
+	    .text(d=>d)
+	    .attr('x', this.width * 0.8 + 12)
+	    .attr('y', (d, i)=>{	
+		    return 2 + i * 10;
+	    })
+	    .attr('font-size', 10)
+            .style("alignment-baseline", "middle")
+	    .style("text-anchor", "middle")
+	    .style('pointer-events', 'none');
+    }
+    
     computeWordPosition(src, targ) {
         // console.log(src, targ);
         this.srcPos = src.map((d, i) => {
@@ -550,6 +582,7 @@ class attentionGraphComponent extends attentionComponent {
             };
         });
     }
+
 
     /*
         parseDataUpdate(msg) {
