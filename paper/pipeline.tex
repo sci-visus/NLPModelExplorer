@@ -20,6 +20,6 @@ The optimization parameters is shown in (a), each of the stages is illustrated i
 There are many way to update the model to correct a prediction. The simplest way to achieve it is applying standard back propagation that overfit to the example. However, without any constrain, the update step may alter the model in unexpected ways. \shusen{what is the benefit of using mira?}
 Insetad, we adopted the \emph{Margin-infused relaxed algorithm (MIRA)}~\cite{CrammerSinger2003} update, where we regulate the optimization with the amount of change to the parameter. In the proposed tool, we define the mira loss as the following:
 \begin{equation}
-\mathrm{argmin}(  C J(w') + ||w' - w|| ),
+\underset{w'}{\mathrm{argmin}}( C_{mira} J(w') + ||w' - w||),
 \end{equation}
-$J$ is the lost function for the model.
+where $J(w)$ is the lost function for the model, and $w$ is the model's parameters.
