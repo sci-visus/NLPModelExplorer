@@ -21,6 +21,8 @@ class baseComponent {
             bottom: 5,
             left: 5
         };
+
+        this.calledFunc = Object();
     }
 
     subscribeDatabyNames(names) {
@@ -49,6 +51,25 @@ class baseComponent {
             "uid": this.uuid
         };
         socket.emit('message', msg);
+        this.addCallSet(funcName);
+    }
+
+    addCallSet(funcName) {
+        if (this.calledFunc[funcName]) {
+            this.calledFunc[funcName] += 1;
+        } else {
+            this.calledFunc[funcName] = 1;
+        }
+
+    }
+
+    removeCallSet(funcName) {
+        if (this.calledFunc[funcName]) {
+            if (this.callFunc[funcName] === 0)
+                delete this.calledFunc[funcName];
+            else
+                this.calledFunc[funcName] -= 1;
+        }
     }
 
     setData(name, data) {
@@ -79,7 +100,7 @@ class baseComponent {
     }
 
     parseFunctionReturn(msg) {
-
+        this.removeCallSet(msg['func']);
     }
 
     parseDataUpdate(msg) {
