@@ -161,7 +161,7 @@ class modelInterface:
     #     token = torch.LongTensor(tokenList).view(1, len(tokenList))
     #     # print token
     #     return token
-    
+
     #evaluate model
 
     def evaluateTestData(self, srcName, targName, groundTruthName):
@@ -193,30 +193,31 @@ class modelInterface:
         #map to token
         sourceSen = sentencePair[0]
         targetSen = sentencePair[1]
-        source = self.mapToToken(sourceSen)
-        target = self.mapToToken(targetSen)
+        if sourceSen and targetSen:
+            source = self.mapToToken(sourceSen)
+            target = self.mapToToken(targetSen)
 
-        wv_idx1 = Variable(source, requires_grad=False)
-        wv_idx2 = Variable(target, requires_grad=False)
-        # Variable(torch.from_numpy(indices).cuda(), requires_grad=False)
+            wv_idx1 = Variable(source, requires_grad=False)
+            wv_idx2 = Variable(target, requires_grad=False)
+            # Variable(torch.from_numpy(indices).cuda(), requires_grad=False)
 
-        word_vecs1 = self.embeddings(wv_idx1)
-        word_vecs2 = self.embeddings(wv_idx2)
+            word_vecs1 = self.embeddings(wv_idx1)
+            word_vecs2 = self.embeddings(wv_idx2)
 
-        # update network parameters
-        # print source.shape[1], target.shape[1]
-        self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
+            # update network parameters
+            # print source.shape[1], target.shape[1]
+            self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
 
-        y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
+            y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
 
-        p = y_dist.exp()
-        # print "prediction result:", p
-        # pred = dict()
-        pred = p.data.numpy()
-        # pred["entail"] = p[0]
-        # pred["neutral"] = p[1]
-        # pred["contradict"] = p[2]
-        return pred
+            p = y_dist.exp()
+            # print "prediction result:", p
+            # pred = dict()
+            pred = p.data.numpy()
+            # pred["entail"] = p[0]
+            # pred["neutral"] = p[1]
+            # pred["contradict"] = p[2]
+            return pred
 
     def attention(self, att_name="att_soft1"):
         #get the current attention, this seems to be reading attention from file
@@ -275,6 +276,7 @@ class modelInterface:
 
             # get a initial w'
             # 	here, it's gonna be updated w using sgd
+            print self.opt
             # just one pass sgd
             self.pipeline, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
             for i in xrange(interation):

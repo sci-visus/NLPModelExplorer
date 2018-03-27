@@ -8,7 +8,8 @@ Based class for attention visualization
 class attentionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["attention", "currentPair", "highlight",
+        this.subscribeDatabyNames(["attention", "normAttention",
+            "currentPair", "highlight",
             "attentionDirection"
         ]);
 
@@ -100,6 +101,7 @@ class attentionComponent extends baseComponent {
 
     attUpdate() {
         // console.log(this.normAttention);
+        this.setData("normAttention", this.normAttention);
         this.callFunc("attentionUpdate", {
             "att_soft1": this.normAttention,
             "att_soft2": this.normAttentionCol
@@ -186,6 +188,11 @@ class attentionComponent extends baseComponent {
 
                 break;
 
+            case "normAttention":
+                this.normAttention = this.data["normAttention"];
+                this.draw();
+                break;
+
             case "currentPair":
                 let pair = msg["data"]["data"]["sentences"];
 
@@ -211,6 +218,7 @@ class attentionComponent extends baseComponent {
                 this.targWords = pair[1].match(/\S+/g);
                 this.oldPair = pair.slice();
                 break;
+
             case "attentionDirection":
                 // console.log("attentionDirection is changed\n");
                 let direction = msg["data"]["data"];
@@ -223,6 +231,7 @@ class attentionComponent extends baseComponent {
                 let srcIndex = msg["data"]["data"][0];
                 let targIndex = msg["data"]["data"][1];
                 this.handleHighlightEvent(srcIndex, targIndex);
+                break;
         }
     }
 
