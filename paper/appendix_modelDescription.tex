@@ -124,10 +124,10 @@ Supplementary Materials
 \firstsection{Appendix A: Detailed description of the Model}
 \maketitle
 
-The Decomposable Attention model is an end-to-end model that takes vectorized premise sentence and hypothesis sentence, and output a probability distribution over three labels. The pipeline can be separated into three phases: encoder, attention and classifier. Here we briefly formalize these three layers.
+The Decomposable Attention~\cite{parikh2016emnlp} model is an end-to-end model that takes vectorized premise sentence and hypothesis sentence, and output a probability distribution over three labels. The pipeline can be separated into three phases: encoder, attention and classifier. Here we briefly formalize these three layers.
 
 \subsection{Encoder}
-Denote the premise sentence as $\overline{\boldsymbol{P}} = (\overline{\boldsymbol{p}}_1, \overline{\boldsymbol{p}}_2, ..., \overline{\boldsymbol{p}}_m)$ and hypothesis sentence as $\overline{\boldsymbol{H}} = (\overline{\boldsymbol{h}}_1, \overline{\boldsymbol{h}}_2, ..., \overline{\boldsymbol{h}}_n)$ where $\overline{\boldsymbol{p}}_i$ and $\overline{\boldsymbol{h}}_j$ are the input embedding vectors respectively. The purpose of encoder is to generate specialized encodings that will participate in the following steps of the model. Define the encoder function as
+Denote the premise sentence as $\overline{\boldsymbol{P}} = (\overline{\boldsymbol{p}}_1, \overline{\boldsymbol{p}}_2, ..., \overline{\boldsymbol{p}}_m)$ and hypothesis sentence as $\overline{\boldsymbol{H}} = (\overline{\boldsymbol{h}}_1, \overline{\boldsymbol{h}}_2, ..., \overline{\boldsymbol{h}}_n)$ where $\overline{\boldsymbol{p}}_i$ and $\overline{\boldsymbol{h}}_j$ are the input embedding vectors respectively. The purpose of encoder is to generate specialized encodings for attention. Define the encoder function as
 \begin{align}
   \boldsymbol{P} &= F(\overline{\boldsymbol{P}})\\
   \boldsymbol{H} &= F(\overline{\boldsymbol{H}})
@@ -160,7 +160,7 @@ Classifier takes features from previous steps and predict a probability distribu
   \boldsymbol{v}_j &= G([\overrightarrow{\boldsymbol{a}}_j \cdot \boldsymbol{P} \hspace{1ex}  | \hspace{1ex}  \overline{\boldsymbol{h}}_j])
 \end{align}
 
-where G is the aggregation layer (e.g. two-layer ReLU) and $[\cdot|\cdot]$ denotes concatenation. Notice this aggregation layer jointly considers embeddings, encodings and attentions. With the aggregated premise feature $\boldsymbol{u}_i$ and hypothesis feature $\boldsymbol{v}_j$, the classifier does further feature conjunction to predict weight on each entailment score:
+where G is the aggregation layer (e.g. two-layer ReLU) and $[\cdot|\cdot]$ denotes concatenation. With the aggregated premise feature $\boldsymbol{u}_i$ and hypothesis feature $\boldsymbol{v}_j$, the classifier does further feature conjunction to predict weight on each entailment score:
 \begin{align}
   \boldsymbol{y} &= Z([\sum_i \boldsymbol{u}_i | \sum_j \boldsymbol{v}_j]) \label{eq:yscore}
 \end{align}
@@ -169,7 +169,7 @@ where $Z$ is another neural layer (e.g. two-layer ReLU followed by a linear laye
 
 %\taoli{Do we need citation in Appendix?}
 
-\textbf{Comment} We used the same network setting in the Decomposable Attention paper~\cite{parikh2016emnlp}. That are, network hidden size is $200$; input word embeddings are $200$ embeddings (downsampled from $300$ dimensional GloVe embeddings~\cite{PenningtonSocherManning2014} by a learnable linear layer); dropout~\cite{SrivastavaHinton2014} is $0.2$ for learning; and learning rate is $0.05$.
+\textbf{Comment} We adopted the same network setting in the Decomposable Attention paper~\cite{parikh2016emnlp}. That are, network hidden size is $200$; input word embeddings are $200$d embeddings (downsampled from $300$d GloVe embeddings~\cite{PenningtonSocherManning2014} by a learnable linear layer). For learning, dropout~\cite{SrivastavaHinton2014} is $0.2$ and learning rate is $0.05$. Optimization algorithm is AdaGrad~\cite{duchi2011adaptive} with mini-batch size 64 and number of epochs 300.
 
 \section{Appendix B: Code Example: Link Visualization with Model}
 \begin{lstlisting}[language=Python, caption=Code for generating the visualization.]
