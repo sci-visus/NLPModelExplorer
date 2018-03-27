@@ -52,7 +52,8 @@ class attentionComponent extends baseComponent {
                 .attr("width", this.pwidth)
                 .attr("height", this.pheight)
 
-            this.svg.selectAll("text,rect,path, #swapButton, defs").remove();
+            this.svg.selectAll(
+                "text,rect,path, #attData, defs").remove();
 
             this.svgSave.updatePos([this.width - 10, 10])
             this.svgSave.draw();
@@ -367,8 +368,8 @@ class attentionComponent extends baseComponent {
     drawAttDataToggle(svg, pos, orientation = "vertical") {
 
         // swap attention normalization button
-        if (this.svg.select("#swapButton").empty()) {
-            this.swapButton = this.svg.append("g").attr("id", "swapButton");
+        if (this.svg.select("#attData").empty()) {
+            this.swapButton = this.svg.append("g").attr("id", "attData");
             this.swapButton.append("rect")
                 .attr("rx", 3)
                 .attr("ry", 3)

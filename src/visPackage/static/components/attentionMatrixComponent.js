@@ -327,11 +327,12 @@ class attentionMatrixComponent extends attentionComponent {
 
         //renormalize current row.
 
-        this.normAttention[row][col] = d;
+        this.normAttentionRow[row][col] = d;
         this.normAttentionCol[row][col] = d;
         //this.aggregatedMatrix[row] =
         //TODO: this may be a bug if you try to renormalize the the matrix after collaspe
-        this.normAttention[row] = this.normalization(this.normAttention[row]);
+        this.normAttentionRow[row] = this.normalization(this.normAttentionRow[
+            row]);
         this.normalizeCol(this.normAttentionCol, col);
 
         d3.selectAll(nodes).style('fill', (d, i) => {
