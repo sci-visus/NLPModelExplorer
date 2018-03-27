@@ -4,7 +4,7 @@ Pipeline view provides a direct visual representation of the three stages (encod
 
 There are many ways to update the model to correct a prediction. A simple way to achieve it is applying standard backpropagation that overfits to the example. However, without any constraint, the update step may alter the model in unexpected ways.
 % \shusen{what is the benefit of using mira?}
-Instead, we adopted the same idea in \emph{Margin-infused relaxed algorithm (MIRA)}~\cite{CrammerSinger2003}, where we regulate the optimization with the amount of change to the parameter. Therefore, in the proposed tool, we minimize the combined loss function by the following:
+Instead, we adopt the same idea in \emph{Margin-infused relaxed algorithm (MIRA)}~\cite{CrammerSinger2003}, where we regulate the optimization with the amount of change to the parameter. Therefore, in the proposed tool, we minimize the combined loss function by the following:
 \begin{equation}
 \underset{w'}{\mathrm{argmin}}( C \mathbb{J}(\mathbf{W}') + ||\mathbf{W}' - \mathbf{W}||^2)
 \end{equation}
