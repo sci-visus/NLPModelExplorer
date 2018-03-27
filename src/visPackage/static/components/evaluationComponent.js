@@ -99,13 +99,13 @@ class evaluationComponent extends baseComponent {
         // var stabilities = data.map(d => d.stability);
         // console.log(stabilities);
         this.histo.setSample(data, d => d.stability);
-        this.histo.setTitle("Sensitivity");
-        this.scatter.setData(data, ["Sensitivity", "PerturbCount"],
+        this.histo.setTitle("CorrectRatio");
+        this.scatter.setData(data, ["CorrectRatio", "PerturbCount"],
             d => [d.stability, d.perturbCount]);
     }
 
     updateScatterplot(data) {
-        this.scatter.setData(data, ["Sensitivity", "PerturbCount"],
+        this.scatter.setData(data, ["CorrectRatio", "PerturbCount"],
             d => [d.stability, d.perturbCount]);
     }
 

@@ -205,40 +205,41 @@ class textEntailVisModule(visModule):
     def predictUpdate(self, newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag, mira_c ):
         print "predictUpdate", newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag
         mode = dataManager.getData("updateMode")
-        print " ===== predict update mode: ", mode
-        if mode == "single":
-            sentencePair = dataManager.getData("currentPair")['sentences']
-            att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag)
-            # print att, pred
+        sentencePair = dataManager.getData("currentPair")['sentences']
+        if sentencePair[0] and sentencePair[1]:
+            print " ===== predict update mode: ", mode
+            if mode == "single":
 
-            dataManager.setData("attention", att)
-            dataManager.setData("predictionUpdate", pred)
+                att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag)
+                # print att, pred
 
-            #update other predictions
-            self.predictAll()
-            self.pipelineStatistic()
-            return True
+                dataManager.setData("attention", att)
+                dataManager.setData("predictionUpdate", pred)
 
-        elif mode == "batch":
-            self.batchRecords = []
-            self.batchPreds = []
-            for encoderFlag in [True, False]:
-                for attFlag in [True, False]:
-                    for classFlag in [True, False]:
-                        if encoderFlag | attFlag | classFlag:
-                            print "batch run:", encoderFlag, attFlag, classFlag
-                            # restore the pipeline
-                            self.reloadModelCallback()
+                #update other predictions
+                self.predictAll()
+                self.pipelineStatistic()
+                return True
 
-                            sentencePair = dataManager.getData("currentPair")['sentences']
-                            att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag, mira_c)
+            elif mode == "batch":
+                self.batchRecords = []
+                self.batchPreds = []
+                for encoderFlag in [True, False]:
+                    for attFlag in [True, False]:
+                        for classFlag in [True, False]:
+                            if encoderFlag | attFlag | classFlag:
+                                print "batch run:", encoderFlag, attFlag, classFlag
+                                # restore the pipeline
+                                self.reloadModelCallback()
+                                att, pred = self.predictionUpdateHook(sentencePair, newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag, mira_c)
 
-                            self.batchPreds.append(pred.tolist())
-                            pipelineData = self.pipelineStatisticCallback()
-                            self.batchRecords.append( ([encoderFlag, attFlag, classFlag], att, pipelineData) )
+                                self.batchPreds.append(pred.tolist())
+                                pipelineData = self.pipelineStatisticCallback()
+                                self.batchRecords.append( ([encoderFlag, attFlag, classFlag], att, pipelineData) )
 
-            dataManager.setData("predictionBatchUpdate", self.batchPreds);
-            return True
+                dataManager.setData("predictionBatchUpdate", self.batchPreds);
+
+        return True
 
     def updatePipelineStateFromIndex(self, index):
         pipeline = dataManager.getData("pipeline")

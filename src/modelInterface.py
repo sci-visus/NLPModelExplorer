@@ -256,6 +256,7 @@ class modelInterface:
         #map to token
         sourceSen = sentences[0]
         targetSen = sentences[1]
+        # if source and target:
         source = self.mapToToken(sourceSen)
         target = self.mapToToken(targetSen)
 

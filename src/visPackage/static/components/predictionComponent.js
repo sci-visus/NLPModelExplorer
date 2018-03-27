@@ -192,9 +192,10 @@ class predictionComponent extends baseComponent {
 
     clear() {
         if (this.svg) {
-            this.onUpdateGroundTruth("");
+            // this.onUpdateGroundTruth("");
             this.svg.select(this.div + "overlay").remove();
             this.svg.selectAll(".predCircle").remove();
+            this.svg.selectAll(".predSquare").remove();
             this.svg.selectAll(".dotPredPath").remove();
             this.svg.selectAll(".predPath").remove();
         }
@@ -239,7 +240,7 @@ class predictionComponent extends baseComponent {
     }
 
     onUpdateOptimizedBatchPrediction(preds) {
-        console.log(preds);
+        // console.log(preds);
 
         //draw batch prediction
         this.updatePredictDisplay();

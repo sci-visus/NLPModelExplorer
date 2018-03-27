@@ -193,7 +193,7 @@ class attentionComponent extends baseComponent {
             case "normAttentionCol":
                 this.normAttentionCol = this.data["normAttentionCol"];
                 if (this.attentionDirection === 'col') {
-                    console.log("update normAttentionCol");
+                    // console.log("update normAttentionCol");
                     this.normAttention = this.normAttentionCol;
                     this.draw();
                 }
@@ -202,7 +202,7 @@ class attentionComponent extends baseComponent {
             case "normAttentionRow":
                 this.normAttentionRow = this.data["normAttentionRow"];
                 if (this.attentionDirection === 'row') {
-                    console.log("update normAttentionRow");
+                    // console.log("update normAttentionRow");
                     this.normAttention = this.normAttentionRow;
                     this.draw();
                 }
@@ -219,6 +219,8 @@ class attentionComponent extends baseComponent {
                             " ").length
                     ) {
                         console.log("new pair loaded, clear tree/att");
+                        if (this.svg)
+                            this.svg.selectAll("*").remove();
                         this.srcDepTreeData = undefined;
                         this.src_dep = undefined;
                         this.targDepTreeData = undefined;
