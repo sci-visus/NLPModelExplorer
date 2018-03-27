@@ -6,14 +6,14 @@ The target audiences of the proposed tool are domain experts who analyze and dev
 Natural Language Inference (NLI)~\cite{DaganRothSammons2013} is an important machine understanding task in NLP.
 The goal of NLI is to predict the relationship between a premise (\textbf{P}) sentence and a hypothesis (\textbf{H}) sentence. 
 The prediction fall in one of three categories: \emph{entailment} (\textbf{E}), \emph{contradiction} (\textbf{C}), \emph{neutral} (\textbf{N}).
-A simple example is shown in Table.~\ref{table:NLI}.
+A simple example is shown in Table~\ref{tab:NLI}.
 In this case, the premise is ``Jim ate an apple''. 
 The hypothesis statement ``Jim ate fruits.'' can be concluded from the premise. Therefore, the relationship between premise and hypothesis is \emph{entailment}. However, we should note that such a relationship is not necessarily reversible. Since the concept ``fruits'' is less restrictive than that of ``apple'', we can not conclude ``Jim ate an apple'' from the statement ``Jim ate fruits''. The same logic applies to the hypothesis of ``Jim ate a Fuji apple.'', in which the premise neither imply nor oppose the hypothesis, therefore, their relationship is \emph{neutral}.
 %\emph{Contradiction} means the textual of hypothesis opposes that of premise;
 %and \emph{Neutral} implies no conclusion can be made on either \emph{Entailment} or \emph{Contradiction}.
 
 \begin{table}[htbp]
-\label{table:NLI}
+\label{tab:NLI}
 \centering
 \caption{An illustration of natural language inference.}
  \begin{tabular}{c | c c c c} 
