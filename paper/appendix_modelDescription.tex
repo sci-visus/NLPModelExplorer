@@ -169,7 +169,7 @@ where $Z$ is another neural layer (e.g. two-layer ReLU followed by a linear laye
 
 %\taoli{Do we need citation in Appendix?}
 
-\textbf{Comment} We used the same network setting in the Decomposable Attention paper~\cite{parikh2016emnlp}. That are, network hidden size is $200$; input word embeddings are $200$ embeddings (downsampled from $300$ dimensional GloVe embeddings (cite) by a learnable linear layer); dropout (cite) is $0.2$ for learning; and learning rate is $0.05$.
+\textbf{Comment} We used the same network setting in the Decomposable Attention paper~\cite{parikh2016emnlp}. That are, network hidden size is $200$; input word embeddings are $200$ embeddings (downsampled from $300$ dimensional GloVe embeddings~\cite{PenningtonSocherManning2014} by a learnable linear layer); dropout~\cite{SrivastavaHinton2014} is $0.2$ for learning; and learning rate is $0.05$.
 
 \section{Appendix B: Code Example: Link Visualization with Model}
 \begin{lstlisting}[language=Python, caption=Code for generating the visualization.]
