@@ -8,8 +8,8 @@ Based class for attention visualization
 class attentionComponent extends baseComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["attention", "normAttention",
-            "currentPair", "highlight",
+        this.subscribeDatabyNames(["attention", "normAttentionCol",
+            "normAttentionRow", "currentPair", "highlight",
             "attentionDirection"
         ]);
 
@@ -52,7 +52,7 @@ class attentionComponent extends baseComponent {
                 .attr("width", this.pwidth)
                 .attr("height", this.pheight)
 
-            this.svg.selectAll("text,rect,path, defs").remove();
+            this.svg.selectAll("text,rect,path, #swapButton, defs").remove();
 
             this.svgSave.updatePos([this.width - 10, 10])
             this.svgSave.draw();
@@ -101,9 +101,10 @@ class attentionComponent extends baseComponent {
 
     attUpdate() {
         // console.log(this.normAttention);
-        this.setData("normAttention", this.normAttention);
+        this.setData("normAttentionCol", this.normAttentionCol);
+        this.setData("normAttentionRow", this.normAttentionRow);
         this.callFunc("attentionUpdate", {
-            "att_soft1": this.normAttention,
+            "att_soft1": this.normAttentionRow,
             "att_soft2": this.normAttentionCol
         });
     }
@@ -149,7 +150,7 @@ class attentionComponent extends baseComponent {
         super.parseDataUpdate(msg);
         switch (msg["name"]) {
             case "attention":
-                console.log(this.data["attention"]);
+                // console.log(this.data["attention"]);
                 //if attention is updated, redraw attention
                 // this.srcDepTreeData = undefined;
                 // this.targDepTreeData = undefined;
@@ -161,7 +162,7 @@ class attentionComponent extends baseComponent {
                 this.rawAttention = this.data["attention"];
                 this.attentionDirection = 'row';
                 this.normAttentionRow = this.convertRawAtt(this.rawAttention,
-                    this.attentionDirection);
+                    'row');
 
                 this.normAttentionCol = this.convertRawAtt(this.rawAttention,
                     'col');
@@ -188,9 +189,22 @@ class attentionComponent extends baseComponent {
 
                 break;
 
-            case "normAttention":
-                this.normAttention = this.data["normAttention"];
-                this.draw();
+            case "normAttentionCol":
+                this.normAttentionCol = this.data["normAttentionCol"];
+                if (this.attentionDirection === 'col') {
+                    console.log("update normAttentionCol");
+                    this.normAttention = this.normAttentionCol;
+                    this.draw();
+                }
+                break;
+
+            case "normAttentionRow":
+                this.normAttentionRow = this.data["normAttentionRow"];
+                if (this.attentionDirection === 'row') {
+                    console.log("update normAttentionRow");
+                    this.normAttention = this.normAttentionRow;
+                    this.draw();
+                }
                 break;
 
             case "currentPair":
@@ -350,7 +364,100 @@ class attentionComponent extends baseComponent {
         return mat;
     }
 
-    drawAttToggle(svg, pos) {
+    drawAttDataToggle(svg, pos, orientation = "vertical") {
+
+        // swap attention normalization button
+        if (this.svg.select("#swapButton").empty()) {
+            this.swapButton = this.svg.append("g").attr("id", "swapButton");
+            this.swapButton.append("rect")
+                .attr("rx", 3)
+                .attr("ry", 3)
+                .attr("x", pos[0])
+                .attr("y", pos[1])
+                .attr("width", d => {
+                    if (orientation === 'vertical') {
+                        return 20;
+                    } else {
+                        return 40;
+                    }
+                })
+                .attr("height", d => {
+                    if (orientation === 'vertical') {
+                        return 30;
+                    } else {
+                        return 20;
+                    }
+                })
+                .style("stroke", "lightgrey")
+                .style("fill", "white")
+                .on("click", d => {
+                    this.swapAttDirection();
+                })
+                .on("mouseover", function(d) {
+                    d3.select(this).style("fill", "lightgrey");
+                }).on("mouseout", function(d) {
+                    d3.select(this).style("fill", "white");
+                });
+            this.swapButton.append("text")
+                .attr("x", d => {
+                    if (orientation === 'vertical') {
+                        return pos[0] + 10;
+                    } else {
+                        return pos[0] + 5;
+                    }
+                })
+                .attr("y", d => {
+                    if (orientation === 'vertical') {
+                        return pos[1] + 1;
+                    } else {
+                        return pos[1] + 10;
+                    }
+                })
+                .text(d => {
+                    if (this.attentionDirection === "col")
+                        return "att2";
+                    else if (this.attentionDirection === "row")
+                        return "att1";
+                })
+                .style("text-anchor", "start")
+                .style("fill", "grey")
+                .style("writing-mode", d => {
+                    if (orientation === 'vertical') {
+                        return "vertical-rl";
+                    } else {
+                        return "hortizontal-rl";
+                    }
+                })
+                .style("alignment-baseline", "middle")
+                .style("pointer-events", "none");
+        } else {
+            console.log("update swap button!!");
+            this.svg.select("#swapButton")
+                .select("rect")
+                .attr("x", pos[0])
+                .attr("y", pos[1]);
+
+            this.svg.select("#swapButton")
+                .select("text")
+                .attr("x", d => {
+                    if (orientation === 'vertical') {
+                        return pos[0] + 10;
+                    } else {
+                        return pos[0] + 20;
+                    }
+                })
+                .attr("y", d => {
+                    if (orientation === 'vertical') {
+                        return pos[1] + 20;
+                    } else {
+                        return pos[1] + 10;
+                    }
+                });
+        }
+
+    }
+
+    drawAttDisplayToggle(svg, pos) {
         let label = ["C", "P", "D"]
         let toggle = svg.append("g");
         toggle.selectAll(".attToggle")

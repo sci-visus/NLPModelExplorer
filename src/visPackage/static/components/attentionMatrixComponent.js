@@ -65,7 +65,8 @@ class attentionMatrixComponent extends attentionComponent {
 
             this.computeWordPosition(this.srcWords, this.targWords);
 
-            this.drawAttToggle(this.svg, [2, 50]);
+            this.drawAttDisplayToggle(this.svg, [2, 50]);
+            this.drawAttDataToggle(this.svg, [15, 80], 'horizontal');
             this.drawDepTree();
 
             //matrix
@@ -248,13 +249,13 @@ class attentionMatrixComponent extends attentionComponent {
             .attr('rx', 5)
             .attr('ry', 5)
             .style('stroke', 'gray')
-	    .on('click', (d)=>{
-                    this.slider_bar_circle.remove();
-                    this.slider_bar_background.remove();
-                    this.slider_bar.remove();
-                    this.slider_bar_axis.remove();
-                    this.freeze_flag.flag = false;
-	    });
+            .on('click', (d) => {
+                this.slider_bar_circle.remove();
+                this.slider_bar_background.remove();
+                this.slider_bar.remove();
+                this.slider_bar_axis.remove();
+                this.freeze_flag.flag = false;
+            });
 
         this.slider_bar = this.svg.append('rect').datum(d)
             .attr('x', (d) => {

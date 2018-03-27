@@ -215,7 +215,7 @@ class pipelineComponent extends baseComponent {
         switch (msg["name"]) {
             case "pipeline":
                 let states = this.data["pipelineState"];
-                console.log(states);
+                // console.log(states);
                 this.draw();
                 break
         }
