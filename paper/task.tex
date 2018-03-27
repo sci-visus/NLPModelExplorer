@@ -20,18 +20,18 @@ Moreover, by introducing new visual encoding and summarization, we can drastical
 %Through many rounds of discussions with NLP experts,
 In such a highly exploratory process, the expert likely will have many ``what if'' type of questions (e.g., what if I make change to this word in the input, what if I force the words to align correctly in the attention), get responsive answers to these queries is essential to maintain the flow of reasoning.
 %
-Here, we solidify the analysis goals around the support for these type workflow and thought process of the experts.
+Here, we solidify the visualization tasks to facilitate the exploratory workflow and thought process of the domain experts.
 %
 \begin{itemize}
-\item Firstly, understanding how perturbation (e.g., replacing words) of the input affect the prediction is the curial part of error analysis. It not only measures the prediction sensitivity, but also help reveal the potential source of the errors in the input (\textbf{T1}).
+    \item Firstly, understanding how perturbation (e.g., replacing words with synonymous) of the input affect the prediction is the curial part of error analysis. It not only measures the prediction sensitivity, but also help reveal the potential source of the errors in the input (\textbf{T1}).
 
-%Understand how attention affect the prediction.
-\item Secondly, study the role and mechanism of attention by examine how variation in the input affect the attention, and how changes in attention affect prediction (\textbf{T2}).
-%Study the relationship between model stages (encoder, attention, classifier) and the prediction
-So far, we focus on how changes in earlier stage of the model affect later stages or final prediction.
+    %Understand how attention affect the prediction.
+    \item Secondly, study the role and mechanism of attention by examine how perturbation in the input sentence affect the attention, and how changes in attention affect prediction (\textbf{T2}).
+    %Study the relationship between model stages (encoder, attention, classifier) and the prediction
 
-\item However, what if the current prediction is wrong, how can we apply minimal update to the model to produce correct prediction and how would such a modification affect attention.
-Therefore, thirdly, we want to explore how model should be updated to produce the desirable change of prediction, and how the attention respond to such a change (\textbf{T3}).
+
+    \item So far, we focus on how changes in earlier stage of the model affect later stages or final prediction. However, what if the current prediction is wrong, how can we apply minimal update to the model to produce correct prediction and how would such a modification affect attention.
+    Therefore, thirdly, we want to explore how model should be updated to produce the desirable change of prediction, and how the attention respond to such a change (\textbf{T3}).
 \end{itemize}
 %
 % Based on the NLP analysis goals, we identify the visualization tasks to achieve these goals.

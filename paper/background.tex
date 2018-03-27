@@ -7,8 +7,8 @@ Natural Language Inference (NLI)~\cite{DaganRothSammons2013} is an important mac
 The goal of NLI is to predict the relationship between a premise (\textbf{P}) sentence and a hypothesis (\textbf{H}) sentence.
 The prediction falls in one of three categories: \emph{entailment} (\textbf{E}), \emph{contradiction} (\textbf{C}), \emph{neutral} (\textbf{N}).
 A simple example is shown in Table~\ref{tab:NLI}.
-In this case, the premise is ``Jim ate an apple''.
-The hypothesis statement ``Jim ate fruit.'' can be concluded from the premise. Therefore, the relationship between premise and hypothesis is \emph{entailment}. However, we should note that such a relationship is not necessarily reversible. Since the concept ``fruit'' is less restrictive than that of ``apple'', we can not conclude ``Boy ate an apple'' from the statement ``Kid ate fruit''. The same logic applies to the hypothesis of ``Jim ate a Fuji apple.'', in which the premise neither imply nor oppose the hypothesis, therefore, their relationship is \emph{neutral}.
+In this case, the premise is ``Boy ate an apple''.
+The hypothesis statement ``Kid ate fruits.'' can be concluded from the premise. Therefore, the relationship between premise and hypothesis is \emph{entailment}. However, we should note that such a relationship is not necessarily reversible. Since the concept ``fruit'' is less restrictive than that of ``apple'', we can not conclude ``Boy ate an apple'' from the statement ``Kid ate fruit''. The same logic applies to the hypothesis of ``Boy ate a Fuji apple.'', in which the premise neither imply nor oppose the hypothesis, therefore, their relationship is \emph{neutral}.
 %\emph{Contradiction} means the textual of hypothesis opposes that of premise;
 %and \emph{Neutral} implies no conclusion can be made on either \emph{Entailment} or \emph{Contradiction}.
 
