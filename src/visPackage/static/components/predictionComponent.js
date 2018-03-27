@@ -71,24 +71,41 @@ class predictionComponent extends baseComponent {
                 .style("alignment-baseline", "middle")
                 .style("pointer-events", "none")
                 .style("font-size", 10);
+            this.legend.append("rect")
+                .attr("class", "legend")
+                .attr("x", -3)
+                .attr("y", 30 - 3)
+                .attr("width", 6)
+                .attr("height", 6)
+                .attr("fill", "lightblue")
+                .style("stroke", "white");
+            this.legend.append("text")
+                .attr("x", 10)
+                .attr("y", 30)
+                .text("Optimized")
+                .style("alignment-baseline", "middle")
+                .style("pointer-events", "none")
+                .style("font-size", 10);
 
             //ground truth
             this.legend.append("rect")
                 .attr("rx", 3)
                 .attr("ry", 3)
                 .attr("x", -10)
-                .attr("y", 25)
+                .attr("y", 40)
                 .attr("width", 20)
                 .attr("height", 15)
                 .attr("stroke", "none")
                 .attr("fill", "lightgreen");
             this.legend.append("text")
                 .attr("x", 12)
-                .attr("y", 32.5)
+                .attr("y", 47)
                 .text("Ground Truth")
                 .style("alignment-baseline", "middle")
                 .style("pointer-events", "none")
                 .style("font-size", 10);
+
+            //prediction update
         }
 
         //entailment
@@ -265,7 +282,7 @@ class predictionComponent extends baseComponent {
             })
             .attr("width", 6)
             .attr("height", 6)
-            .style("fill", "#3F3F3F")
+            .style("fill", "lightblue")
             .style("stroke", "white")
             .style("opacity", 1.0)
             .on("click", (d, i) => {
