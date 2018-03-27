@@ -333,15 +333,19 @@ class attentionMatrixComponent extends attentionComponent {
         //TODO: this may be a bug if you try to renormalize the the matrix after collaspe
         this.normAttentionRow[row] = this.normalization(this.normAttentionRow[
             row]);
-        this.normalizeCol(this.normAttentionCol, col);
+        // this.normAttentionCol =
+        this.normalizeCol(this.normAttentionCol,
+            col);
+        // if (this.attentionDirection === 'row')
+        //     this.normAttention = this.normAttentionRow;
+        // else
+        //     this.normAttention = this.normAttentionCol;
 
         d3.selectAll(nodes).style('fill', (d, i) => {
             let r = Math.floor(i / this.normAttention[0].length);
             let c = i % this.normAttention[0].length;
 
-            if (r == row) {
-                d.value = this.normAttention[row][c];
-            }
+            d.value = this.normAttention[r][c];
             return this.colorbar.lookup(d.value);
         });
     }

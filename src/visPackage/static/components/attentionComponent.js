@@ -330,9 +330,11 @@ class attentionComponent extends baseComponent {
 
     //normalize col of the input matrix
     normalizeCol(mat, col) {
-        var sum = mat.map(d => d[col]).reduce((a, b) => a + b, 0);
+        var sum = mat.map(d => d[col]).reduce((a, b) => a + b, 0.0);
+        // console.log(sum);
         for (var i = 0; i < mat.length; i++)
             mat[i][col] = mat[i][col] / sum;
+        return mat;
     }
 
     toggleAttMode(mode) {
