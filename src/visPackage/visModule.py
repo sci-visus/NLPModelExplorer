@@ -147,6 +147,7 @@ class textEntailVisModule(visModule):
             statistics = json.load(json_data)
             # print "loadSummaryStatistic: ", type(statistics), type(statistics[0])
             dataManager.setData("evaluationStatistics", statistics)
+            return True
 
     # an sentence pair index (self.index) is used as handle for the correspondence
     # between attention, prediction, and the input
@@ -164,6 +165,7 @@ class textEntailVisModule(visModule):
         dataManager.setData("sentenceList", sentenceList)
         dataManager.setData("originalPair", [data[0]['src'], data[0]['targ']])
         dataManager.setData("currentPair", {"sentences":[data[0]['src'], data[0]['targ']],"label":data[0]['pred']})
+        return True
 
     # called when the user change the prediction, the attention need to be
     # recomputed by python model
@@ -215,6 +217,7 @@ class textEntailVisModule(visModule):
             #update other predictions
             self.predictAll()
             self.pipelineStatistic()
+            return True
 
         elif mode == "batch":
             self.batchRecords = []
@@ -235,6 +238,7 @@ class textEntailVisModule(visModule):
                             self.batchRecords.append( ([encoderFlag, attFlag, classFlag], att, pipelineData) )
 
             dataManager.setData("predictionBatchUpdate", self.batchPreds);
+            return True
 
     def updatePipelineStateFromIndex(self, index):
         pipeline = dataManager.getData("pipeline")
@@ -246,6 +250,7 @@ class textEntailVisModule(visModule):
 
         dataManager.setData("attention", att)
         dataManager.setData("pipeline", pipeline)
+        return True
 
     def predict(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
@@ -255,6 +260,7 @@ class textEntailVisModule(visModule):
         attentionMatrix = self.attentionHook("score1")
         # print attentionMatrix
         dataManager.setData("attention", attentionMatrix)
+        return True
 
     def attentionUpdate(self, att_soft1, att_soft2):
         sentencePair = dataManager.getData("currentPair")['sentences']
@@ -265,6 +271,7 @@ class textEntailVisModule(visModule):
 
         #update other predictions if available
         self.predictAll()
+        return True
 
     def attention(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
@@ -273,6 +280,7 @@ class textEntailVisModule(visModule):
         #use raw attention
         attentionMatrix = self.attentionHook("score1")
         dataManager.setData("attention", attentionMatrix)
+        return True
 
     def predictAll(self):
         allSourceSens = None
@@ -313,6 +321,7 @@ class textEntailVisModule(visModule):
         print "##### ratio:", 1.0-float(wrongPred)/float(allPred), wrongPred, allPred
         dataManager.setData("allPairsPrediction", allPairsPrediction)
         # dataManager.setData("allAttention", allAttention)
+        return True
 
     def perturbSentence(self, sentence):
         perturbed = self.sentencePerturbationHook(sentence)
@@ -320,6 +329,9 @@ class textEntailVisModule(visModule):
 
     def reloadModel(self):
         self.reloadModelCallback();
+        self.predict()
+        self.predictAll()
+        return True
 
     def pipelineStatistic(self):
         pipelineData = self.pipelineStatisticCallback()
@@ -329,3 +341,4 @@ class textEntailVisModule(visModule):
             pipeline[index]["hist"] = pipelineData[index]
 
         dataManager.setData("pipeline", pipeline)
+        return True

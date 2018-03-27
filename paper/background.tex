@@ -3,30 +3,30 @@ The target audiences of the proposed tool are domain experts who analyze and dev
 
 \subsection{Natural Language Inference}
 \label{sec:languageInference}
-Natural language inference (NLI)~\cite{DaganRothSammons2013} is an important machine understanding task in NLP.
-The goal of NLI is to predict the relationship between a premise (\textbf{P}) sentence and a hypothesis (\textbf{H}) sentence. 
-The prediction falls into one of three categories: \emph{entailment} (\textbf{E}), \emph{contradiction} (\textbf{C}), and \emph{neutral} (\textbf{N}).
-A simple example is shown in Table.~\ref{table:NLI}.
-In this case, the premise is ``Jim ate an apple''. 
-The hypothesis statement ``Jim ate fruits'' can be concluded from the premise. Therefore, the relationship between the premise and hypothesis is \emph{entailment}. However, we should note that such a relationship is not necessarily reversible. Since the concept ``fruits'' is less restrictive than that of ``apple'', we cannot conclude ``Jim ate an apple'' from the statement ``Jim ate fruits''. The same logic applies to the hypothesis ``Jim ate a Fuji apple'', in which the premise neither implies nor opposes the hypothesis, and therefore, their relationship is \emph{neutral}.
+Natural Language Inference (NLI)~\cite{DaganRothSammons2013} is an important machine understanding task in NLP.
+The goal of NLI is to predict the relationship between a premise (\textbf{P}) sentence and a hypothesis (\textbf{H}) sentence.
+The prediction falls in one of three categories: \emph{entailment} (\textbf{E}), \emph{contradiction} (\textbf{C}), and \emph{neutral} (\textbf{N}).
+A simple example is shown in Table~\ref{tab:NLI}.
+In this case, the premise is ``Boy ate an apple''.
+The hypothesis statement ``Kid ate fruits'' can be concluded from the premise. Therefore, the relationship between the premise and hypothesis is \emph{entailment}. However, we should note that such a relationship is not necessarily reversible. Since the concept ``fruit'' is less restrictive than that of ``apple'', we can not conclude ``Boy ate an apple'' from the statement ``Kid ate fruit''. The same logic applies to the hypothesis of ``Boy ate a Fuji apple.'', in which the premise neither imply nor oppose the hypothesis, therefore, their relationship is \emph{neutral}.
 %\emph{Contradiction} means the textual of hypothesis opposes that of premise;
 %and \emph{Neutral} implies no conclusion can be made on either \emph{Entailment} or \emph{Contradiction}.
 
 \begin{table}[htbp]
-\label{table:NLI}
+\label{tab:NLI}
 \centering
 \caption{An illustration of natural language inference.}
- \begin{tabular}{c | c c c c} 
+ \begin{tabular}{c | c c c c}
  \hline
-  P / H & sentences & entail & contradict & neutral \\ [0.5ex] 
+  P / H & sentences & entail & contradict & neutral \\ [0.5ex]
  \hline
- premise & Jim ate an apple. &  -  &  -  & - \\ 
- hypothesis & Jim ate fruits. & \checkmark &   &  \\
- hypothesis & Jim ate a banana. &  & \checkmark & \\
+ premise & Boy ate an apple. &  -  &  -  & - \\
+ hypothesis & Kid ate fruits. & \checkmark &   &  \\
+ hypothesis & Boy ate a banana. &  & \checkmark & \\
  hypothesis & Tom ate an apple. &  &  & \checkmark \\
- hypothesis & Jim ate a Fuji apple. &   &  & \checkmark \\
+ hypothesis & Boy ate a Fuji apple. &   &  & \checkmark \\
  %\hline
- %premise & Facebook's IPO electrified the general public. &  -  &  -  & - \\ 
+ %premise & Facebook's IPO electrified the general public. &  -  &  -  & - \\
  %hypothesis & Facebook went public. & \checkmark   &  &  \\
  %hypothesis & General Electric went public. &  &   & \checkmark \\
  %hypothesis & People ignored Facebook's IPO. &  & \checkmark & \\
@@ -34,9 +34,10 @@ The hypothesis statement ``Jim ate fruits'' can be concluded from the premise. T
 \end{tabular}
 \end{table}
 
-At first glance, the task of natural language inference may seem less practical compared to other well-known NLP challenges such as machine translation; however, the ability to distinguish entailment and contradiction relationship is fundamental to understanding natural language at large. 
+
+At the first glance, the task of natural language inference may seem less practical compared to other well-known NLP challenges such as machine translation; however, the ability to distinguish entailment and contradiction relationship is fundamental to understanding natural language at large.
 %
-Considering the ambiguousness of natural language and polysemy words, the inference task can become quite challenging (especially from the learning algorithm's point of view). Take the following sentences as an example (here \textbf{P} refers to premise, \textbf{H} refers to hypothesis):  (\textbf{P}) Facebook's IPO electrified the general public; (\textbf{H1}) Facebook went public; (\textbf{H2}) General Electric went public; (\textbf{H3}) People ignored Facebook's IPO. The literal similarity between ``Electric'' and ``electrified'' may trick the model to predict \textbf{H2} as \emph{entailment}. The model likely will also fail to understand the link between ``went public'' and ``IPO'', and therefore, mistake \textbf{H1} as \emph{neutral}.
+Considering the ambiguousness of natural language and polysemy words, the inference task can become quite challenging (especially from learning algorithm's point of view). Take the following sentences as an example (here \textbf{P} refers to premise, \textbf{H} refers to hypothesis):  (\textbf{P}) Facebook's IPO electrified the general public; (\textbf{H1}) Facebook went public; (\textbf{H2}) General Electric went public; (\textbf{H3}) People ignored Facebook's IPO. The literal similarity between ``Electric'' and ``electrified'' may trick a model to predict \textbf{H2} as \emph{entailment}. A model likely will also fail to understand the link between ``went public'' and ``IPO'', therefore, mistake \textbf{H1} as \emph{neutral}.
 %
 %The grand challenge in Natural Language Processing (NLP) is to have machine to acquire
 %deep comprehension of textual information. Major tasks include Natural Language Inference,
@@ -68,7 +69,8 @@ On the other hand, a majority of recent NLP neural networks share the nature of
 end-to-end model, where the entire model operates as a black-box that takes
 vectorized input and yields a final prediction for a specific task.
 %
-Many of the recent NLP end-to-end neural network models, despite having potentially drastically different network architectures, share a similar high-level design that consists of three distinct stages (encode, align, classify, see Fig.~\ref{fig:modelPipeline}). 
+
+Many of the recent NLP end-to-end neural network models, despite having potentially drastically different network architectures, share a similar high-level design that consists of three distinct stages (encode, align, classify, see Fig.~\ref{fig:modelPipeline}).
 %
 The existence of shared conceptual structures means the proposed tool, although designed for NLI task, can be generalized for a much broader set of applications.
 
@@ -87,13 +89,14 @@ Since all these three stages of the model are trained jointly in an end-to-end f
 
 \subsection{Attention Mechanism}
 \label{sec:attention}
-Among the three stages, the second stage often constitutes the most crucial part of the model as it determines where the classifier will focus for generating a prediction. The operation to compute the alignment between words in the input is referred to as the attention mechanism. 
+Among the three stages, the second stage often constitutes a crucial part of the model as it determines where the classifier will focus for generating a prediction. The operation to compute the alignment between words in the input is referred to as the attention mechanism. 
 The introduction of the attention mechanism~\cite{bahdanau2014neural} allows
-pairwise interaction between internal representations of words (\shusen{the original text is hidden states, isn't the pairwise interaction between the representation of words, are the hidden states refer to that?}). 
+pairwise interaction between internal representations of words. 
 This interaction can be naturally explained as a form of alignment that exposes an interpretable layer in end-to-end neural networks.
 %
 %As the only interpretable part of the internal state of the network, understanding how attention information 
 Recently, attention has contributed to many strongly performed NLP models
+
 ~\cite{parikh2016emnlp},~\cite{rush2015neural},~\cite{yang2016hierarchical},
 ~\cite{seo2016bidirectional},~\cite{schwartz2017high}.
 
@@ -101,11 +104,12 @@ Recently, attention has contributed to many strongly performed NLP models
 \centering
 \vspace{-2mm}
  \includegraphics[width=0.9\linewidth]{attentionIllustration}
- \caption{Attention can be naturally explained as a form of alignment that exposes an interpretable layer in end-to-end neural networks. On the left, the matrix shows the soft alignment between between the premise and hypothesis pair.}
+
+ \caption{Attention can be naturally explained as a form of alignment which exposes an interpretable layer in end-to-end neural networks. On the left, the matrix shows the attention between between premise and hypothesis pair. On the right, attention can also be interpreted as alignment.}
 \label{fig:attention}
 \end{figure}
 
-For the natural language inference task, as illustrated in Fig.~\ref{fig:attention}, the attention information can be represented as a matrix describing the soft alignment between words in the premise and the words in the hypothesis. As we can see in this example, the higher values indicate better alignments between words. The \emph{subject}, \emph{verb}, and \emph{object} between these two sentences are aligned correctly (words such as ``an'', which has less importance in determining the sentence relationship were assigned a lower score). Interestingly, the difference between the subject words does not affect their alignment. The classification stage can then utilize this information to determine if the subject of the sentence is different, and therefore, despite the other part of the sentences being identical, the relationship between the premise and hypothesis is neutral.
+For natural language inference task, as illustrated in Fig.~\ref{fig:attention}, the attention information can be represented as a matrix describing the soft alignment between words in the premise and the words in the hypothesis. As we can see in this example, the higher values indicate significant alignments between words. The \emph{subject}, \emph{verb}, and \emph{object} between these two sentences are aligned correctly (words, such as ``an'', which has less importance in determine sentence relationship was assigned a lower score). Interestingly, the difference between the subject words does not affect their alignment. The classification stage can then utilize this information to determine the subject of the sentence are different, therefore, despite the other part of the sentences are identical, the relationship between the premise and the hypothesis is neutral.
 
 % \begin{itemize}
 %     \item what is the textaul entailment problem

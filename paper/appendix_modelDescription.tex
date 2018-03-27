@@ -52,6 +52,7 @@
 \usepackage{cite}                      % needed to automatically sort the references
 \usepackage{tabu}                      % only used for the table example
 \usepackage{booktabs}                  % only used for the table example
+\usepackage{amsmath,bm}
 %% We encourage the use of mathptmx for consistent usage of times font
 %% throughout the proceedings. However, if you encounter conflicts
 %% with other math-related packages, you may want to disable it.
@@ -61,6 +62,8 @@
 
 \usepackage[pdftex,dvipsnames]{xcolor}  % Coloured text etc.
 \usepackage{listings}
+
+\newcommand{\taoli}[1]{\textcolor{orange}{[#1]}}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -121,6 +124,53 @@ Supplementary Materials
 \firstsection{Appendix A: Detailed description of the Model}
 \maketitle
 
+The Decomposable Attention model is an end-to-end model that takes vectorized premise sentence and hypothesis sentence, and output a probability distribution over three labels. The pipeline can be separated into three phases: encoder, attention and classifier. Here we briefly formalize these three layers.
+
+\subsection{Encoder}
+Denote the premise sentence as $\overline{\boldsymbol{P}} = (\overline{\boldsymbol{p}}_1, \overline{\boldsymbol{p}}_2, ..., \overline{\boldsymbol{p}}_m)$ and hypothesis sentence as $\overline{\boldsymbol{H}} = (\overline{\boldsymbol{h}}_1, \overline{\boldsymbol{h}}_2, ..., \overline{\boldsymbol{h}}_n)$ where $\overline{\boldsymbol{p}}_i$ and $\overline{\boldsymbol{h}}_j$ are the input embedding vectors respectively. The purpose of encoder is to generate specialized encodings that will participate in the following steps of the model. Define the encoder function as
+\begin{align}
+  \boldsymbol{P} &= F(\overline{\boldsymbol{P}})\\
+  \boldsymbol{H} &= F(\overline{\boldsymbol{H}})
+\end{align}
+
+where $F$ function is the encoder layer (e.g. a context-free two-layer ReLU). Let $\boldsymbol{P}$ denote the output premise encoding of size $m \times d$, and $\boldsymbol{H}$ the hypothesis encoding of size $n \times d$ where $d$ is the encoding size.
+
+\subsection{Attention} \label{sec:att}
+The job of attention layer is to capture pairwise interaction between encodings of premise and hypothesis. First we compute a similarity score matrix $\boldsymbol{S}$ ($m \times n$) by the following
+\begin{align}
+  S_{ij} &= \boldsymbol{p}_i ^T \boldsymbol{h}_j
+\end{align}
+
+Then attention weights are obtained by normalizing $\boldsymbol{S}$ bidirectionally. We will use $\leftarrow$ and $\rightarrow$ to differentiate the notation. That is, for premise token $\boldsymbol{p}_i$, a probability distribution over all $\boldsymbol{h}_j$`s are done as
+\begin{align}
+  \overleftarrow{\boldsymbol{a}}_i &= \frac{exp(S_{ij})}{\sum_{j \in h} exp(S_{ij})}
+\end{align}
+
+where $\overleftarrow{\boldsymbol{a}}_i$ is of dimension $1 \times n$ naturally. Similarly, for every $\boldsymbol{h}_j$, there is a probability distribution over all premise tokens.
+\begin{align}
+  \overrightarrow{\boldsymbol{a}}_j &= \frac{exp(S_{ij})}{\sum_{i \in p} exp(S_{ij})} \label{eq:aright}
+\end{align}
+
+where $\overrightarrow{\boldsymbol{a}}_j$ is a $1 \times m$ dimension. In case a token is not correlated with any other tokens, the model added an extra artificial token to both premise and hypothesis to allow a word aligning with null.
+
+\subsection{Classifier} \label{sec:cls}
+Classifier takes features from previous steps and predict a probability distribution over three labels. First, it aggregates features following the bidirectional attentions as
+\begin{align}
+  \boldsymbol{u}_i &= G([\overleftarrow{\boldsymbol{a}}_i \cdot \boldsymbol{H} \hspace{1ex} | \hspace{1ex}  \overline{\boldsymbol{p}}_i]) \\
+  \boldsymbol{v}_j &= G([\overrightarrow{\boldsymbol{a}}_j \cdot \boldsymbol{P} \hspace{1ex}  | \hspace{1ex}  \overline{\boldsymbol{h}}_j])
+\end{align}
+
+where G is the aggregation layer (e.g. two-layer ReLU) and $[\cdot|\cdot]$ denotes concatenation. Notice this aggregation layer jointly considers embeddings, encodings and attentions. With the aggregated premise feature $\boldsymbol{u}_i$ and hypothesis feature $\boldsymbol{v}_j$, the classifier does further feature conjunction to predict weight on each entailment score:
+\begin{align}
+  \boldsymbol{y} &= Z([\sum_i \boldsymbol{u}_i | \sum_j \boldsymbol{v}_j]) \label{eq:yscore}
+\end{align}
+
+where $Z$ is another neural layer (e.g. two-layer ReLU followed by a linear layer). For training, the scores $\boldsymbol{y}$ are connected to multi-class cross entropy loss function. For inference, the predicted label is $\arg\max_i y_i$.
+
+%\taoli{Do we need citation in Appendix?}
+
+\textbf{Comment} We used the same network setting in the Decomposable Attention paper~\cite{parikh2016emnlp}. That are, network hidden size is $200$; input word embeddings are $200$ embeddings (downsampled from $300$ dimensional GloVe embeddings~\cite{PenningtonSocherManning2014} by a learnable linear layer); dropout~\cite{SrivastavaHinton2014} is $0.2$ for learning; and learning rate is $0.05$.
+
 \section{Appendix B: Code Example: Link Visualization with Model}
 \begin{lstlisting}[language=Python, caption=Code for generating the visualization.]
 from visPackage import *
@@ -167,5 +217,10 @@ vis.setSentenceParserHook(dep.getDependencyTree)
 modelVis.show()
 
 \end{lstlisting}
+\bibliographystyle{abbrv-doi}
+%\bibliographystyle{abbrv-doi-narrow}
+%\bibliographystyle{abbrv-doi-hyperref}
+%\bibliographystyle{abbrv-doi-hyperref-narrow}
 
+\bibliography{entailVis.bib}
 \end{document}

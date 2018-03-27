@@ -1,29 +1,43 @@
-\begin{figure*}[t]
+\begin{figure*}[htbp]
 \centering
 \vspace{-2mm}
 \includegraphics[width=1.0\linewidth]{attentionView}
 \vspace{-6mm}
 \caption{
-Attention visualization. In the graph attention view (a), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. In the matrix attention view (b), the $i^{th}$ row corresponds to the probability of words in hypotheses align to the $i^{th}$ word in the premise.
-The user can alter the attention values via the pop up interface illustrated in (c).
+Attention visualization. In the graph attention view (a), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. In the matrix attention view (b), the entries of $i^{th}$ row represent the probabilities of words in hypotheses align to the $i^{th}$ word in the premise.
+The user can alter the attention values via the pop-up interface illustrated in (c).
+We overlay the dependency tree ($a_1$) grammar structure to highlight important words and simplify complex sentence to reduce clutter (d-e).
+In (f), we show the difference between two attention matrix (the comparison feature is controlled by the buttons in the top left of all attention plots ($a_2$) ).
 }
 \label{fig:attentionVis}
 \end{figure*}
 
 \subsection{Attention View}
 \label{sec:attention}
-\shusen{How to fit dependency into the task, what is the motivation}
-As discussed in Section~\ref{sec:attention}, the attention is the only intermediate layer in the network that provide interpretable information for domain expert to infer the inner mechanisms of the model.
+As discussed in Section~\ref{sec:attention}, the attention is the only intermediate layer in the network that provides interpretable information for domain experts to infer the inner mechanisms of the model.
 %
-Intuitively, the attention captures the alignment of words between input sentences. In the NLI model examined in this work, the attention is represented as a matrix, in which the $i^{th}$ row corresponds to the probability of words in hypotheses align to the $i^{th}$ word in the premise.
-% The
+Intuitively, the attention captures the alignment of words between input sentences. For the NLI model examined in this work, the attention is represented as a matrix, in which the entries in the $i^{th}$ row corresponds to the probabilities of words in the hypotheses align to the $i^{th}$ word in the premise.
 
-As illustrated in Fig.~\ref{fig:attentionVis}, we employ too visual encoding for attention. In the graph attention view (a), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. Such a view is good for highlight the most dominate alignments. However, if many attention values are high, the edges may become cluttered lead to less effective visualization. In addition, if the sentence structure different between premise and hypothesis is drastically different, we are likely to see the prominent edges cross each other, which can also lead to confusing visual patterns. The matrix attention view (b), despite being more verbose and less efficient in highlighting the dominate alignment, do not have similar shortcomings. Together them complement each other and provide the same information from different perspective. As illustrated by the pink arrow line, we can see how the same attention value is visualization in both the grpah and the matrix view.
-To help the user recongnize the correspondence during the exploration, we enable the linkage between highlight actions in both view.
+As illustrated in Fig.~\ref{fig:attentionVis}, we employ two visual encodings for visualizing attention. In the graph attention view (Fig.~\ref{fig:attentionVis}(a)), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. The color of rectangle text block encodes the sum of all edge values connect to it (darker shade of blues correspond to higher values).
+%
+The graph view is good for highlighting the most dominate alignments. However, if many attention values are high, the edges may become cluttered lead to less effective visualization. Also, if the sentence structures between premise and hypothesis are drastically different, we are likely to see the prominent edges cross each other, which can also lead to confusing and misleading visual patterns.
 
-To full address the \emph{T2}, we also include the attention editing functionality. The attention matrix view is the most suitable place conduct the edit, since it provide a direction mapping of attention value.
-As we can see in Fig.~\ref{fig:attentionVis}(c), when the cell of the matrix is clicked, a sider will pop up to allow user customize the attention value (as the user edit the value, each row will be automatically normalized).
-%allow the user to view all the values clearly.
+The matrix attention view (Fig.~\ref{fig:attentionVis}(b)), despite being more verbose and less efficient in highlighting the dominant alignment, do not have similar shortcomings. Together, they complement each other and provide the same information from different perspectives. As illustrated by the pink arrow line, we can see how the same attention value is visualization in both the graph and the matrix view.
+To help the user recognize the correspondence during the exploration, we enable the linkage between highlight actions in both views.
+
+To support the ability to perturb the attention values (\textbf{T2}), we include the attention editing functionality. The attention matrix view is the most suitable place to conduct the edit operation since it provides a direct mapping of attention value.
+As we can see in Fig.~\ref{fig:attentionVis}(c), when a user clicks the cell of the matrix, a sider will pop up for customizing the attention value (as the user edit the value, each row is automatically normalized).
+%
+As illustrated in Fig.~\ref{fig:attentionVis}($a_{2}$)(f), we allow the user to compare currently and previously displayed attentions by computing and visualizing their difference.
+
+
+Even though the attention does not explicitly encode any grammar, they often highlight essential words in the sentence structure.
+%
+To help the researcher better understand the relationship between attention and sentence structure, as illustrated in Fig.~\ref{fig:attentionVis}($a_{1}$), we overlay the grammar dependency tree~\cite{Nivre2005} structure next to the sentence.
+%
+Since the dependency tree encodes the word importance information in a hierarchical matter, it is very suitable for sentence simplification task.
+Therefore, we utilize the grammar dependency tree to simplify the attention representations to combat the visual clutter when examining long sentences (see Fig.~\ref{fig:attentionVis}(d)).
+A simplfication example is show in  Fig.~\ref{fig:attentionVis}(d)(e)(f).
 
 
 %\subsubsection{Attention visualization challenges}

@@ -1,28 +1,34 @@
 
 \section{Related Works}
 With the increasing demands for model accountability (e.g., what is the evidence for making the prediction) and model fairness (e.g., is the prediction affected by the bias in the training data),
-the interpretability of the machine learning model held significant implications. As a result, a wealth of research have be focused on the explanation and interpretation of deep neural network models from both machine learning as well as visualization community.
+the interpretability of the machine learning model held significant implications. As a result, a wealth of research has been developed that focused on the explanation and interpretation of neural network models from both machine learning and visualization community.
 
 \textbf{Model Interpretability.}
-Before one can solve the model interpretability challenge, it worth to define what constitute an explanation or interpretation of a machine learning model.
-As discussed in ~\cite{Lipton2016, Doshi-Velez2017}, the concept of interpretable is inherently subjective, since the recipients of the explanation are always human.
-% And the discussion of interpretability quickly become philosophical.
-However, despite the underspecification nature of the problem, we can still refine the concept and provide certain guideline~\cite{Doshi-Velez2017}.
-%
+Before one can solve the model interpretability challenge, it worth to define what constitutes an explanation or interpretation of a machine learning model.
+As discussed in ~\cite{Lipton2016, Doshi-Velez2017}, despite the concept of interpretable is inherently subjective, it is still necessary to refine the concept and devise guidelines for approaching model interpretability problems.
 %And as suggested in~\cite{Doshi-Velez2017}
-One of the most studied areas in model interpretability is the explanation of a given prediction.
-Many works have been dedicated to providing intuitive explanations for a given prediction, several~\cite{RibeiroSinghGuestrin2016, KrausePererNg2016} of which approach the problem from a model agnostic perspective that made them applicable to different applications (i.e., by fitting a simpler linear model near the prediction of interests).
+In machine learning community, one of the most studied areas in model interpretability is the interpretation of convolution neural network (CNN) ~\cite{SimonyanVedaldiZisserman2013, ZeilerFergus2014, YosinskiCluneNguyen2015, OlahMordvintsevSchubert2017, OlahSatyanarayanJohnson2018}.
 %
-Despite being invaluable for the providing human understandable explanation, the lack of the ability to access and explore the internal states of the model, which is vitally important to make sense of why a model fail, limits their ability for more in depth exploration and evaluation of the model.
+These methods either identify the pattern that maximally activate a part of the network (referred to as \emph{feature visualization}, i.e., what feature does the given neuron, channel, or layer captures), or reveal what areas in the input contribute most to the predicted label (often referred to as \emph{attribution}, i.e., attribute the prediction label in the input domain).
+%
+Besides the techniques designed for specific types of models, a few works~\cite{RibeiroSinghGuestrin2016, LundbergLee2017} approach the interpretability challenge from a model agnostic perspective, which make them applicable to different applications. In the LIME~\cite{RibeiroSinghGuestrin2016} work, a simpler linear model is fitted near the prediction of interests to provide a simpler but easier to understanding snapshot of the classifier near a specific input.
+%
+Despite being invaluable for generating a human understandable explanation, however, the lack of the ability to access and explore the internal states of the system limits their application. 
+%which is vitally important for making sense of the inner works of a model, 
+To avoid similar limitation, the proposed system enabled direct access and manipulation of the internal of the model.
 
 \textbf{Visual Exploration of Neural Network Models.}
-Due to the effectiveness for exploring complex relationships, visualization have long been adopted for interpreting neural network models~\cite{TzengMa2005}.
-Recently, the increasingly apparent interpretability challenge for deep neural network model motivate the introduction of many visualization works that dedicated to the neural network models.
+Due to the effectiveness of exploring complex relationships, visualization has long been adopted for interpreting neural network model~\cite{TzengMa2005}.
+Recently, the increasing demand for interpretability for deep neural network model motivate the introduction of many visualization works that dedicated to the neural network models.
 % The classification~\cite{KrausePererNg2016}
-In the work~\cite{BilalJourablooYe2018} by Bilal et al., the authors analyzing classification errors in convolutional neural networks and answer the question on whether class hierarchy is learn in the network.
-Liu et al.~\cite{LiuShiCao2018} explore the possibility of understanding the training process of deep generative models.
-The ActiVis~\cite{KahngAndrewsKalro2018} focus on large scale network in real world setting.
-The DeepEyes~\cite{Pezzotti2018} focuses on the analyzing the training process, so they can provide design guideline to the deep neutral network architect.
+The Prospector~\cite{KrausePererNg2016} provided a model agnostic approach for analyzing and interpreting predictions via an interactive visual interface.
+%
+In the work~\cite{BilalJourablooYe2018} by Bilal et al., the authors analyzed classification errors in convolutional neural networks (CNN) and answered the question on whether class hierarchy is learned in the network.
+%
+The DeepEyes~\cite{Pezzotti2018} focused on the analyzing the training process of CNN so that they can provide design guideline to the deep neutral network architect.
+%
+The ActiVis~\cite{KahngAndrewsKalro2018} introduced an interactive system tailored for tuning industry-scale neural network in Facebook.
+Finally, Liu et al.~\cite{LiuShiCao2018} presented a visualization tool for understanding the often challenging training process of deep generative models.
 
 % \begin{itemize}
 %     \item ActiVis: Visual Exploration of Industry-Scale Deep Neural Network Models
@@ -35,9 +41,15 @@ The DeepEyes~\cite{Pezzotti2018} focuses on the analyzing the training process, 
 % \end{itemize}
 
 \textbf{NLP Models Visualization.}
-Compare to the multitude of research for making sense of convolutional neural networks, relatively less works has been dedicated to neural linguistic models.
+Compare to the multitude of research for making sense of convolutional neural networks, relatively fewer works have been dedicated to neural language processing models.
 %
-However, the previous works~\cite{KarpathyJohnson2015, LiChenHovy2015, StrobeltGehrmannPfister2018, LiuBremerJayaraman2018} not only demonstrated the benefit of visualization in understanding NLP models, but also revealed enoumous possibility for future applications.
-% There is many unresolve challenge and the
-The early work on charactor level recurrent network~\cite{KarpathyJohnson2015} demonstrates effectness of the hidden state in capturing the unique pattern in training text. The compositionality exibited in neural linguistic model (i.e., build sentence from meaing of words and phrases) are examined in the work by Li et al. ~\cite{LiChenHovy2015}, by utilizing methods inspired by similar work in computer vision.
-The LSTMvis~\cite{StrobeltGehrmannPfister2018} work utilized a line plot style visual encoding to visualize the time varying hidden states of recurrent neutral network. The word embedding visualization work~\cite{LiuBremerJayaraman2018} illustrate how semantic relationship can be recovered by linear projections in the high-dimensional word embedding space produced by word2vec~\cite{MikolovSutskeverChen2013} or Glove~\cite{PenningtonSocherManning2014}.
+The previous works~\cite{KarpathyJohnson2015, LiChenHovy2015, StrobeltGehrmannPfister2018, LiuBremerJayaraman2018} not only demonstrated the benefit of visualization in understanding NLP models but also revealed enormous possibility for future applications.
+% There is many unresolved challenges and the
+The early work on character level recurrent network~\cite{KarpathyJohnson2015} demonstrates the effectiveness of the hidden state in capturing the unique pattern in the training text. The compositionality (i.e., build the meaning of a sentence from the meaning of words and phrases) exhibited in neural network linguistic models are examined by utilizing techniques inspired by model interpretability techniques in computer vision by Li et al. ~\cite{LiChenHovy2015}, 
+In the RNNVis~\cite{MingCaoZhang2017} work, the Ming et al. visualize the hidden state units in a recurrent neural network based on their expected responses to model input.
+The RNNbow~\cite{CashmanPattersonMosca2017} system help domain experts understand how the model is trained by visualizing the backpropagation gradient information.
+The LSTMvis~\cite{StrobeltGehrmannPfister2018} work employs a line plot style visual encoding to represent the time varying hidden states of the recurrent neural network. The word embedding visualization work~\cite{LiuBremerJayaraman2018} illustrates how semantic relationship can be recovered by linear projections in the high-dimensional word embedding space (e.g., word2vec~\cite{MikolovSutskeverChen2013} or Glove~\cite{PenningtonSocherManning2014}).
+%As discussed in the introduction, the experts guided exploration calls for the ability to interact with internal of the model in a dynamic setting. 
+
+All of the previously discussed works either focus on the training process or examine the trained model as a fixed object. In contrast, the proposed method allows direct user interaction with the internals of the trained model in a dynamic environment, which enables unrestrictive exploratory analysis that is not possible before.
+%In addition, instead of exploring a language model or low-level, the proposed method focus on a specific NLP task, which provide insight on 
