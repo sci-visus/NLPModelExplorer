@@ -245,6 +245,7 @@ class modelInterface:
         self.opt.zero_out_encoder = 0 if encoderFlag else 1
         self.opt.zero_out_attention = 0 if attFlag else 1
         self.opt.zero_out_classifier = 0 if classFlag else 1
+        print self.opt
         # print "zero out setting:", self.opt.zero_out_encoder, self.opt.zero_out_attention, self.opt.zero_out_classifier
 
         self.opt.learning_rate = learningRate
@@ -279,8 +280,8 @@ class modelInterface:
             # 	here, it's gonna be updated w using sgd
             print self.opt
             # just one pass sgd
-            self.pipeline = perturb_params(self.opt, self.shared, self.pipeline)
-            # self.pipeline, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
+            # self.pipeline = perturb_params(self.opt, self.shared, self.pipeline)
+            self.pipeline, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
             for i in xrange(interation):
                 # print('epoch {0}'.format(i))
                 m, y = mirafit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex, w_start)

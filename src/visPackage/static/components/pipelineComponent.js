@@ -51,6 +51,9 @@ class pipelineComponent extends baseComponent {
             //draw legend
             this.legend = this.svgContainer.append("g").attr("id", "legend");
 
+            this.drawConfigurationOption();
+            this.drawResetBotton();
+
             this.svg = this.svgContainer
                 .append("g")
                 .attr("transform", "translate(" + this.margin.left + "," +
@@ -238,9 +241,8 @@ class pipelineComponent extends baseComponent {
         // console.log("draw pipeline");
         if (this.data["pipeline"] !== undefined) {
             this.initSvg();
-            this.drawConfigurationOption();
             this.drawLegend();
-            this.drawResetBotton();
+
             this.items = [];
             var pipelineData = this.data["pipeline"];
             console.log(pipelineData);
@@ -337,6 +339,4 @@ class pipelineComponent extends baseComponent {
             .style("text-anchor", "end")
             .style("alignment-baseline", "middle");
     }
-
-
 }
