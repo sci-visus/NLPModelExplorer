@@ -2,29 +2,37 @@
 \label{sec:caseStudy}
 % \shusen{A full case study that driven by the visualization task and the question associated with them}
 %In this section, we discuss application scenarios, in which the domain experts utilize the 
-To better illustrate how the proposed perturbation-driven exploration tool helps the domain experts interpret the neural network model, we present five application scenarios gathered by the domain experts who integrated the proposed tool into their model analysis workflow.
+To better illustrate how the proposed perturbation-driven exploration tool helps researchers interpret the neural network model, we present five application scenarios gathered by the domain experts who integrated the proposed tool into their model analysis workflow.
+%Here 
 
 \begin{figure}[htbp]
 \centering
 \vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{predictStability}
  \caption{
-Prediction stability assessment. Isolate unstable one
- }
+Prediction stability assessment. In (a)(b)(c), we estimate the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (100k examples). The user can drill down to individual examples by filtering via the histogram and scatterplot (see Fig.~\ref{fig:summaryView}) for a case by case exploration, as illustrated in (d)(e). For highly unstable outliers, we often observe the prediction of the original sentences near the decision boundary (e.g., the yellow circle in (f) corresponds to a entailment prediction that is very close to neural), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence).
+%
+}
 \label{fig:predictStability}
 \end{figure}
 
 \subsection{Scenario 1: Assess the Model Prediction Stability}
-Utilize input sentence perturbation to assess the overall stability of the prediction
+The robustness of the prediction is often the information the researchers wish they know, yet hard measure easily.
+Utilize the automated system input sentence perturbation to assess the overall stability of the prediction.
+As illustrated in Fig.~\ref{fig:predictStability}, we estimate the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (100k examples). The user can drill down to individual examples by filtering via the histogram and scatterplot (see Fig.~\ref{fig:summaryView}) for a case by case exploration, as illustrated in (d)(e). For highly unstable outliers, we often observe the prediction of the original sentences near the decision boundary (e.g., the yellow circle in (f) corresponds to a entailment prediction that is very close to neural), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence
 
 
-\subsection{Scenario 1: Examine the Decision Making Process}
+\subsection{Scenario 2: Examine the Decision Making Process}
 \begin{itemize}
-\item if the prediction look for attention alignment
+\item What alignment the prediction looks for attention alignment
 \item 
 \end{itemize}
 
-Understand how the model arrive at the prediction is the first step  only essential for evaluating the model performance but also necessary for hypothesizing improvement strategies.
+%Hypothesizing
+Interpreting how the model arrive at a prediction is one of the most important goal for the expert driven exploratory analysis.
+%
+
+ first step  only essential for evaluating the model performance but also necessary for hypothesizing improvement strategies.
 %
 The three stages (encoder, attention, classifier) of the model work in synergy to produce the correct prediction.
 

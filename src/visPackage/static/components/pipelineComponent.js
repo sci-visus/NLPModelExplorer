@@ -229,11 +229,6 @@ class pipelineComponent extends baseComponent {
         pipeline[index]["state"] = state;
         // console.log("updatePipeline: ", index, state, pipeline);
         this.setData("pipeline", pipeline);
-        // if (this.items) {
-        //     for (var i = 0; this.items.length; i++) {
-        //         this.items[i].setState(states[i] === 0 ? false : true);
-        //     }
-        // }
     }
 
     draw() {
