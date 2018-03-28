@@ -94,6 +94,11 @@ def get_weight_offset(m, w_start):
 	return offset
 
 
+def perturb_params(opt, shared, m):
+	for name, p in m.named_parameters():
+		p.data += torch.randn(p.data.shape) * 0.01
+	return m
+
 # runs multiple passes of learning until fit to the right prediction
 def mirafit_to_ex(opt, shared, wv, optim, m, ex, w_start):
 	print "########## mirafit_to_ex ############"
@@ -153,6 +158,7 @@ def mirafit_to_ex(opt, shared, wv, optim, m, ex, w_start):
 	y_dist = m.forward(word_vecs1, word_vecs2)
 	# return the updated model, and y prediction (probabilities)
 	return m, y_dist.data.exp()
+
 
 # This function will run one epoch of training given a batch of examples
 # 	updates will be made to model m
@@ -279,7 +285,10 @@ def main(args):
 	# get a initial w'
 	# 	here, it's gonna be updated w using sgd
 	# just one pass sgd
-	pipeline, y = overfit_to_ex(opt, shared, embeddings, optim, pipeline, ex)
+	#pipeline, y = overfit_to_ex(opt, shared, embeddings, optim, pipeline, ex)
+
+	# instead initialize w' with sgd update, make a small perturbation
+	pipeline = perturb_params(opt, shared, pipeline)
 
 	# then perform mira fit
 	# just one pass sgd, run multiple if need to overfit
