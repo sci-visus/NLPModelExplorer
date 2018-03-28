@@ -96,7 +96,7 @@ def get_weight_offset(m, w_start):
 
 def perturb_params(opt, shared, m):
 	for name, p in m.named_parameters():
-		p.data += torch.randn(p.data.shape) * 0.01
+		p.data += torch.randn(p.data.shape) * 0.00001
 	return m
 
 # runs multiple passes of learning until fit to the right prediction
