@@ -76,20 +76,25 @@ The prediction is failed due to incorrect alignment. For all the failed case,
 %One of the essential task for can be made in either of these stages.
 % \shusen{difference in sensitivity among entail natural and contradict relationships}
 % the generate the correct prediction for the wrong reason
-
-Another
 Does the model arrived at the correct prediction for the wrong reason?
 
-\subsection{Scenario 2: What Does It Take to Correct a Wrong Prediction?}
+\subsection{Scenario 3: What Does It Take to Correct a Wrong Prediction?}
 In the previous section, we discussed how we can use forward prediction
 
 
-
-\subsection{Scenario 4: Handcraft Example Analysis}
-Well-known tough examples, such as the Facebook IPO example discussed in Section~\ref{sec:background}.
-
-\subsection{Scenario 5: Explore Relationship Between Grammar and Attention}
+\subsection{Scenario 4: Explore Relationship Between Grammar and Attention}
 Can attention capture grammar structure? Is 
+
+\subsection{Scenario 5: Handcraft Example Analysis}
+To test the limitation of the model, domain experts often handcraft ``extreme'' examples (as such the Facebook IPO example discussed in Section~\ref{sec:background}) that they know most model will have a difficult time making correct inference. 
+%
+%The exploration is just started once the prediction result is examined, 
+Often the researchers have a set of "what if..." experiments they would like to run. And dependent on the experiment out come, they like will have new questions to ask and try out the different variations or combinations.
+%
+In some way, we can think of such a process as a nature blend of all previously discussed scenario, where the domain experts do not necessarily have specific goal in mind, instead focus on probing around and see if they can find anything interesting and out-of-ordinary behaviors in the model.
+%
+Having an environment, in which the experts can freely modify the words or attention then observe the corresponding changes in other parts of the model pipeline, ensures an streamlined exploration experience that free the users from interruption and grunt work, allow them to focus on more productive activity. 
+
 %\subsection{Is the Prediction Stable?}
 %\subsection{Where Are the Mistakes?}
 %\subsection{How Attention Affect the Prediction?}
