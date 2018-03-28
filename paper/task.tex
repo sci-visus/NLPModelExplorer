@@ -1,23 +1,29 @@
 \section{Task Analysis}
 \label{sec:task}
 Identify the analysis goals and the corresponding visualization tasks is the first yet significant step in designing a useful tool. In this section, we examine how domain experts normally approach the task of analyzing a model (i.e., assess its strength and weakness) and identify where and how an interactive visualization system can aid in such a process.
-Then, we reify the multitude discussion with domain experts into concrete tasks, which guide the design and implementation of the proposed tool.
+Then, we distill the numerous discussions with domain experts into concrete tasks, which guide the design and implementation of the proposed tool.
 
 During our long-term collaboration with NLP experts, we have conducted extensive discussion to understand the common approach employed by researcher for assessing the behavior of a model.%
 The prediction accuracy has its place as an objective evaluation metric to measure the overall effectiveness of the model, however, the accuracy number alone does not provide the full story.
 For example, the model may produce correct predictions for the ``wrong'' reasons (e.g., pickup unintended pattern in the training data that can not be generalized in real word scenarios).
 %
-As a result, the domain experts also rely on exploration centric approach to conduct error analysis and obtain intuition.
+As a result, the domain experts rely on an exploration centric approach to conduct error analysis and obtain intuition.
 
 There is little one can learn when everything is behaving as expect, therefore,
-observing how model make mistakes under various scenarios is at the center of such a process.
-The experts often start with simple failure examples, and then make minor perturbations (replace a word or phrase) to the input and observe the change in the prediction. This exercise help isolate where in the input is likely contributed to the failures. For many NLP models, the attention information (see Section~\ref{sec:attention}) is essential to infer the mechanism of the model. The expert often print out the attention values or generate plots to visualize sentence alignment or compare attention values. As the experts explore more variation of similar examples, combined with their domain knowledge, he / she may develop hypotheses about the cause of failures, or ask additional questions, which lead to further experimentation.
+observing how models make mistakes under various scenarios is at the center of such a process.
+The experts often start with simple failure examples, and then make minor perturbations (replace a word or phrase) to the input and observe the change in the prediction. This exercise helps isolate where in the input is likely contributing to the failures. For many NLP models, the attention information (see Section~\ref{sec:attention}) is essential to infer the mechanism of the model. Experts often print out the attention values or generate plots to visualize sentence alignment or compare attention values. As the experts explore more variation of similar examples, combined with their domain knowledge, he / she may develop hypotheses about the cause of failures, or ask additional questions, which lead to further experimentation.
 
 In such an exploration workflow, NLP researchers often need to utilize multiple scripts and manually run all the experiments. The batch process based approach, is not only time consuming, but also hinders the flow of reasoning which rely on obtaining instantaneous feedbacks, and making many on-the-fly adjustments.
 %
-Therefore, the expert driven exploration process can greatly benefit from the introduction of an interactive visual exploration environment, where the researchers can easily express their experiment ideas and obtain quick visual feedback of the results.
+Therefore, the expert driven exploration process can greatly benefit from the introduction of an interactive visual exploration environment, where the researchers can easily express their hypotheses and obtain quick visual feedback of the results.
 %
-Moreover, by introducing new visual encoding and summarization, we can drastically expand the ways domain experts interact with the model, enable exploration options that is not possible before either due to tedious manual operation or lack of communication channels.
+Moreover, by introducing new visual encodings and summarizations, we can drastically expand the ways domain experts interact with the model, enable exploration options that previously were not possible either due to tedious manual operation or the lack of communication channels.
+
+%Through many rounds of discussions with NLP experts,
+%In such a highly exploratory process, the expert likely will have many ``what if'' type of questions (e.g., what if I make change to this word in the input, what if I force the words to align correctly in the attention), get responsive answers to these queries is essential to maintain the flow of reasoning.
+%
+To support the visual exploratory workflow, we have summarized the following visualization tasks.
+>>>>>>> More small changes
 %
 To support the visual exploratory workflow, we need to address the following visualization tasks.
 
