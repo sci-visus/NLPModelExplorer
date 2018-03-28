@@ -271,7 +271,7 @@ class textEntailVisModule(visModule):
         dataManager.setData("prediction", pred)
 
         #update other predictions if available
-        self.predictAll()
+        # self.predictAll()
         return True
 
     def attention(self):

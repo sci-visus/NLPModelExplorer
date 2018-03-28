@@ -11,20 +11,40 @@ To better illustrate how the proposed perturbation-driven exploration tool helps
  \caption{
 Prediction stability assessment. Isolate unstable one
  }
-\label{fig:pipelineView}
+\label{fig:predictStability}
 \end{figure}
 
 \subsection{Scenario 1: Assess the Model Prediction Stability}
 Utilize input sentence perturbation to assess the overall stability of the prediction
 
-\subsection{Scenario 1: Interpreting Decision Making Process}
+
+\subsection{Scenario 1: Examine the Decision Making Process}
+\begin{itemize}
+\item if the prediction look for attention alignment
+\item 
+\end{itemize}
+
 Understand how the model arrive at the prediction is the first step  only essential for evaluating the model performance but also necessary for hypothesizing improvement strategies.
 %
 The three stages (encoder, attention, classifier) of the model work in synergy to produce the correct prediction.
-%
+
+\begin{figure*}[t]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=0.9\linewidth]{failledEncoding}
+ \caption{
+The prediction is failed due to incorrect alignment. For all the failed case, 
+ }
+\label{fig:failedEncoding}
+\end{figure*}
+
+
 %One of the essential task for can be made in either of these stages.
 % \shusen{difference in sensitivity among entail natural and contradict relationships}
 % the generate the correct prediction for the wrong reason
+
+Another
+Does the model arrived at the correct prediction for the wrong reason?
 
 \subsection{Scenario 2: What Does It Take to Correct a Wrong Prediction?}
 In the previous section, we discussed how we can use forward prediction
