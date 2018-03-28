@@ -13,6 +13,8 @@ class sentenceGenerator:
                 toks = l.split()
                 self.train_tokens[toks[0]] = 1
 
+        ### perturb one sentence to preload the nltk ####
+        self.perturbSentence("Who am I.")
         # print "angele:", "angele" in self.train_tokens.keys()
         # print "token count:", len(self.train_tokens.keys())
 

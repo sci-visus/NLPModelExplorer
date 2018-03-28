@@ -279,7 +279,8 @@ class modelInterface:
             # 	here, it's gonna be updated w using sgd
             print self.opt
             # just one pass sgd
-            self.pipeline, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
+            self.pipeline = perturb_params(self.opt, self.shared, self.pipeline)
+            # self.pipeline, y = overfit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex)
             for i in xrange(interation):
                 # print('epoch {0}'.format(i))
                 m, y = mirafit_to_ex(self.opt, self.shared, self.embeddings, self.optim, self.pipeline, ex, w_start)
