@@ -258,7 +258,6 @@ class predictionComponent extends baseComponent {
 
     onUpdateOptimizedBatchPrediction(preds) {
         // console.log(preds);
-
         //draw batch prediction
         this.updatePredictDisplay();
         this.svg.selectAll(".predSquare").remove();

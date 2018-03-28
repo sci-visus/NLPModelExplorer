@@ -18,25 +18,36 @@ In such an exploration workflow, NLP researchers often need to utilize multiple 
 Therefore, the expert driven exploration process can greatly benefit from the introduction of an interactive visual exploration environment, where the researchers can easily express their experiment ideas and obtain quick visual feedback of the results.
 %
 Moreover, by introducing new visual encoding and summarization, we can drastically expand the ways domain experts interact with the model, enable exploration options that is not possible before either due to tedious manual operation or lack of communication channels.
+%
+To support the visual exploratory workflow, we need to address the following visualization tasks.
 
+\begin{itemize}
+
+\item To begin with, understanding how perturbation (e.g., replacing words with synonymous) of the input affect the prediction is the curial part of error analysis. It not only measures the prediction sensitivity, but also help reveal the potential source of the errors in the input (\textbf{T1}).
+
+%Understand how attention affect the prediction.
+\item In addition, study the role and mechanism of attention by examine how perturbation in the input sentence affect the attention, and how changes in attention affect prediction (\textbf{T2}).
+%Study the relationship between model stages (encoder, attention, classifier) and the prediction
+
+\item So far, we focus on how changes in earlier stage of the model affect later stages or final prediction. However, what if the current prediction is wrong, how can we apply minimal update to the model to produce correct prediction. and how would such a modification affect attention (\textbf{T3}).
+% Therefore, thirdly, we want to explore how model should be updated to produce the desirable change of prediction, and how the attention respond to such a change (\textbf{T3}).
+
+\end{itemize}
 %Through many rounds of discussions with NLP experts,
 %In such a highly exploratory process, the expert likely will have many ``what if'' type of questions (e.g., what if I make change to this word in the input, what if I force the words to align correctly in the attention), get responsive answers to these queries is essential to maintain the flow of reasoning.
+
+%To support the analysis goal and visual exploratory workflow, we have summarized the following visualization tasks.
+
+% \begin{itemize}
+% \item To start with, we need to construct the visual language for communicating the model information to the user, which mean designing visual encoding for key model information, such as attention, the prediction results, as well as input sentences (T1). %but also the user interface to convey various perturbation operation (T2);
 %
-To support the visual exploratory workflow, we have summarized the following visualization tasks.
+% \item  In addition, convey the user intend to the underlying computation is the other part of the puzzle.
+% The user should be able to easily express operations such as perturb input sentences, update attention values, as well as re-assign prediction.
+% % the   the role and mechanism of attention by examine how perturbation in the input sentence affect the attention, and how changes in attention affect prediction (\textbf{T2}).
 %
-\begin{itemize}
-    \item Firstly, we need to design visual representation for the key information the domain experts are interested in, e.g., input sentences, the attention information, prediction results, the overall model pipeline (T1).
-    \item Secondly understanding how perturbation (e.g., replacing words with synonymous) of the input affect the prediction is the curial part of error analysis. It not only measures the prediction sensitivity, but also help reveal the potential source of the errors in the input
-     (\textbf{T1}).
-
-    %Understand how attention affect the prediction.
-    \item Secondly, the user should be able to easily express the perturbation of input sentences, the   the role and mechanism of attention by examine how perturbation in the input sentence affect the attention, and how changes in attention affect prediction (\textbf{T2}).
-    %Study the relationship between model stages (encoder, attention, classifier) and the prediction
-
-
-    \item So far, we have focused on how changes in earlier stage of the model affect later stages or the final prediction. However, what if the current prediction is wrong, where and how can we apply update to the model to produce correct prediction and how the attention respond to such a change (\textbf{T3}).
-    %Therefore, thirdly, we want to explore how model should be updated to produce the desirable change of prediction, and how the attention respond to such a change (\textbf{T3}).
-\end{itemize}
+% \item Finally, to identify the where and how the model change to  update  res we have focused on how changes in earlier stage of the model affect later stages or the final prediction. However, what if the current prediction is wrong, where and how can we apply update to the model to produce correct prediction and how the attention respond to such a change (\textbf{T3}).
+%
+% \end{itemize}
 %
 % Based on the NLP analysis goals, we identify the visualization tasks to achieve these goals.
 

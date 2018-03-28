@@ -4,6 +4,8 @@ import hashlib
 class dependencyTree:
     def __init__(self):
         self.cache = {}
+        ## init the modules
+        # self.getDependencyTree("Who am I .")
 
     def hashSentence(self, sentence):
         # print "sentence:", sentence
@@ -13,7 +15,6 @@ class dependencyTree:
 
     def getDependencyTree(self, sentence):
         # return {}
-        
         hashKey = self.hashSentence(sentence)
         if hashKey in self.cache.keys():
             # print "found:", sentence
@@ -24,7 +25,6 @@ class dependencyTree:
             dependency_parser = StanfordDependencyParser(path_to_jar=path_to_jar, path_to_models_jar=path_to_models_jar)
 
             g = dependency_parser.raw_parse(sentence).next()
-
 
             dep_json = []
 
@@ -39,10 +39,10 @@ class dependencyTree:
                                 dep_json.append([node['address']-1, key, v-1])
 
             self.cache[hashKey] = dep_json
-            
+
             #print '#####################', dep_json
-            
+
             #print self.cache
-            
+
             return dep_json
         #return list(g.triples())
