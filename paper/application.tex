@@ -2,30 +2,56 @@
 \label{sec:caseStudy}
 % \shusen{A full case study that driven by the visualization task and the question associated with them}
 %In this section, we discuss application scenarios, in which the domain experts utilize the 
-To better illustrate how the proposed perturbation-driven exploration tool helps researchers interpret the neural network model, we present five application scenarios gathered by the domain experts who integrated the proposed tool into their model analysis workflow.
-%Here 
+To better illustrate how the proposed perturbation-driven exploration tool helps researchers interpret the neural network model, we present five application scenarios gathered by the domain experts who integrated the proposed tool into their analysis workflow.
 
 \begin{figure}[htbp]
 \centering
-\vspace{-2mm}
+%\vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{predictStability}
  \caption{
-Prediction stability assessment. In (a)(b)(c), we estimate the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (100k examples). The user can drill down to individual examples by filtering via the histogram and scatterplot (see Fig.~\ref{fig:summaryView}) for a case by case exploration, as illustrated in (d)(e). For highly unstable outliers, we often observe the prediction of the original sentences near the decision boundary (e.g., the yellow circle in (f) corresponds to a entailment prediction that is very close to neural), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence).
+Prediction stability assessment. In (a)(b)(c), we estimate the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (10k examples). The user can drill down to individual examples by filtering via the histogram and scatterplot (see Fig.~\ref{fig:summaryView}) for a case by case exploration, as illustrated in (d)(e). For highly unstable outliers, we often observe the prediction of the original sentences near the decision boundary (e.g., the yellow circle in (f) corresponds to a entailment prediction that is very close to neural), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence).
 %
 }
 \label{fig:predictStability}
 \end{figure}
 
 \subsection{Scenario 1: Assess the Model Prediction Stability}
-The robustness of the prediction is often the information the researchers wish they know, yet hard measure easily.
-Utilize the automated system input sentence perturbation to assess the overall stability of the prediction.
-As illustrated in Fig.~\ref{fig:predictStability}, we estimate the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (100k examples). The user can drill down to individual examples by filtering via the histogram and scatterplot (see Fig.~\ref{fig:summaryView}) for a case by case exploration, as illustrated in (d)(e). For highly unstable outliers, we often observe the prediction of the original sentences near the decision boundary (e.g., the yellow circle in (f) corresponds to a entailment prediction that is very close to neural), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence
+The robustness of the prediction is often hard to evaluate, however, they provide valuable information for the researchers to evaluate the model.
+%
+In the proposed work, we approach the prediction robustness from sensitivity analysis point of view. The stability of the prediction is measured by how often the predicted labels are altered after small perturbations are applied to the input. 
+%
+Compare to other types of input (e.g., image), perturbation of the natural language can be particular tricky, as small alteration of words can drastically change the meaning of the sentence. As discussed in Section~\ref{sec:sentence}, we try to maintain semantic of the sentence by only replace words with their synonymous and only replace one word for each pair.
+%
+As illustrated in Fig.~\ref{fig:predictStability}, by utilizing the automated input perturbation and visual interface in the proposed tool, the domain expert can not only examine visual summary of the stability, but also quickly dive into individual examples for case by case analysis.%which system input sentence perturbation to assess the overall stability of the prediction. 
 
+By viewing the distribution of the stability in the histogram (Fig.~\ref{fig:predictStability}(a)(b)(c)), we estimate the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (10k examples).
+%
+We can observe a drastic difference between the stability for entailment predictions compare to the contradiction and neutral ones.
+%
+Such a distinction can be partially explained by how entailment relationship is defined. As discussed in the Section~\ref{sec:background}, the relationship is only valid if the concept in premise is more specific than the concept in hypothesis (therefore, you can infer the hypothesis from the premise, but not other way around). This means, we may change the entailment relationships simply by replacing nouns and verb by synonymous, whereas, the same does not apply for neutral and contradiction.
+%
+By exploring the inherent sensitivity difference among the three types of relationship, the researcher may consider designing dedicate model mechanism to address the such a disparity.
+
+Beside making overall assess, the proposed tool also allow user to narrow down to individual examples by filtering via the histogram and scatterplot (see Fig.~\ref{fig:summaryView}) for a detailed exploration, as illustrated in Fig.~ref{fig:predictStability}(d)(e). 
+%
+Through exploring multiple samples (in the entailment category, E/E in Fig.~\ref{fig:summaryView}(a)), the domain experts noticed many highly unstable outliers are from sentence pairs where the prediction is near the decision boundary (e.g., the yellow circle corresponds to a \emph{entailment} prediction that is very close to \emph{neutral}), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence. We will try to understand the what is happened inside the model in the following section (see Fig.~\ref{fig:att2pred}).
 
 \subsection{Scenario 2: Examine the Decision Making Process}
+
+\begin{figure}[htbp]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=1.0\linewidth]{att2pred}
+ \caption{
+How attention affect prediction.).
+%
+}
+\label{fig:att2pred}
+\end{figure}
+
 \begin{itemize}
-\item What alignment the prediction looks for attention alignment
-\item 
+\item A very young child in a red plaid coat and pink winter hat makes a snowball in a large pile of snow .
+\item A child in a red plaid coat and pink winter hat makes a snowball in a large heap of snow .
 \end{itemize}
 
 %Hypothesizing
