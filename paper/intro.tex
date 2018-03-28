@@ -3,31 +3,47 @@
 
 % (What is the high level motivation)
 % What is the obstacle for effectively apply machine learning model
-With the recent advances in neural network model, machine learning has gained unprecedented popularity, and its adaption has permeated many fields of studies.
+Based on some stunning recent advances, machine learning and neural networks base deep learning approaches in particular have gained unprecedented popularity, and have been adopted in a wide variety of scientific applications.
 %
-However, from researchers to practitioners, one often need to overcome many obstacles during the training, debugging, and tuning processes to unleash the full potential of these models.
+However, researchers as well as practitioners often need to overcome many obstacles during the training, debugging, and tuning processes to realize the full potential of these models.
 %
-Interpreting the internal mechanism and analyzing how predictions are made are critical to both the design and deployment of a model.
-More importantly, the ability to pinpoint where and how an error is made and come up with hypotheses for the cause of the error is the key to identifying the limitation and improving upon existing models.
-However, providing meaningful answers to these questions is incredibly challenging and often regarded as impossible by many.
+Interpreting the internal mechanism and analyzing how predictions are made is critical to both the design and deployment of a model.
+More importantly, the ability to pinpoint where and how an error is made and propose hypotheses for the cause of the error is key to identifying the limitations of and improving upon existing models.
+However, providing meaningful answers to these questions is challenging and has been described as impossible by many.
 
-Recently, sizable research has been developed to combat the model interpretability challenges. Most notably, the works~\cite{SimonyanVedaldiZisserman2013, ZeilerFergus2014, YosinskiCluneNguyen2015, OlahMordvintsevSchubert2017, LiuShiLi2017, OlahSatyanarayanJohnson2018, BilalJourablooYe2018} on interpreting the convolution neural network (CNN) model from both the machine learning and visualization communities have revealed the enormous potential and immediate benefits of model interpretation. At the same time, these works also remind us how little we truly understand about the inner mechanism of these deep neural networks.
+Recently, significant research has been developed to combat the model interpretability challenges.
+Both the machine learning as well as the visualization community have proposed a number of promising techniques aimed at interpreting convolution neural networks (CNN)~\cite{SimonyanVedaldiZisserman2013, ZeilerFergus2014, YosinskiCluneNguyen2015, OlahMordvintsevSchubert2017, LiuShiLi2017, OlahSatyanarayanJohnson2018, BilalJourablooYe2018}. 
+At the same time, these approaches also remind us how little we truly understand about the inner mechanism of such deep neural networks.
 
-Compared to image classification task, natural language processing (NLP) systems have innate restrictions (e.g., the discrete nature of words) that make the road to interpretation more treacherous. For example, \emph{feature visualization}~\cite{OlahMordvintsevSchubert2017}, an often deployed technique for illustrating what image features a given part of the network (e.g., neuron, layer, or channel) captures, cannot be readily generalized to natural language. An image (pixel values) represents a continuous solution space, in which human can quickly recognize the existence (or the absence) of patterns or shapes. For natural language, even though we can encode a word as a vector~\cite{MikolovSutskeverChen2013, PenningtonSocherManning2014}, the word embedding space is still discretely defined, in which the interpolation of two vectors (i.e., two words) does not hold clear meaning.
+Compared to image classification tasks, natural language processing (NLP) systems have innate restrictions (e.g., the discrete nature of words) that make the road to interpretation even more challenging.
+For example, \emph{feature visualization}~\cite{OlahMordvintsevSchubert2017}, an often deployed technique for illustrating what image features a given part of the network (e.g., neuron, layer, or channel) captures, cannot be readily generalized to natural language. 
+An image (pixel values) represents a continuous solution space, in which human can quickly recognize the existence (or the absence) of patterns or shapes. 
+For natural language, even though we can encode a word as a vector~\cite{MikolovSutskeverChen2013, PenningtonSocherManning2014}, the word embedding space is still discretely defined, in which the interpolation of two vectors (i.e., two words) does not hold clear meaning.
 %
 These restrictions call for new avenues for solving the interpretation challenges of natural language models, which motivates the proposed work.
 
 % Beside explore the internal states of the model, understand how different parts of the model work together and how one may affect one another is as or if not more important.
-Moreover, despite many recent advances, the majority of the existing techniques study the model as an invariant object, where the model's behaviors are recorded and analyzed in an offline fashion.
+Despite a number of recent advances, the majority of existing techniques study the model as an invariant object, where the model's behaviors are recorded and analyzed in an offline fashion.
 %
-However, the exploratory nature of the model interpretation analysis often leads to many \emph{``what if ...''} type of questions. Such as, what if we perturbed the current input? Will the prediction be stable? What if we change one of the critical internal states of the model? How would the modification affect the prediction? What if the current prediction is wrong? How and where could we apply minimal change to the model to produce the correct result? And how would it affect the internal state we care about? These types of queries form a natural way to gain understanding and come up with hypotheses of the model mechanisms by \emph{interrogating} how the components of a model interact with each other in a dynamic setting. Hypothetically, we can code specialized experiments for each of these scenarios. However, such a process is not only tedious but also ignores the iterative nature of the exploratory analysis. Often, these questions are not pre-determined. Instead, new exploration paths arise as we investigate and analyze previous observations.
+However, the exploratory nature of the model interpretation often leads to many \emph{``what if ...''} type of questions. 
+Such as, what if we perturbed the current input?
+Will the prediction be stable?
+What if we change one of the critical internal states of the model? 
+How would the modification affect the prediction? 
+What if the current prediction is wrong? 
+How and where could we apply minimal change to the model to produce the correct result? And how would it affect the internal state we care about? These types of queries form a natural way to gain understanding and develop hypotheses of the model mechanisms by \emph{interrogating} how the components of a model interact with each other in a dynamic setting.
+Hypothetically, we can code specialized experiments for each of these scenarios.
+However, such a process is not only tedious but also ignores the iterative nature of the exploratory analysis. Often, these questions are not pre-determined.
+Instead, new exploration paths arise as we investigate and analyze previous observations.
 
-In this work, we aim to provide immediate and informative answers to these \emph{``what if''} questions by combining the expressive power of visualization and direct online query/optimization of the neural network model. Instead of viewing the models as invariant objects, we approach the interpretability challenge by studying them in a dynamic environment. By employing a perturbation-driven paradigm, we probe the internal states of the model and examine how changes in one part of the pipeline (the input, internal states, and output prediction, see Fig.~\ref{fig:modelPipeline}) affect others, which in turn provides a new perspective to address the model interpretation problem.
+Here, we aim to provide immediate and informative answers to these \emph{``what if''} questions by combining the expressive power of visualization and direct online query/optimization of the neural network model. Instead of viewing the models as invariant objects, we approach the interpretability challenge by studying them in a dynamic environment. By employing a perturbation-driven paradigm, we probe the internal states of the model and examine how changes in one part of the pipeline (the input, internal states, and output prediction, see Fig.~\ref{fig:modelPipeline}) affect others, which in turn provides a new perspective to address the model interpretation problem.
 
 We implement our vision of the perturbation-driven exploration in an interactive visualization system for natural language inference models~\cite{Parikh2016}.
-However, the components of the visualization and the overall paradigm can be readily extended to other NLP tasks, such as question and answer, and text summarization, etc.
+However, the components of the visualization and the overall paradigm can be readily extended to other NLP tasks, such as question and answer, text summarization, etc.
 %
-In the simplest form, the inference task asks the question about whether we can infer the content of \textbf{sentence B} from \textbf{sentence A} (\emph{entail}), or if they are contradict with each other (\emph{contradiction}), or whether two sentences talk about different/unrelated things (\emph{neutral}). Language inference addresses the fundamental challenge of measuring the semantic similarity of sentences, and is one the core NLP tasks (see detail in Section~\ref{sec:languageInference}).
+In the simplest form, the inference task asks the question about whether \textbf{sentence A} and \textbf{sentence B}: (1) are \emph{entailed} (one can infer \textbf{B} from \textbf{A}; (2) \emph{contradict} (\textbf{B} disagrees with \textbf{A}) or (3) are \emph{neutral} (\textbf{A} and \textbf{B} talk about different/unrelated thins
+% we can infer the content of \textbf{sentence B} from \textbf{sentence A} (\emph{entail}), if they contradict with each other (\emph{contradiction}), or whether two sentences talk about different/unrelated things (\emph{neutral}). 
+Language inference addresses the fundamental challenge of measuring the semantic similarity of sentences, and is one the core NLP tasks (see Section~\ref{sec:languageInference} for details).
 
 One recent advance in neural natural language process models is the introduction of \emph{attention mechanisms}~\cite{VaswaniShazeerParmar2017} (Section~\ref{sec:attention}). Intuitively, the attention helps capture which part of the input the model is deemed more important for making a prediction. The attention is often represented as weights for individual words or pairs of words (i.e., the alignment between words in different sentences).
 %
@@ -36,23 +52,23 @@ There have been many speculations on how attention works in various models. By u
 %we can perturb the attention and observer the change in the prediction, perturb the sentence input and observe the effects on the attention. And more importantly, we also allow the user to change prediction, where we apply a constrained optimization to find the least amount of parameter update to produce the user assign label. 
 %Another word, 
 %Such type of exploration is not only essential to interpret the language inference problem, but can also be generalized to other NLP model utilized the attention mechanisms.
-Moreover, we enhanced the standard visual encoding (e.g., as a bipartite graph or as a matrix) of the attention matrix by overlaying sentence linguistic structure to allow grammar-guided simplification of the visual representation.
+Moreover, we propose to enhance the standard visual encoding (e.g., as a bipartite graph or as a matrix) of the attention matrix by overlaying sentence linguistic structure to allow grammar-guided simplification of the visual representation.
 %
 Finally, as discussed in Section~\ref{sec:caseStudy}, the ability to examine how attention corresponds to the grammatical structure also enables domain experts to speculate about the potential benefits of including the linguistic structure in the design of the attention component of the model.
 
 In summary, the key contributions of the proposed works are the following:
 \begin{itemize}
   % \item Distill the visualization tasks for making sense of the role of attention in natural language inference (section~\ref{sec:task});
-    \item Distill the perturbation-driven exploration paradigm from close examination of how domain experts conduct exploratory analysis on end-to-end NLP neural network models;
+    \item A perturbation-driven exploration paradigm derived from close examination of how domain experts conduct exploratory analysis on end-to-end NLP neural network models;
     
-    \item Present the NLIZE system that enriches such a paradigm by providing an intuitive environment where the domain experts can readily express experiment ideas and obtain instantaneous feedbacks; 
+    \item The NLIZE system that enriches such a paradigm by providing an intuitive environment that allows domain experts to readily express hypotheses and obtain instantaneous feedbacks; 
     %to  experiment with the intricate relationships among input sentences, model internals, and the prediction;
     %\item Perform error analysis by examining the stability of the predictions under perturbation;
 
-    \item Introduce an optimization scheme for correcting a failed prediction based on the natural extension of the margin-infused relaxed algorithm (MIRA) to the neural network.
+    \item An optimization scheme for correcting a failed prediction based on the natural extension of the margin-infused relaxed algorithm (MIRA) to the neural network; and
     % to minimally update the model to fix a failed prediction, which help reason about the  better understand the re the question about how t
     
-    \item Enhance the visual encoding of the attention by overlaying sentence linguistic structure to allow grammar-guided sentence simplification.
+    \item A visual encoding of the attention by imposing sentence linguistic structure to allow grammar-guided sentence simplification.
 \end{itemize}
 %
 % In addition,
@@ -79,3 +95,8 @@ In summary, the key contributions of the proposed works are the following:
 % Interpret/probe the relationship between attention and the prediction result
 
 % On the one hand, recognize where the model fail is non-trivial. The standard evaluation approach (i.e., the prediction accuracy on the test set) provides limited information and cannot answer many important questions (e.g., how stable the prediction is, which part of the model may contribute to the failure) that are essential to the model diagnostic process. On the other hand, infer the cause of model failure is even more challenging. Neural network models are often referred to as black boxes due to the hard to recognize  difficult to interpret parameter, hypothesizing what happened in prediction process require the ability to peek inside the model and understand the intricate relationships among model inputs, critical internal mechanisms, as well the output predictions.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "paper_entailVis"
+%%% End:
