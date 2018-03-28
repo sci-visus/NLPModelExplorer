@@ -4,12 +4,12 @@ With the increasing demands for model accountability (e.g., what is the evidence
 the interpretability of the machine learning model held significant implications. As a result, a wealth of research has been developed that focused on the explanation and interpretation of neural network models from both machine learning and visualization community.
 
 \textbf{Model Interpretability.}
-Before one can solve the model interpretability challenge, it worth to define what constitutes an explanation or interpretation of a machine learning model.
-As discussed in ~\cite{Lipton2016, Doshi-Velez2017}, despite the concept of interpretable is inherently subjective, it is still necessary to refine the concept and devise guidelines for approaching model interpretability problems.
-%And as suggested in~\cite{Doshi-Velez2017}
+Before one can solve the model interpretability challenge, it worth to understand what constitutes an explanation for a machine learning model.
+As discussion in~\cite{Lipton2016, Doshi-Velez2017}, there is little consensus on what interpretability is in the context of machine learning. A taxonomy is suggested~\cite{Doshi-Velez2017} to promote a more rigorous study on such a subject. In the work by Lipton~\cite{Lipton2016}, many philosophical questions related to model interpretability are examined and the study also challenged the commonly held belief that linear models are more interpretable than deep neural networks.
+%
 In machine learning community, one of the most studied areas in model interpretability is the interpretation of convolution neural network (CNN) ~\cite{SimonyanVedaldiZisserman2013, ZeilerFergus2014, YosinskiCluneNguyen2015, OlahMordvintsevSchubert2017, OlahSatyanarayanJohnson2018}.
 %
-These methods either identify the pattern that maximally activate a part of the network (referred to as \emph{feature visualization}, i.e., what feature does the given neuron, channel, or layer captures), or reveal what areas in the input contribute most to the predicted label (often referred to as \emph{attribution}, i.e., attribute the prediction label in the input domain).
+These methods either identify the pattern that maximally activate a part of the network (referred to as \emph{feature visualization}, i.e., what feature does the given neuron, channel, or layer captures), or reveal what areas in the input that contribute most to the predicted label (often referred to as \emph{attribution}, i.e., attribute the prediction label in the input domain).
 %
 Besides the techniques designed for specific types of models, a few works~\cite{RibeiroSinghGuestrin2016, LundbergLee2017} approach the interpretability challenge from a model agnostic perspective, which make them applicable to different applications. In the LIME~\cite{RibeiroSinghGuestrin2016} work, a simpler linear model is fitted near the prediction of interests to provide a simpler but easier to understanding snapshot of the classifier near a specific input.
 %
