@@ -9,7 +9,7 @@ To better illustrate how the proposed perturbation-driven exploration tool helps
 %\vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{predictStability}
  \caption{
-Prediction stability assessment. In (a)(b)(c), we estimate the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (10k examples). The user can drill down to individual examples by filtering via the histogram and scatterplot (see Fig.~\ref{fig:summaryView}) for a case by case exploration, as illustrated in (d)(e). For highly unstable outliers, we often observe the prediction of the original sentences near the decision boundary (e.g., the yellow circle in (f) corresponds to a entailment prediction that is very close to neural), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence).
+Prediction stability assessment. In (a)(b)(c), we estimate the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (10k examples). The user can drill down to individual examples by filtering via the histogram and scatterplot (see Fig.~\ref{fig:summaryView}) for a case by case exploration, as illustrated in (d)(e). For highly unstable outliers, we often observe the prediction of the original sentences near the decision boundary (e.g., the yellow circle in (f) corresponds to a entailment prediction that is very close to neural), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``pile'' is replace by ``heap'' in the hypothesis sentence).
 %
 }
 \label{fig:predictStability}
@@ -28,7 +28,7 @@ By viewing the distribution of the stability in the histogram (Fig.~\ref{fig:pre
 %
 We can observe a drastic difference between the stability for entailment predictions compare to the contradiction and neutral ones.
 %
-Such a distinction can be partially explained by how entailment relationship is defined. As discussed in the Section~\ref{sec:background}, the relationship is only valid if the concept in premise is more specific than the concept in hypothesis (therefore, you can infer the hypothesis from the premise, but not other way around). This means, we may change the entailment relationships simply by replacing nouns and verb by synonymous, whereas, the same does not apply for neutral and contradiction.
+Such a distinction can be partially explained by how entailment relationship is defined. As discussed in the Section~\ref{sec:languageInference}, the relationship is only valid if the concept in premise is more specific than the concept in hypothesis (therefore, you can infer the hypothesis from the premise, but not other way around). This means, we may change the entailment relationships simply by replacing nouns and verb by synonymous, whereas, the same does not apply for neutral and contradiction.
 %
 By exploring the inherent sensitivity difference among the three types of relationship, the researcher may consider designing dedicate model mechanism to address the such a disparity.
 
@@ -36,6 +36,8 @@ Beside making overall assess, the proposed tool also allow user to narrow down t
 %
 Through exploring multiple samples (in the entailment category, E/E in Fig.~\ref{fig:summaryView}(a)), the domain experts noticed many highly unstable outliers are from sentence pairs where the prediction is near the decision boundary (e.g., the yellow circle corresponds to a \emph{entailment} prediction that is very close to \emph{neutral}), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence. We will try to understand the what is happened inside the model in the following section (see Fig.~\ref{fig:att2pred}).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% perturb input, attention
 \subsection{Scenario 2: Examine the Decision Making Process}
 
 \begin{figure}[htbp]
@@ -49,18 +51,21 @@ How attention affect prediction.).
 \label{fig:att2pred}
 \end{figure}
 
-\begin{itemize}
-\item A very young child in a red plaid coat and pink winter hat makes a snowball in a large pile of snow .
-\item A child in a red plaid coat and pink winter hat makes a snowball in a large heap of snow .
-\end{itemize}
-
 %Hypothesizing
-Interpreting how the model arrive at a prediction is one of the most important goal for the expert driven exploratory analysis.
+Examining how the model arrive at a prediction is not only instrumental for evaluating the model performance but also essential for hypothesizing improvement strategies.
+%
+A model may produce the correct prediction for the wrong reason (or the randomness of ), the prediction may be correct due to luc label provide one way to evaluation model. To ensure a model does what it intended to do, we need to answer the questions whether the model arrived at the correct prediction for the wrong reason? prediction can mean a number of things
+It is not only the first step  only essential for evaluating the model performance but also necessary for hypothesizing improvement strategies.
+
+The three stages (encoder, attention, classifier) work in synergy to produce the prediction.
+%
+Therefore, making sense of the prediction involving understand how different part of the model affect the final prediction.
 %
 
- first step  only essential for evaluating the model performance but also necessary for hypothesizing improvement strategies.
-%
-The three stages (encoder, attention, classifier) of the model work in synergy to produce the correct prediction.
+
+The example discussed in the previous section, 
+\textbf{P}: ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \emph{pile} of snow.''
+\textbf{H}: ``A child in a red plaid coat and pink winter hat makes a snowball in a large \emph{heap} of snow.''
 
 \begin{figure*}[t]
 \centering
@@ -72,21 +77,24 @@ The prediction is failed due to incorrect alignment. For all the failed case,
 \label{fig:failedEncoding}
 \end{figure*}
 
-
 %One of the essential task for can be made in either of these stages.
 % \shusen{difference in sensitivity among entail natural and contradict relationships}
 % the generate the correct prediction for the wrong reason
-Does the model arrived at the correct prediction for the wrong reason?
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Scenario 3: What Does It Take to Correct a Wrong Prediction?}
-In the previous section, we discussed how we can use forward prediction
+Once, we get a sense of how prediction are being made, where it went wrong. The next obvious questions are what does it take to correct the wrong prediction. 
+In addition, when we interpreting how decision are made, we always fix the model and make forward pass in the neural network.
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Scenario 4: Explore Relationship Between Grammar and Attention}
+There is no simple answer to what exactly is the information attention captures.
 Can attention capture grammar structure? Is 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Scenario 5: Handcraft Example Analysis}
-To test the limitation of the model, domain experts often handcraft ``extreme'' examples (as such the Facebook IPO example discussed in Section~\ref{sec:background}) that they know most model will have a difficult time making correct inference. 
+To test the limitation of the model, domain experts often handcraft ``extreme'' examples (as such the Facebook IPO example discussed in Section~\ref{sec:languageInference}) that they know most model will have a difficult time making correct inference. 
 %
 %The exploration is just started once the prediction result is examined, 
 Often the researchers have a set of "what if..." experiments they would like to run. And dependent on the experiment out come, they like will have new questions to ask and try out the different variations or combinations.
