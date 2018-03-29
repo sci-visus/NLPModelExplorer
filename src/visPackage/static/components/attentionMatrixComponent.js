@@ -669,7 +669,7 @@ class attentionMatrixComponent extends attentionComponent {
             this.svg.selectAll('.attentionComponent_matrix_rect')
                 .data(this.attList)
                 .style('fill', d => {
-                    console.log(d);
+                    // console.log(d);
                     return this.colorbar.lookup(d.value);
                 });
         }
