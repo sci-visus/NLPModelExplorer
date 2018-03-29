@@ -70,9 +70,22 @@ The change of attention lead to change of prediction from neutral to the class b
 \label{fig:att2pred}
 \end{figure}
 
-\shusen{Example where the prediction is correct but the alignment is wrong}
+%\shusen{Example where the prediction is correct but the alignment is wrong}
 %%%% are we obtain correct prediction from wrong alignment %%%%%
-%By looking into the model decision making process, we can assess whether the model is behaving as intended. For the attention based NLI model, one underlying assumption is that the attention should capture the correct alignment between words in the premise and hypothesis sentence for the classifier to make an informed/correct decision. However, since there is only three output labels, it is also likely in some cases the model produce correct predictions due to pure luck with attention that does not make sense (i.e., the important words are mis-align). It is also possible that even the alignment is perfect, the model still generate a wrong prediction.
+%By looking into the model decision making process, we can assess whether the model is behaving as intended. For the attention based NLI model, one underlying assumption is that the attention should capture the correct alignment between words in the premise and hypothesis sentence for the classifier to make an informed/correct decision.
+In the previous example, we show that even the alignment is perfect, the model still does not generate a correct prediction.
+However, as illustrated in Fig.~\ref{fig:wrongAlignRightPred}, it is also likely that model produce correct predictions from the wrong attention (i.e., the important words are mis-align). The word \textbf{break} and \textbf{sit} should not align with each other (Fig.~\ref{fig:wrongAlignRightPred}(a)), however, it still produce the correct \emph{neutral} label (Fig.~\ref{fig:wrongAlignRightPred}(b)).
+
+\begin{figure}[htbp]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=1.0\linewidth]{wrongAlignRightPred}
+ \caption{
+The example of model producing right prediction with wrong attention.
+The word \textbf{break} and \textbf{sit} should not align with each other (a), yet, it still yield the correct prediction (b).
+}
+\label{fig:wrongAlignRightPred}
+\end{figure}
 
 
 %%%% hypothesis on which part of model is wrong? %%%%%
@@ -121,8 +134,13 @@ How changes in different stage impact the prediction.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Scenario 4: Explore Relationship Between Grammar and Attention}
+
 There is no simple answer to what exactly is the information attention captures.
-Can attention capture grammar structure? Is
+Can attention capture grammar structure? 
+
+The prediction is Entailment which is wrong. The "green" will be aligned to "green". However they are actually attached to different words in the dependency tree. That is "green" in P is attached to jacket, while "green" in H is attached to tea. They should not be aligned.
+And more interestingly is, by forcing the two "green"'s alignment to be zero, the prediction label is corrected to Neutral. This stresses the importance of dependency tree in our tool.
+
 
 \begin{figure*}[t]
 \centering

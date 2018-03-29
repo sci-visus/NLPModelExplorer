@@ -53,6 +53,16 @@ exampleData = [
     "src": "<s> A very young child in a red plaid coat and pink winter hat makes a snowball in a large pile of snow .\n",
     "targ": "<s> A child in a red plaid coat and pink winter hat makes a snowball in a large heap of snow .\n",
     "pred": "entailment"
+},{
+    "index":6,
+    "src": "<s> A couple is taking a break from bicycling .\n",
+    "targ": "<s> sisters sit next to their bikes .\n",
+    "pred": "neutral"
+},{
+    "index":7,
+    "src": "<s> A woman in a green jacket is drinking tea .\n",
+    "targ": "<s> A woman is drinking green tea .\n",
+    "pred": "neutral"
 }
 ]
 pipelineState = [{
