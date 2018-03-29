@@ -18,7 +18,7 @@ There are many ways to update the model to correct a prediction. A simple way to
 % \shusen{what is the benefit of using mira?}
 Instead, we adopt the same idea in \emph{margin-infused relaxed algorithm (MIRA)}~\cite{CrammerSinger2003}, where we regulate the optimization with the L2-norm of the parameter change. Therefore, in the proposed tool, we obtain the target parameters by the following:
 \begin{equation}
-\underset{w'}{\mathrm{argmin}}( C \mathbb{J}(\mathbf{W}') + ||\mathbf{W}' - \mathbf{W}||^2)
+\underset{\mathbf{W}'}{\mathrm{argmin}}( C \mathbb{J}(\mathbf{W}') + ||\mathbf{W}' - \mathbf{W}||^2)
 \end{equation}
 where $\mathbb{J}(\mathbf{W})$ is the loss function of the neural model, $\mathbf{W}$ is the original model's parameters taken as constant, $\mathbf{W}'$ is the parameters to update, and $C$ is the weighting term, which determines whether we intended to emphasize more on obtaining better fitting or deviating less from the original model. Due to the nonconvex nature of the neural networks, we use SGD to optimize the above combined loss function.
 %
