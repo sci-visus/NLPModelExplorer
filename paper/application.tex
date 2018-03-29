@@ -40,32 +40,37 @@ Through exploring multiple samples (in the entailment category, E/E in Fig.~\ref
 % perturb input, attention
 \subsection{Scenario 2: Examine the Decision Making Process}
 
+%Hypothesizing
+Examining how the model arrive at a given conclusion is not only instrumental for evaluating the model performance but also essential for hypothesizing improvement strategies for developing future models.
+
+%%%% are we obtain correct prediction from wrong alignment %%%%%
+As discussed the introduction, the predicted label alone provide limited information to evaluate a model. By looking into the model decision making process, we can assess whether the model is behaving as intended. For the attention based NLI model, one underlying assumption is that the attention should capture the correct alignment between words in the premise and hypothesis sentence for the classifier to make an informed/correct decision. However, since there is only three output labels, it is also likely in some cases the model produce correct predictions due to pure luck with attention that does not make sense (i.e., the important words are mis-align). It is also possible that even the alignment is perfect, the model still generate a wrong prediction.
+
+The three stages (encoder, attention, classifier) work in synergy to produce the prediction.
+Therefore, making sense of the prediction involving understand how different part of the model affect the final prediction.
+
+We have noticed some very unusual behavior in the example discussed in the previous section,  where a minor perturbation of the text from \emph{pile} to \emph{heap} lead to drastically change in the prediction (Fig.~\ref{fig:predictStability}(d)). Here, we want to make sense of what lead to the failed prediction.  In this example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{heap} of snow.''. The perturbed hypothesis \textbf{H2} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.''
+
+As illustrated in Fig.~\ref{fig:att2pred}(a), based on the graph attention visualization, we can see the for the (\textbf{P}, \textbf{H2}) pair, the word \textbf{pile} and \textbf{heap} is not well-aligned (see Fig.~\ref{fig:att2pred}(a)). 
+%
+To verify whether the alignment is what contribute to the mis-classification, we can utilize the attention editing functionality in the matrix view (Fig.~\ref{fig:attentionView}) to make the word \textbf{pile} align correctly with \textbf{heap} (shown in Fig.~\ref{fig:att2pred}(b)). 
+%
+In the update prediction view (see Fig.~\ref{fig:att2pred} (d)), we can see the new attention moved the original prediction from neutral toward the entailment (which is the true label) and straddle on the class boundary. This is very interesting, as showed in Fig~\ref{fig:predictStability}(d), the original pair (\textbf{P}, \textbf{H1}) has almost identify alignment (not shown in the figure). This mean is the model do not strongly believe ``\textbf{pile} of snow'' and ``\textbf{heap} snow'' has the same meaning.
+
 \begin{figure}[htbp]
 \centering
 \vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{att2pred}
  \caption{
-How attention affect prediction.).
+How attention affect prediction.
 %
 }
 \label{fig:att2pred}
 \end{figure}
-
-%Hypothesizing
-Examining how the model arrive at a prediction is not only instrumental for evaluating the model performance but also essential for hypothesizing improvement strategies.
-%
-A model may produce the correct prediction for the wrong reason (or the randomness of ), the prediction may be correct due to luc label provide one way to evaluation model. To ensure a model does what it intended to do, we need to answer the questions whether the model arrived at the correct prediction for the wrong reason? prediction can mean a number of things
-It is not only the first step  only essential for evaluating the model performance but also necessary for hypothesizing improvement strategies.
-
-The three stages (encoder, attention, classifier) work in synergy to produce the prediction.
-%
-Therefore, making sense of the prediction involving understand how different part of the model affect the final prediction.
-%
+%%%% hypothesis on which part of model is wrong? %%%%%
 
 
-The example discussed in the previous section, 
-\textbf{P}: ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \emph{pile} of snow.''
-\textbf{H}: ``A child in a red plaid coat and pink winter hat makes a snowball in a large \emph{heap} of snow.''
+
 
 \begin{figure*}[t]
 \centering
