@@ -5,7 +5,7 @@
 % What is the obstacle for effectively apply machine learning model
 Based on some stunning recent advances, machine learning and neural networks base deep learning approaches in particular have gained unprecedented popularity, and have been adopted in a wide variety of scientific applications.
 %
-However, researchers as well as practitioners often need to overcome many obstacles during the training, debugging, and tuning processes to realize the full potential of these models.
+However, researchers as well as practitioners often needs to overcome many obstacles during the training, debugging, and tuning processes to realize the full potential of these models.
 %
 Interpreting the internal mechanism and analyzing how predictions are made is critical to both the design and deployment of a model.
 More importantly, the ability to pinpoint where and how an error is made and propose hypotheses for the cause of the error is key to identifying the limitations of and improving upon existing models.
@@ -13,7 +13,7 @@ However, providing meaningful answers to these questions is challenging and has 
 
 Recently, significant research has been developed to combat the model interpretability challenges.
 Both the machine learning as well as the visualization community have proposed a number of promising techniques aimed at interpreting convolution neural networks (CNN)~\cite{SimonyanVedaldiZisserman2013, ZeilerFergus2014, YosinskiCluneNguyen2015, OlahMordvintsevSchubert2017, LiuShiLi2017, OlahSatyanarayanJohnson2018, BilalJourablooYe2018}. 
-At the same time, these approaches also remind us how little we truly understand about the inner mechanism of such deep neural networks.
+At the same time, these approaches also remind us how little we truly understand about the inner mechanisms of such deep neural networks.
 
 Compared to image classification tasks, natural language processing (NLP) systems have innate restrictions (e.g., the discrete nature of words) that make the road to interpretation even more challenging.
 For example, \emph{feature visualization}~\cite{OlahMordvintsevSchubert2017}, an often deployed technique for illustrating what image features a given part of the network (e.g., neuron, layer, or channel) captures, cannot be readily generalized to natural language. 
@@ -25,8 +25,8 @@ These restrictions call for new avenues for solving the interpretation challenge
 % Beside explore the internal states of the model, understand how different parts of the model work together and how one may affect one another is as or if not more important.
 Despite a number of recent advances, the majority of existing techniques study the model as an invariant object, where the model's behaviors are recorded and analyzed in an offline fashion.
 %
-However, the exploratory nature of the model interpretation often leads to many \emph{``what if ...''} type of questions. 
-Such as, what if we perturbed the current input?
+However, the exploratory nature of the model interpretation often leads to many \emph{``what if ...''} types of questions, 
+such as, what if we perturbed the current input?
 Will the prediction be stable?
 What if we change one of the critical internal states of the model? 
 How would the modification affect the prediction? 
@@ -43,7 +43,7 @@ However, the components of the visualization and the overall paradigm can be rea
 %
 In the simplest form, the inference task asks the question about whether \textbf{sentence A} and \textbf{sentence B}: (1) are \emph{entailed} (one can infer \textbf{B} from \textbf{A}; (2) \emph{contradict} (\textbf{B} disagrees with \textbf{A}) or (3) are \emph{neutral} (\textbf{A} and \textbf{B} talk about different/unrelated thins
 % we can infer the content of \textbf{sentence B} from \textbf{sentence A} (\emph{entail}), if they contradict with each other (\emph{contradiction}), or whether two sentences talk about different/unrelated things (\emph{neutral}). 
-Language inference addresses the fundamental challenge of measuring the semantic similarity of sentences, and is one the core NLP tasks (see Section~\ref{sec:languageInference} for details).
+Language inference addresses the fundamental challenge of measuring the semantic similarity of sentences, and is one of the core NLP tasks (see Section~\ref{sec:languageInference} for details).
 
 One recent advance in neural natural language process models is the introduction of \emph{attention mechanisms}~\cite{VaswaniShazeerParmar2017} (Section~\ref{sec:attention}). Intuitively, the attention helps capture which part of the input the model is deemed more important for making a prediction. The attention is often represented as weights for individual words or pairs of words (i.e., the alignment between words in different sentences).
 %
