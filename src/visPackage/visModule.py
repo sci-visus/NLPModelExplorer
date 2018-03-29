@@ -51,7 +51,7 @@ exampleData = [
 },{
     "index":5,
     "src": "<s> A very young child in a red plaid coat and pink winter hat makes a snowball in a large pile of snow .\n",
-    "targ": "<s> A child in a red plaid coat and pink winter hat makes a snowball in a large pile of snow .\n",
+    "targ": "<s> A child in a red plaid coat and pink winter hat makes a snowball in a large heap of snow .\n",
     "pred": "entailment"
 }
 ]

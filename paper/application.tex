@@ -41,20 +41,22 @@ However, some predictions, such as the one illustrated in Fig.~ref{fig:predictSt
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % perturb input, attention
 \subsection{Scenario 2: Examine the Decision Making Process}
-The predicted label alone provide limited information, often the domain experts want to know how does the model arrive at the conclusion. And if the prediction is incorrect where does the error occur.
+The predicted label alone provide limited information. Often, domain experts want to know how does the model arrive at such a conclusion. And if the prediction is incorrect, where does the error occur in the model?
 %
 Examining the decision making process is not only instrumental for evaluating the model performance but also essential for hypothesizing improvement strategies for developing future models.
 %
 In the NLI model, the three stages (encoder, attention, classifier) work in synergy to produce the prediction.
-Therefore, making sense of the prediction involving understand how different part of the model affect the final prediction.
+Therefore, making sense of the prediction involves understanding how different parts of the model affect the final prediction.
 
-In the previous section, we have noticed some very unusual behavior, where a minor perturbation of the text from \emph{pile} to \emph{heap} lead to drastically change in the prediction (Fig.~\ref{fig:predictStability}(d)). Here, we want to make sense of what lead to the failed prediction. In this example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{heap} of snow.''. The perturbed hypothesis \textbf{H2} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.''
+In the previous section, we have noticed some unexpected behavior, where a minor perturbation of the text from \emph{pile} to \emph{heap} lead to change in the final prediction label (Fig.~\ref{fig:predictStability}(d)). Here, we want to make sense of what lead to the failed prediction. In this particular example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.''. The perturbed hypothesis \textbf{H2} replaced the word \textbf{pile} with \textbf{heap}.
 
-As illustrated in Fig.~\ref{fig:att2pred}(a), based on the graph attention visualization, we can see the for the (\textbf{P}, \textbf{H2}) pair, the word \textbf{pile} and \textbf{heap} is not well-aligned (see Fig.~\ref{fig:att2pred}(a)). 
+As illustrated in Fig.~\ref{fig:att2pred}(a), based on the graph attention visualization, we can see in the attention for (\textbf{P}, \textbf{H2}) pair, the word \textbf{pile} and \textbf{heap} is not well-aligned (see Fig.~\ref{fig:att2pred}(a)). 
 %
-To verify whether the alignment is what contribute to the mis-classification, we can utilize the attention editing functionality in the matrix view (Fig.~\ref{fig:attentionView}) to make the word \textbf{pile} align correctly with \textbf{heap} (shown in Fig.~\ref{fig:att2pred}(b)). 
+To verify whether the alignment is what contribute to the misclassification, the domain expert utilize the attention editing functionality in the matrix view (Fig.~\ref{fig:attView}) to make the word \textbf{pile} align with \textbf{heap} (shown in Fig.~\ref{fig:att2pred}(b)). 
 %
-In the update prediction view (see Fig.~\ref{fig:att2pred} (d)), we can see the new attention moved the original prediction from neutral toward the entailment (which is the true label) and straddle on the class boundary. This is very interesting, as showed in Fig~\ref{fig:predictStability}(d), the original pair (\textbf{P}, \textbf{H1}) has almost identify alignment (not shown in the figure). This mean is the model do not strongly believe ``\textbf{pile} of snow'' and ``\textbf{heap} snow'' has the same meaning.
+In the update prediction view (see Fig.~\ref{fig:att2pred} (d)), we can see the editing of attention lead to changes in prediction. The original prediction moved from neutral toward the entailment (which is the true label) and straddle on the class boundary. However, the correct alignment does not full fix the prediction problem as the original pair (\textbf{P}, \textbf{H1}) is clearly predicted as \emph{entailment} (as showed in Fig~\ref{fig:predictStability}(d)). 
+%
+Interestingly, the original pair's attention is almost identical to the edited attention (the comparison is not shown in the figure). Such an observation means that the model do not strongly believe ``\textbf{heap} of snow'' and ``\textbf{pile} snow'' has the same meaning, which indicate the potential issue with encoder or word embedding.
 
 \begin{figure}[htbp]
 \centering
@@ -68,14 +70,12 @@ The change of attention lead to change of prediction from neutral to the class b
 \label{fig:att2pred}
 \end{figure}
 
+\shusen{Example where the prediction is correct but the alignment is wrong}
 %%%% are we obtain correct prediction from wrong alignment %%%%%
 %By looking into the model decision making process, we can assess whether the model is behaving as intended. For the attention based NLI model, one underlying assumption is that the attention should capture the correct alignment between words in the premise and hypothesis sentence for the classifier to make an informed/correct decision. However, since there is only three output labels, it is also likely in some cases the model produce correct predictions due to pure luck with attention that does not make sense (i.e., the important words are mis-align). It is also possible that even the alignment is perfect, the model still generate a wrong prediction.
 
 
 %%%% hypothesis on which part of model is wrong? %%%%%
-
-
-
 
 \begin{figure*}[t]
 \centering
