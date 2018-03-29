@@ -16,40 +16,39 @@ Prediction stability assessment. In (a)(b)(c), we estimate the overall predictio
 \end{figure}
 
 \subsection{Scenario 1: Assess the Model Prediction Stability}
-The robustness of the prediction is often hard to evaluate, however, they provide valuable information for the researchers to evaluate the model.
+The robustness of the prediction is often hard to evaluate, however, they provide valuable information for the researchers to better understand the model.
 %
 In the proposed work, we approach the prediction robustness from sensitivity analysis point of view. The stability of the prediction is measured by how often the predicted labels are altered after small perturbations are applied to the input. 
 %
 Compare to other types of input (e.g., image), perturbation of the natural language can be particular tricky, as small alteration of words can drastically change the meaning of the sentence. As discussed in Section~\ref{sec:sentence}, we try to maintain semantic of the sentence by only replace words with their synonymous and only replace one word for each pair.
-%
-As illustrated in Fig.~\ref{fig:predictStability}, by utilizing the automated input perturbation and visual interface in the proposed tool, the domain expert can not only examine visual summary of the stability, but also quickly dive into individual examples for case by case analysis.%which system input sentence perturbation to assess the overall stability of the prediction. 
+As illustrated in Fig.~\ref{fig:predictStability}, by utilizing the proposed tool, the domain expert can not only examine visual summary of the stability, but also quickly dive into individual examples for case by case analysis.
 
-By viewing the distribution of the stability in the histogram (Fig.~\ref{fig:predictStability}(a)(b)(c)), we estimate the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (10k examples).
+
+In Fig.~\ref{fig:predictStability}(a)(b)(c),  %by viewing the distribution of the stability in the histogram
+we compare the overall prediction stability (regarding synonymous perturbation) for each type prediction over the entire development set (10k examples).
 %
-We can observe a drastic difference between the stability for entailment predictions compare to the contradiction and neutral ones.
+We observe a drastic difference between the stability for entailment predictions compare to the contradiction and neutral ones.
 %
 Such a distinction can be partially explained by how entailment relationship is defined. As discussed in the Section~\ref{sec:languageInference}, the relationship is only valid if the concept in premise is more specific than the concept in hypothesis (therefore, you can infer the hypothesis from the premise, but not other way around). This means, we may change the entailment relationships simply by replacing nouns and verb by synonymous, whereas, the same does not apply for neutral and contradiction.
 %
-By exploring the inherent sensitivity difference among the three types of relationship, the researcher may consider designing dedicate model mechanism to address the such a disparity.
+The inherent sensitivity difference may motivate domain experts designing dedicate model mechanism to address the such a disparity.
 
-Beside making overall assess, the proposed tool also allow user to narrow down to individual examples by filtering via the histogram and scatterplot (see Fig.~\ref{fig:summaryView}) for a detailed exploration, as illustrated in Fig.~ref{fig:predictStability}(d)(e). 
+Beside presenting the summary view, the tool also allow user to quickly narrow down the select to single example  by filtering through the histogram and scatterplot (see Fig.~\ref{fig:summaryView}). 
 %
-Through exploring multiple samples (in the entailment category, E/E in Fig.~\ref{fig:summaryView}(a)), the domain experts noticed many highly unstable outliers are from sentence pairs where the prediction is near the decision boundary (e.g., the yellow circle corresponds to a \emph{entailment} prediction that is very close to \emph{neutral}), however, some predictions, such as the one illustrated in (d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence. We will try to understand the what is happened inside the model in the following section (see Fig.~\ref{fig:att2pred}).
+Through exploring multiple samples (in the entailment category, E/E in Fig.~\ref{fig:summaryView}(a)), the domain experts noticed many highly unstable outliers are from sentence pairs where the prediction is near the decision boundary (see Fig.~\ref{fig:predictStability}(e), the yellow circle corresponds to a \emph{entailment} prediction that is very close to \emph{neutral}). 
+However, some predictions, such as the one illustrated in Fig.~ref{fig:predictStability}(d) can alter the prediction quite drastically with minor perturbation (illustrated in $d_1$, where the word ``heap'' is replace by ``pile'' in the hypothesis sentence. We will try to understand the what is happened inside the model in the following section (see Fig.~\ref{fig:att2pred}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % perturb input, attention
 \subsection{Scenario 2: Examine the Decision Making Process}
-
-%Hypothesizing
-Examining how the model arrive at a given conclusion is not only instrumental for evaluating the model performance but also essential for hypothesizing improvement strategies for developing future models.
-
-%%%% are we obtain correct prediction from wrong alignment %%%%%
-As discussed the introduction, the predicted label alone provide limited information to evaluate a model. By looking into the model decision making process, we can assess whether the model is behaving as intended. For the attention based NLI model, one underlying assumption is that the attention should capture the correct alignment between words in the premise and hypothesis sentence for the classifier to make an informed/correct decision. However, since there is only three output labels, it is also likely in some cases the model produce correct predictions due to pure luck with attention that does not make sense (i.e., the important words are mis-align). It is also possible that even the alignment is perfect, the model still generate a wrong prediction.
-
-The three stages (encoder, attention, classifier) work in synergy to produce the prediction.
+The predicted label alone provide limited information, often the domain experts want to know how does the model arrive at the conclusion. And if the prediction is incorrect where does the error occur.
+%
+Examining the decision making process is not only instrumental for evaluating the model performance but also essential for hypothesizing improvement strategies for developing future models.
+%
+In the NLI model, the three stages (encoder, attention, classifier) work in synergy to produce the prediction.
 Therefore, making sense of the prediction involving understand how different part of the model affect the final prediction.
 
-We have noticed some very unusual behavior in the example discussed in the previous section,  where a minor perturbation of the text from \emph{pile} to \emph{heap} lead to drastically change in the prediction (Fig.~\ref{fig:predictStability}(d)). Here, we want to make sense of what lead to the failed prediction.  In this example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{heap} of snow.''. The perturbed hypothesis \textbf{H2} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.''
+In the previous section, we have noticed some very unusual behavior, where a minor perturbation of the text from \emph{pile} to \emph{heap} lead to drastically change in the prediction (Fig.~\ref{fig:predictStability}(d)). Here, we want to make sense of what lead to the failed prediction. In this example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{heap} of snow.''. The perturbed hypothesis \textbf{H2} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.''
 
 As illustrated in Fig.~\ref{fig:att2pred}(a), based on the graph attention visualization, we can see the for the (\textbf{P}, \textbf{H2}) pair, the word \textbf{pile} and \textbf{heap} is not well-aligned (see Fig.~\ref{fig:att2pred}(a)). 
 %
@@ -62,11 +61,17 @@ In the update prediction view (see Fig.~\ref{fig:att2pred} (d)), we can see the 
 \vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{att2pred}
  \caption{
-How attention affect prediction.
+Editing the original attention (a) to correctly align the word "heap" with "pile" as shown in (b) (these two words are highlight in orange).  
+The change of attention lead to change of prediction from neutral to the class boundary between neutral and entialment.
 %
 }
 \label{fig:att2pred}
 \end{figure}
+
+%%%% are we obtain correct prediction from wrong alignment %%%%%
+%By looking into the model decision making process, we can assess whether the model is behaving as intended. For the attention based NLI model, one underlying assumption is that the attention should capture the correct alignment between words in the premise and hypothesis sentence for the classifier to make an informed/correct decision. However, since there is only three output labels, it is also likely in some cases the model produce correct predictions due to pure luck with attention that does not make sense (i.e., the important words are mis-align). It is also possible that even the alignment is perfect, the model still generate a wrong prediction.
+
+
 %%%% hypothesis on which part of model is wrong? %%%%%
 
 
@@ -98,15 +103,15 @@ There is no simple answer to what exactly is the information attention captures.
 Can attention capture grammar structure? Is 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Scenario 5: Handcraft Example Analysis}
+\subsection{Scenario 5: Handcraft Example Exploration}
 To test the limitation of the model, domain experts often handcraft ``extreme'' examples (as such the Facebook IPO example discussed in Section~\ref{sec:languageInference}) that they know most model will have a difficult time making correct inference. 
 %
 %The exploration is just started once the prediction result is examined, 
-Often the researchers have a set of "what if..." experiments they would like to run. And dependent on the experiment out come, they like will have new questions to ask and try out the different variations or combinations.
+Often the researchers have a set of experiments they plan test, from which they likely develop new hypothesis for further experiments.
 %
-In some way, we can think of such a process as a nature blend of all previously discussed scenario, where the domain experts do not necessarily have specific goal in mind, instead focus on probing around and see if they can find anything interesting and out-of-ordinary behaviors in the model.
+In some way, we can think of such a process as a nature blend of all previously discussed scenarios. However,  instead with specific analysis goal in mind, the domain experts focus on probing around and see if they can find anything interesting or out-of-ordinary behaviors in the model.
 %
-Having an environment, in which the experts can freely modify the words or attention then observe the corresponding changes in other parts of the model pipeline, ensures an streamlined exploration experience that free the users from interruption and grunt work, allow them to focus on more productive activity. 
+Having an environment, in which the experts can freely modify the words or attention then observe the corresponding changes in other parts of the model pipeline, ensures an streamlined exploration experience that free the users from interruption and tedious grunt work, allow them to focus on more productive activity. 
 
 %\subsection{Is the Prediction Stable?}
 %\subsection{Where Are the Mistakes?}

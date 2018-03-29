@@ -209,7 +209,10 @@ class attentionComponent extends baseComponent {
                 break;
 
             case "currentPair":
-                let pair = msg["data"]["data"]["sentences"];
+                let pair = msg["data"]["data"][
+                    "sentences"
+                ];
+                // console.log("pair", pair);
 
                 if (this.oldPair) {
                     //clear the current dependency
@@ -233,7 +236,7 @@ class attentionComponent extends baseComponent {
 
                 this.srcWords = pair[0].match(/\S+/g);
                 this.targWords = pair[1].match(/\S+/g);
-                this.oldPair = pair.slice();
+                this.oldPair = JSON.parse(JSON.stringify(pair));
                 break;
 
             case "attentionDirection":

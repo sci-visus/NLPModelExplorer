@@ -414,23 +414,25 @@ class predictionComponent extends baseComponent {
                 })
                 //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
                 .on("click", (d, i) => {
+                    // console.log(d);
                     if (this.data["allSourceSens"] !== undefined) {
                         var source, target;
                         if (this.data["allSourceSens"])
                             source = this.data["allSourceSens"][d[3]];
                         else
-                            source = this.data["originalPair"][0];
+                            source = this.data["currentPair"][0];
 
                         if (this.data["allTargetSens"])
                             target = this.data["allTargetSens"][d[4]];
                         else
-                            target = this.data["originalPair"][1];
+                            target = this.data["currentPair"][1];
                         this.data["currentPair"]["sentences"] = [
                             source,
                             target
                         ];
                         //update the pair
-                        console.log("update pair/att");
+                        // console.log("update pair/att", this.data[
+                        // "allSourceSens"]);
                         this.setData("currentPair", this.data[
                             "currentPair"]);
 
@@ -490,7 +492,8 @@ class predictionComponent extends baseComponent {
             var w = 20;
             var h = 15;
 
-            var g = this.svg.append("g").attr("id", "reassignPredict");
+            var g = this.svg.append("g").attr("id",
+                "reassignPredict");
 
             var entailRect = g.append("g");
 
@@ -514,7 +517,8 @@ class predictionComponent extends baseComponent {
                     that.drawCurrentAssignedPred();
                 })
                 .on("mouseout", function(d) {
-                    d3.select(this).attr("fill", "lightgrey");
+                    d3.select(this).attr("fill",
+                        "lightgrey");
                     that.reassignedPred = undefined;
                     that.drawCurrentAssignedPred();
                 })
@@ -541,7 +545,8 @@ class predictionComponent extends baseComponent {
                     that.drawCurrentAssignedPred();
                 })
                 .on("mouseout", function(d) {
-                    d3.select(this).attr("fill", "lightgrey");
+                    d3.select(this).attr("fill",
+                        "lightgrey");
                     that.reassignedPred = undefined;
                     that.drawCurrentAssignedPred();
                 })
@@ -569,7 +574,8 @@ class predictionComponent extends baseComponent {
                     that.drawCurrentAssignedPred();
                 })
                 .on("mouseout", function(d) {
-                    d3.select(this).attr("fill", "lightgrey");
+                    d3.select(this).attr("fill",
+                        "lightgrey");
                     that.reassignedPred = undefined;
                     that.drawCurrentAssignedPred();
                 })
@@ -604,7 +610,8 @@ class predictionComponent extends baseComponent {
         this.svg.select("#reassignPredict").remove();
         //trigger optimizaton on the python side
         if (this.reassignedPred) {
-            var i = this.reassignedPred.indexOf(Math.max(...this.reassignedPred));
+            var i = this.reassignedPred.indexOf(Math.max(...this
+                .reassignedPred));
             this.onPredictionReassign(i);
             //reset reassignPred so it won't be trigger when click on the point
             this.reassignedPred = undefined;
@@ -632,7 +639,8 @@ class predictionComponent extends baseComponent {
             this.svg.selectAll(".dotPredPath").remove();
             this.svg.selectAll(".predPath").remove();
         } else {
-            var line = [this.pred2Pos(path[0]), this.pred2Pos(path[1])];
+            var line = [this.pred2Pos(path[0]), this.pred2Pos(
+                path[1])];
             // console.log(line);
 
             //draw arrow

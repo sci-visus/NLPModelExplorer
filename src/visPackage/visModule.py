@@ -40,14 +40,19 @@ exampleData = [
     "pred": "entailment"
 },{
     "index":3,
-    "src": "<s> This church choir sings to the masses as they sing joyous songs from the book at a church .",
-    "targ": "<s> The church has cracks in the ceiling .",
+    "src": "<s> This church choir sings to the masses as they sing joyous songs from the book at a church .\n",
+    "targ": "<s> The church has cracks in the ceiling .\n",
     "pred": "neutral"
 },{
     "index":4,
-    "src": "<s> A woman with a green headscarf , blue shirt and a very big grin .",
-    "targ": "<s> The woman is young .",
+    "src": "<s> A woman with a green headscarf , blue shirt and a very big grin .\n",
+    "targ": "<s> The woman is young .\n",
     "pred": "neutral"
+},{
+    "index":5,
+    "src": "<s> A very young child in a red plaid coat and pink winter hat makes a snowball in a large pile of snow .\n",
+    "targ": "<s> A child in a red plaid coat and pink winter hat makes a snowball in a large pile of snow .\n",
+    "pred": "entailment"
 }
 ]
 pipelineState = [{

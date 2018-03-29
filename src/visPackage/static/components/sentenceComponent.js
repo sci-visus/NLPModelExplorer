@@ -59,8 +59,8 @@ class sentenceComponent extends baseComponent {
                         this.clearDropdown(this.div + "srcInput");
                         this.clearDropdown(this.div + "targInput");
 
-                        this.setData("allSourceSens", [pair[0]]);
-                        this.setData("allTargetSens", [pair[1]]);
+                        // this.setData("allSourceSens", [pair[0]]);
+                        // this.setData("allTargetSens", [pair[1]]);
                     }
                 }
 
@@ -157,8 +157,8 @@ class sentenceComponent extends baseComponent {
         this.clearDropdown(this.div + "srcInput");
         this.clearDropdown(this.div + "targInput");
 
-        this.setData("allSourceSens", [currentPair[0]]);
-        this.setData("allTargetSens", [currentPair[1]]);
+        // // this.setData("allSourceSens", [currentPair[0]]);
+        // this.setData("allTargetSens", [currentPair[1]]);
     }
 
     onUpdateCurrentPair() {

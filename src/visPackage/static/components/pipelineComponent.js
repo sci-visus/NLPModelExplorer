@@ -240,7 +240,7 @@ class pipelineComponent extends baseComponent {
 
             this.items = [];
             var pipelineData = this.data["pipeline"];
-            console.log(pipelineData);
+            // console.log(pipelineData);
 
             // if (this.items === undefined) {
             var len = pipelineData.length;
