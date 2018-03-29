@@ -1,3 +1,18 @@
+\begin{figure}[htbp]
+\centering
+% \vspace{-2mm}
+ \includegraphics[width=1.0\linewidth]{summaryView}
+ \caption{
+Summarize the prediction results and sensitivity of the entire development set, and provide an explorative interface to select an example of interest.
+We summarize all the prediction results in (a), where the green block indicates correct predictions, the orange block indicates wrong predictions, and the label (e.g., E/E, E/N) indicates the ground truth label and the predicted label (N-Neural, E-Entailment, C-Contradiction).
+%
+The user can select the treemap to focus on the specific type of scenarios and reveal the histogram (b) and scatterplot (c) for displaying per-pair information on the selected subset.
+The selection can be further narrowed down by selecting the bin in the histogram.
+In (c) and (d), each point corresponds to one prediction.
+ }
+\label{fig:summaryView}
+\end{figure}
+
 \subsection{Summary View}
 \label{sec:allPairs}
 % outline:
@@ -16,24 +31,11 @@ By clicking on the treemap cell, we can narrow down the selection by focusing on
 %
 As we select the ``E/E'' (ground truth: E-Entailment / predicted label: E-Entailment) category in the treemap (see Fig.~\ref{fig:summaryView}(a)), the histogram (Fig.~\ref{fig:summaryView}(b)) and scatterplot  (Fig.~\ref{fig:summaryView}(c)) are revealed to focus on the selected subset. The histogram shows the distribution of the prediction sensitivity in this category. For each original pair, the sensitivity is defined by the ratio between the number of unchanged predictions among the perturbed pairs and the all the perturbed pairs. In other words, if we generated 100 sentence pairs via the automated sentence perturbation (i.e., replace nouns and verbs with synonymous), and after we predict the labels on all 100 pairs, if 80 out of the 100 maintain the original prediction label, we will have a sensitivity of 0.8. The \emph{sensitivity} measures how likely it is a sentence pair will change its prediction after applying minor perturbations to the original, which helps the expert infer the model stability on the given example.
 %
-We can further narrow down the focused set by selecting the bins in the histogram (see Fig.~\ref{fig:summaryView}(b),(d)). 
+We can further narrow down the focused set by selecting the bins in the histogram (see Fig.~\ref{fig:summaryView}(b),(d)).
 %
 In the scatterplot, besides showing the sensitivity value, we also include the number of perturbed pairs (labeled as \emph{perturbCount}) to help users better assess the \emph{sensitivity}. For example, if the \emph{perturbCount} is rather small ($<10$), then the \emph{sensitivity} number is likely to be quite noisy and less trustworthy, as compared to the sensitivity ratio computed from a much larger number of perturbed pairs.
 
-\begin{figure}[htbp]
-\centering
-\vspace{-2mm}
- \includegraphics[width=1.0\linewidth]{summaryView}
- \caption{
-Summarize the prediction results and sensitivity of the entire development set, and provide an explorative interface to select an example of interest.
-We summarize all the prediction results in (a), where the green block indicates correct predictions, the orange block indicates wrong predictions, and the label (e.g., E/E, E/N) indicates the ground truth label and the predicted label (N-Neural, E-Entailment, C-Contradiction).
-%
-The user can select the treemap to focus on the specific type of scenarios and reveal the histogram (b) and scatterplot (c) for displaying per-pair information on the selected subset.
-The selection can be further narrowed down by selecting the bin in the histogram.
-In (c) and (d), each point corresponds to one prediction.
- }
-\label{fig:summaryView}
-\end{figure}
+
 
 %The all pair
 % \begin{itemize}

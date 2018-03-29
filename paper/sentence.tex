@@ -1,3 +1,4 @@
+
 \subsection{Sentence View}
 \label{sec:sentence}
 % Once an exploration cycle started, the experts need to examine the premise and hypothesis sentence the current example.
@@ -5,20 +6,21 @@ As illustrated in Fig.~\ref{fig:sentenceView}, the sentence view shows the premi
 %
 To facilitate the analysis task (\textbf{T1}), we employ an automate sentence perturbation scheme that replaces \emph{nouns} and \emph{verbs} by their synonyms in the wordNet~\cite{Miller1995} (the standard lexical database for NLP applications).
 %
-When the perturbation is applied to either of the sentences, the replaced words are highlighted in blue (see Fig.~\ref{fig:modelPipeline}(e) ) to signal the modification made to the original sentence.
+When the perturbation is applied to either of the sentences, the replaced words are highlighted in blue (see Fig.~\ref{fig:modelPipeline}(e)) to signal the modification made to the original sentence.
 
-\begin{figure}[htbp]
-\centering
-\vspace{-2mm}
- \includegraphics[width=0.95\linewidth]{sentenceView}
- \vspace{-2mm}
- \caption{
- Sentence view shows the premise (c) and the hypothesis (d) sentence pair. The word that replaces the word in the original text is highlighted in blue (e).
- The \emph{Predict} and \emph{Predict All} controls (a) correspond to predicting the currently displayed sentence pairs and predicting all combinations of perturbed premise and hypothesis, respectively.
- Previous explored original sentence are stored in the dropdown list (d) that allow the user to revisit previous examined sentence.
-}
-\label{fig:sentenceView}
-\end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \vspace{-2mm}
+%  \includegraphics[width=0.9\linewidth]{sentenceView}
+%  \vspace{-2mm}
+%  \caption{
+%  Sentence view shows the premise (c) and the hypothesis (d) sentence pair. The word that replaces the word in the original text is highlighted in blue (e).
+%  The \emph{Predict} and \emph{Predict All} controls (a) correspond to predicting the currently displayed sentence pairs and predicting all combinations of perturbed premise and hypothesis, respectively.
+%  Previous explored original sentence are stored in the dropdown list (d) that allow the user to revisit previous examined sentence.
+% }
+% \label{fig:sentenceView}
+% \end{figure}
+
 
 At the top left of the view, the two controls \emph{Predict} and \emph{Predict All} (a) correspond to predicting the currently displayed sentence pairs and predict all combinations of perturbed premises and hypotheses, respectively.
 %
