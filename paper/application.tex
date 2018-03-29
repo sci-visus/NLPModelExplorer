@@ -48,7 +48,7 @@ Examining the decision making process is not only instrumental for evaluating th
 In the NLI model, the three stages (encoder, attention, classifier) work in synergy to produce the prediction.
 Therefore, making sense of the prediction involves understanding how different parts of the model affect the final prediction.
 
-In the previous section, we have noticed some unexpected behavior, where a minor perturbation of the text from \emph{pile} to \emph{heap} lead to change in the final prediction label (Fig.~\ref{fig:predictStability}(d)). Here, we want to make sense of what lead to the failed prediction. In this particular example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.''. The perturbed hypothesis \textbf{H2} replaced the word \textbf{pile} with \textbf{heap}.
+In the previous section, we have noticed some unexpected behavior, where a minor perturbation of the text from \emph{pile} to \emph{heap} lead to change in the final prediction label (Fig.~\ref{fig:predictStability}(d)). Here, we want to make sense of what lead to the failed prediction. In this particular example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.''. The perturbed hypothesis \textbf{H2} replaces the word \textbf{pile} with \textbf{heap}.
 
 As illustrated in Fig.~\ref{fig:att2pred}(a), based on the graph attention visualization, we can see in the attention for (\textbf{P}, \textbf{H2}) pair, the word \textbf{pile} and \textbf{heap} is not well-aligned (see Fig.~\ref{fig:att2pred}(a)). 
 %
@@ -77,15 +77,6 @@ The change of attention lead to change of prediction from neutral to the class b
 
 %%%% hypothesis on which part of model is wrong? %%%%%
 
-\begin{figure*}[t]
-\centering
-\vspace{-2mm}
- \includegraphics[width=0.9\linewidth]{failledEncoding}
- \caption{
-The prediction is failed due to incorrect alignment. For all the failed case, 
- }
-\label{fig:failedEncoding}
-\end{figure*}
 
 %One of the essential task for can be made in either of these stages.
 % \shusen{difference in sensitivity among entail natural and contradict relationships}
@@ -93,17 +84,48 @@ The prediction is failed due to incorrect alignment. For all the failed case,
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Scenario 3: What Does It Take to Correct a Wrong Prediction?}
-Once, we get a sense of how prediction are being made, where it went wrong. The next obvious questions are what does it take to correct the wrong prediction. 
-In addition, when we interpreting how decision are made, we always fix the model and make forward pass in the neural network.
+\subsection{Scenario 3: What Does It Take to Correct a Failed Prediction?}
+Up till now, we have employed perturbation for input to understand prediction robustness, utilized the perturbation of attention to infer the model decision making process. Both these perturbation operations rely on forward propagation in the pipeline and assume the model parameter stay unchanged. 
+%
+However, once we get a sense of how predictions are being made and hypothesized about the cause of failure in case of a prediction error, it nature to ask the follow up question, what does it take to fix an incorrect prediction? And more importantly, what role does each of the three stages play in such a process, are they affect the prediction differently?
+
+Domain experts obtain answers to these questions by utilizing the prediction and pipeline view in the proposed. As discussed in details in Section~\ref{sec:pipelineView}, we employed an margin-infused relaxed algorithm (MIRA) based optimization with two complementary objectives (1. apply least amount of change to the parameter, 2. making the new prediction as close to the reassigned prediction as possible) to update the network parameters.
+%
+We can then visualize how much each stage of the model is changed through the distribution of parameters change.
+
+To infer the role each stage of the pipeline plays, the proposed tool allow the parameter update to be enabled or disabled for each pipeline stage.
+The tool also includes an automatic option to try all the possible combination configurations. As illustrated in Fig.~\ref{fig:pipelineUpdate}, the ground truth for this sentence pair is neutral. However, the model produces an incorrect label entailment. We reassign the prediction to neural, which triggers model update optimization for $7$ different pipeline configurations. Four configurations are shown in Fig.~\ref{fig:pipelineUpdate}(a)(b)(c)(d), the arrow line highlights the corresponding prediction for each of the update model.
+
+Interestingly, all configurations except one are concentrated around the full neural prediction. Referring back to the pipeline visualization, we can see the one configuration that failed to produce the correct label is when only attention stage update is allowed.
+%
+In other words, update of attention stage seems to have significant less impact on the prediction result compared to the classifier or encoder of the model. 
+%The attention layer is less sensitive compared to encoding layer and classification layer. 
+We also examined many other sentences pairs, such an observation remains.  
+%This gives domain expert some hint about the significance of the role of each pipeline stage play in this model.
+% which based on the natural extension of the margin-infused relaxed algorithm (MIRA) to the neural network generalize the concept of maligin combined effort of the  proposed technique
+
+%
+%However, to understand how the model should
+
+
+
+\begin{figure*}[t]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=1.0\linewidth]{pipelineUpdate}
+ \caption{
+How changes in different stage impact the prediction.
+ }
+\label{fig:pipelineUpdate}
+\end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Scenario 4: Explore Relationship Between Grammar and Attention}
-There is no simple answer to what exactly is the information attention captures.
-Can attention capture grammar structure? Is 
+%\subsection{Scenario 4: Explore Relationship Between Grammar and Attention}
+%There is no simple answer to what exactly is the information attention captures.
+%Can attention capture grammar structure? Is 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Scenario 5: Handcraft Example Exploration}
+\subsection{Scenario 4: Handcraft Example Exploration}
 To test the limitation of the model, domain experts often handcraft ``extreme'' examples (as such the Facebook IPO example discussed in Section~\ref{sec:languageInference}) that they know most model will have a difficult time making correct inference. 
 %
 %The exploration is just started once the prediction result is examined, 
