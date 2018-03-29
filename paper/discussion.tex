@@ -1,10 +1,19 @@
 \section{Discussion}
 
+Even though the current setup for the proposed tool is only suitable for natural language inference task. However, due to the modular design and the many shared attribution among end-two-end NLP models we can readily extends the system to handle other tasks. We plan add support for neural machine translation, question and answer, and more in the future.
+%
+Initial setup cost and learning curve of the tool are often the major barriers for visualization adoption.
+In the proposed system, we approach these challenges by designing the system as an python library rather than as an monolithic tool. 
+Just like a python plotting library, the different pieces of the visualization can be access individual or combined in any ways by the user via a simple python API.
+As a result, the proposed tool can not only be configured to suit the different needs of the individual domain experts to better fit into their workflow, but also enable NLP researchers to experiment to simpler features reduce the learning curved. 
+Finally, the researchers are really appreciated the ability to easily swap functionality of the visualization in python.
+%defined and combined  The long term goal for the 
 
-Limitation: sometime wordNet  produce not very meaningful  perturbations
+How to generate meaningful perturbation
+Limitation: sometime wordNet produce not very meaningful  perturbations
 
-\begin{itemize}
-    \item how the visualization approaches generalizes to other NLP task
-    \item limitation
-    \item future direction
-\end{itemize}
+%\begin{itemize}
+%    \item how the visualization approaches generalizes to other NLP task
+%    \item limitation
+%    \item future direction
+%\end{itemize}
