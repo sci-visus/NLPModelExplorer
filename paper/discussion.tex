@@ -1,16 +1,21 @@
 \section{Discussion}
-
-The current setup for the proposed tool is only suitable for natural language inference task. However, due to the modular design and the many shared attribution among end-two-end NLP models we can readily extends the system to handle other tasks. We plan add support for neural machine translation, question and answer, and more in the future.
-%
-Initial setup cost and learning curve of the tool are often the major barriers for visualization adoption.
-In the proposed system, we approach these challenges by designing the system as an python library rather than as an monolithic tool. 
-Just like a python plotting library, the different pieces of the visualization can be access individual or combined in any ways by the user via a simple python API.
-As a result, the proposed tool can not only be configured to suit the different needs of the individual domain experts to better fit into their workflow, but also enable NLP researchers to experiment to simpler features reduce the learning curved. 
-Finally, the researchers are really appreciated the ability to easily swap functionality of the visualization in python.
+The initial learning curve and workflow setup cost of the tool are often the most significant barriers to adaptation.
+In the proposed system, we approach these challenges by designing the system as a python library rather than as a monolithic tool. 
+Just like a python plotting library, the different pieces of the visualization can be accessed individually, which help ease the initial learning curve. 
+The individual components can also be combined in any configuration desired by the user via a simple Python API to better fit into one's workflow.
+More importantly, the library based design allows easily integrate with existing model implemented in python (a code example is illustrated in \textbf{Appendix B}).
 %defined and combined  The long term goal for the 
+Even though the current setup for the proposed tool is only suitable for natural language inference task. However, due to the modular design and the many shared attribution among end-two-end NLP models we can readily extends the system to handle other tasks. We plan to add support for more NLP task, such as neural machine translation, question and answer, in the future.
 
-How to generate meaningful perturbation
-Limitation: sometime wordNet produce not very meaningful  perturbations
+One hard to address limitation of the tool is the quality of the perturbed sentences. 
+Since we rely on WordNet to generate the perturbation, which has a quite inclusive definition for synonymous. Often, we can identify perturbed sentences that are not particularly meaningful (e.g., sentences with very obscured words or usages). 
+Even if all the words are meaning, currently, there is no way we can verify whether the perturbed sentence is valid natural language composition or not.
+%
+However, the perturbation of sentence is an open research area on its own. 
+%As better method appears, we can easily swap out the sentence perturbation functionality 
+
+To sum up, this work introduces the NLIVZ, a perturbation-driven visual interrogation system that provides the expert with a streamlined exploration environment. The proposed system frees the researchers from interruptions and tedious chores and allows them to focus on the more productive activities.
+
 
 %\begin{itemize}
 %    \item how the visualization approaches generalizes to other NLP task
