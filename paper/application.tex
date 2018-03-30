@@ -118,7 +118,7 @@ We then visualize how much each stage of the model is changed through the distri
 \centering
 \vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{pipelineUpdate}
- \vspace{-2mm}
+  \vspace{-6mm}
  \caption{
 Experiment with all configurations for the label reassignment optimization. As shown in (d), the update of attention stage seems to have significantly less impact on the prediction result compared to the classifier or encoder of the model.
  }
@@ -142,6 +142,7 @@ In other words, the update of attention stage seems to have significantly less i
 \centering
 \vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{depTreeExample}
+  \vspace{-6mm}
  \caption{
 Dependency tree provides valuable information that can help fix the prediction error.
 In (a), the model mistakenly aligns the word green, which lead to wrong prediction.  
@@ -149,6 +150,7 @@ After examining the dependency tree (highlighted by pink squares), we can see th
 In (b), by editing the attention and forcing the two \textbf{green}'s alignment to be zero, the prediction label is corrected to \emph{neutral}. 
  }
 \label{fig:depTreeExample}
+ \vspace{-2mm}
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
