@@ -63,7 +63,7 @@ As illustrated in Fig.~\ref{fig:att2pred}(a), based on the graph attention visua
 %
 To test whether the alignment is what contribute to the misclassification, the domain expert utilizes the attention editing functionality in the matrix attention view (Fig.~\ref{fig:attentionVis}(c)) to make the word \textbf{pile} align with \textbf{heap} (shown in Fig.~\ref{fig:att2pred}(b)).
 %
-As illustrated in Fig.~\ref{fig:att2pred} (d), after the edit, the original prediction (Fig.~\ref{fig:att2pred}(c)) has been moved from neutral to the classification boundary (Fig.~\ref{fig:att2pred}(d)), but the corrected attention fails to produce a conclusive \emph{entailment} prediction.
+As illustrated in Fig.~\ref{fig:att2pred} (d), after the edit, the original prediction (Fig.~\ref{fig:att2pred}(c)) has been moved from neutral to the classification boundary (Fig.~\ref{fig:att2pred}(d)), but the corrected attention fails to produce a conclusive \emph{entailment} prediction (a case where the attention edit corrects the final prediction is shown in Fig.~ref{fig:depTreeExample}).
 %
 %Interestingly, the original pair's attention is almost identical to the edited attention (the comparison is not shown in the figure). 
 Such an observation implies that the model does not firmly believe ``\textbf{heap} of snow'' and ``\textbf{pile} of snow'' have the same meaning, which may indicate the potential issue with the encoder or word embedding.
@@ -88,10 +88,10 @@ We have shown that the perfect alignment does not necessarily guarantee a correc
 %
 On the flip side, we may produce the right predictions for the ``wrong'' reason (i.e., incorrect attention). 
 %As illustrated in Fig.~\ref{fig:wrongAlignRightPred}, 
-For example the sentence pair (\emph{H}: ``A couple is taking a break from bicycling.'', \textbf{H}: ``sisters sit next to their bikes.''). The word \textbf{take} and \textbf{next} should not align with each other,
+For example, in the sentence pair (\textbf{P}: ``A couple is taking a break from bicycling.'', \textbf{H}: ``sisters sit next to their bikes.''), the word \textbf{take} and \textbf{next} should not align with each other,
 %(Fig.~\ref{fig:wrongAlignRightPred}(a)), 
 yet, it still produce the correct \emph{neutral} label.% (Fig.~\ref{fig:wrongAlignRightPred}(b)).
-%
+
 %By looking into the model decision making process, we can assess whether the model is behaving as intended. 
 %These situations demonstrate the important of understanding the model decision making process, we can assess whether the model is behaving as intended. 
 
