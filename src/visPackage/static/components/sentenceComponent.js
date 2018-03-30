@@ -59,13 +59,12 @@ class sentenceComponent extends baseComponent {
                         this.clearDropdown(this.div + "srcInput");
                         this.clearDropdown(this.div + "targInput");
 
-                        // this.setData("allSourceSens", [pair[0]]);
-                        // this.setData("allTargetSens", [pair[1]]);
+                        console.log("refresh the allSourceSens");
                     }
                 }
 
                 this.onReceiveCurrentPair();
-                this.oldPair = pair.slice();
+                this.oldPair = JSON.parse(JSON.stringify(pair));
                 break;
         }
     }
