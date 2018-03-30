@@ -162,7 +162,7 @@ Classifier takes features from previous steps and predict a probability distribu
   \boldsymbol{v}_j &= G([\overrightarrow{\boldsymbol{a}}_j \cdot \boldsymbol{P} \hspace{1ex}  | \hspace{1ex}  \overline{\boldsymbol{h}}_j])
 \end{align}
 
-where G is the aggregation layer (e.g. two-layer ReLU) and $[\cdot|\cdot]$ denotes concatenation. With the aggregated premise feature $\boldsymbol{u}_i$ and hypothesis feature $\boldsymbol{v}_j$, the classifier does further feature conjunction to predict weight on each entailment score:
+where G is the aggregation layer (e.g. two-layer ReLU) and $[\cdot|\cdot]$ denotes concatenation. With the aggregated premise feature $\boldsymbol{u}_i$ and hypothesis feature $\boldsymbol{v}_j$, the classifier does further feature conjunction to predict score on each entailment label:
 \begin{align}
   \boldsymbol{y} &= Z([\sum_i \boldsymbol{u}_i | \sum_j \boldsymbol{v}_j]) \label{eq:yscore}
 \end{align}
