@@ -1,14 +1,4 @@
-\begin{figure}[htbp]
-\centering
- \includegraphics[width=1.0\linewidth]{pipeline}
- \caption{
- Perturbation-driven exploration of the natural language inference model.
- In the proposed tool, we enable the interrogation of the relationship between different components of the model via the perturbation-based analysis.
- %
- The user can perturb the input sentences (i.e., replace words with synonymous), perturb the attention (i.e., alter the soft alignment between sentences), and perturb the prediction (i.e., adjust the prediction by making updates to the model).
-}
-\label{fig:modelPipeline}
-\end{figure}
+
 
 \section{NLIZE System}
 In this section, we discuss the design and implementation of the NLIZE (pronounced as ``analyze''; see interface overview in Fig.~\ref{fig:teaser}) system, which address the visualization tasks (\textbf{T1-3}).
@@ -21,6 +11,20 @@ As illustrated in Fig.~\ref{fig:modelPipeline}, we enable the automated or user-
 %
 In the following sections, we describe in detail the five major components of the proposed system, namely, the sentence view  (Section~\ref{sec:sentence}), the attention view (Section~\ref{sec:attention}), the prediction view (Section~\ref{sec:prediction}), the pipeline view (Section~\ref{sec:pipeline}), and the all pair summary view (Section~\ref{sec:allPairs}).
 
+\begin{figure}[htbp]
+\vspace{-2mm}
+\centering
+ \includegraphics[width=1.0\linewidth]{pipeline}
+ \vspace{-5mm}
+ \caption{
+ Perturbation-driven exploration of the natural language inference model.
+ In the proposed tool, we enable the interrogation of the relationship between different components of the model via the perturbation-based analysis.
+ %
+ The user can perturb the input sentences (i.e., replace words with synonymous), perturb the attention (i.e., alter the soft alignment between sentences), and perturb the prediction (i.e., adjust the prediction by making updates to the model).
+}
+\vspace{-2mm}
+\label{fig:modelPipeline}
+\end{figure}
 
 
 

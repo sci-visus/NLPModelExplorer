@@ -13,6 +13,7 @@ The hypothesis statement ``Kid ate fruits'' can be concluded from the premise. T
 %and \emph{Neutral} implies no conclusion can be made on either \emph{Entailment} or \emph{Contradiction}.
 
 \begin{table}[htbp]
+\vspace{-2mm}
 \label{tab:NLI}
 \centering
 \caption{An illustration of natural language inference.}
@@ -32,6 +33,7 @@ The hypothesis statement ``Kid ate fruits'' can be concluded from the premise. T
  %hypothesis & People ignored Facebook's IPO. &  & \checkmark & \\
  \hline
 \end{tabular}
+\vspace{-2mm}
 \end{table}
 
 
@@ -75,9 +77,10 @@ Many of the recent NLP end-to-end neural network models, despite having potentia
 The existence of shared conceptual structures means the proposed tool, although designed for NLI tasks, can be readily generalized for a much broader set of applications.
 
 \begin{figure}[htbp]
+\vspace{-2mm}
 \centering
  \includegraphics[width=1.0\linewidth]{end2end}
- \vspace{-2mm}
+ \vspace{-5mm}
  \caption{End-to-end NLP neural network model.}
   \vspace{-2mm}
 \label{fig:modelPipeline}
@@ -101,9 +104,10 @@ Recently, attention has contributed to many strongly performed NLP models~\cite{
 \centering
 \vspace{-2mm}
  \includegraphics[width=0.9\linewidth]{attentionIllustration}
-
+  \vspace{-2mm}
  \caption{Attention can be naturally explained as a form of alignment which exposes an interpretable layer in end-to-end neural networks. On the left, the matrix shows the attention between between premise and hypothesis pair. On the right, attention can also be interpreted as alignment.}
 \label{fig:attention}
+  \vspace{-2mm}
 \end{figure}
 
 For natural language inference task, as illustrated in Fig.~\ref{fig:attention}, the attention information can be represented as a matrix describing the soft alignment between words in the premise and the words in the hypothesis. As we can see in this example, the higher values indicate significant alignments between words. The \emph{subject}, \emph{verb}, and \emph{object} between these two sentences are aligned correctly (words, such as ``an'', which has less importance in determining sentence relationship, was assigned a lower score). Interestingly, the difference between the subject words does not affect their alignment. The classification stage can then utilize this information to determine the subject of the sentence is different, and therefore, despite the other part of the sentences are identical, the relationship between the premise and the hypothesis is neutral.
