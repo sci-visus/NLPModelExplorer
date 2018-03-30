@@ -69,25 +69,28 @@ As illustrated in Fig.~\ref{fig:att2pred} (d), after the edit, the original pred
 Such an observation implies that the model does not firmly believe ``\textbf{heap} of snow'' and ``\textbf{pile} of snow'' have the same meaning, which may indicate the potential issue with the encoder or word embedding.
 
 
-\begin{figure}[htbp]
-\centering
-\vspace{-2mm}
- \includegraphics[width=1.0\linewidth]{wrongAlignRightPred}
- \caption{
-The model may produces the right prediction for the ``wrong'' reason, i.e., attention.
-The word \textbf{break} and \textbf{sit} should not align with each other (a). Yet, based on the attention, model still produces the correct prediction (b).
-}
-\label{fig:wrongAlignRightPred}
-\end{figure}
+%\begin{figure}[htbp]
+%\centering
+%\vspace{-2mm}
+% \includegraphics[width=1.0\linewidth]{wrongAlignRightPred}
+% \caption{
+%The model may produces the right prediction for the ``wrong'' reason, i.e., attention.
+%The word \textbf{break} and \textbf{sit} should not align with each other (a). Yet, based on the attention, model still produces the correct prediction (b).
+%}
+%\label{fig:wrongAlignRightPred}
+%\end{figure}
 
 
 %\shusen{Example where the prediction is correct but the alignment is wrong}
 %%%% are we obtain correct prediction from wrong alignment %%%%%
 %By looking into the model decision making process, we can assess whether the model is behaving as intended. For the attention based NLI model, one underlying assumption is that the attention should capture the correct alignment between words in the premise and hypothesis sentence for the classifier to make an informed/correct decision.
-In the previous example, we show that the perfect alignment does not necessarily guarantee a correct prediction.
+We have shown that the perfect alignment does not necessarily guarantee a correct prediction.
 %
 On the flip side, we may produce the right predictions for the ``wrong'' reason (i.e., incorrect attention). 
-As illustrated in Fig.~\ref{fig:wrongAlignRightPred}, the word \textbf{take} and \textbf{next} should not align with each other (Fig.~\ref{fig:wrongAlignRightPred}(a)), however, it still produce the correct \emph{neutral} label (Fig.~\ref{fig:wrongAlignRightPred}(b)).
+%As illustrated in Fig.~\ref{fig:wrongAlignRightPred}, 
+For example the sentence pair (\emph{H}: ``A couple is taking a break from bicycling.'', \textbf{H}: ``sisters sit next to their bikes.''). The word \textbf{take} and \textbf{next} should not align with each other,
+%(Fig.~\ref{fig:wrongAlignRightPred}(a)), 
+yet, it still produce the correct \emph{neutral} label.% (Fig.~\ref{fig:wrongAlignRightPred}(b)).
 %
 %By looking into the model decision making process, we can assess whether the model is behaving as intended. 
 %These situations demonstrate the important of understanding the model decision making process, we can assess whether the model is behaving as intended. 
