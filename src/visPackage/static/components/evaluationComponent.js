@@ -100,12 +100,14 @@ class evaluationComponent extends baseComponent {
         // console.log(stabilities);
         this.histo.setSample(data, d => d.stability);
         this.histo.setTitle("Sensitivity");
-        this.scatter.setData(data, ["Sensitivity", "PerturbCount"],
+        // this.scatter.setData(data, ["Sensitivity", "PerturbCount"],
+        this.scatter.setData(data, ["Stability", "PerturbCount"],
             d => [d.stability, d.perturbCount]);
     }
 
     updateScatterplot(data) {
-        this.scatter.setData(data, ["Sensitivity", "PerturbCount"],
+        // this.scatter.setData(data, ["Sensitivity", "PerturbCount"],
+        this.scatter.setData(data, ["Stability", "PerturbCount"],
             d => [d.stability, d.perturbCount]);
     }
 
@@ -159,12 +161,4 @@ class evaluationComponent extends baseComponent {
         }
     }
 
-    // parseFunctionReturn(msg) {
-    //     switch (msg["func"]) {
-    //         case "loadSummaryStatistic":
-    //             //load data
-    //             console.log(msg);
-    //             break;
-    //     }
-    // }
 }

@@ -37,16 +37,6 @@ Through the exploration of many samples with low stabilities (i.e., high sensiti
 However, some predictions, such as the one illustrated in Fig.~\ref{fig:predictStability}(d) can alter the prediction quite drastically with minor perturbation (shown in Fig.~\ref{fig:predictStability}$d_1$, where the word \textbf{heap} is replaced by \textbf{pile} in the hypothesis sentence). In the following section, we will examine what happened inside the model and hypothesize the cause of failure (see Fig.~\ref{fig:att2pred}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% perturb input, attention
-\subsection{Scenario 2: Examine the Decision Making Process}
-The predicted label alone provides limited information. Often, domain experts want to know how does the model arrive at a conclusion. And if the prediction is incorrect, where in the model does the error occur?
-Examining the decision making process is not only instrumental in evaluating the model performance but also essential for hypothesizing improvement strategies for future models.
-%
-In the NLI model, the three stages (encoder, attention, classifier) work in synergy to produce the prediction.
-Therefore, making sense of the prediction involves understanding how different parts of the model affect the final prediction.
-
-In the previous section, we have noticed that a minor perturbation of the sentence may result in change of the final prediction (Fig.~\ref{fig:predictStability}(d)). Here, we want to make sense of what lead to the failed prediction. In this example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.''. The perturbed hypothesis \textbf{H2} replaces the word \textbf{pile} with \textbf{heap} in \textbf{H1}. This example should be rather straightforward for the model since there are only minor differences between the \textbf{P} and \textbf{H1}/\textbf{H2}.
-
 \begin{figure}[htbp]
 \centering
 \vspace{-2mm}
@@ -58,6 +48,28 @@ The change of attention leads to the change of prediction from neutral to the cl
 }
 \label{fig:att2pred}
 \end{figure}
+
+% perturb input, attention
+\begin{figure*}[t]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=1.0\linewidth]{pipelineUpdate}
+  \vspace{-6mm}
+ \caption{
+Experiment with all configurations for the label reassignment optimization. As shown in (d), the update of attention stage seems to have significantly less impact on the prediction result compared to the classifier or encoder of the model.
+ }
+  \vspace{-4mm}
+\label{fig:pipelineUpdate}
+\end{figure*}
+
+\subsection{Scenario 2: Examine the Decision Making Process}
+The predicted label alone provides limited information. Often, domain experts want to know how does the model arrive at a conclusion. And if the prediction is incorrect, where in the model does the error occur?
+Examining the decision making process is not only instrumental in evaluating the model performance but also essential for hypothesizing improvement strategies for future models.
+%
+In the NLI model, the three stages (encoder, attention, classifier) work in synergy to produce the prediction.
+Therefore, making sense of the prediction involves understanding how different parts of the model affect the final prediction.
+
+In the previous section, we have noticed that a minor perturbation of the sentence may result in change of the final prediction (Fig.~\ref{fig:predictStability}(d)). Here, we want to make sense of what lead to the failed prediction. In this example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow.''. The perturbed hypothesis \textbf{H2} replaces the word \textbf{pile} with \textbf{heap} in \textbf{H1}. This example should be rather straightforward for the model since there are only minor differences between the \textbf{P} and \textbf{H1}/\textbf{H2}.
 
 As illustrated in Fig.~\ref{fig:att2pred}(a), based on the graph attention visualization, we can see in the attention for (\textbf{P}, \textbf{H2}) pair, the word \textbf{pile} and \textbf{heap} is not well-aligned (see Fig.~\ref{fig:att2pred}(a)).
 %
@@ -113,17 +125,6 @@ However, once we get a sense of how predictions are made and hypothesized about 
 Domain experts can obtain answers to these questions by utilizing the prediction and pipeline view in the proposed. As discussed in details in Section~\ref{sec:pipeline}, we employed an margin-infused relaxed algorithm (MIRA) based optimization with two objectives (1. apply least amount of change to the parameter, 2. make the new prediction as close to the reassigned prediction as possible) to update the network parameters.
 %
 We then visualize how much each stage of the model is changed through the distribution of parameters difference (see Fig.~\ref{fig:pipelineView}).
-
-\begin{figure*}[t]
-\centering
-\vspace{-2mm}
- \includegraphics[width=1.0\linewidth]{pipelineUpdate}
-  \vspace{-6mm}
- \caption{
-Experiment with all configurations for the label reassignment optimization. As shown in (d), the update of attention stage seems to have significantly less impact on the prediction result compared to the classifier or encoder of the model.
- }
-\label{fig:pipelineUpdate}
-\end{figure*}
 
 To infer the role each stage of the pipeline plays, the proposed tool allows the parameter update to be enabled or disabled for each pipeline stage.
 The tool also includes an automatic option to test all the possible configuration combinations. As illustrated in Fig.~\ref{fig:pipelineUpdate}, the ground truth for this sentence pair is neutral. However, the model produces an incorrect label \emph{entailment}. The domain expert reassigns the prediction to \emph{neutral}, which triggers the prediction update optimization for $7$ different pipeline configurations. Four configurations are shown in Fig.~\ref{fig:pipelineUpdate}(a)(b)(c)(d). The updated predictions are illustrated as blue squares, and the pointers highlighted the corresponding pipeline configurations.
