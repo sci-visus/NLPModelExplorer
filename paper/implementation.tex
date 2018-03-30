@@ -1,8 +1,15 @@
 \subsection{Implementation}
 \label{sec:implementation}
-We design the tool with flexibility and extensibility in mind. One of the key objectives is to allow easy integration with the existing NLP workflow. Therefore, instead of implementing the tool as a standalone application, we encapsulate the visualization functionality as a Python library, in which the behavior of the visual interaction (e.g., once prediction button is pressed what should be the prediction result) is defined in Python using the existing model in the expert's workflow. Also, due to the separation between the visualization and the underlying model computation, we can readily adapt different models or the same model with a different configuration or training. 
+The initial learning curve and workflow setup cost of the tool are often the most significant barriers for user adaptation.
+In the proposed system, we approach these challenges by designing the system as a python library rather than as a monolithic standalone application. 
+Just like a python plotting library, the different pieces of the visualization can be accessed individually, which help ease the initial learning curve. 
+The individual components can also be combined in any configuration desired by the user via a simple Python API to better fit into one's workflow.
+More importantly, the library based design allows easily integrate with existing model implemented in python.
+%
+To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction, accessing attention, to link the visualization to their NLP models (see the code example in \textbf{Appendix B}). 
 
-To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction, accessing attention, to link the visualization to their models. The code (consists only a few lines of code) used to create the visualization in this paper is included in appendix B.
+%We design the tool with flexibility and extensibility in mind. One of the key objectives is to allow easy integration with the existing NLP workflow. Therefore, instead of implementing the tool as a standalone application, we encapsulate the visualization functionality as a Python library, in which the behavior of the visual interaction (e.g., once prediction button is pressed what should be the prediction result) is defined in Python using the existing model in the expert's workflow. Also, due to the separation between the visualization and the underlying model computation, we can readily adapt different models or the same model with a different configuration or training. 
+
 %
 The NLP model is implemented in Python using \emph{pytorch}~\cite{PaszkeGrossChintala2017}.
 The visual elements are implemented in Javascript using \emph{D3.js} library , and the Python server act as the glue between the Javascript visualization and the \emph{pytorch} model.
