@@ -1,3 +1,4 @@
+
 \subsection{Prediction View}
 \label{sec:prediction}
 For a given sentence pair, the model predicts a discrete probability distribution of the three labels (neutral, contradiction, and entailment).
@@ -24,5 +25,4 @@ As illustrated in (b), the predicted label does not match the ground truth. Ther
 \end{figure}
 
 To perturb the prediction (\textbf{T3}), we need a way to communicate the reassignment of the predicted label. As illustrated in Fig.~\ref{fig:predictionView}(b), we integrate such an operation in the prediction view. When pressing and dragging the prediction (represented as a circle), the user is presented with the three options (E, N, C) corresponding to the labels. When the user hovers on one of the options, a dotted line is shown to indicate the newly assigned label. The assignment is applied when the user releases the mouse while hovering on the label of choice.
-
 
