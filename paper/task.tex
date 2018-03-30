@@ -26,13 +26,19 @@ To support the visual exploratory workflow, we need to address the following vis
 
 \begin{itemize}
 
-\item To begin with, understanding how perturbation (e.g., replacing words with synonymous) of the input affects the prediction is the crucial part of error analysis. It not only measures the prediction sensitivity, but also helps reveal the potential source of the errors in the input (\textbf{T1}).
+\item \textbf{T1}: Understand the stability of a prediction, i.e., how perturbation of input affects the behavior of the model?
+
+\item \textbf{T2}: Examine the attention mechanism, i.e., what is the relationship between input and attention and how does the attention affect the prediction?
+
+\item \textbf{T3}: When the predicted label is incorrect, what does it take to fix the model? What is the effect of updating different stages of the model?
+
+%\item To begin with, understanding how perturbation (e.g., replacing words with synonymous) of the input affects the prediction is the crucial part of error analysis. It not only measures the prediction sensitivity, but also helps reveal the potential source of the errors in the input (\textbf{T1}).
 
 %Understand how attention affect the prediction.
-\item In addition, we study the role and mechanism of attention by examining how perturbation in the input sentence affect the attention, and how changes in attention affect prediction (\textbf{T2}).
+%\item In addition, we study the role and mechanism of attention by examining how perturbation in the input sentence affect the attention, and how changes in attention affect prediction (\textbf{T2}).
 %Study the relationship between model stages (encoder, attention, classifier) and the prediction
 
-\item So far, we focus on how changes in earlier stage of the model affect later stages or the final prediction. However, what if the current prediction is wrong, how can we apply minimal update to the model to produce correct prediction. and how would such a modification affect attention (\textbf{T3}).
+%\item So far, we focus on how changes in earlier stage of the model affect later stages or the final prediction. However, what if the current prediction is wrong, how can we apply minimal update to the model to produce correct prediction. and how would such a modification affect attention (\textbf{T3}).
 % Therefore, thirdly, we want to explore how model should be updated to produce the desirable change of prediction, and how the attention respond to such a change (\textbf{T3}).
 
 \end{itemize}
