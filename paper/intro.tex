@@ -41,14 +41,20 @@ Here, we aim to provide immediate and informative answers to these \emph{``what 
 We implement our vision of the perturbation-driven exploration in an interactive visualization system for natural language inference models~\cite{Parikh2016}.
 However, the components of the visualization and the overall paradigm can be readily extended to other NLP tasks, such as question and answer, text summarization, etc.
 %
-In the simplest form, the inference task asks the question about whether \textbf{sentence A} and \textbf{sentence B}: (1) are \emph{entailed} (one can infer \textbf{B} from \textbf{A}; (2) \emph{contradict} (\textbf{B} disagrees with \textbf{A}) or (3) are \emph{neutral} (\textbf{A} and \textbf{B} talk about different/unrelated things
+In the simplest form, the inference task asks whether the
+relationship between \textbf{sentence A} and \textbf{sentence B}: (1) is \emph{entailment} (one can infer \textbf{B} from \textbf{A}), (2) \emph{contradiction} (\textbf{B} disagrees with \textbf{A}) or (3) is \emph{neutral} (\textbf{A} and \textbf{B} talk about different/unrelated things).
 % we can infer the content of \textbf{sentence B} from \textbf{sentence A} (\emph{entail}), if they contradict with each other (\emph{contradiction}), or whether two sentences talk about different/unrelated things (\emph{neutral}). 
-Language inference addresses the fundamental challenge of measuring the semantic similarity of sentences, and is one of the core NLP tasks (see Section~\ref{sec:languageInference} for details).
+Natural language inference addresses the fundamental challenge of identifying semantic relationships between sentences, and is a core NLP task (see Section~\ref{sec:languageInference} for details).
 
-One recent advance in neural natural language process models is the introduction of \emph{attention mechanisms}~\cite{VaswaniShazeerParmar2017} (Section~\ref{sec:attention}). Intuitively, the attention helps capture which part of the input the model is deemed more important for making a prediction. The attention is often represented as weights for individual words or pairs of words (i.e., the alignment between words in different sentences).
+One recent advance in neural natural language process models is the
+introduction of \emph{attention
+  mechanisms}~\cite[for example]{bahdanau2014neural,VaswaniShazeerParmar2017}
+(Section~\ref{sec:attention}). Intuitively, attention asks which parts of the
+input are deemed more important for making a prediction. The attention is often represented via weights for individual words or pairs of words (i.e., the alignment between words in different sentences).
 %
 %\shusen{seems repeated some of the previous points}
-There have been many speculations on how attention works in various models. By utilizing the proposed tool, the domain experts study how changes in sentence input, attention, or prediction affect each other, which helps them develop deeper intuitive and alternative hypotheses. 
+There have been many speculations on how attention works in various models.
+Using the proposed tool, the domain experts can study how changes in sentence input, attention, or prediction affect each other, which helps them develop deeper intuitive and alternative hypotheses. 
 %we can perturb the attention and observer the change in the prediction, perturb the sentence input and observe the effects on the attention. And more importantly, we also allow the user to change prediction, where we apply a constrained optimization to find the least amount of parameter update to produce the user assign label. 
 %Another word, 
 %Such type of exploration is not only essential to interpret the language inference problem, but can also be generalized to other NLP model utilized the attention mechanisms.
@@ -56,16 +62,16 @@ Moreover, we propose to enhance the standard visual encoding (e.g., as a biparti
 %
 Finally, as discussed in Section~\ref{sec:grammarAttention}, the ability to examine how attention corresponds to the grammatical structure also enables domain experts to speculate about the potential benefits of including the linguistic structure in the design of the attention component of the model.
 
-In summary, the key contributions of the proposed works are the following:
+In summary, the key contributions of this paper are:
 \begin{itemize}
   % \item Distill the visualization tasks for making sense of the role of attention in natural language inference (section~\ref{sec:task});
     \item A perturbation-driven exploration paradigm derived from close examination of how domain experts conduct exploratory analysis on end-to-end NLP neural network models;
     
-    \item The NLIZE system that enriches such a paradigm by providing an intuitive environment that allows domain experts to readily express hypotheses and obtain instantaneous feedbacks; 
+    \item The NLIZE system that enriches such a paradigm by providing an intuitive environment that allows domain experts to readily express hypotheses and obtain instantaneous feedback; 
     %to  experiment with the intricate relationships among input sentences, model internals, and the prediction;
     %\item Perform error analysis by examining the stability of the predictions under perturbation;
 
-    \item An optimization scheme for correcting a failed prediction based on the natural extension of the margin-infused relaxed algorithm (MIRA) to the neural network; and
+    \item An optimization scheme for correcting a failed prediction based on a natural extension of the margin-infused relaxed algorithm (MIRA) to neural networks; and
     % to minimally update the model to fix a failed prediction, which help reason about the  better understand the re the question about how t
     
     \item A visual encoding of the attention by imposing sentence linguistic structure to allow grammar-guided sentence simplification.
