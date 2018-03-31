@@ -22,15 +22,15 @@ Moreover, by introducing new visual encodings and summarizations, we can drastic
 %Through many rounds of discussions with NLP experts,
 %In such a highly exploratory process, the expert likely will have many ``what if'' type of questions (e.g., what if I make change to this word in the input, what if I force the words to align correctly in the attention), get responsive answers to these queries is essential to maintain the flow of reasoning.
 %
-To support the visual exploratory workflow, we need to address the following visualization tasks.
+To support the exploratory workflow for analyzing NLI models, we need to address the following tasks.
 
 \begin{itemize}
 
-\item \textbf{T1}: Understand the stability of a prediction, i.e., how perturbation of input affects the behavior of the model?
+\item \textbf{T1}: Understand the stability of a prediction, i.e., how perturbations of the input affect the behavior of the model?
 
-\item \textbf{T2}: Examine the attention mechanism, i.e., what is the relationship between input and attention and how does the attention affect the prediction?
+\item \textbf{T2}: Examine the attention mechanism, i.e., what is the relationship between the input and the attention, and how does the attention affect the prediction?
 
-\item \textbf{T3}: When the predicted label is wrong, how can we update the model to correct the prediction? What is the effect of updating different parts of the model?
+\item \textbf{T3}: When the predicted label is wrong, how can we update the model to correct the prediction? What are the effects of updating different parts of the model?
 
 %\item To begin with, understanding how perturbation (e.g., replacing words with synonymous) of the input affects the prediction is the crucial part of error analysis. It not only measures the prediction sensitivity, but also helps reveal the potential source of the errors in the input (\textbf{T1}).
 
