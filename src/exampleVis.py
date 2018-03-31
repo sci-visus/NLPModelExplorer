@@ -19,7 +19,7 @@ visLayout = {
     }
 
 #setup interface
-modelVis = textEntailVisModule(visLayout)
+modelVis = nlizeModule(visLayout)
 
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)

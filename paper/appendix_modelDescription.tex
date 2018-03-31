@@ -124,7 +124,7 @@ NLIZE: A Perturbation-Driven Visual Interrogation Tool for Analyzing and Interpr
 \firstsection{Appendix A: Detailed description of the Model}
 \maketitle
 
-The Decomposable Attention~\cite{parikh2016emnlp} model is an end-to-end model that takes vectorized premise sentence and hypothesis sentence, and output a probability distribution over three labels. The pipeline can be separated into three phases: encoder, attention and classifier. Here we briefly formalize these three layers.
+The Decomposable Attention~\cite{parikh2016emnlp} model is an end-to-end model that takes vectorized premise sentence and hypothesis sentence, and output a probability distribution over three labels. The pipeline can be separated into three phases: encoder, attention and classifier. Here we briefly formalize these three layers (referred to as stages in the main text of the paper).
 
 \subsection{Encoder}
 Denote the premise sentence as $\overline{\boldsymbol{P}} = (\overline{\boldsymbol{p}}_1, \overline{\boldsymbol{p}}_2, ..., \overline{\boldsymbol{p}}_m)$ and hypothesis sentence as $\overline{\boldsymbol{H}} = (\overline{\boldsymbol{h}}_1, \overline{\boldsymbol{h}}_2, ..., \overline{\boldsymbol{h}}_n)$ where $\overline{\boldsymbol{p}}_i$ and $\overline{\boldsymbol{h}}_j$ are the input embedding vectors respectively. The purpose of encoder is to generate specialized encodings for attention. Define the encoder function as
@@ -174,9 +174,9 @@ where $Z$ is another neural layer (e.g. two-layer ReLU followed by a linear laye
 \textbf{Comment} We adopted the same network setting in the Decomposable Attention paper~\cite{parikh2016emnlp}. That are, network hidden size is $200$; input word embeddings are $200$d embeddings (downsampled from $300$d GloVe embeddings~\cite{PenningtonSocherManning2014} by a learnable linear layer). For learning, dropout~\cite{SrivastavaHinton2014} is $0.2$ and learning rate is $0.05$. Optimization algorithm is AdaGrad~\cite{duchi2011adaptive} with mini-batch size 64 and number of epochs 300.
 
 \section{Appendix B: Code Example: Link Visualization with Model}
-From the user's point of view, the following Python script is all the code the domain expert needs to link the NLP model with the visual interface and generate the tool used in the paper. The visualization library's API defines several callbacks (called Hook in the code) that correspond to functions (e.g., prediction) need to be supplied by the NLP model.
+From the user's point of view, the following Python script is all the code the domain expert needs to link the NLP model with the visual interface and set up the visualization system shown in the paper. The visualization library's API defines several callbacks (called ``Hook'' in the API) that correspond to functions (e.g., prediction) need to be supplied by the NLP model.
 
-\begin{lstlisting}[language=Python, caption=Code for generating the visualization.]
+\begin{lstlisting}[language=Python, caption=Code for setting up the visualization system shown in the paper.]
 from nlize import *
 from modelInterface import *
 from sentenceGenerator import *

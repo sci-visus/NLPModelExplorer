@@ -128,7 +128,7 @@ data organization structure
 
 layoutConfig = None
 
-class textEntailVisModule(visModule):
+class nlizeModule(visModule):
     def __init__(self, componentLayout):
         # super(visModule, self).__init__()
         self.index = 0
