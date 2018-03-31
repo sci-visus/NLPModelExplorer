@@ -1,12 +1,11 @@
 \section{Discussion}
-The current setup for the proposed tool is only suitable for natural language inference task. However, due to the modular design and the many shared attribution among end-two-end NLP models, we can readily extend the system to handle other tasks. In the future, we plan to open source our projection and add support for more NLP tasks, such as neural machine translation, question and answer.
+The current setup for the proposed tool is suitable only for natural language inference task. However, due to the modular design and the many shared attributions among the end-two-end NLP models, we can readily extend the system to handle other tasks. In the future, we plan to open source our projection and add support for more NLP tasks, such as neural machine translation and question-and-answer.
 %
-From our evaluation process, we found that the quality of automatic perturbed sentences can be a potential limitation of the tool.
-Since we rely on WordNet to generate the perturbation, which has a rather inclusive definition for synonymous. Often, we can identify perturbed sentences that are not particularly meaningful (e.g., sentences with very obscured words or usages). 
-Even if all the words are meaning, currently, there is no way we can verify whether the perturbed sentence is valid natural language composition or not.
+From our evaluation process, we found that the quality of automatic perturbed sentences can be a potential limitation of the tool, since we rely on WordNet to generate the perturbation, which has a rather inclusive definition for synonymous. Often, we can identify perturbed sentences that are not particularly meaningful (e.g., sentences with very obscure words or usages). 
+Even if all the words are meaningful, currently, there is no way we can verify whether the perturbed sentence is valid natural language composition or not.
 %
-However, from natural language process point of view the perturbation of sentence while maintaining semantic and sentence correctness is an open research area on its own. 
+However, from the natural language process point of view, the perturbation of a sentence while maintaining semantic and grammar correctness is an open research area on its own. 
 %As better method appears, we can easily swap out the sentence perturbation functionality 
 
-To conclude, this work introduces a perturbation-driven visual interrogation system that provides the expert with a streamlined exploration environment for testing hypothesis and obtain intuition about the model. The proposed system frees the researchers from interruptions and tedious operations, therefore, allows them to focus on the more productive activities.
+To conclude, this work introduces a perturbation-driven visual interrogation system that provides experts with a streamlined exploration environment for testing hypothesis and obtaining intuition about the model. The proposed system frees the researchers from interruptions and tedious operations, therefore, allows them to focus on more productive activities.
 
