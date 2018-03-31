@@ -2,7 +2,7 @@
 \label{sec:caseStudy}
 % \shusen{A full case study that driven by the visualization task and the question associated with them}
 %In this section, we discuss application scenarios, in which the domain experts utilize the
-To better illustrate how the proposed perturbation-driven exploration tool helps researchers interpret the neural network model, we present five application scenarios gathered by the domain experts who integrated the proposed tool in their analysis workflow.
+To better illustrate how the proposed perturbation-driven exploration tool helps researchers interpret the neural network model, we present five application scenarios gathered by the domain experts who integrated the proposed tool into their analysis workflow.
 
 \begin{figure}[htbp]
 \centering
@@ -58,7 +58,7 @@ The change of attention leads to the change of prediction from neutral to the cl
  \includegraphics[width=1.0\linewidth]{pipelineUpdate}
   \vspace{-6mm}
  \caption{
-Experiment with all configurations for the label reassignment optimization. As shown in (d), the update of attention stage seems to have significantly less impact on the prediction result compared to the classifier or encoder of the model.
+Experiment with all configurations for the label reassignment optimization. As shown in (d), the update of the attention stage seems to have significantly less impact on the prediction result compared to the classifier or encoder of the model.
  }
   \vspace{-4mm}
 \label{fig:pipelineUpdate}
@@ -147,10 +147,10 @@ In other words, the update of attention stage seems to have significantly less i
  \includegraphics[width=1.0\linewidth]{depTreeExample}
   \vspace{-6mm}
  \caption{
-Dependency tree provides valuable information that can help fix the prediction error.
-In (a), the model mistakenly aligns the word green, which lead to an incorrect prediction.  
-After examining the dependency tree (highlighted by pink squares), we can see the two \textbf{green} are attached to different words.
-In (b), by editing the attention and forcing the two \textbf{green}'s alignment to be zero, the prediction label is corrected to \emph{neutral}. 
+The dependency tree provides valuable information that can help fix the prediction error.
+In (a), the model mistakenly aligns the word green, which leads to an incorrect prediction.  
+After examining the dependency tree (highlighted by pink squares), we can see the two \textbf{greens} are attached to different words.
+In (b), by editing the attention and forcing the alignment of the two \textbf{greens} to be zero, the prediction label is corrected to \emph{neutral}. 
  }
 \label{fig:depTreeExample}
  \vspace{-4mm}
@@ -172,11 +172,11 @@ And interestingly, as illustrated in Fig.~\ref{fig:depTreeExample}(b), by editin
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Scenario 5: Handcraft Example Exploration}
-To test the limits of the model, domain experts often handcraft ``extreme'' examples (as such the Facebook IPO example discussed in Section~\ref{sec:languageInference}) that they know most models will have a difficult time making correct inference.
+To test the limits of the model, domain experts often handcraft ``extreme'' examples (such as the Facebook IPO example discussed in Section~\ref{sec:languageInference}) for which they know most models will have difficulty making a correct inference.
 %
-The researchers start with a set of experiments they plan to run, from which, they will develop new hypotheses for further analysis.
+The researchers start with a set of experiments they plan to run, from which they will develop new hypotheses for further analysis.
 %
-In some way, we can think of such a process as a natural blend of all previously discussed scenarios. However, instead of with specific goal in mind, the domain experts focus on probing around to uncover any interesting or out-of-ordinary behaviors in the model.
+In some way, we can think of such a process as a natural blend of all previously discussed scenarios. However, instead of having a specific goal in mind, the domain experts focus on probing around to uncover any interesting or out-of-the-ordinary behaviors in the model.
 %
 
 
