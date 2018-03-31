@@ -41,7 +41,7 @@ Here, we aim to provide immediate and informative answers to these \emph{``what 
 We implement our vision of the perturbation-driven exploration in an interactive visualization system for natural language inference models~\cite{Parikh2016}.
 However, the components of the visualization and the overall paradigm can be readily extended to other NLP tasks, such as question and answer, text summarization, etc.
 %
-In the simplest form, the inference task asks the question about whether \textbf{sentence A} and \textbf{sentence B}: (1) are \emph{entailed} (one can infer \textbf{B} from \textbf{A}; (2) \emph{contradict} (\textbf{B} disagrees with \textbf{A}) or (3) are \emph{neutral} (\textbf{A} and \textbf{B} talk about different/unrelated thins
+In the simplest form, the inference task asks the question about whether \textbf{sentence A} and \textbf{sentence B}: (1) are \emph{entailed} (one can infer \textbf{B} from \textbf{A}; (2) \emph{contradict} (\textbf{B} disagrees with \textbf{A}) or (3) are \emph{neutral} (\textbf{A} and \textbf{B} talk about different/unrelated things
 % we can infer the content of \textbf{sentence B} from \textbf{sentence A} (\emph{entail}), if they contradict with each other (\emph{contradiction}), or whether two sentences talk about different/unrelated things (\emph{neutral}). 
 Language inference addresses the fundamental challenge of measuring the semantic similarity of sentences, and is one of the core NLP tasks (see Section~\ref{sec:languageInference} for details).
 
@@ -54,7 +54,7 @@ There have been many speculations on how attention works in various models. By u
 %Such type of exploration is not only essential to interpret the language inference problem, but can also be generalized to other NLP model utilized the attention mechanisms.
 Moreover, we propose to enhance the standard visual encoding (e.g., as a bipartite graph or as a matrix) of the attention matrix by overlaying sentence linguistic structure to allow grammar-guided simplification of the visual representation.
 %
-Finally, as discussed in Section~\ref{sec:caseStudy}, the ability to examine how attention corresponds to the grammatical structure also enables domain experts to speculate about the potential benefits of including the linguistic structure in the design of the attention component of the model.
+Finally, as discussed in Section~\ref{sec:grammarAttention}, the ability to examine how attention corresponds to the grammatical structure also enables domain experts to speculate about the potential benefits of including the linguistic structure in the design of the attention component of the model.
 
 In summary, the key contributions of the proposed works are the following:
 \begin{itemize}
