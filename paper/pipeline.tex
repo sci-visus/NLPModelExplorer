@@ -1,14 +1,14 @@
 \subsection{Pipeline View}
 \label{sec:pipeline}
-The Pipeline view provides a direct visual representation of the three stages (encoder, attention, classifier) of the model. In the proposed tool, we allow the model parameter to be updated (via an optimization) to correct a prediction error (\textbf{T3}). The pipeline view, by visualizing the aggregated gradient distribution, informs the user about how each stage responds to the optimization.
+The Pipeline view provides a direct visual representation of the three stages (encoder, attention, classifier) of the model. In the proposed tool, we allow model parameters to be updated (via an optimization) to correct a prediction error (\textbf{T3}). The pipeline view, by visualizing the distribution of the parameter changes, informs the user about how each stage responds to the optimization.
 
 There are many ways to update the model to correct a prediction. The simplest approach is applying standard backpropagation and overfits to the example. However, without any constraint, the update step may alter the model in unexpected ways.
 % \shusen{what is the benefit of using mira?}
-Instead, we adopt the idea in \emph{margin-infused relaxed algorithm (MIRA)}~\cite{CrammerSinger2003}, where we regulate the optimization with the L2-norm of the parameter change. Therefore, in the proposed tool, we obtain the target parameters by the following:
+Instead, we adopt the idea in \emph{margin-infused relaxed algorithm (MIRA)}~\cite{CrammerSinger2003}, where we regulate the optimization with the L2-norm of the parameter change. In the proposed tool, we obtain the target parameters by the following optimization:
 \begin{equation}
 \underset{\mathbf{W}'}{\mathrm{argmin}}( C \mathbb{J}(\mathbf{W}') + ||\mathbf{W}' - \mathbf{W_o}||^2)
 \end{equation}
-where $\mathbb{J}(\mathbf{W})$ is the loss function of the neural model, $\mathbf{W_o}$ is the original model's parameters taken as constant, $\mathbf{W}'$ is the parameters to update, and $C$ is the weighting term, which determines whether we intended to emphasize more on obtaining better fitting or deviating less from the original model. Due to the nonconvex nature of the neural networks, we use SGD to optimize the above combined loss function.
+where $\mathbb{J}(\mathbf{W})$ is the loss function of the neural network model, $\mathbf{W_o}$ is the original model's parameters taken as constant, $\mathbf{W}'$ is the updated parameters, and $C$ is the weighting term, which determines whether we intended to emphasize more on obtaining better fitting or deviating less from the original model. Due to the nonconvex nature of the neural networks, we use SGD to optimize the above combined loss function.
 %
 With this formulation, we try to find a good approximation to the newly assigned label, while still maintaining relatively small change with respect to the original model.
 
@@ -18,17 +18,16 @@ With this formulation, we try to find a good approximation to the newly assigned
  \includegraphics[width=0.95\linewidth]{pipelineView}
  \vspace{-2mm}
  \caption{
-The pipeline view provides the visual representation of three-stage (encoder, attention, classifier) model. 
-%The pipeline view, by showing the aggregated gradient distribution, informs the user about how different parts of the model respond to the optimization.
- %
-In the proposed tool, we allow the model parameter to be updated to correct a prediction error. 
-The optimization hyperparameters are shown in (a), and each of the stages is illustrated in (b), where the user can click on the blue ``parameter'' area to enable or disable its update (the legend is shown in (d)). In (c), we select whether we want to use the current update setting as displayed or try all the configuration combinations as the parameter update can be enabled or disabled for each stage.
+The pipeline view provides the visual representation of the three-stage (encoder, attention, classifier) model. 
+%
+In the proposed tool, we allow model parameters to be updated to correct a prediction error. 
+The optimization hyperparameters are shown in (a), and each of the stages is illustrated in (b), where the user can click on the blue rectangle marked with ``parameter'' to enable or disable its update (the legend is shown in (d)). In (c), we select whether we want to use the current pipeline setting as displayed or try all the pipeline configuration combinations as the parameter update operation can be enabled or disabled for each stage.
  }
 \label{fig:pipelineView}
 \vspace{-2mm}
 \end{figure}
 
-The optimization hyperparameters are shown in Fig.~\ref{fig:pipelineView}(a). Each of the stages is illustrated by a glyph (Fig.~\ref{fig:pipelineView}(b)), in which the user can enable or disable its parameter update by clicking on the parameter bar (the legend about its state is shown in Fig.~\ref{fig:pipelineView}(d) ). In Fig.~\ref{fig:pipelineView}(c), we select whether we want to use the current update setting as displayed or try all the configuration combinations (i.e., each stage can either be enabled or disabled for the three stages; therefore, there are $8$ combinations in total, or $7$ we discard the case where all stages are not updated).
+The optimization hyperparameters are shown in Fig.~\ref{fig:pipelineView}(a). Each of the stages is illustrated by a glyph (Fig.~\ref{fig:pipelineView}(b)), in which the user can enable or disable its parameter update by clicking on the blue rectangle marked with ``parameter'' (the legend about its state is shown in Fig.~\ref{fig:pipelineView}(d) ). In Fig.~\ref{fig:pipelineView}(c), we select whether we want to use the current update setting as displayed or try all the configuration combinations (i.e., each stage can either be enabled or disabled for the three stages; therefore, there are $8$ combinations in total, or $7$ we discard the case where all stages are not updated).
 
 
 
