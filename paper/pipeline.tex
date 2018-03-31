@@ -21,13 +21,13 @@ With this formulation, we try to find a good approximation to the newly assigned
 The pipeline view provides the visual representation of the three-stage (encoder, attention, classifier) model. 
 %
 In the proposed tool, we allow model parameters to be updated to correct a prediction error. 
-The optimization hyperparameters are shown in (a), and each of the stages is illustrated in (b), where the user can click on the blue rectangle marked with ``parameter'' to enable or disable its update (the legend is shown in (d)). In (c), we select whether we want to use the current pipeline setting as displayed or try all the pipeline configuration combinations as the parameter update operation can be enabled or disabled for each stage.
+The optimization hyperparameters are shown in (a), and each of the stages is illustrated in (b), where the user can click on the blue rectangle marked with the word ``parameter'' to enable or disable its update (the legend is shown in (d)). In (c), we select whether we want to use the current pipeline setting as displayed or try all the pipeline configuration combinations as the parameter update operation can be enabled or disabled for each stage.
  }
 \label{fig:pipelineView}
 \vspace{-2mm}
 \end{figure}
 
-The optimization hyperparameters are shown in Fig.~\ref{fig:pipelineView}(a). Each of the stages is illustrated by a glyph (Fig.~\ref{fig:pipelineView}(b)), in which the user can enable or disable its parameter update by clicking on the blue rectangle marked with ``parameter'' (the legend about its state is shown in Fig.~\ref{fig:pipelineView}(d) ). In Fig.~\ref{fig:pipelineView}(c), we select whether we want to use the current update setting as displayed or try all the configuration combinations (i.e., each stage can either be enabled or disabled for the three stages; therefore, there are $8$ combinations in total, or $7$ we discard the case where all stages are not updated).
+The optimization hyperparameters are shown in Fig.~\ref{fig:pipelineView}(a). Each of the stages is illustrated by a glyph (Fig.~\ref{fig:pipelineView}(b)), in which the user can enable or disable its parameter update by clicking on the blue rectangle marked with the word``parameter'' (the legend about its state is shown in Fig.~\ref{fig:pipelineView}(d)). In Fig.~\ref{fig:pipelineView}(c), we select whether we want to use the current pipeline update setting as displayed or try all the pipeline configuration combinations (i.e., each stage can either be enabled or disabled; therefore, there are $8$ combinations in total, or $7$ if we discard the case where all stages are not enabled).
 
 
 
