@@ -72,18 +72,17 @@ end-to-end models, where the entire model operates as a black-box that takes
 vectorized input and yields a final prediction for a specific task.
 %
 
-Many of the recent NLP end-to-end neural network models, despite having potentially drastically different network architectures, share a similar high-level design that consists of three distinct stages (encode, align, classify, see Fig.~\ref{fig:modelPipeline}).
+Many of the recent NLP end-to-end neural network models, despite having potentially drastically different network architectures, share a similar high-level design that consists of three distinct stages (encode, align, classify, see Fig.~\ref{fig:end2end}).
 %
 The existence of shared conceptual structures means the proposed tool, although designed for NLI tasks, can be readily generalized for a much broader set of applications.
 
 \begin{figure}[htbp]
-\vspace{-2mm}
 \centering
  \includegraphics[width=1.0\linewidth]{end2end}
- \vspace{-5mm}
+ \vspace{-6mm}
  \caption{The shared structure of end-to-end NLP neural network models.}
-  \vspace{-2mm}
-\label{fig:modelPipeline}
+  \vspace{-5mm}
+\label{fig:end2end}
 \end{figure}
 
 These end-to-end models usually take pre-trained word vectors (numerical vector representation of individual words, in which the semantic similarities are expressed by distances in the high-dimensional vector space~\cite{MikolovSutskeverChen2013, PenningtonSocherManning2014}) as input, and then in the encoding stage, the pre-trained vectors are adjusted to the specialized task at hand. Subsequently, the next stage aims at finding alignment between words in the input sequences. For the NLI task, this means finding the correspondance between words from the premise sentence to the hypothesis sentence (see details in Fig.~\ref{fig:attention} and Section~\ref{sec:attention}). Finally, in the last stage, the alignment information and the encoded vector representations are aggregated and then used as features for a classification network (last part of the end-to-end neural network).
@@ -105,9 +104,9 @@ Recently, attention has contributed to many strongly performed NLP models~\cite{
 \vspace{-2mm}
  \includegraphics[width=0.85\linewidth]{attentionIllustration}
   \vspace{-2mm}
- \caption{Attention can be naturally explained as a form of alignment which exposes an interpretable layer in end-to-end neural networks. On the left, the matrix shows the attention between between premise and hypothesis pair. On the right, attention can also be interpreted as alignment.}
+ \caption{Attention can be naturally explained as a form of alignment which exposes an interpretable layer in end-to-end neural networks. On the left, the matrix shows the attention between the premise and hypothesis pair. On the right, we illustrate that the attention can also be interpreted as alignment.}
 \label{fig:attention}
-  \vspace{-2mm}
+\vspace{-2mm}
 \end{figure}
 
 For natural language inference task, as illustrated in Fig.~\ref{fig:attention}, the attention information can be represented as a matrix describing the soft alignment between words in the premise and the words in the hypothesis. As we can see in this example, the higher values indicate significant alignments between words. The \emph{subject}, \emph{verb}, and \emph{object} between these two sentences are aligned correctly (words, such as ``an'', which has less importance in determining sentence relationship, was assigned a lower score). Interestingly, the difference between the subject words does not affect their alignment. The classification stage can then utilize this information to determine the subject of the sentence is different, and therefore, despite the other part of the sentences are identical, the relationship between the premise and the hypothesis is neutral.

@@ -11,7 +11,7 @@ In the machine learning community, one of the most studied areas in model interp
 %
 These methods either identify the pattern that maximally activates a part of the network (referred to as \emph{feature visualization}, i.e., what feature does the given neuron, channel, or layer captures?), or reveals what areas in the input that contribute most to the predicted label (often referred to as \emph{attribution}, i.e., attribute the prediction label in the input domain).
 %
-Besides the techniques designed for specific types of models, a few works~\cite{RibeiroSinghGuestrin2016, LundbergLee2017} approach the interpretability challenge from a model agnostic perspective, which makes them applicable to different applications. In the LIME~\cite{RibeiroSinghGuestrin2016} work, a simpler linear model is fitted near the prediction of interests to provide a simpler but easier to understand snapshot of the classifier near a specific input.
+Besides the techniques designed for specific types of models, a few works~\cite{RibeiroSinghGuestrin2016, KrausePererNg2016, LundbergLee2017} approach the interpretability challenge from a model agnostic perspective, which makes them applicable to different applications. In the LIME~\cite{RibeiroSinghGuestrin2016} work, a simpler linear model is fitted near the prediction of interests to provide a simpler but easier to understand snapshot of the classifier near a specific input.
 %
 Despite being invaluable for generating a human understandable explanation, however, the lack of the ability to access and explore the internal states of the system limits their application. 
 %which is vitally important for making sense of the inner works of a model, 
@@ -19,15 +19,16 @@ To avoid similar limitations, the proposed system enables direct access and mani
 
 \textbf{Visual Exploration of Neural Network Models.}
 Due to the effectiveness of exploring complex relationships, visualization has long been adopted for interpreting neural network models~\cite{TzengMa2005}.
-Recently, the increasing demand for interpretability for deep neural network models has motivated the introduction of many visualization works that are dedicated to neural network models.
+Recently, the increasing demand for interpretability for machine learning models has motivated the introduction of many visualization works that are dedicated to neural network models.
 % The classification~\cite{KrausePererNg2016}
-The Prospector~\cite{KrausePererNg2016} provides a model agnostic approach for analyzing and interpreting predictions via an interactive visual interface.
+%The Prospector~\cite{KrausePererNg2016} provides a model agnostic approach for analyzing and interpreting predictions via an interactive visual interface.
 %
 In the work~\cite{BilalJourablooYe2018} by Bilal et al., the authors analyzed classification errors in convolutional neural networks (CNN) and answered the question of whether class hierarchy is learned in the network.
 %
-The DeepEyes~\cite{Pezzotti2018} focused on analyzing the training process of CNN, which provides domain experts design guideline of the deep neutral network architecture.
+The DeepEyes~\cite{Pezzotti2018} focused on analyzing the training process of CNN, which provided domain experts design guideline of the deep neutral network architecture.
 %
 The ActiVis~\cite{KahngAndrewsKalro2018} introduced an interactive system tailored for tuning industry-scale neural networks in Facebook.
+The TensorFlow Graph Visualizer~\cite{Wongsuphasawat2018} work designed a hierarchical visual representation to encode complex computation graphs of deep neural networks for the TensorFlow framework~\cite{Abadi2016}.
 Finally, Liu et al.~\cite{LiuShiCao2018} presented a visualization tool for understanding the often challenging training process of deep generative models.
 
 % \begin{itemize}
