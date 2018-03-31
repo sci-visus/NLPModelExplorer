@@ -7,8 +7,8 @@ Natural Language Inference (NLI)~\cite{DaganRothSammons2013} is an important mac
 The goal of NLI is to predict the relationship between a premise (\textbf{P}) sentence and a hypothesis (\textbf{H}) sentence.
 The prediction falls in one of three categories: \emph{entailment} (\textbf{E}), \emph{contradiction} (\textbf{C}), and \emph{neutral} (\textbf{N}).
 A simple example is shown in Table~\ref{tab:NLI}.
-In this case, the premise is ``Boy ate an apple''.
-The hypothesis statement ``Kid ate fruits'' can be concluded from the premise. Therefore, the relationship between the premise and hypothesis is \emph{entailment}. However, we should note that such a relationship is not necessarily reversible. Since the concept ``fruit'' is less restrictive than that of ``apple'', we cannot conclude ``Boy ate an apple'' from the statement ``Kid ate fruit''. The same logic applies to the hypothesis of ``Boy ate a Fuji apple.'', in which the premise neither implies nor opposes the hypothesis, and therefore, their relationship is \emph{neutral}.
+In this case, the premise is ``A boy ate an apple''.
+The hypothesis statement ``A kid ate fruit'' can be concluded from the premise. Therefore, the relationship between the premise and hypothesis is \emph{entailment}. However, we should note that such a relationship is not necessarily reversible. Since the concept ``fruit'' is less restrictive than that of ``apple'', we cannot conclude ``A boy ate an apple'' from the statement ``A kid ate fruit''. The same logic applies to the hypothesis of ``A boy ate a Fuji apple.'', in which the premise neither implies nor opposes the hypothesis, and therefore, their relationship is \emph{neutral}.
 %\emph{Contradiction} means the textual of hypothesis opposes that of premise;
 %and \emph{Neutral} implies no conclusion can be made on either \emph{Entailment} or \emph{Contradiction}.
 
@@ -21,11 +21,11 @@ The hypothesis statement ``Kid ate fruits'' can be concluded from the premise. T
  \hline
   P / H & sentences & entail & contradict & neutral \\ [0.5ex]
  \hline
- premise & Boy ate an apple. &  -  &  -  & - \\
- hypothesis & Kid ate fruits. & \checkmark &   &  \\
- hypothesis & Boy ate a banana. &  & \checkmark & \\
+ premise & A boy ate an apple. &  -  &  -  & - \\
+ hypothesis & A kid ate fruit. & \checkmark &   &  \\
+ hypothesis & A boy ate a banana. &  & \checkmark & \\
  hypothesis & Tom ate an apple. &  &  & \checkmark \\
- hypothesis & Boy ate a Fuji apple. &   &  & \checkmark \\
+ hypothesis & A boy ate a Fuji apple. &   &  & \checkmark \\
  %\hline
  %premise & Facebook's IPO electrified the general public. &  -  &  -  & - \\
  %hypothesis & Facebook went public. & \checkmark   &  &  \\
@@ -39,7 +39,7 @@ The hypothesis statement ``Kid ate fruits'' can be concluded from the premise. T
 
 At first glance, the task of natural language inference may seem less practical compared to other well-known NLP challenges such as machine translation; however, the ability to distinguish entailment and contradiction relationship is fundamental to understanding natural language at large.
 %
-Considering the ambiguousness of natural language and polysemy words, the inference task can become quite challenging (especially from the learning algorithm's point of view). Take the following sentences as an example (here \textbf{P} refers to premise, \textbf{H} refers to hypothesis):  (\textbf{P}) Facebook's IPO electrified the general public; (\textbf{H1}) Facebook went public; (\textbf{H2}) General Electric went public; (\textbf{H3}) People ignored Facebook's IPO. The literal similarity between ``Electric'' and ``electrified'' may trick a model to predict \textbf{H2} as \emph{entailment}. A model likely will also fail to understand the link between ``went public'' and ``IPO'', and therefore, mistake \textbf{H1} as \emph{neutral}.
+Considering the ambiguousness of natural language and polysemy of words, the inference task can become quite challenging (especially from the learning algorithm's point of view). Take the following sentences as an example (here \textbf{P} refers to premise, \textbf{H} refers to hypothesis):  (\textbf{P}) Facebook's IPO electrified the general public; (\textbf{H1}) Facebook went public; (\textbf{H2}) General Electric went public; (\textbf{H3}) People ignored Facebook's IPO. The literal similarity between ``Electric'' and ``electrified'' may trick a model to predict \textbf{H2} as \emph{entailment}. A model likely will also fail to understand the link between ``went public'' and ``IPO'', and therefore, mistake \textbf{H1} as \emph{neutral}.
 %
 %The grand challenge in Natural Language Processing (NLP) is to have machine to acquire
 %deep comprehension of textual information. Major tasks include Natural Language Inference,
@@ -61,18 +61,14 @@ Recently, Bowman et al. introduced a large corpus~\cite{BowmanAngeliPotts2015} f
 
 % \subsection{Neural Network Primer}
 
-\subsection{Neural Network Model in NLP}
+\subsection{Neural Network Models in NLP}
 %\shusen{What is the basic understanding of neural network What is the end-to-end}
-There are many connections and distinctions between neural network models employed for vision and NLP tasks.
-On the one hand, as discussed in the introduction, the discrete nature of words and sentences presents additional challenges for
-interpreting the NLP model.
-%
-On the other hand, a majority of recent NLP neural networks share the nature of
-end-to-end models, where the entire model operates as a black-box that takes
-vectorized input and yields a final prediction for a specific task.
+Neural network models employed for computer vision and NLP tasks share a key common characteristic: a majority of recent approaches use end-to-end models. That is, the entire model operates as a black-box that takes vectorized inputs and yields a final prediction for a task of interest.
+However, as discussed in the introduction, the discrete nature of words and sentences presents additional challenges for
+interpreting NLP models.
 %
 
-Many of the recent NLP end-to-end neural network models, despite having potentially drastically different network architectures, share a similar high-level design that consists of three distinct stages (encode, align, classify, see Fig.~\ref{fig:end2end}).
+Many recent end-to-end neural network models in NLP, despite having  diverse network architectures, share a similar high-level design that consists of three distinct stages (encode, align, classify, see Fig.~\ref{fig:end2end}).
 %
 The existence of shared conceptual structures means the proposed tool, although designed for NLI tasks, can be readily generalized for a much broader set of applications.
 
@@ -91,13 +87,13 @@ Since all these three stages of the model are trained jointly in an end-to-end f
 
 \subsection{Attention Mechanism}
 \label{sec:attention}
-Among the three stages, the second stage often constitutes a crucial part of the model as it determines where the classifier will focus for generating a prediction. The operation to compute the alignment between words in the input is referred to as the attention mechanism. 
-The introduction of the attention mechanism~\cite{bahdanau2014neural} allows
+Among the three stages, the second stage often constitutes a crucial part of the model as it determines where the classifier will focus for generating a prediction. The operation to compute the alignment between words in the input is referred to as the attention mechanism~\cite{bahdanau2014neural}. 
+The introduction of the attention mechanism allows
 pairwise interaction between internal representations of words. 
 This interaction can be naturally explained as a form of alignment that exposes an interpretable layer in end-to-end neural networks.
 %
 %As the only interpretable part of the internal state of the network, understanding how attention information 
-Recently, attention has contributed to many strongly performed NLP models~\cite{parikh2016emnlp,rush2015neural,yang2016hierarchical,seo2016bidirectional,schwartz2017high}.
+Recently, attention has contributed to the strong performance of many NLP models~\cite{parikh2016emnlp,rush2015neural,yang2016hierarchical,seo2016bidirectional,schwartz2017high}.
 
 \begin{figure}[htbp]
 \centering
