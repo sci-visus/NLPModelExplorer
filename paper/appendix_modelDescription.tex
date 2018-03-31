@@ -174,7 +174,7 @@ where $Z$ is another neural layer (e.g. two-layer ReLU followed by a linear laye
 \textbf{Comment} We adopted the same network setting in the Decomposable Attention paper~\cite{parikh2016emnlp}. That are, network hidden size is $200$; input word embeddings are $200$d embeddings (downsampled from $300$d GloVe embeddings~\cite{PenningtonSocherManning2014} by a learnable linear layer). For learning, dropout~\cite{SrivastavaHinton2014} is $0.2$ and learning rate is $0.05$. Optimization algorithm is AdaGrad~\cite{duchi2011adaptive} with mini-batch size 64 and number of epochs 300.
 
 \section{Appendix B: Code Example: Link Visualization with Model}
-From the user's point of view, the following Python script is all the code the domain expert needs to link the NLP model with the visual interface and generate the tool used in the paper. The visualization library's API defines several callbacks (called Hook in the code) that describe the model functionality (e.g., prediction) need to be supplied by the NLP model.
+From the user's point of view, the following Python script is all the code the domain expert needs to link the NLP model with the visual interface and generate the tool used in the paper. The visualization library's API defines several callbacks (called Hook in the code) that correspond to functions (e.g., prediction) need to be supplied by the NLP model.
 
 \begin{lstlisting}[language=Python, caption=Code for generating the visualization.]
 from nlize import *
