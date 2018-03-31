@@ -115,7 +115,7 @@
 
 %% Paper title.
 \title{
-NLIZE: A Perturbation-Driven Visual Interrogation Tool for Analyzing and Interpreting Natural Language Inference Models: Supplementary Materials
+NLIZE: A Perturbation-Driven Visual Interrogation Tool for Analyzing and Interpreting Natural Language Inference Models: Supplemental Materials
 %Where and How Do Models Fail? A Visual Exploration Tool for Analyzing and Interpreting Natural Language Inference Models
 }
 \vgtcinsertpkg
@@ -178,7 +178,7 @@ From the user point of view, the following python script is all the code the dom
 
 
 \begin{lstlisting}[language=Python, caption=Code for generating the visualization.]
-from visPackage import *
+from nlize import *
 from modelInterface import *
 from sentenceGenerator import *
 
@@ -195,7 +195,7 @@ dep = dependencyTree()
 
 #define visualization components
 visLayout = {
-    "column":[{"row":["Selector", 
+    "column":[{"row":["Summary", 
                       "Sentence", 
                       "Pipeline"]},
             {"row":["AttentionGraph", 
@@ -204,7 +204,7 @@ visLayout = {
     }
 
 #create vis interface
-vis = textEntailVisModule(visLayout)
+vis = nlizeModule(visLayout)
 
 #setup model callbacks
 vis.setPredictionHook(model.predict)
