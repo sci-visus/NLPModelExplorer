@@ -43,7 +43,7 @@ class socketioManager:
 
     def sendToClient(self, uID, json):
         # print "send to client:", uID, json
-        self.sio.emit(uID, json, namespace = self.namespace, broadcast=True)
+        self.sio.emit(uID, json, namespace = self.namespace, broadcast=False)
         # emit(uID, json, namespace = self.namespace)
 
     def sendFuncReturn(self, func, data, uID):

@@ -258,6 +258,7 @@ class attentionComponent extends baseComponent {
     }
 
     parseFunctionReturn(msg) {
+        super.parseFunctionReturn(msg);
         switch (msg["func"]) {
             case "parseSentence":
                 this.handleParsedSentence(msg["data"]["data"]);

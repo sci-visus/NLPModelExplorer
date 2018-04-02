@@ -7,7 +7,7 @@ var panelMetaInfo = {
     'Prediction': ['prediction_view', 'predictionComponent'],
     'AttentionMatrix': ['attention_view', 'attentionMatrixComponent'],
     'Sentence': ['sentence_view', 'sentenceComponent'],
-    "AttentionGraph": ['attentionSentence_view',
+    "AttentionGraph": ['template_view',
         'attentionGraphComponent'
     ],
     'Summary': ['evaluation_view', 'evaluationComponent'],

@@ -70,14 +70,12 @@ class sentenceComponent extends baseComponent {
     }
 
     parseFunctionReturn(msg) {
+        super.parseFunctionReturn(msg);
         switch (msg['func']) {
             case 'perturbSentence':
                 this.updatePerturbedSentences(msg["data"]["data"], msg[
                     "data"]);
                 break;
-                // case 'functionReturn':
-                //     this.parseFunctionReturn(msg);
-                //     return;
         }
     }
 

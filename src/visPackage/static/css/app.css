@@ -24,11 +24,9 @@ form div {
   margin-top: 20px;
 }
 
-div.tooltip {
-    position: absolute;
+div.notice {
+    position: relative;
     text-align: center;
-    width: 80px;
-    height: 28px;
     padding: 2px;
     font: 12px sans-serif;
     background: lightsteelblue;

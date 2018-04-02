@@ -25,27 +25,33 @@ class baseComponent {
         this.calledFunc = Object();
         // Define the div for the tooltip
         // console.log(d3.select(this._getContainer().get()));
-        this.tooltip = d3.select(d3.select(this.div).node().parentNode)
-            .append(
-                "div")
-            // this.tooltip = d3.select("body").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
-        // this.showTooltip([10, 10], "test");
+        this.tooltip = d3.select(this.div)
+            .append("div")
+            .attr("class", "notice")
+            .style("position", "relative")
+            .style("display", "none")
+            .style("display", "none")
+            .style("opacity", 1.0);
     }
 
     showTooltip(pos, message) {
-        let offsetX = d3.select(d3.select(this.div).node().parentNode).attr(
-            "width");
-        let offsetX = d3.select(d3.select(this.div).node().parentNode).attr(
-            "height");
-        this.tooltip.transition()
-            .duration(200)
-            .style("opacity", .9);
+        // if()
+        // let offsetX = d3.select(d3.select(this.div).node().parentNode).attr(
+        //     "width");
+        // let offsetY = d3.select(d3.select(this.div).node().parentNode).attr(
+        //     "height");
+        // console.log(offsetX, offsetY);
+        // this.tooltip.transition()
+        // .duration(200)
+
         this.tooltip.html(message)
-            .style("position", "absolute")
+            .style("display", "inline")
+            .style("position", "relative")
             .style("left", pos[0] + "px")
             .style("top", pos[1] + "px");
+
+        // .style("left", offsetX + pos[0] + "px")
+        // .style("top", offsetY + pos[1] + "px");
 
     }
 
@@ -76,6 +82,27 @@ class baseComponent {
         };
         socket.emit('message', msg);
         this.addCallSet(funcName);
+        this.updateServerStateDisplay();
+    }
+
+    updateServerStateDisplay() {
+        // console.log(this.calledFunc);
+        // Object.keys(this.calledFunc)
+        var allReturned = true;
+        for (var key in this.calledFunc) {
+            if (this.calledFunc.hasOwnProperty(key)) {
+                if (this.calledFunc[key] !== 0) {
+                    this.showTooltip([0, 0],
+                        "Running:" + key);
+                    allReturned = false;
+                    console.log(key, this.calledFunc[key]);
+                }
+
+            }
+        }
+        if (allReturned)
+            this.tooltip.html("").style("display", "none");
+
     }
 
     addCallSet(funcName) {
@@ -84,7 +111,6 @@ class baseComponent {
         } else {
             this.calledFunc[funcName] = 1;
         }
-
     }
 
     removeCallSet(funcName) {
@@ -94,6 +120,7 @@ class baseComponent {
             else
                 this.calledFunc[funcName] -= 1;
         }
+        this.updateServerStateDisplay();
     }
 
     setData(name, data) {
@@ -114,9 +141,6 @@ class baseComponent {
             case 'data':
                 this.parseDataUpdate(msg);
                 break;
-                // case 'functionReturn':
-                //     this.parseFunctionReturn(msg);
-                //     return;
             case 'funcReturn':
                 this.parseFunctionReturn(msg);
                 break;
