@@ -25,33 +25,25 @@ class baseComponent {
         this.calledFunc = Object();
         // Define the div for the tooltip
         // console.log(d3.select(this._getContainer().get()));
-        this.tooltip = d3.select(this.div)
-            .append("div")
-            .attr("class", "notice")
-            .style("position", "relative")
-            .style("display", "none")
-            .style("display", "none")
-            .style("opacity", 1.0);
+        if (!d3.select(this.div + "container").empty()) {
+            this.tooltip = d3.select(d3.select(this.div + "container").node()
+                    .parentNode)
+                // this.tooltip = d3.select(this.div + "container")
+                .append("div")
+                .attr("class", "notice")
+                .style("position", "relative")
+                .style("display", "none")
+                .style("opacity", 0.5);
+        }
     }
 
     showTooltip(pos, message) {
-        // if()
-        // let offsetX = d3.select(d3.select(this.div).node().parentNode).attr(
-        //     "width");
-        // let offsetY = d3.select(d3.select(this.div).node().parentNode).attr(
-        //     "height");
-        // console.log(offsetX, offsetY);
-        // this.tooltip.transition()
-        // .duration(200)
 
         this.tooltip.html(message)
-            .style("display", "inline")
+            .style("display", "inline-block")
             .style("position", "relative")
             .style("left", pos[0] + "px")
-            .style("top", pos[1] + "px");
-
-        // .style("left", offsetX + pos[0] + "px")
-        // .style("top", offsetY + pos[1] + "px");
+            .style("top", -35 + pos[1] + "px");
 
     }
 
@@ -92,8 +84,11 @@ class baseComponent {
         for (var key in this.calledFunc) {
             if (this.calledFunc.hasOwnProperty(key)) {
                 if (this.calledFunc[key] !== 0) {
-                    this.showTooltip([0, 0],
-                        "Running:" + key);
+                    this.showTooltip(
+                        [5.0, 0.0],
+                        // [this.width * 0.5, 0.0],
+                        // [this.width * 0.5, this.height * 0.5 ],
+                        "Running:" + key + "...");
                     allReturned = false;
                     console.log(key, this.calledFunc[key]);
                 }
