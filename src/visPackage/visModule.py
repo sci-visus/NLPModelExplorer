@@ -128,6 +128,30 @@ data organization structure
 
 layoutConfig = None
 
+#############  Q & A ##############
+class QAModule(visModule):
+    def __init__(self, componentLayout):
+        # super(visModule, self).__init__()
+        self.index = 0
+        global layoutConfig
+        layoutConfig = componentLayout
+        dataManager.setObject(self)
+
+    @app.route('/')
+    def index():
+        dataManager.clear()
+        # dataManager.setData("componentLayout", layoutConfig)
+        # dataManager.setData("sentenceList", exampleData)
+        # dataManager.setData("pipeline", pipelineState)
+        # dataManager.setData("currentPair", {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']})
+        return app.send_static_file('index.html')
+
+    @app.route('/<name>')
+    def views(name):
+        return app.send_static_file('viewTemplates/'+name+".mst")
+
+
+#############  Natural Language Inference ##############
 class nlizeModule(visModule):
     def __init__(self, componentLayout):
         # super(visModule, self).__init__()

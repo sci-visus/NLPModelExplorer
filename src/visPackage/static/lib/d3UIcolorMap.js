@@ -214,3 +214,21 @@ class d3UIcolorMap {
     }
 
 }
+
+/////// independent function for generating colormap ///////
+
+function generateColormap(valueRange, colorList) {
+    var cmrange = [];
+    var cmlen = colorList.length;
+    for (var i = 0; i < cmlen; i++) {
+        cmrange.push(valueRange[0] + (i / (cmlen - 1)) * (valueRange[
+            1] - valueRange[0]));
+    }
+    var colorMap = d3.scaleLinear()
+        .domain(cmrange)
+        .range(this.currentColormap.data)
+        // .interpolate(d3.interpolateHsl);
+        .interpolate(d3.interpolateRgb);
+
+    return colormap;
+}

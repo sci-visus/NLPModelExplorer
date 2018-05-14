@@ -1,14 +1,14 @@
 class pixelBar {
-    constructor(svg, pos, size) {
+    constructor(svg, pos, size, colormap) {
         this.svg = svg.append("g");
         this.pos = pos;
         this.size = size;
-
+        this.colormap = colormap;
+        //default colormap
     }
 
     setData(values) {
         this.data = values;
-
     }
 
     setColorMap(map) {
@@ -16,11 +16,15 @@ class pixelBar {
     }
 
     //emphasis the higher values
-    setEmphasisRatio() {
-
+    setEmphasisRatio(ratio) {
+        this.ratio = ratio;
+        this.draw();
     }
 
     draw() {
+        if (this.bars) {
+            //readjust bar size
+        }
 
     }
 }

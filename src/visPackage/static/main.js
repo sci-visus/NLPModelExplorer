@@ -10,8 +10,10 @@ var panelMetaInfo = {
     "AttentionGraph": ['template_view',
         'attentionGraphComponent'
     ],
+    "AttentionAsymmetric": ['template_view', "attentionAsymmetricComponent"],
     'Summary': ['evaluation_view', 'evaluationComponent'],
-    'Pipeline': ['pipeline_view', 'pipelineComponent']
+    'Pipeline': ['pipeline_view', 'pipelineComponent'],
+    "Paragraph": ['pragraph_view', 'paragraphComponenet']
 };
 
 //for lookup component class on-the-fly
