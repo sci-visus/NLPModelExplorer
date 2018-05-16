@@ -24,7 +24,9 @@ class pixelBar {
     draw() {
         if (this.bars) {
             //readjust bar size
-        }
+            for (var i = 0; i < this.data.length; i++) {
 
+            }
+        }
     }
 }

@@ -13,7 +13,6 @@ class sentenceComponent extends baseComponent {
         d3.select(this.div + "perturbSource").on("click", this.perturbSource
             .bind(this));
 
-
         d3.select(this.div + "Predict").on("click", d => {
             this.callFunc("predict");
         });

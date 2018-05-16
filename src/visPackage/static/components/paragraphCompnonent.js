@@ -4,7 +4,12 @@ class paragraphComponenet extends baseComponent {
 
     }
 
+    parseDataUpdate(msg) {
+        //dynamicSourceHighlight
+    }
+
     draw() {
+        //sync highlight with attention
 
     }
 }

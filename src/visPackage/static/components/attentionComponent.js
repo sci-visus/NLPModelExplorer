@@ -1,7 +1,5 @@
 /*
-
 Based class for attention visualization
-
 */
 
 //beside margin matrix will take 2/3 width and 2/3 height space
