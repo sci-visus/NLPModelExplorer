@@ -11,7 +11,8 @@ model = modelInterface(
 # gen = sentenceGenerator()
 gen = translationPerturbation()
 
-#visualization components
+# visualization components
+# attention is linked to paragraph
 visLayout = {
     "column":[{"row":["Summary", "Paragraph"]},
             {"row":["AttentionAsymmetric"]}]
