@@ -1,6 +1,6 @@
-from visPackage import *
+from visPackage.MCModule import MCModule
 from modelInterface import *
-from sentenceGenerator import *
+from translationPerturbation import *
 
 #initialize NLP model
 model = modelInterface(
@@ -14,23 +14,21 @@ gen = translationPerturbation()
 # visualization components
 # attention is linked to paragraph
 visLayout = {
-    "column":[{"row":["Summary", "Paragraph"]},
+    "column":[{"row":
+                [
+                # "Summary",
+                "Paragraph"
+                ]},
             {"row":["AttentionAsymmetric"]}]
     }
 
 #setup interface
-modelVis = nlizeModule(visLayout)
+modelVis = MCModule(visLayout)
 
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
-modelVis.setPredictionUpdateHook(model.updatePrediction)
-modelVis.setAttentionUpdateHook(model.updateAttention)
 modelVis.setReloadModelCallback(model.reloadModel)
-
-modelVis.setPipelineStatisticHook(model.pipelineStatistic)
-
-modelVis.setSentencePerturbationHook(gen.perturbSentence)
-modelVis.setSentenceParserHook(dep.getDependencyTree)
+# modelVis.setSentencePerturbationHook(gen.perturbSentence)
 
 #open browser for visualization
 # modelVis.show()

@@ -1,4 +1,7 @@
-from visPackage import *
+## FIXME fix the import ###
+from visPackage.nlizeModule import nlizeModule
+from visPackage.dependencyTree import dependencyTree
+
 from modelInterface import *
 from sentenceGenerator import *
 

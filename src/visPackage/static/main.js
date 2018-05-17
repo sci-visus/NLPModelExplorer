@@ -6,7 +6,7 @@ var socket = io('http://' + document.domain + ':' + location.port + namespace);
 
 var panelMetaInfo = {
     'Prediction': ['prediction_view', 'predictionComponent'],
-    'AttentionMatrix': ['attention_view', 'attentionMatrixComponent'],
+    'AttentionMatrix': ['template_view', 'attentionMatrixComponent'],
     'Sentence': ['sentence_view', 'sentenceComponent'],
     "AttentionGraph": [
         'template_view',
@@ -14,7 +14,7 @@ var panelMetaInfo = {
     ],
     "AttentionAsymmetric": ['template_view', "attentionAsymmetricComponent"],
     'Summary': ['evaluation_view', 'evaluationComponent'],
-    'Pipeline': ['pipeline_view', 'pipelineComponent'],
+    'Pipeline': ['template_view', 'pipelineComponent'],
     "Paragraph": ['paragraph_view', 'paragraphComponenet']
 };
 
@@ -25,7 +25,10 @@ var objectMap = {
     attentionGraphComponent: attentionGraphComponent,
     sentenceComponent: sentenceComponent,
     evaluationComponent: evaluationComponent,
-    pipelineComponent: pipelineComponent
+    pipelineComponent: pipelineComponent,
+
+    paragraphComponenet: paragraphComponenet,
+    attentionAsymmetricComponent: attentionAsymmetricComponent
 };
 
 /////////////////////////// create layout ///////////////////////////
