@@ -30,15 +30,17 @@ class pixelBar {
             .attr("y", this.pos[1])
             .attr("width", this.size[0])
             .attr("height", this.size[1])
-            .attr("fill", "none")
+            .attr("fill", "white")
             .attr("stroke", "grey")
             .attr("stroke-width", 2)
             .on("mouseover", function(d) {
-                d3.select(".senBlock").attr("stroke", "grey");
-                d3.select(this).attr("stroke", "lightblue");
+                // d3.selectAll(".senBlock").attr("stroke", "grey");
+                // d3.select(this).attr("stroke", "lightblue");
+                d3.select(this).attr("stroke-width", 8);
             })
             .on("mouseout", function(d) {
-                d3.select(".senBlock").attr("stroke", "grey");
+                // d3.selectAll(".senBlock").attr("stroke", "grey");
+                d3.selectAll(".senBlock").attr("stroke-width", 2);
             });
 
         if (this.attData) {
@@ -52,7 +54,8 @@ class pixelBar {
                     .attr("y", this.pos[1])
                     .attr("width", unit)
                     .attr("height", this.size[1])
-                    .attr("fill", this.colormap(this.attData[i]));
+                    .attr("fill", this.colormap(this.attData[i]))
+                    .attr("pointer-events", "none");
 
             }
         }
