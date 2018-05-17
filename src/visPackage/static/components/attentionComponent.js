@@ -167,7 +167,6 @@ class attentionComponent extends baseComponent {
                     'col');
 
                 this.normAttention = this.normAttentionRow;
-
                 // console.log(this.rawAttention);
                 // console.log(this.normAttention);
 

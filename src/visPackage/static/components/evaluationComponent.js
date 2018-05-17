@@ -106,7 +106,7 @@ class evaluationComponent extends baseComponent {
     }
 
     updateScatterplot(data) {
-        // this.scatter.setData(data, ["Sensitivity", "PerturbCount"],
+        // this.scatter.setData(data, ["Sensitivity", "PerturbCount"];
         this.scatter.setData(data, ["Stability", "PerturbCount"],
             d => [d.stability, d.perturbCount]);
     }

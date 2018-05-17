@@ -226,7 +226,7 @@ function generateColormap(valueRange, colorList) {
     }
     var colorMap = d3.scaleLinear()
         .domain(cmrange)
-        .range(valueRange)
+        .range(colorList)
         // .interpolate(d3.interpolateHsl);
         .interpolate(d3.interpolateRgb);
 
