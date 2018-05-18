@@ -1,4 +1,4 @@
-from visPackage.MCModule import MCModule
+from visPackage import MCModule
 from modelInterface import *
 from translationPerturbation import *
 

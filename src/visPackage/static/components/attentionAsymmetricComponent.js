@@ -17,7 +17,7 @@ class attentionAsymmetricComponent extends attentionComponent {
         super.parseDataUpdate(msg);
         switch (msg["name"]) {
             case "attention":
-                console.log(msg["data"]);
+                // console.log(msg["data"]);
                 break;
             case "currentPair":
                 // console.log(msg["data"]);

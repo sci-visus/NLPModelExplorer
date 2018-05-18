@@ -3,6 +3,9 @@ class paragraphComponenet extends sentenceComponent {
         super(uuid);
         // this.subscribeDatabyNames(["sentenceList", "currentPair"]);
 
+        //init
+        this.callFunc("initSetup");
+
     }
 
     parseDataUpdate(msg) {

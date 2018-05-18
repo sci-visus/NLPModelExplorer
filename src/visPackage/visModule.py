@@ -44,8 +44,12 @@ pipelineState = [{
 ];
 
 #################### server control ######################
-class visModule:
-    def __init__(self):
+layoutConfig = None
+
+class visModule(object):
+    def __init__(self, componentLayout):
+        global layoutConfig
+        layoutConfig = componentLayout
         dataManager.setObject(self)
 
     # envoke callback when the server is running
@@ -57,6 +61,16 @@ class visModule:
     @app.route('/<name>')
     def views(name):
         return app.send_static_file('viewTemplates/'+name+".mst")
+
+    @app.route('/')
+    def index():
+        dataManager.clear()
+        dataManager.setData("componentLayout", layoutConfig)
+        return app.send_static_file('index.html')
+
+    ##### placeholder to be implemented in the derived class
+    def initSetup(self):
+        pass
 
     def show(self):
         url = 'http://localhost:5050'

@@ -24,25 +24,15 @@ exampleData = [
 }
 ]
 
-layoutConfig = None
-
 #############  machine comprehension ##############
 class MCModule(visModule):
     def __init__(self, componentLayout):
-        # super(visModule, self).__init__()
-        self.index = 0
-        global layoutConfig
-        layoutConfig = componentLayout
-        dataManager.setObject(self)
+        super(MCModule, self).__init__(componentLayout)
 
-    @app.route('/')
-    def index():
-        dataManager.clear()
-        dataManager.setData("componentLayout", layoutConfig)
+    def initSetup(self):
         dataManager.setData("sentenceList", exampleData)
         # dataManager.setData("pipeline", pipelineState)
         dataManager.setData("currentPair", {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']})
-        return app.send_static_file('index.html')
 
     def setSentencePerturbationHook(self, callback):
         self.sentencePerturbationHook = callback

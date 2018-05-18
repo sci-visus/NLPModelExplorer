@@ -7,6 +7,9 @@ class sentenceComponent extends baseComponent {
         super(uuid);
         this.subscribeDatabyNames(["sentenceList", "currentPair"]);
 
+        //init
+        this.callFunc("initSetup");
+
         //setup UI
         d3.select(this.div + "perturbTarget").on("click", this.perturbTarget
             .bind(this));
