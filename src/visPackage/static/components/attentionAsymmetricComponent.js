@@ -22,6 +22,8 @@ class attentionAsymmetricComponent extends attentionComponent {
             case "currentPair":
                 // console.log(msg["data"]);
                 this.parseParagraph(msg["data"]["data"]["sentences"][0]);
+                this.question = msg["data"]["data"]["sentences"][1];
+                this.question = this.question.trim().split(/\s+/);
                 break;
         }
     }
@@ -47,19 +49,32 @@ class attentionAsymmetricComponent extends attentionComponent {
             let pos = 5;
             let minIndex = 0
 
-            var srcAtt = this.normAttention.map(d => d.reduce((a, b) => a +
+            ///FIXME duplicated code from attentionGraphComponent
+            ////////// getting attention normalized //////
+            let attMatrix = this.normAttention;
+            var srcAtt = attMatrix.map(d => d.reduce((a, b) => a +
                 b));
             let srcAttMax = Math.max(...srcAtt);
             let srcAttMin = Math.min(...srcAtt);
             this.srcAtt = srcAtt.map(d =>
                 (d - srcAttMin) / (srcAttMax - srcAttMin));
 
+            var targAtt = attMatrix[0].map((d, i) => {
+                // console.log(d, i);
+                var sum = 0;
+                for (var j = 0; j < attMatrix.length; j++)
+                    sum += attMatrix[j][i];
+                return sum;
+            });
+            let targAttMax = Math.max(...targAtt);
+            targAtt = targAtt.map(d => d / targAttMax);
+
             let unit = this.width * 0.85 / paragraphLen;
             for (var i = 0; i < this.segmentList.length; i++) {
                 let senLen = this.segmentList[i].length;
                 let size = senLen * unit;
                 let maxIndex = minIndex + senLen;
-                console.log(minIndex, maxIndex);
+                // console.log(minIndex, maxIndex);
                 let atts = this.srcAtt.slice(minIndex, maxIndex +
                     1);
                 let words = this.segmentList[i].slice(minIndex, maxIndex +
@@ -74,8 +89,60 @@ class attentionAsymmetricComponent extends attentionComponent {
                 this.pixelBars.push(pixel);
                 // this.segmentList.push();
             }
-        }
 
-        //draw
+
+            ////////////// draw question //////////////
+
+            let targ = this.question;
+
+            this.targPos = targ.map((d, i) => {
+                return {
+                    'x': this.width / (targ.length + 1) * (i + 1),
+                    'y': this.height / 3 * 2.5
+                };
+            });
+
+            var targWidth = this.width / (this.targWords.length + 1);
+            this.rectHeight = this.height / 3.0 * 0.5;
+
+            this.svg.selectAll(".attentionGraphComponentTargRect")
+                .data(targ)
+                .enter()
+                .append("rect")
+                .attr('class', 'attentionGraphComponentTargRect')
+                .attr("x", (d, i) => this.targPos[i].x - targWidth / 2.0)
+                .attr("y", (d, i) => this.targPos[i].y - this.rectHeight)
+                .attr("width", targWidth)
+                .attr("height", this.rectHeight)
+                .attr("class", "targRect")
+                .style("fill", (d, i) => this.colormap(targAtt[i]))
+                // .style("opacity", (d, i) => targAtt[i])
+                .on('mouseover', (d, i, nodes) => {
+                    // this.highlight_and_linkAlignSrc('highlight', i,
+                    //     nodes);
+                })
+                .on('mouseout', (d, i, nodes) => {
+                    // this.highlight_and_linkAlignSrc('clean', i, nodes);
+                })
+                .on("click", (d, i) => {
+                    this.draw();
+                });
+
+            this.targWordsText = this.svg.selectAll(
+                    ".attentionGraphComponentTargText")
+                .data(this.targWords)
+                .enter()
+                .append("text")
+                .attr('class', 'attentionGraphComponentTargText')
+                .text(d => d)
+                .attr("x", (d, i) => this.targPos[i].x)
+                .attr("y", (d, i) => this.targPos[i].y - this.rectHeight *
+                    0.5)
+                // .style("font-size", this.checkFontSize.bind(this))
+                // .style("writing-mode", this.checkTargOrientation.bind(this))
+                .style("alignment-baseline", "middle")
+                .style("text-anchor", "middle")
+                .style('pointer-events', 'none');
+        }
     }
 }

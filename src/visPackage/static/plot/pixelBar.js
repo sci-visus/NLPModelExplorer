@@ -43,20 +43,26 @@ class pixelBar {
                 d3.selectAll(".senBlock").attr("stroke-width", 2);
             });
 
+        //ratio adjust
+
         if (this.attData) {
             // console.log(this.attData);
             //readjust bar size
+            this.cellData = [];
             let unit = this.size[0] / this.attData.length;
+            let unitSum = 0;
             for (var i = 0; i < this.attData.length; i++) {
-                console.log("color:", this.colormap(this.attData[i]));
+                this.cellData.push([this.pos[0] + i * unit, unit]);
+            }
+
+            for (var i = 0; i < this.cellData.length; i++) {
                 this.svg.append("rect")
-                    .attr("x", this.pos[0] + i * unit)
+                    .attr("x", this.cellData[i][0])
                     .attr("y", this.pos[1])
-                    .attr("width", unit)
+                    .attr("width", this.cellData[i][1])
                     .attr("height", this.size[1])
                     .attr("fill", this.colormap(this.attData[i]))
                     .attr("pointer-events", "none");
-
             }
         }
     }
