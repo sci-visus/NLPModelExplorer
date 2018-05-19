@@ -329,7 +329,6 @@ class attentionGraphComponent extends attentionComponent {
             this.setData("highlight", [-1, -1]);
         } else {
 
-
             d3.select(nodes[index]).style('fill', 'orange');
 
             d3.selectAll('.attentionGraphComponentSrcText').filter((d, i) => {

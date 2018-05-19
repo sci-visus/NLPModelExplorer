@@ -77,11 +77,12 @@ class attentionAsymmetricComponent extends attentionComponent {
                 // console.log(minIndex, maxIndex);
                 let atts = this.srcAtt.slice(minIndex, maxIndex +
                     1);
-                let words = this.segmentList[i].slice(minIndex, maxIndex +
-                    1);
+                let words = this.segmentList[i];
                 minIndex = maxIndex;
                 let pixel = new pixelBar(this.svg, [pos, 15], [size, 20],
                     atts, words, this.ratio, this.colormap);
+                pixel.bindShowSentenceCallback(this.showParagraphSentence.bind(
+                    this));
 
                 pos += (size + 20);
 
@@ -93,56 +94,164 @@ class attentionAsymmetricComponent extends attentionComponent {
 
             ////////////// draw question //////////////
 
-            let targ = this.question;
+            this.questionPos = this.drawSentence(this.question,
+                this.width - 20, 60, [10,
+                    this.height /
+                    3 * 2.5
+                ], targAtt, "question");
+        }
+    }
 
-            this.targPos = targ.map((d, i) => {
-                return {
-                    'x': this.width / (targ.length + 1) * (i + 1),
-                    'y': this.height / 3 * 2.5
-                };
+    /*
+        width, height of the sentence bar
+    */
+
+    showParagraphSentence(sentence, att, startPos, endPos) {
+        // console.log(sentence, att);
+        if (sentence) {
+            let width = this.width - 20;
+            let height = 60;
+            let posX = 10;
+            let posY = this.height * 0.3;
+            this.selectParaSenPos = this.drawSentence(sentence, width,
+                height, [posX, posY], att, "paraSen");
+            var targWidth = width / sentence.length;
+            let polygonList = [
+                startPos,
+                endPos, [posX + width, posY],
+                [posX, posY]
+            ];
+            this.svg.selectAll("." + "paraSen" + "Polygon").remove();
+            this.svg.selectAll("." + "paraSen" + "Polygon")
+                .data([polygonList])
+                .enter().append("polygon")
+                .attr("class", "paraSen" + "Polygon")
+                .attr("points", function(d) {
+                    return d.map(function(d) {
+                        console.log(d);
+                        return d.join(",");
+                    }).join(" ");
+                })
+                .attr("stroke", "grey")
+                .attr("fill", "lightgrey")
+                .attr("opacity", 0.4);
+        } else {
+            this.svg.selectAll("." + "paraSen" + "Rect").remove();
+            this.svg.selectAll("." + "paraSen" + "Text").remove();
+            this.svg.selectAll("." + "paraSen" + "Link").remove();
+            this.svg.selectAll("." + "paraSen" + "Polygon").remove();
+        }
+
+    }
+
+    drawSentence(sentence, width, height, offset, targAtt,
+        classPrefix) {
+        let targPos = sentence.map((d, i) => {
+            return {
+                'x': offset[0] + width / (sentence.length) * (i +
+                    0.5),
+                'y': offset[1]
+            };
+        });
+
+        var targWidth = width / sentence.length;
+
+        this.svg.selectAll("." + classPrefix + "Rect").remove();
+        this.svg.selectAll("." + classPrefix + "Rect")
+            .data(sentence)
+            .enter()
+            .append("rect")
+            .attr('class', classPrefix + "Rect")
+            .attr("x", (d, i) => targPos[i].x - targWidth * 0.5)
+            .attr("y", (d, i) => targPos[i].y)
+            .attr("width", targWidth)
+            .attr("height", height)
+            .style("fill", (d, i) => this.colormap(targAtt[i]))
+            // .style("opacity", (d, i) => targAtt[i])
+            .on('mouseover', (d, i, nodes) => {
+                // this.highlight_and_linkAlignSrc('highlight', i,
+                //     nodes);
+            })
+            .on('mouseout', (d, i, nodes) => {
+                // this.highlight_and_linkAlignSrc('clean', i, nodes);
+            })
+            .on("click", (d, i) => {
+                this.draw();
             });
 
-            var targWidth = this.width / (this.targWords.length + 1);
-            this.rectHeight = this.height / 3.0 * 0.5;
 
-            this.svg.selectAll(".attentionGraphComponentTargRect")
-                .data(targ)
-                .enter()
-                .append("rect")
-                .attr('class', 'attentionGraphComponentTargRect')
-                .attr("x", (d, i) => this.targPos[i].x - targWidth / 2.0)
-                .attr("y", (d, i) => this.targPos[i].y - this.rectHeight)
-                .attr("width", targWidth)
-                .attr("height", this.rectHeight)
-                .attr("class", "targRect")
-                .style("fill", (d, i) => this.colormap(targAtt[i]))
-                // .style("opacity", (d, i) => targAtt[i])
-                .on('mouseover', (d, i, nodes) => {
-                    // this.highlight_and_linkAlignSrc('highlight', i,
-                    //     nodes);
-                })
-                .on('mouseout', (d, i, nodes) => {
-                    // this.highlight_and_linkAlignSrc('clean', i, nodes);
-                })
-                .on("click", (d, i) => {
-                    this.draw();
-                });
+        this.svg.selectAll("." + classPrefix + "Text").remove();
+        this.svg.selectAll("." + classPrefix + "Text")
+            .data(sentence)
+            .enter()
+            .append("text")
+            .attr('class', classPrefix + "Text")
+            .text(d => d)
+            .attr("x", (d, i) => targPos[i].x)
+            .attr("y", (d, i) => targPos[i].y + height * 0.5)
+            // .style("font-size", this.checkFontSize.bind(this))
+            .style("writing-mode", d => {
+                var cbbox = this.svg.select("." + classPrefix + "Rect")
+                    .node().getBBox();
+                // console.log(cbbox);
+                if (cbbox.height > cbbox.width)
+                    return "vertical-rl";
+                else
+                    return "hortizontal-rl";
+            })
+            .style("alignment-baseline", "middle")
+            .style("text-anchor", "middle")
+            .style('pointer-events', 'none');
 
-            this.targWordsText = this.svg.selectAll(
-                    ".attentionGraphComponentTargText")
-                .data(this.targWords)
-                .enter()
-                .append("text")
-                .attr('class', 'attentionGraphComponentTargText')
-                .text(d => d)
-                .attr("x", (d, i) => this.targPos[i].x)
-                .attr("y", (d, i) => this.targPos[i].y - this.rectHeight *
-                    0.5)
-                // .style("font-size", this.checkFontSize.bind(this))
-                // .style("writing-mode", this.checkTargOrientation.bind(this))
-                .style("alignment-baseline", "middle")
-                .style("text-anchor", "middle")
-                .style('pointer-events', 'none');
-        }
+    }
+
+    drawLink(posSrc, posTarg, attMatrix) {
+
+        var d3line = d3.line()
+            .x(function(d) {
+                return d[0];
+            })
+            .y(function(d) {
+                return d[1];
+            });
+
+        this.svg.selectAll(".attentionGraphComponentAttConnect").remove();
+
+        let connections = this.svg.selectAll(
+                ".attentionGraphComponentAttConnect")
+            .data(this.attList)
+            .enter()
+            .append("path")
+            .attr("d", d => {
+                // console.log(d);
+                //mapped from original index to collapsed index
+                let mappedSrcIndex = this.srcCollapMap[d[0]];
+                let mappedTargIndex = this.targCollapMap[d[1]];
+
+                if (mappedSrcIndex >= 0 && mappedTargIndex >= 0) {
+
+                    var lineData = [
+                        [
+                            this.srcPos[mappedSrcIndex].x,
+                            this.srcPos[mappedSrcIndex].y +
+                            this.rectHeight
+                        ],
+                        [
+                            this.targPos[mappedTargIndex].x,
+                            this.targPos[mappedTargIndex].y -
+                            this.rectHeight
+                        ]
+                    ];
+
+                    return d3line(lineData);
+                }
+            })
+            .attr("class", 'attentionGraphComponentAttConnect')
+            .style("stroke-width", d => this.widthscale(d[2]))
+            .style("stroke", "#87CEFA")
+            .style("opacity", d => 0.1 + d[2])
+            .style("fill", "none");
+
+        return connections;
     }
 }

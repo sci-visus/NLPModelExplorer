@@ -6,6 +6,8 @@ class pixelBar {
         this.colormap = colormap;
         this.attData = att;
         this.words = words;
+
+        this.selectionFlag = false;
         //default colormap
     }
 
@@ -24,23 +26,69 @@ class pixelBar {
     }
 
     draw() {
-        this.svg.append("rect")
+        this.rect = this.svg.append("rect")
             .attr("class", "senBlock")
             .attr("x", this.pos[0])
             .attr("y", this.pos[1])
             .attr("width", this.size[0])
             .attr("height", this.size[1])
             .attr("fill", "white")
-            .attr("stroke", "grey")
-            .attr("stroke-width", 2)
+            .attr("stroke", "lightgrey")
+            // .attr("stroke-width", 2)
             .on("mouseover", function(d) {
                 // d3.selectAll(".senBlock").attr("stroke", "grey");
                 // d3.select(this).attr("stroke", "lightblue");
-                d3.select(this).attr("stroke-width", 8);
+                d3.select(this).attr("stroke-width", 4);
             })
-            .on("mouseout", function(d) {
+            .on("mouseout", d => {
                 // d3.selectAll(".senBlock").attr("stroke", "grey");
                 d3.selectAll(".senBlock").attr("stroke-width", 2);
+            })
+            // .on("mouseover", function(d) {
+            //     this.callback(this.word, this.attData);
+            // })
+            // .on("mouseout", function(d){
+            //     this.callback(this.word, this.attData);
+            // })
+            .on("click", d => {
+                console.log(this.rect.attr("stroke"));
+                if (this.rect.attr("stroke") === "grey") {
+                    d3.selectAll(".senBlock").attr("stroke",
+                        "lightgrey");
+                    d3.selectAll(".senBlock").attr("opacity", 1.0);
+                    d3.selectAll(".cell").attr("opacity", 1.0);
+                    this.callback();
+                } else {
+                    //set de-emphasis on all other block
+                    d3.selectAll(".senBlock").attr("stroke",
+                        "lightgrey");
+                    d3.selectAll(".senBlock").attr("opacity", 0.5);
+                    d3.selectAll(".cell").attr("opacity", 0.5);
+                    //set highlight color
+                    this.rect.attr("stroke", "grey");
+                    this.rect.attr("opacity", 1.0);
+                    this.svg.selectAll(".cell").attr("opacity", 1.0);
+                    this.callback(this.words, this.attData, [this.pos[0],
+                        this.pos[1] + this.size[1]
+                    ], [this.pos[0] + this.size[0], this.pos[1] +
+                        this.size[1]
+                    ]);
+                }
+
+
+
+                // if (this.rect.attr("opacity") > 0.9) {
+                //     d3.selectAll(".senBlock").attr("opacity", 1.0);
+                //     d3.selectAll(".cell").attr("opacity", 0.5);
+                //     this.rect.attr("opacity", 0.5);
+                //
+                //     this.svg.selectAll(".cell").attr("opacity", 1.0);
+                //     this.callback(this.words, this.attData);
+                // } else {
+                //     d3.selectAll(".senBlock").attr("opacity", 1.0);
+                //     d3.selectAll(".cell").attr("opacity", 1.0);
+                //     this.callback();
+                // }
             });
 
         //ratio adjust
@@ -57,6 +105,7 @@ class pixelBar {
 
             for (var i = 0; i < this.cellData.length; i++) {
                 this.svg.append("rect")
+                    .attr("class", "cell")
                     .attr("x", this.cellData[i][0])
                     .attr("y", this.pos[1])
                     .attr("width", this.cellData[i][1])
@@ -67,7 +116,7 @@ class pixelBar {
         }
     }
 
-    showSentence() {
-
+    bindShowSentenceCallback(callback) {
+        this.callback = callback;
     }
 }
