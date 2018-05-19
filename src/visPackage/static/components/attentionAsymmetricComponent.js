@@ -128,25 +128,42 @@ class attentionAsymmetricComponent extends attentionComponent {
             let posX = 10;
             let posY = this.height * 0.3;
 
+            let srcWidth = endPos[0] - startPos[0];
+
             this.selectParaSenPos = this.drawSentence(sentence, width,
                 height, [posX, posY], att, "paraSen");
             var targWidth = width / sentence.length;
+            var curveGen = d3.line()
+                // .curve(d3.curveCatmullRom.alpha(0));
+                .curve(d3.curveBasis);
+            // .curve(d3.curveLinear);
+            let rightCurve = curveGen([
+                endPos, [endPos[0], endPos[1] + 25],
+                [(endPos[0] + posX + width) * 0.5,
+                    endPos[1] + (posY - endPos[1]) * 0.8
+                ],
+                [posX + width, posY]
+            ]);
+            let leftCurve = curveGen([
+                [posX, posY],
+                [(posX + startPos[0]) * 0.5,
+                    startPos[1] + (posY - startPos[1]) * 0.8
+                ],
+                [startPos[0], startPos[1] + 25],
+                startPos
+            ]);
+            // console.log(leftCurve, rightCurve);
             let polygonList = [
                 startPos,
                 endPos, [posX + width, posY],
                 [posX, posY]
             ];
             this.svg.selectAll("." + "paraSen" + "Polygon").remove();
-            this.svg.selectAll("." + "paraSen" + "Polygon")
-                .data([polygonList])
-                .enter().append("polygon")
+            this.svg.append("path")
                 .attr("class", "paraSen" + "Polygon")
-                .attr("points", function(d) {
-                    return d.map(function(d) {
-                        // console.log(d);
-                        return d.join(",");
-                    }).join(" ");
-                })
+                .attr("d", rightCurve + "L" + posX + "," + posY + leftCurve +
+                    "L" + endPos[0] + "," + endPos[1])
+                // .attr("d", leftCurve)
                 .attr("stroke", "grey")
                 .attr("fill", "lightgrey")
                 .attr("opacity", 0.4);
