@@ -11,6 +11,7 @@ class attentionAsymmetricComponent extends attentionComponent {
 
         this.ratio = 0.5; //between 0 - 1, 1 uniform, 0 only show highest value
         this.pixelBars = [];
+        this.widthscale = d3.scaleLinear().domain([0, 1]).range([0, 5]);
     }
 
     parseDataUpdate(msg) {
@@ -70,6 +71,7 @@ class attentionAsymmetricComponent extends attentionComponent {
             targAtt = targAtt.map(d => d / targAttMax);
 
             let unit = this.width * 0.85 / paragraphLen;
+            this.paraPos = [];
             for (var i = 0; i < this.segmentList.length; i++) {
                 let senLen = this.segmentList[i].length;
                 let size = senLen * unit;
@@ -79,6 +81,13 @@ class attentionAsymmetricComponent extends attentionComponent {
                     1);
                 let words = this.segmentList[i];
                 minIndex = maxIndex;
+
+                ///// generate paraPos //////
+                for (var j = 0; j < this.segmentList[i].length; j++) {
+                    // this.paraPos.push([pos])
+
+                }
+
                 let pixel = new pixelBar(this.svg, [pos, 15], [size, 20],
                     atts, words, this.ratio, this.colormap);
                 pixel.bindShowSentenceCallback(this.showParagraphSentence.bind(
@@ -99,6 +108,8 @@ class attentionAsymmetricComponent extends attentionComponent {
                     this.height /
                     3 * 2.5
                 ], targAtt, "question");
+
+            this.drawLink(this.paraPos, this.questionPos)
         }
     }
 
@@ -141,7 +152,6 @@ class attentionAsymmetricComponent extends attentionComponent {
             this.svg.selectAll("." + "paraSen" + "Link").remove();
             this.svg.selectAll("." + "paraSen" + "Polygon").remove();
         }
-
     }
 
     drawSentence(sentence, width, height, offset, targAtt,
@@ -205,7 +215,7 @@ class attentionAsymmetricComponent extends attentionComponent {
 
     }
 
-    drawLink(posSrc, posTarg, attMatrix) {
+    drawLink(srcPos, targPos, attMatrix, classPrefix) {
 
         var d3line = d3.line()
             .x(function(d) {
@@ -215,38 +225,33 @@ class attentionAsymmetricComponent extends attentionComponent {
                 return d[1];
             });
 
-        this.svg.selectAll(".attentionGraphComponentAttConnect").remove();
+        this.svg.selectAll("." + classPrefix + "Link").remove();
 
-        let connections = this.svg.selectAll(
-                ".attentionGraphComponentAttConnect")
+        this.attList = [];
+        for (var i = 0; i < attMatrix.length; i++) //src
+            for (var j = 0; j < attMatrix[i].length; j++) { //targ
+            this.attList.push([i, j, attMatrix[i][j]]);
+        }
+
+        let connections = this.svg.selectAll("." + classPrefix + "Link")
             .data(this.attList)
             .enter()
             .append("path")
             .attr("d", d => {
-                // console.log(d);
-                //mapped from original index to collapsed index
-                let mappedSrcIndex = this.srcCollapMap[d[0]];
-                let mappedTargIndex = this.targCollapMap[d[1]];
+                var lineData = [
+                    [
+                        this.srcPos[d[0]].x,
+                        this.srcPos[d[0]].y
+                    ],
+                    [
+                        this.targPos[d[1]].x,
+                        this.targPos[d[1]].y
+                    ]
+                ];
 
-                if (mappedSrcIndex >= 0 && mappedTargIndex >= 0) {
-
-                    var lineData = [
-                        [
-                            this.srcPos[mappedSrcIndex].x,
-                            this.srcPos[mappedSrcIndex].y +
-                            this.rectHeight
-                        ],
-                        [
-                            this.targPos[mappedTargIndex].x,
-                            this.targPos[mappedTargIndex].y -
-                            this.rectHeight
-                        ]
-                    ];
-
-                    return d3line(lineData);
-                }
+                return d3line(lineData);
             })
-            .attr("class", 'attentionGraphComponentAttConnect')
+            .attr("class", classPrefix + "Link")
             .style("stroke-width", d => this.widthscale(d[2]))
             .style("stroke", "#87CEFA")
             .style("opacity", d => 0.1 + d[2])
