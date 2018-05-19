@@ -1,11 +1,12 @@
 class pixelBar {
-    constructor(svg, pos, size, att, words, ratio, colormap) {
+    constructor(svg, pos, size, att, words, ratio, colormap, metaInfo) {
         this.svg = svg.append("g");
         this.pos = pos;
         this.size = size;
         this.colormap = colormap;
         this.attData = att;
         this.words = words;
+        this.metaInfo = metaInfo;
 
         this.selectionFlag = false;
         //default colormap
@@ -72,11 +73,8 @@ class pixelBar {
                         this.pos[1] + this.size[1]
                     ], [this.pos[0] + this.size[0], this.pos[1] +
                         this.size[1]
-                    ]);
+                    ], this.metaInfo);
                 }
-
-
-
                 // if (this.rect.attr("opacity") > 0.9) {
                 //     d3.selectAll(".senBlock").attr("opacity", 1.0);
                 //     d3.selectAll(".cell").attr("opacity", 0.5);

@@ -11,7 +11,7 @@ class attentionAsymmetricComponent extends attentionComponent {
 
         this.ratio = 0.5; //between 0 - 1, 1 uniform, 0 only show highest value
         this.pixelBars = [];
-        this.widthscale = d3.scaleLinear().domain([0, 1]).range([0, 5]);
+        this.widthscale = d3.scaleLinear().domain([0, 1]).range([0, 3]);
     }
 
     parseDataUpdate(msg) {
@@ -80,16 +80,19 @@ class attentionAsymmetricComponent extends attentionComponent {
                 let atts = this.srcAtt.slice(minIndex, maxIndex +
                     1);
                 let words = this.segmentList[i];
+                let indexRange = [minIndex, maxIndex];
                 minIndex = maxIndex;
 
                 ///// generate paraPos //////
                 for (var j = 0; j < this.segmentList[i].length; j++) {
-                    // this.paraPos.push([pos])
-
+                    this.paraPos.push({
+                        "x": pos + (0.5 + j) * unit,
+                        "y": 35
+                    });
                 }
 
                 let pixel = new pixelBar(this.svg, [pos, 15], [size, 20],
-                    atts, words, this.ratio, this.colormap);
+                    atts, words, this.ratio, this.colormap, indexRange);
                 pixel.bindShowSentenceCallback(this.showParagraphSentence.bind(
                     this));
 
@@ -102,14 +105,14 @@ class attentionAsymmetricComponent extends attentionComponent {
 
 
             ////////////// draw question //////////////
-
             this.questionPos = this.drawSentence(this.question,
                 this.width - 20, 60, [10,
                     this.height /
                     3 * 2.5
                 ], targAtt, "question");
 
-            this.drawLink(this.paraPos, this.questionPos)
+            // console.log(this.questionPos);
+            this.drawLink(this.paraPos, this.questionPos, attMatrix);
         }
     }
 
@@ -117,13 +120,14 @@ class attentionAsymmetricComponent extends attentionComponent {
         width, height of the sentence bar
     */
 
-    showParagraphSentence(sentence, att, startPos, endPos) {
+    showParagraphSentence(sentence, att, startPos, endPos, indexRange) {
         // console.log(sentence, att);
         if (sentence) {
             let width = this.width - 20;
             let height = 60;
             let posX = 10;
             let posY = this.height * 0.3;
+
             this.selectParaSenPos = this.drawSentence(sentence, width,
                 height, [posX, posY], att, "paraSen");
             var targWidth = width / sentence.length;
@@ -139,18 +143,33 @@ class attentionAsymmetricComponent extends attentionComponent {
                 .attr("class", "paraSen" + "Polygon")
                 .attr("points", function(d) {
                     return d.map(function(d) {
-                        console.log(d);
+                        // console.log(d);
                         return d.join(",");
                     }).join(" ");
                 })
                 .attr("stroke", "grey")
                 .attr("fill", "lightgrey")
                 .attr("opacity", 0.4);
+
+            let subMat = this.normAttention.slice(
+                indexRange[0],
+                indexRange[1]);
+            // console.log("subMat", subMat, indexRange);
+            // console.log(this.selectParaSenPos, this.questionPos);
+            this.drawLink(this.selectParaSenPos.map(d => {
+                    return {
+                        "x": d.x,
+                        "y": d.y + height
+                    };
+                }),
+                this.questionPos, subMat);
+
         } else {
             this.svg.selectAll("." + "paraSen" + "Rect").remove();
             this.svg.selectAll("." + "paraSen" + "Text").remove();
             this.svg.selectAll("." + "paraSen" + "Link").remove();
             this.svg.selectAll("." + "paraSen" + "Polygon").remove();
+            this.drawLink(this.paraPos, this.questionPos, this.normAttention);
         }
     }
 
@@ -213,9 +232,10 @@ class attentionAsymmetricComponent extends attentionComponent {
             .style("text-anchor", "middle")
             .style('pointer-events', 'none');
 
+        return targPos;
     }
 
-    drawLink(srcPos, targPos, attMatrix, classPrefix) {
+    drawLink(srcPos, targPos, attMatrix, classPrefix = "para") {
 
         var d3line = d3.line()
             .x(function(d) {
@@ -233,6 +253,8 @@ class attentionAsymmetricComponent extends attentionComponent {
             this.attList.push([i, j, attMatrix[i][j]]);
         }
 
+        // console.log(this.attList);
+
         let connections = this.svg.selectAll("." + classPrefix + "Link")
             .data(this.attList)
             .enter()
@@ -240,12 +262,12 @@ class attentionAsymmetricComponent extends attentionComponent {
             .attr("d", d => {
                 var lineData = [
                     [
-                        this.srcPos[d[0]].x,
-                        this.srcPos[d[0]].y
+                        srcPos[d[0]].x,
+                        srcPos[d[0]].y
                     ],
                     [
-                        this.targPos[d[1]].x,
-                        this.targPos[d[1]].y
+                        targPos[d[1]].x,
+                        targPos[d[1]].y
                     ]
                 ];
 
