@@ -11,7 +11,7 @@ model = modelInterface(
     wordVec="../data/glove.hdf5", model="../data/local_300_parikh")
 
 #sentence perturbation
-gen = sentenceGenerator()
+gen = translationPerturbation()
 #dependency parsing
 dep = dependencyTree()
 

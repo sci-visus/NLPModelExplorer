@@ -28,7 +28,7 @@ modelVis = MCModule(visLayout)
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
 modelVis.setReloadModelCallback(model.reloadModel)
-# modelVis.setSentencePerturbationHook(gen.perturbSentence)
+modelVis.setSentencePerturbationHook(gen.perturbSentence)
 
 #open browser for visualization
 # modelVis.show()

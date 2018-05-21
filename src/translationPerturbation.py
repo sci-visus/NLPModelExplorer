@@ -6,6 +6,7 @@ class translationPerturbation:
         self.translate_client = translate.Client.from_service_account_json(authFilePath)
 
     def perturbSentence(self, inputSentence):
+        print "\n\ntranslation perturbation:", inputSentence
         # The text to translate
         # text = u'Hello, world!'
         # The target language
@@ -42,5 +43,6 @@ class translationPerturbation:
                 target_language=u'en')
             # print outputSentence
             sentenceList.add(outputSentence["translatedText"])
-
-        return list(sentenceList)
+        perturbedSen = list(sentenceList)
+        print perturbedSen, "\n\n"
+        return perturbedSen
