@@ -14,6 +14,8 @@ class attentionMatrixComponent extends attentionComponent {
             'index': -1,
             'flag': false
         };
+
+        this.backgourndText = ['Premise', 'Hypothesis'];
     }
 
     draw() {
@@ -27,8 +29,6 @@ class attentionMatrixComponent extends attentionComponent {
             this.initSvg();
 
             //attention matrix
-            let attMatrix = this.normAttention;
-            // console.log(attMatrix);
             let attMax = 1.0;
             let attMin = 0.0;
             if (this.comparisonFlag) {
@@ -55,13 +55,23 @@ class attentionMatrixComponent extends attentionComponent {
 
             //location of words
             var pair = this.data["currentPair"]["sentences"];
+            this.srcWords = this.sen2words(pair[0]);
+            this.targWords = this.sen2words(pair[1]);
 
             this.aggregatedMatrix = Object.assign(this.normAttention);
 
-            this.attList = this.generateMatrixGeometry();
+            //for subMatrix
+            if (this.data["selectionRange"]) {
+                console.log(this.data["selectionRange"]);
+                this.srcWords = this.srcWords.slice(this.data[
+                        "selectionRange"][0],
+                    this.data["selectionRange"][1]);
+                this.aggregatedMatrix = this.aggregatedMatrix.slice(
+                    this.data["selectionRange"][0],
+                    this.data["selectionRange"][1]);
+            }
 
-            this.srcWords = this.sen2words(pair[0]);
-            this.targWords = this.sen2words(pair[1]);
+            this.attList = this.generateMatrixGeometry();
 
             this.computeWordPosition(this.srcWords, this.targWords);
 
@@ -195,12 +205,11 @@ class attentionMatrixComponent extends attentionComponent {
 
             ////////////// rect mouse over event ///////////////
             //this.rectMouseEvent(rects, targtext, srctext);
-
             //draw text background only when depTree do not exist
             if (this.srcDepTreeData === undefined) {
                 this.svg.selectAll(
                         '.attentionMatrixComponent_background_text')
-                    .data(['Premise', 'Hypothesis'])
+                    .data([this.backgourndText[0], this.backgourndText[1]])
                     .enter()
                     .append('text')
                     .text(d => d)
@@ -472,16 +481,16 @@ class attentionMatrixComponent extends attentionComponent {
 
         let attMatrix = this.aggregatedMatrix;
 
-        let targWords = this.sen2words(this.data["currentPair"]["sentences"]
-            [1]);
+        // let targWords = this.sen2words(this.data["currentPair"]["sentences"]
+        //     [1]);
+        //
+        // let srcWords = this.sen2words(this.data["currentPair"]["sentences"]
+        //     [0]);
 
-        let srcWords = this.sen2words(this.data["currentPair"]["sentences"]
-            [0]);
-
-        let w = this.width * 3 / 4 / (targWords.length - this.targIndexMaskSet
+        let w = this.width * 3 / 4 / (this.targWords.length - this.targIndexMaskSet
             .size);
 
-        let h = this.height * 3 / 4 / (srcWords.length - this.srcIndexMaskSet
+        let h = this.height * 3 / 4 / (this.srcWords.length - this.srcIndexMaskSet
             .size);
 
         let attList = [];
@@ -529,21 +538,20 @@ class attentionMatrixComponent extends attentionComponent {
 
         let srcText = [];
 
-        let srcWords = this.sen2words(this.data["currentPair"]["sentences"]
-            [0]);
+        // let srcWords = this.sen2words(this.data["currentPair"]["sentences"][0]);
 
-        let h = (this.height * 0.75) / (srcWords.length - this.srcIndexMaskSet
+        let h = (this.height * 0.75) / (this.srcWords.length - this.srcIndexMaskSet
             .size);
 
         let text_loc = h / 2 + this.height / 4;
-        for (let i = 0; i < srcWords.length; i++) {
+        for (let i = 0; i < this.srcWords.length; i++) {
             let item = {};
 
             item['x'] = this.width * 1 / 4 - this.margin.left * 3;
 
             item['y'] = text_loc;
 
-            item['text'] = srcWords[i];
+            item['text'] = this.srcWords[i];
 
             if (!this.srcIndexMaskSet.has(i)) {
                 item['display'] = 'block';
@@ -556,21 +564,21 @@ class attentionMatrixComponent extends attentionComponent {
 
         let targText = [];
 
-        let targWords = this.sen2words(this.data["currentPair"]["sentences"]
-            [1]);
+        // let targWords = this.sen2words(this.data["currentPair"]["sentences"]
+        //     [1]);
 
-        let w = (this.width * 0.75) / (targWords.length - this.targIndexMaskSet
+        let w = (this.width * 0.75) / (this.targWords.length - this.targIndexMaskSet
             .size);
 
         text_loc = w / 2 + this.width / 4;
-        for (let i = 0; i < targWords.length; i++) {
+        for (let i = 0; i < this.targWords.length; i++) {
             let item = {};
 
             item['x'] = text_loc;
 
             item['y'] = this.height * 1 / 4 - this.margin.top * 3;
 
-            item['text'] = targWords[i];
+            item['text'] = this.targWords[i];
 
             if (!this.targIndexMaskSet.has(i)) {
                 item['display'] = 'block';

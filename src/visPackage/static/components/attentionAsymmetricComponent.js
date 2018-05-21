@@ -29,6 +29,11 @@ class attentionAsymmetricComponent extends attentionComponent {
         }
     }
 
+    ///// highlight entry /////
+    handleHighlightEvent(srcIndex, targIndex) {
+        console.log("highlight placeholder");
+    }
+
     parseParagraph(paragraph) {
         this.segmentList = paragraph.trim().match(
             /([^\.!\?]+[\.!\?]+)|([^\.!\?]+$)/g);
@@ -171,6 +176,8 @@ class attentionAsymmetricComponent extends attentionComponent {
             let subMat = this.normAttention.slice(
                 indexRange[0],
                 indexRange[1]);
+            this.setData("selectionRange", [indexRange[0], indexRange[1]]);
+
             // console.log("subMat", subMat, indexRange);
             // console.log(this.selectParaSenPos, this.questionPos);
             this.drawLink(this.selectParaSenPos.map(d => {

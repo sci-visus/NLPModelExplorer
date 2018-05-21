@@ -16,8 +16,8 @@ gen = translationPerturbation()
 visLayout = {
     "column":[{"row":
                 [
-                # "Summary",
-                "Paragraph"
+                "Paragraph",
+                "AttentionSubMatrix"
                 ]},
             {"row":["AttentionAsymmetric"]}]
     }
