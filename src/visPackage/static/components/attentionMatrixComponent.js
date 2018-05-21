@@ -62,7 +62,7 @@ class attentionMatrixComponent extends attentionComponent {
 
             //for subMatrix
             if (this.data["selectionRange"]) {
-                console.log(this.data["selectionRange"]);
+                // console.log(this.data["selectionRange"]);
                 this.srcWords = this.srcWords.slice(this.data[
                         "selectionRange"][0],
                     this.data["selectionRange"][1]);
