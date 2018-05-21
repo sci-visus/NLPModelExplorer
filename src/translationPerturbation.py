@@ -2,8 +2,7 @@
 from google.cloud import translate
 
 class translationPerturbation:
-    def __init__(self, authFilePath):
-
+    def __init__(self, authFilePath='../key/Paraphrasing-684a368e96ad.json'):
         self.translate_client = translate.Client.from_service_account_json(authFilePath)
 
     def perturbSentence(self, inputSentence):
@@ -30,6 +29,7 @@ class translationPerturbation:
         ]
         sentenceList = set()
 
+        ### the default model is NMT
         for target in targLangs:
             # Translates some text into Russian
             translation = self.translate_client.translate(
