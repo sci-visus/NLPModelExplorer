@@ -1,33 +1,49 @@
 ##### using translation to generate paraphrased sentences #####
+from google.cloud import translate
+
 class translationPerturbation:
     def __init__(self, authFilePath):
-        self.jsonPath = authFilePath
-        self.explicitAuth()
+
+        self.translate_client = translate.Client.from_service_account_json(authFilePath)
 
     def perturbSentence(self, inputSentence):
-        pass
-
-
-    def explicitAuth(self):
-        from google.cloud import translate
-
-        # Explicitly use service account credentials by specifying the private key
-        # file.
-        translate_client = translate.Client.from_service_account_json(
-            self.jsonPath)
-
         # The text to translate
-        text = u'Hello, world!'
+        # text = u'Hello, world!'
         # The target language
-        target = 'ru'
+        # targLangs = [entry["language"] for entry in self.translate_client.get_languages()]
+        # print "Supported language: ", targLangs
 
-        # Translates some text into Russian
-        translation = translate_client.translate(
-            text,
-            target_language=target)
+        targLangs = [
+        u'ar',
+        u'zh',
+        u'cs',
+        u'da',
+        u'nl',
+        u'fr',
+        u'de',
+        u'iw',
+        u'hi',
+        u'it',
+        u'ja',
+        u'ko',
+        u'tr'
+        ]
+        sentenceList = set()
 
-        print u'Text: {}'.format(text)
-        print u'Translation: {}'.format(translation['translatedText'])
+        for target in targLangs:
+            # Translates some text into Russian
+            translation = self.translate_client.translate(
+                inputSentence,
+                target_language=target)
+            # print translation
+            outputSentence = self.translate_client.translate(
+                translation["translatedText"],
+                source_language=target,
+                target_language=u'en')
+            # print outputSentence
+            sentenceList.add(outputSentence["translatedText"])
+
+        return list(sentenceList)
 
     def translate_text_with_model(target, text, model):
         """Translates text into the target language.

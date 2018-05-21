@@ -5,6 +5,8 @@ from translationPerturbation import *
 
 #initialize NLP model
 trans = translationPerturbation('../key/Paraphrasing-684a368e96ad.json')
+sens = trans.perturbSentence(u"How many bird is on the large tree?")
+print sens
 exit()
 
 model = modelInterface(
