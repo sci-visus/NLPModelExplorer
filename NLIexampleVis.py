@@ -2,8 +2,8 @@
 from visPackage.nlizeModule import nlizeModule
 from visPackage.dependencyTree import dependencyTree
 
-from modelInterface import *
-from sentenceGenerator import *
+from nli_src import modelInterface
+from translationPerturbation import *
 
 #initialize NLP model
 model = modelInterface(

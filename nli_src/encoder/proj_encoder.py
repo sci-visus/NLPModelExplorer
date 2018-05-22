@@ -1,10 +1,10 @@
 import sys
-sys.path.insert(0, '../')
+# sys.path.insert(0, '../')
 
 import torch
 from torch import nn
-from view import *
-from holder import *
+from ..view import *
+from ..holder import *
 
 
 class ProjEncoder(torch.nn.Module):

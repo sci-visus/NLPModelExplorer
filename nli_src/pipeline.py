@@ -1,7 +1,7 @@
 import sys
-sys.path.insert(0, './encoder')
-sys.path.insert(0, './attention')
-sys.path.insert(0, './classifier')
+# sys.path.insert(0, './encoder')
+# sys.path.insert(0, './attention')
+# sys.path.insert(0, './classifier')
 
 import torch
 from torch import nn
@@ -9,9 +9,12 @@ from torch import cuda
 from view import *
 from join_table import *
 from holder import *
-from proj_encoder import *
-from local_attention import *
-from local_classifier import *
+# from proj_encoder import *
+from encoder import *
+# from local_attention import *
+from attention import *
+# from local_classifier import *
+from classifier import *
 from torch.autograd import Variable
 import numpy as np
 from optimizer import *
@@ -59,7 +62,7 @@ class Pipeline(torch.nn.Module):
 		self.encoder.init_weight_from(m.encoder)
 		self.attention.init_weight_from(m.attention)
 		self.classifier.init_weight_from(m.classifier)
-		
+
 
 	def forward(self, sent1, sent2):
 		shared = self.shared
@@ -169,7 +172,3 @@ def overfit():
 
 if __name__ == '__main__':
 	overfit()
-
-
-
-

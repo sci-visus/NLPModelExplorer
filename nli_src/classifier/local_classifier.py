@@ -1,11 +1,11 @@
 import sys
-sys.path.insert(0, '../')
+# sys.path.insert(0, '../')
 
 import torch
 from torch import nn
-from view import *
-from join_table import *
-from holder import *
+from ..join_table import *
+from ..view import *
+from ..holder import *
 
 class LocalClassifier(torch.nn.Module):
 	def __init__(self, opt, shared):

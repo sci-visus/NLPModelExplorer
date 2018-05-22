@@ -1,11 +1,11 @@
 import sys
-sys.path.insert(0, '../')
+# sys.path.insert(0, '../')
 
 import torch
 from torch import nn
 from torch.autograd import Variable
-from view import *
-from holder import *
+from ..view import *
+from ..holder import *
 
 class LocalAttention(torch.nn.Module):
 	def __init__(self, opt, shared):
