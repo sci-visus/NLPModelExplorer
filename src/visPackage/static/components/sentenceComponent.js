@@ -108,7 +108,6 @@ class sentenceComponent extends baseComponent {
             4));
         // console.log("----------", this.data["allSourceSens"]);
         if (this.data["allSourceSens"]) {
-
             $(this.div + "src").highlightWithinTextarea({
                 highlight: this.getSentenceDiff(
                     this.data["allSourceSens"][0].substring(
@@ -262,39 +261,53 @@ class sentenceComponent extends baseComponent {
     colorSentenceDiff(origin, perturbed) {
         var originList = origin.split(" ");
         var perturbedList = perturbed.split(" ");
-        if (originList.length === perturbedList.length) {
-            var outputStr = "";
-            for (var i = 0; i < originList.length; i++) {
-                var word = perturbedList[i];
-                if (word !== originList[i] && word !== ".") {
-                    // console.log(word, "-", originList[i]);
-                    word = "<span style=\"background:#87CEFA\">" + word +
-                        "</span>";
-                }
-                word += " "
-
-                outputStr += word;
+        let originWords = new Set(originList);
+        // if (originList.length === perturbedList.length) {
+        var outputStr = "";
+        for (var i = 0; i < perturbedList.length; i++) {
+            var word = perturbedList[i];
+            // if (word !== originList[i] && word !== ".")
+            if (!originWords.has(word)) {
+                // console.log(word, "-", originList[i]);
+                word = "<span style=\"background:#87CEFA\">" + word +
+                    "</span>";
             }
-            // <span style="color:#FF0000">some text</span>
-            return outputStr;
+            word += " "
+
+            outputStr += word;
         }
-        return perturbed;
+        // <span style="color:#FF0000">some text</span>
+        return outputStr;
     }
 
     getSentenceDiff(origin, perturbed) {
-        var originList = origin.split(" ");
-        var perturbedList = perturbed.split(" ");
-        var wordList = [];
-        if (originList.length === perturbedList.length) {
-            var outputStr = "";
-            for (var i = 0; i < originList.length; i++) {
-                var word = perturbedList[i];
-                if (word !== originList[i] && word !== ".") {
-                    // console.log(word, "-", originList[i]);
-                    wordList.push(word);
-                }
+        let originList = origin.split(" ");
+        let perturbedList = perturbed.split(" ");
+        let wordList = [];
+        let originWords = new Set(originList);
+        // console.log(originWords);
+
+        // if (originList.length === perturbedList.length) {
+        //     var outputStr = "";
+        //     for (var i = 0; i < originList.length; i++) {
+        //         var word = perturbedList[i];
+        //         if (word !== originList[i] && word !== ".") {
+        //             // console.log(word, "-", originList[i]);
+        //             wordList.push(word);
+        //         }
+        //     }
+        // }
+
+        //check which word is not appeared in the original
+        for (var i = 0; i < perturbedList.length; i++) {
+            var word = perturbedList[i];
+            if (!originWords.has(word)) {
+                wordList.push(word);
             }
         }
+
+        // console.log(wordList);
+
         return wordList;
     }
 }

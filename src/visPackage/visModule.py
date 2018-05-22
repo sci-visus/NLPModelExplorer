@@ -97,7 +97,10 @@ class visModule(object):
     def perturbSentence(self, sentence):
         if self.sentencePerturbationHook:
             perturbed = self.sentencePerturbationHook(sentence)
-            return [sentence] + perturbed
+            if str(perturbed[0])!=str(sentence):
+                return [sentence] + perturbed
+            else:
+                return perturbed
         else:
             print "No sentence perturbator is specified!"
             return False

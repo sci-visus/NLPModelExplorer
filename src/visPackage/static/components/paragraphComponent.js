@@ -16,10 +16,6 @@ class paragraphComponenet extends sentenceComponent {
         }
     }
 
-    // draw() {
-    //     //sync highlight with attention
-    //
-    // }
 }
 
 // onReceiveSentenceList() {
