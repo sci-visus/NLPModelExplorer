@@ -84,12 +84,22 @@ class attentionAsymmetricComponent extends attentionComponent {
                 minIndex = maxIndex;
 
                 ///// generate paraPos //////
-                for (var j = 0; j < this.segmentList[i].length; j++) {
+                if (!this.aggregateSrc) {
+                    for (var j = 0; j < this.segmentList[i].length; j++) {
+                        this.paraPos.push({
+                            "x": pos + (0.5 + j) * unit,
+                            "y": 35
+                        });
+                    }
+                } else {
                     this.paraPos.push({
-                        "x": pos + (0.5 + j) * unit,
+                        "x": pos + this.segmentList.length * unit *
+                            0.5,
                         "y": 35
                     });
                 }
+
+                //////////////////////////////
 
                 let pixel = new pixelBar(this.svg, [pos, 15], [size, 20],
                     atts, words, this.ratio, this.colormap, indexRange);
@@ -103,6 +113,12 @@ class attentionAsymmetricComponent extends attentionComponent {
                 // this.segmentList.push();
             }
 
+            //////// prepare link attention ///////////
+            if (!this.aggregateSrc) {
+                this.linkAttMatrix = this.normAttention;
+            } else {
+                // this.linkAttMatrix = this.normAttention;
+            }
 
             ////////////// draw question //////////////
             this.questionPos = this.drawSentence(this.question,
@@ -112,7 +128,7 @@ class attentionAsymmetricComponent extends attentionComponent {
                 ], targAtt, "question");
 
             // console.log(this.questionPos);
-            this.drawLink(this.paraPos, this.questionPos, attMatrix);
+            this.drawLink(this.paraPos, this.questionPos, this.linkAttMatrix);
         }
     }
 
@@ -186,7 +202,7 @@ class attentionAsymmetricComponent extends attentionComponent {
             this.svg.selectAll("." + "paraSen" + "Text").remove();
             this.svg.selectAll("." + "paraSen" + "Link").remove();
             this.svg.selectAll("." + "paraSen" + "Polygon").remove();
-            this.drawLink(this.paraPos, this.questionPos, this.normAttention);
+            this.drawLink(this.paraPos, this.questionPos, this.linkAttMatrix);
         }
     }
 
@@ -260,7 +276,8 @@ class attentionAsymmetricComponent extends attentionComponent {
             })
             .y(function(d) {
                 return d[1];
-            });
+            })
+            .curve(d3.curveBasis);
 
         this.svg.selectAll("." + classPrefix + "Link").remove();
 
@@ -271,6 +288,7 @@ class attentionAsymmetricComponent extends attentionComponent {
         }
 
         // console.log(this.attList);
+        let heighGap = targPos[0].y - srcPos[0].y;
 
         let connections = this.svg.selectAll("." + classPrefix + "Link")
             .data(this.attList)
@@ -281,6 +299,14 @@ class attentionAsymmetricComponent extends attentionComponent {
                     [
                         srcPos[d[0]].x,
                         srcPos[d[0]].y
+                    ],
+                    [
+                        srcPos[d[0]].x,
+                        srcPos[d[0]].y + heighGap * 0.15
+                    ],
+                    [
+                        targPos[d[1]].x,
+                        targPos[d[1]].y - heighGap * 0.15
                     ],
                     [
                         targPos[d[1]].x,
