@@ -52,7 +52,7 @@ class pixelBar {
             //     this.callback(this.word, this.attData);
             // })
             .on("click", d => {
-                console.log(this.rect.attr("stroke"));
+                // console.log(this.rect.attr("stroke"));
                 if (this.rect.attr("stroke") === "grey") {
                     d3.selectAll(".senBlock").attr("stroke",
                         "lightgrey");

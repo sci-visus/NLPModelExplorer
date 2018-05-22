@@ -32,7 +32,60 @@ class attentionAsymmetricComponent extends attentionComponent {
 
     ///// highlight entry /////
     handleHighlightEvent(srcIndex, targIndex) {
-        console.log("highlight placeholder");
+        // console.log("highlight placeholder");
+        this.svg.selectAll(".paraSenText").each(function(d, i) {
+            if (srcIndex === i) {
+                d3.select(this).style("fill", "orange");
+                d3.select(this).style("font-weight", "bold");
+            } else {
+                d3.select(this).style("fill", "black");
+                d3.select(this).style("font-weight", "normal");
+            }
+        });
+
+        this.svg.selectAll(".questionText").each(function(d, i) {
+            if (targIndex === i) {
+                d3.select(this).style("fill", "orange");
+                d3.select(this).style("font-weight", "bold");
+            } else {
+                d3.select(this).style("fill", "black");
+                d3.select(this).style("font-weight", "normal");
+            }
+        });
+
+        // let that = this;
+        // this.svg.selectAll(".paraSenLink").each(function(d, i) {
+        //     // console.log("i:", i, " index:", srcIndex * that.subMat[
+        //     // 0].length +
+        //     // targIndex)
+        //     if (i === srcIndex * that.subMat[0].length + targIndex) {
+        //         d3.select(this).attr("stroke", "orange");
+        //         d3.select(this).attr("fill", "orange");
+        //         // d3.select(this).attr("stroke-width", );
+        //         console.log("highlgith link", i)
+        //     }
+        // })
+
+        if (srcIndex >= 0 && targIndex >= 0) {
+            let linkIndex = srcIndex * this.subMat[0].length + targIndex;
+            console.log(linkIndex, this.svg.select("#paraSenLink" +
+                linkIndex));
+            this.svg.select("#paraSenLink" + linkIndex)
+                .style("stroke", "orange");
+            // .attr("stroke-width", 10)
+            // .attr("opacity", 0.0);
+        }
+
+        if (srcIndex === -1 && targIndex === -1) {
+            this.svg.selectAll(".paraSenText").style("fill", "black");
+            this.svg.selectAll(".paraSenText").style("font-weight",
+                "normal");
+
+            this.svg.selectAll(".questionText").style("fill", "black");
+            this.svg.selectAll(".questionText").style("font-weight",
+                "normal");
+            this.svg.selectAll(".paraSenLink").style("stroke", "#87CEFA")
+        }
     }
 
     parseParagraph(paragraph) {
@@ -207,7 +260,7 @@ class attentionAsymmetricComponent extends attentionComponent {
                 .attr("fill", "lightgrey")
                 .attr("opacity", 0.4);
 
-            let subMat = this.normAttention.slice(
+            this.subMat = this.normAttention.slice(
                 indexRange[0],
                 indexRange[1]);
             this.setData("selectionRange", [indexRange[0], indexRange[1]]);
@@ -220,7 +273,7 @@ class attentionAsymmetricComponent extends attentionComponent {
                         "y": d.y + height
                     };
                 }),
-                this.questionPos, subMat);
+                this.questionPos, this.subMat);
 
         } else {
             this.svg.selectAll("." + "paraSen" + "Rect").remove();
@@ -298,7 +351,7 @@ class attentionAsymmetricComponent extends attentionComponent {
         return targPos;
     }
 
-    drawLink(srcPos, targPos, attMatrix, classPrefix = "para") {
+    drawLink(srcPos, targPos, attMatrix, classPrefix = "paraSen") {
 
         var d3line = d3.line()
             .x(function(d) {
@@ -347,6 +400,7 @@ class attentionAsymmetricComponent extends attentionComponent {
                 return d3line(lineData);
             })
             .attr("class", classPrefix + "Link")
+            .attr("id", (d, i) => classPrefix + "Link" + i)
             .style("stroke-width", d => this.widthscale(d[2]))
             .style("stroke", "#87CEFA")
             .style("opacity", d => 0.1 + d[2])
