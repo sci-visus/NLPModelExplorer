@@ -21,7 +21,6 @@ class attentionComponent extends baseComponent {
         //init member
         this.srcIndexMaskSet = new Set();
         this.targIndexMaskSet = new Set();
-
         this.aggregationIndex = {};
     }
 

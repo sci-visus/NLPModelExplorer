@@ -13,6 +13,7 @@ var panelMetaInfo = {
         'attentionGraphComponent'
     ],
     "AttentionAsymmetric": ['template_view', "attentionAsymmetricComponent"],
+    "AttentionSubMatrix": ["template_view", "attentionSubMatrixComponent"],
     'Summary': ['evaluation_view', 'evaluationComponent'],
     'Pipeline': ['template_view', 'pipelineComponent'],
     "Paragraph": ['paragraph_view', 'paragraphComponenet']
@@ -28,7 +29,8 @@ var objectMap = {
     pipelineComponent: pipelineComponent,
 
     paragraphComponenet: paragraphComponenet,
-    attentionAsymmetricComponent: attentionAsymmetricComponent
+    attentionAsymmetricComponent: attentionAsymmetricComponent,
+    attentionSubMatrixComponent: attentionSubMatrixComponent
 };
 
 /////////////////////////// create layout ///////////////////////////

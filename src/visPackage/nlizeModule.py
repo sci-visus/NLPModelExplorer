@@ -99,17 +99,11 @@ class nlizeModule(visModule):
     def setGradientUpdateHook(self, callback):
         self.gradientUpdateHook = callback
 
-    def setSentencePerturbationHook(self, callback):
-        self.sentencePerturbationHook = callback
-
     def setPredictionHook(self, callback):
         self.predictionHook = callback
 
     def setAttentionHook(self, callback):
         self.attentionHook = callback
-
-    def setSentenceParserHook(self, callback):
-        self.parserHook = callback
 
     def setPredictionUpdateHook(self, callback):
         self.predictionUpdateHook = callback
@@ -122,12 +116,6 @@ class nlizeModule(visModule):
 
     def setReloadModelCallback(self, callback):
         self.reloadModelCallback = callback
-
-    #get sentence parse tree
-    def parseSentence(self, sentence):
-        if self.parserHook:
-            depTree = self.parserHook(sentence)
-            return {"depTree": depTree, "sentence":sentence}
 
     def predictUpdate(self, newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag, mira_c ):
         print "predictUpdate", newLabel, iteration, learningRate, encoderFlag, attFlag, classFlag
@@ -250,10 +238,6 @@ class nlizeModule(visModule):
         dataManager.setData("allPairsPrediction", allPairsPrediction)
         # dataManager.setData("allAttention", allAttention)
         return True
-
-    def perturbSentence(self, sentence):
-        perturbed = self.sentencePerturbationHook(sentence)
-        return [sentence] + perturbed
 
     def reloadModel(self):
         self.reloadModelCallback();

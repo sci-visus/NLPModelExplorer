@@ -34,9 +34,6 @@ class MCModule(visModule):
         # dataManager.setData("pipeline", pipelineState)
         dataManager.setData("currentPair", {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']})
 
-    def setSentencePerturbationHook(self, callback):
-        self.sentencePerturbationHook = callback
-
     def setPredictionHook(self, callback):
         self.predictionHook = callback
 
@@ -60,7 +57,4 @@ class MCModule(visModule):
         self.reloadModelCallback();
         self.predict()
         self.predictAll()
-        return True
-
-    def parseSentence(self, sentence):
         return True

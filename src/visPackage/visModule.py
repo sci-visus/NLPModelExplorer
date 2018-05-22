@@ -51,6 +51,8 @@ class visModule(object):
         global layoutConfig
         layoutConfig = componentLayout
         dataManager.setObject(self)
+        self.parserHook = None
+        self.sentencePerturbationHook = None
 
     # envoke callback when the server is running
     @sio.on('message', namespace='/app')
@@ -85,3 +87,26 @@ class visModule(object):
     def startServer(self):
         eventlet.wsgi.server(eventlet.listen(('localhost', 5050)), fApp)
         # socketio.run(app, host='localhost',port=5050, debug=True)
+
+    def setSentenceParserHook(self, callback):
+        self.parserHook = callback
+
+    def setSentencePerturbationHook(self, callback):
+        self.sentencePerturbationHook = callback
+
+    def perturbSentence(self, sentence):
+        if self.sentencePerturbationHook:
+            perturbed = self.sentencePerturbationHook(sentence)
+            return [sentence] + perturbed
+        else:
+            print "No sentence perturbator is specified!"
+            return False
+
+    #get sentence parse tree
+    def parseSentence(self, sentence):
+        if self.parserHook:
+            depTree = self.parserHook(sentence)
+            return {"depTree": depTree, "sentence":sentence}
+        else:
+            print "No sentence parser is specified!"
+            return False

@@ -1,8 +1,15 @@
-from visPackage import *
-from modelInterface import *
-from sentenceGenerator import *
+# from visPackage import *
+# from modelInterface import *
+# from sentenceGenerator import *
+from translationPerturbation import *
 
 #initialize NLP model
+trans = translationPerturbation('../key/Paraphrasing-684a368e96ad.json')
+
+sens = trans.perturbSentence(u"How many bird is on the large tree?")
+print sens
+exit()
+
 model = modelInterface(
     wordDict="../data/snli_1.0/snli_1.0.word.dict",
     wordVec="../data/glove.hdf5", model="../data/local_300_parikh")

@@ -12,6 +12,7 @@ class attentionAsymmetricComponent extends attentionComponent {
         this.ratio = 0.5; //between 0 - 1, 1 uniform, 0 only show highest value
         this.pixelBars = [];
         this.widthscale = d3.scaleLinear().domain([0, 1]).range([0, 3]);
+        this.aggregateSen = true;
     }
 
     parseDataUpdate(msg) {
@@ -27,6 +28,11 @@ class attentionAsymmetricComponent extends attentionComponent {
                 this.question = this.question.trim().split(/\s+/);
                 break;
         }
+    }
+
+    ///// highlight entry /////
+    handleHighlightEvent(srcIndex, targIndex) {
+        console.log("highlight placeholder");
     }
 
     parseParagraph(paragraph) {
@@ -84,7 +90,7 @@ class attentionAsymmetricComponent extends attentionComponent {
                 minIndex = maxIndex;
 
                 ///// generate paraPos //////
-                if (!this.aggregateSrc) {
+                if (!this.aggregateSen) {
                     for (var j = 0; j < this.segmentList[i].length; j++) {
                         this.paraPos.push({
                             "x": pos + (0.5 + j) * unit,
@@ -93,8 +99,7 @@ class attentionAsymmetricComponent extends attentionComponent {
                     }
                 } else {
                     this.paraPos.push({
-                        "x": pos + this.segmentList.length * unit *
-                            0.5,
+                        "x": pos + (0.5 + senLen * 0.5) * unit,
                         "y": 35
                     });
                 }
@@ -113,12 +118,6 @@ class attentionAsymmetricComponent extends attentionComponent {
                 // this.segmentList.push();
             }
 
-            //////// prepare link attention ///////////
-            if (!this.aggregateSrc) {
-                this.linkAttMatrix = this.normAttention;
-            } else {
-                // this.linkAttMatrix = this.normAttention;
-            }
 
             ////////////// draw question //////////////
             this.questionPos = this.drawSentence(this.question,
@@ -128,8 +127,32 @@ class attentionAsymmetricComponent extends attentionComponent {
                 ], targAtt, "question");
 
             // console.log(this.questionPos);
-            this.drawLink(this.paraPos, this.questionPos, this.linkAttMatrix);
+            if (this.aggregateSen) {
+                this.aggregateMatrix = this.aggregateMatrixBySen(attMatrix,
+                    this.segmentList);
+                this.drawLink(this.paraPos, this.questionPos, this.aggregateMatrix);
+            } else {
+                this.drawLink(this.paraPos, this.questionPos, attMatrix);
+            }
+
         }
+    }
+
+    aggregateMatrixBySen(matrix, segmentList) {
+        let aggMat = [];
+        let index = 0;
+        for (let i = 0; i < this.segmentList.length; i++) {
+            let tempList = [];
+            for (let j = 0; j < this.segmentList[i].length; j++) {
+                tempList.push(matrix[index]);
+                index++;
+            }
+            let maxList = tempList[0].map((_, index) => {
+                return Math.max(...tempList.map(d => d[index]));
+            })
+            aggMat.push(maxList);
+        }
+        return aggMat;
     }
 
     /*
@@ -187,6 +210,8 @@ class attentionAsymmetricComponent extends attentionComponent {
             let subMat = this.normAttention.slice(
                 indexRange[0],
                 indexRange[1]);
+            this.setData("selectionRange", [indexRange[0], indexRange[1]]);
+
             // console.log("subMat", subMat, indexRange);
             // console.log(this.selectParaSenPos, this.questionPos);
             this.drawLink(this.selectParaSenPos.map(d => {
@@ -202,7 +227,12 @@ class attentionAsymmetricComponent extends attentionComponent {
             this.svg.selectAll("." + "paraSen" + "Text").remove();
             this.svg.selectAll("." + "paraSen" + "Link").remove();
             this.svg.selectAll("." + "paraSen" + "Polygon").remove();
-            this.drawLink(this.paraPos, this.questionPos, this.linkAttMatrix);
+
+            if (this.aggregateSen) {
+                this.drawLink(this.paraPos, this.questionPos, this.aggregateMatrix);
+            } else {
+                this.drawLink(this.paraPos, this.questionPos, this.normAttention);
+            }
         }
     }
 
