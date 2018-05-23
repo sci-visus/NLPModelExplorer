@@ -184,7 +184,7 @@ def main(args):
 	data = Data(opt, opt.data)
 	acc1, acc2, avg_loss = evaluate(opt, shared, m, data)
 	acc = (acc1 + acc2) / 2.0
-	print('Val EM: {0:.4f}/{1:.4f}/{2:.4f}, Loss: {4:.4f}'.format(acc1, acc2, acc, avg_loss))
+	print('Val EM: {0:.4f}/{1:.4f}/{2:.4f}, Loss: {3:.4f}'.format(acc1, acc2, avg_loss))
 
 
 if __name__ == '__main__':
