@@ -20,8 +20,8 @@ class dependencyTree:
             # print "found:", sentence
             return self.cache[hashKey]
         else:
-            path_to_jar = '../data/stanford-corenlp-3.9.0.jar'
-            path_to_models_jar = '../data/stanford-corenlp-3.9.0-models.jar'
+            path_to_jar = 'data/stanford-corenlp-3.9.0.jar'
+            path_to_models_jar = 'data/stanford-corenlp-3.9.0-models.jar'
             dependency_parser = StanfordDependencyParser(path_to_jar=path_to_jar, path_to_models_jar=path_to_models_jar)
 
             g = dependency_parser.raw_parse(sentence).next()
