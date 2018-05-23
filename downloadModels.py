@@ -111,22 +111,51 @@ if __name__ == "__main__":
     nlpcore = "1UZmw9g7DcpX-aGFeluj_AVoI06yYfz9r"
 
     GoogleDriveDownloader.download_file_from_google_drive(file_id=glove_hdf5,
-                                        dest_path='../data/glove.hdf5')
+                                        dest_path='data/glove.hdf5')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=local_300_parikh_hdf5,
-                                        dest_path='../data/local_300_parikh.hdf5')
+                                        dest_path='data/local_300_parikh.hdf5')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=local_300_parikh_txt,
-                                        dest_path='../data/local_300_parikh.txt')
+                                        dest_path='data/local_300_parikh.txt')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=snli_10_test_hdf5,
-                                        dest_path='../data/snli_1.0/snli_1.0-test.hdf5')
+                                        dest_path='data/snli_1.0/snli_1.0-test.hdf5')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=snli_10_train_hdf5,
-                                        dest_path='../data/snli_1.0/snli_1.0-train.hdf5')
+                                        dest_path='data/snli_1.0/snli_1.0-train.hdf5')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=snli_10_val_hdf5,
-                                        dest_path='../data/snli_1.0/snli_1.0-val.hdf5')
+                                        dest_path='data/snli_1.0/snli_1.0-val.hdf5')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=snli_10_label_hdf5,
-                                        dest_path='../data/snli_1.0/snli_1.0.label.hdf5')
+                                        dest_path='data/snli_1.0/snli_1.0.label.hdf5')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=snli_10_word_hdf5,
-                                        dest_path='../data/snli_1.0/snli_1.0.word.hdf5')
+                                        dest_path='data/snli_1.0/snli_1.0.word.hdf5')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=nlpcore_model,
-                                        dest_path='../data/stanford-corenlp-3.9.0-models.jar')
+                                        dest_path='data/stanford-corenlp-3.9.0-models.jar')
     GoogleDriveDownloader.download_file_from_google_drive(file_id=nlpcore,
-                                        dest_path='../data/stanford-corenlp-3.9.0.jar')
+                                        dest_path='data/stanford-corenlp-3.9.0.jar')
+
+    GoogleDriveDownloader.download_file_from_google_drive(
+        file_id="1cysjEN9RcsIu9DOwfygeyrFBlQaYpUEy",
+        dest_path='data/bidaf/bidaf_5.ema.hdf5')
+
+    # https://drive.google.com/file/d/1puNX0My9W6CDU71ugyvb11fuLTC_GjQZ/view?usp=sharing
+    GoogleDriveDownloader.download_file_from_google_drive(
+        file_id="1puNX0My9W6CDU71ugyvb11fuLTC_GjQZ",
+        dest_path='data/bidaf/bidaf_5.hdf5')
+
+    # https://drive.google.com/file/d/1THLq0fZevBTpv3AsyoVbJEDw3dr-vtCW/view?usp=sharing
+    GoogleDriveDownloader.download_file_from_google_drive(
+        file_id="1THLq0fZevBTpv3AsyoVbJEDw3dr-vtCW",
+        dest_path='data/bidaf/glove.hdf5')
+
+    # https://drive.google.com/file/d/1WvY9JLyA-ytPRaNSv8rcztHj9VJYH5Pw/view?usp=sharing
+    GoogleDriveDownloader.download_file_from_google_drive(
+        file_id="1WvY9JLyA-ytPRaNSv8rcztHj9VJYH5Pw",
+        dest_path='data/bidaf/squad-train.hdf5')
+
+    # https://drive.google.com/file/d/1gAxN4s9zFshC1Wd_aR2NxEvmQqtB7-6w/view?usp=sharing
+    GoogleDriveDownloader.download_file_from_google_drive(
+        file_id="1gAxN4s9zFshC1Wd_aR2NxEvmQqtB7-6w",
+        dest_path='data/bidaf/squad-val.hdf5')
+
+    # https://drive.google.com/file/d/1ysEEtWPVFACWS7TNg_aQgEUNahwNG3m0/view?usp=sharing
+    GoogleDriveDownloader.download_file_from_google_drive(
+        file_id="1ysEEtWPVFACWS7TNg_aQgEUNahwNG3m0",
+        dest_path='data/bidaf/squad.word.dict')

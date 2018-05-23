@@ -8,10 +8,6 @@ class translationPerturbation:
     def perturbSentence(self, inputSentence):
         print "\n\ntranslation perturbation:", inputSentence
         # The text to translate
-        # text = u'Hello, world!'
-        # The target language
-        # targLangs = [entry["language"] for entry in self.translate_client.get_languages()]
-        # print "Supported language: ", targLangs
 
         targLangs = [
         u'ar',
