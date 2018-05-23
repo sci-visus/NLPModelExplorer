@@ -169,9 +169,9 @@ def main(args):
 	m = Pipeline(opt, shared)
 
 	# initialization
-	#print('loading pretrained model from {0}...'.format(opt.load_file))
-	#param_dict = load_param_dict('{0}.hdf5'.format(opt.load_file))
-	#m.set_param_dict(param_dict)
+	print('loading pretrained model from {0}...'.format(opt.load_file))
+	param_dict = load_param_dict('{0}.hdf5'.format(opt.load_file))
+	m.set_param_dict(param_dict)
 
 	model_parameters = filter(lambda p: p.requires_grad, m.parameters())
 	num_params = sum([np.prod(p.size()) for p in model_parameters])
