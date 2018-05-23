@@ -25,7 +25,7 @@ class Pipeline(torch.nn.Module):
 		self.opt = opt
 
 		self.embeddings = WordVecLookup(opt)
-		self.char_embeddings = nn.Embedding(opt.char_size, opt.char_emb_size)
+		#self.char_embeddings = nn.Embedding(opt.char_size, opt.char_emb_size)
 
 		# 4 stages
 		self.encoder = Encoder(opt, shared)
