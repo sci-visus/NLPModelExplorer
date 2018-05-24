@@ -68,6 +68,7 @@ class BiAttention(torch.nn.Module):
 		att1, att2, G = self.biattention(scores1, H, U)
 
 		# bookkeeping
+		self.shared.scores1 = scores1
 		self.shared.att_soft1 = att1
 		self.shared.att_soft2 = att2
 		self.shared.G = G
@@ -81,7 +82,7 @@ class BiAttention(torch.nn.Module):
 		query_l = self.shared.query_l
 		word_vec_size = self.opt.word_vec_size
 		hidden_size = self.opt.hidden_size
-		
+
 		self.score_view = View(batch_l * context_l * query_l, hidden_size * 3)
 		self.score_unview = View(batch_l, context_l, query_l)
 
@@ -109,8 +110,3 @@ class BiAttention(torch.nn.Module):
 
 	def end_pass(self):
 		pass
-
-
-
-
-		

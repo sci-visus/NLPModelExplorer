@@ -57,16 +57,21 @@ class bidafModelInterface:
         self.m = Pipeline(opt, self.shared)
 
         # initialization
-        print('loading pretrained model from {0}...'.format(opt.load_file))
-        param_dict = load_param_dict('{0}.hdf5'.format(opt.load_file))
+        self.opt = opt
+        self.reloadModel()
+
+        if opt.gpuid != -1:
+            self.m = self.m.cuda()
+
+    def reloadModel(self):
+        # initialization
+        print('loading pretrained model from {0}...'.format(self.opt.load_file))
+        param_dict = load_param_dict('{0}.hdf5'.format(self.opt.load_file))
         self.m.set_param_dict(param_dict)
 
         # model_parameters = filter(lambda p: p.requires_grad, self.m.parameters())
         # num_params = sum([np.prod(p.size()) for p in model_parameters])
         # print('total number of trainable parameters: {0}'.format(num_params))
-
-        if opt.gpuid != -1:
-            self.m = self.m.cuda()
 
     def mapToToken(self, sentence):
         tokenList = []
@@ -79,6 +84,16 @@ class bidafModelInterface:
         # print tokenList
         token = torch.LongTensor(tokenList).view(1, len(tokenList))
         return token
+
+    def attention(self, att_name='att_soft1'):
+        print "att_name:", att_name
+        batch_att = getattr(self.shared, 'att_soft1')
+        print self.shared.keys()
+        att = batch_att.data[0, 0:, 0:]
+        att = att.numpy()
+        # print "attention range:", att.min(), att.max()
+        # att = att/att.max()
+        return att
 
     def predict(self, sentencePair):
         #map to token

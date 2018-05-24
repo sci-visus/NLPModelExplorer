@@ -10,19 +10,19 @@ class translationPerturbation:
         # The text to translate
 
         targLangs = [
-        u'ar',
-        u'zh',
-        u'cs',
-        u'da',
-        u'nl',
-        u'fr',
-        u'de',
-        u'iw',
-        u'hi',
-        u'it',
-        u'ja',
-        u'ko',
-        u'tr'
+            u'ar',
+            u'zh',
+            u'cs',
+            u'da',
+            u'nl',
+            u'fr',
+            u'de',
+            u'iw',
+            u'hi',
+            u'it',
+            u'ja',
+            u'ko',
+            u'tr'
         ]
         sentenceList = set()
 
