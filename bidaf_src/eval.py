@@ -94,7 +94,7 @@ def get_span_f1(pred, gold):
 	denom = pred_range.float()
 	denom_mask = (pred_range == 0).float()
 	prec = overlap.float() / (denom + denom_mask)
-	
+
 	# numerical fixes for f1
 	denom = prec + rec
 	denom_mask = (denom == 0.0).float()

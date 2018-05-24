@@ -6,8 +6,8 @@ python eval.py --gpuid -1 --data ../data/snli_1.0-val.hdf5
  --load_file local_200_parikh
 '''
 
-import sys
-sys.path.insert(0, '../')
+# import sys
+# sys.path.insert(0, '../')
 from pipeline import *
 import argparse
 import h5py
