@@ -57,8 +57,6 @@ class attentionComponent extends baseComponent {
         }
     }
 
-
-
     sen2words(sen) {
         var words = sen.match(/\S+/g);
         // words.unshift("\<s\>");

@@ -17,6 +17,7 @@ from torch import nn
 from torch import cuda
 from holder import *
 from embeddings import *
+import nltk
 from data import *
 
 class bidafModelInterface:
@@ -75,6 +76,11 @@ class bidafModelInterface:
 
     def mapToToken(self, sentence):
         tokenList = []
+        # sentence = nltk.word_tokenize(sentence)
+        # sentence = [t.replace("''", '"').replace("``", '"') for t in sentence]
+        #
+        # print "token: ", sentence
+
         sentence = sentence.rstrip().split(" ")
         for word in sentence:
             if word in self.tokenMap.keys():
@@ -123,7 +129,7 @@ class bidafModelInterface:
             words = sourceSen.rstrip().split(" ")
             prediction = ",".join(words[startIndex:endIndex+1])
             print "prediction:", prediction
-            return [prediction, p1, p2]
+            return [p1.tolist(), p2.tolist()]
 
             # loss
             # crit1 = torch.nn.NLLLoss(size_average=False)

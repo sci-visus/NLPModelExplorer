@@ -4,15 +4,23 @@ class attentionAsymmetricComponent extends attentionComponent {
         // this.subscribeDatabyNames(["attention", "currentPair"]);
 
         //create default colormap
-        this.colormap = generateColormap([0.0, 1.0], ["#253494", "#2c7fb8",
+        this.colormap = generateColormap([1.0, 0.0], ["#253494", "#2c7fb8",
             "#41b6c4", "#a1dab4",
             "#ffffcc"
         ]);
+
+        this.margin = {
+            top: 0,
+            right: 10,
+            bottom: 10,
+            left: 10
+        };
 
         this.ratio = 0.5; //between 0 - 1, 1 uniform, 0 only show highest value
         this.pixelBars = [];
         this.widthscale = d3.scaleLinear().domain([0, 1]).range([0, 3]);
         this.aggregateSen = true;
+        this.yOffset = 35;
     }
 
     parseDataUpdate(msg) {
@@ -97,13 +105,16 @@ class attentionAsymmetricComponent extends attentionComponent {
 
     draw() {
         this._updateWidthHeight();
+        //adjust the heights
+        this.height = this.height - this.yOffset;
+        this.pheight = this.pheight - this.yOffset;
 
         if (this.rawAttention !== undefined) {
             // init svg
             this.initSvg();
             let paragraphLen = this.rawAttention.length;
 
-            console.log("paragraphLen:", paragraphLen);
+            // console.log("paragraphLen:", paragraphLen);
             //organize the pixelBar
             //for each text segment
             let pos = 5;

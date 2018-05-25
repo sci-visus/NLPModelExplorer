@@ -12,7 +12,9 @@ var panelMetaInfo = {
         'template_view',
         'attentionGraphComponent'
     ],
-    "AttentionAsymmetric": ['template_view', "attentionAsymmetricComponent"],
+    "AttentionAsymmetric": ['asymmetric_view',
+        "attentionAsymmetricComponent"
+    ],
     "AttentionSubMatrix": ["template_view", "attentionSubMatrixComponent"],
     'Summary': ['evaluation_view', 'evaluationComponent'],
     'Pipeline': ['template_view', 'pipelineComponent'],
