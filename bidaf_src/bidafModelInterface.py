@@ -86,8 +86,9 @@ class bidafModelInterface:
         return token
 
     def attention(self, att_name='att_soft1'):
-        print "att_name:", att_name
-        batch_att = getattr(self.shared, 'att_soft1')
+        # print dir(self.shared)
+        # print "att_name:", att_name
+        batch_att = getattr(self.shared, att_name)
         print self.shared.keys()
         att = batch_att.data[0, 0:, 0:]
         att = att.numpy()

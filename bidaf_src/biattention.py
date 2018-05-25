@@ -68,7 +68,7 @@ class BiAttention(torch.nn.Module):
 		att1, att2, G = self.biattention(scores1, H, U)
 
 		# bookkeeping
-		self.shared.scores1 = scores1
+		self.shared.score1 = scores1
 		self.shared.att_soft1 = att1
 		self.shared.att_soft2 = att2
 		self.shared.G = G

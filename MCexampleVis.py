@@ -6,7 +6,7 @@ from NLPutility import translationPerturbation
 #initialize NLP model
 model = bidafModelInterface(
     wordDict="data/bidaf/squad.word.dict",
-    wordVec="data/bidaf/glove.hdf5", model="data/bidaf/bidaf_5.ema")
+    wordVec="data/bidaf/glove.hdf5", model="data/bidaf/bidaf_clip5_20.ema")
 # print model
 
 # exit()

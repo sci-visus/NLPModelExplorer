@@ -159,3 +159,8 @@ if __name__ == "__main__":
     GoogleDriveDownloader.download_file_from_google_drive(
         file_id="1ysEEtWPVFACWS7TNg_aQgEUNahwNG3m0",
         dest_path='data/bidaf/squad.word.dict')
+
+    # https://drive.google.com/file/d/1j3ar-mD3tqkDEat0LOhmLmJ4DTtbPdi6/view?usp=sharing
+    GoogleDriveDownloader.download_file_from_google_drive(
+        file_id="1j3ar-mD3tqkDEat0LOhmLmJ4DTtbPdi6",
+        dest_path='data/bidaf/bidaf_clip5_20.ema.hdf5')
