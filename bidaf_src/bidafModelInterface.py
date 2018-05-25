@@ -115,13 +115,15 @@ class bidafModelInterface:
             # forward pass
             log_p1, log_p2 = self.m.forward(wv_idx1, wv_idx2)
             # print log_p1, log_p2
-            startIndex = np.argmax(log_p1.exp().data.numpy())
-            endIndex = np.argmax(log_p2.exp().data.numpy())
+            p1 = log_p1.exp().data.numpy()
+            p2 = log_p2.exp().data.numpy()
+            startIndex = np.argmax(p1)
+            endIndex = np.argmax(p2)
             print "startIndex, endIndex", startIndex, endIndex
             words = sourceSen.rstrip().split(" ")
             prediction = ",".join(words[startIndex:endIndex+1])
             print "prediction:", prediction
-            return prediction
+            return [prediction, p1, p2]
 
             # loss
             # crit1 = torch.nn.NLLLoss(size_average=False)

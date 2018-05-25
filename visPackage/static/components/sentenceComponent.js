@@ -120,16 +120,16 @@ class sentenceComponent extends baseComponent {
         d3.select(this.div + "targ").property("value", this.target);
 
         // console.log("----------", this.data["allSourceSens"]);
-        // if (this.data["allSourceSens"]) {
-        //     $(this.div + "src").highlightWithinTextarea({
-        //         highlight: this.getSentenceDiff(
-        //             this.data["allSourceSens"][0].substring(
-        //                 4),
-        //             currentPair[0].substring(
-        //                 4)), //
-        //         className: 'blue'
-        //     });
-        // }
+        if (this.data["allSourceSens"]) {
+            $(this.div + "src").highlightWithinTextarea({
+                highlight: this.getSentenceDiff(
+                    this.data["allSourceSens"][0].substring(
+                        4),
+                    currentPair[0].substring(
+                        4)), //
+                className: 'blue'
+            });
+        }
         if (this.data["allTargetSens"]) {
             $(this.div + "targ").highlightWithinTextarea({
                 highlight: this.getSentenceDiff(this.orig_source,
