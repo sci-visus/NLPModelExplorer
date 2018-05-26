@@ -55,7 +55,7 @@ class bidafModelInterface:
 
         # build model
         self.m = Pipeline(opt, self.shared)
-        self.m.train(False)
+        # self.m.train(False)
 
         # initialization
         self.opt = opt

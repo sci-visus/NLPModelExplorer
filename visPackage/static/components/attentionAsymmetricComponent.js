@@ -4,7 +4,7 @@ class attentionAsymmetricComponent extends attentionComponent {
         // this.subscribeDatabyNames(["attention", "currentPair"]);
 
         //create default colormap
-        this.colormap = generateColormap([1.0, 0.0], ["#253494", "#2c7fb8",
+        this.colormap = generateColormap([0.0, 1.0], ["#253494", "#2c7fb8",
             "#41b6c4", "#a1dab4",
             "#ffffcc"
         ]);
@@ -122,9 +122,11 @@ class attentionAsymmetricComponent extends attentionComponent {
 
             ///FIXME duplicated code from attentionGraphComponent
             ////////// getting attention normalized //////
-            let attMatrix = this.normAttention;
-            var srcAtt = attMatrix.map(d => d.reduce((a, b) => a +
-                b));
+            let attMatrix = this.rawAttention;
+            // var srcAtt = attMatrix.map(d => d.reduce((a, b) => a +
+            // b));
+            var srcAtt = attMatrix.map(d => Math.max(...d));
+            this.srcAtt = this.softmax(srcAtt);
             let srcAttMax = Math.max(...srcAtt);
             let srcAttMin = Math.min(...srcAtt);
             this.srcAtt = srcAtt.map(d =>
@@ -138,7 +140,9 @@ class attentionAsymmetricComponent extends attentionComponent {
                 return sum;
             });
             let targAttMax = Math.max(...targAtt);
-            targAtt = targAtt.map(d => d / targAttMax);
+            let targAttMin = Math.min(...targAtt);
+            targAtt = targAtt.map(d =>
+                (d - targAttMin) / (targAttMax - targAttMin));
 
             let unit = this.width * 0.85 / paragraphLen;
             this.paraPos = [];
@@ -192,11 +196,11 @@ class attentionAsymmetricComponent extends attentionComponent {
 
             // console.log(this.questionPos);
             if (this.aggregateSen) {
-                this.aggregateMatrix = this.aggregateMatrixBySen(attMatrix,
+                this.aggregateMatrix = this.aggregateMatrixBySen(this.normAttention,
                     this.segmentList);
                 this.drawLink(this.paraPos, this.questionPos, this.aggregateMatrix);
             } else {
-                this.drawLink(this.paraPos, this.questionPos, attMatrix);
+                this.drawLink(this.paraPos, this.questionPos, this.normAttention);
             }
 
         }
