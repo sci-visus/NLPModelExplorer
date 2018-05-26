@@ -1,7 +1,6 @@
 '''
 Test the model
 python2.7 eval.py --gpuid -1 --data ../data/bidaf/squad-val.hdf5 --word_vecs ../data/bidaf/glove.hdf5 --rnn_type lstm --word_vec_size 300 --load_file ../data/bidaf/bidaf_5.ema
-
 '''
 
 from pipeline import *
@@ -56,6 +55,7 @@ class bidafModelInterface:
 
         # build model
         self.m = Pipeline(opt, self.shared)
+        self.m.train(False)
 
         # initialization
         self.opt = opt
@@ -76,7 +76,6 @@ class bidafModelInterface:
 
     def mapToToken(self, sentence):
         tokenList = []
-
         sentence = sentence.rstrip().split(" ")
         for word in sentence:
             if word in self.tokenMap.keys():
@@ -105,6 +104,8 @@ class bidafModelInterface:
         if sourceSen and targetSen:
             source = self.mapToToken(sourceSen)
             target = self.mapToToken(targetSen)
+            print source, "\n"
+            print target, "\n"
 
             wv_idx1 = Variable(source, requires_grad=False)
             wv_idx2 = Variable(target, requires_grad=False)
