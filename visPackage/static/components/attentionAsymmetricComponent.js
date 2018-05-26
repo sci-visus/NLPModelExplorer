@@ -1,7 +1,7 @@
 class attentionAsymmetricComponent extends attentionComponent {
     constructor(uuid) {
         super(uuid);
-        // this.subscribeDatabyNames(["attention", "currentPair"]);
+        this.subscribeDatabyNames(["prediction"]);
 
         //create default colormap
         this.colormap = generateColormap([0.0, 1.0], ["#253494", "#2c7fb8",
@@ -9,8 +9,10 @@ class attentionAsymmetricComponent extends attentionComponent {
             "#ffffcc"
         ]);
 
+        this.probColormap = generateColormap([0.0, 1.0], ["white", "red"]);
+
         this.margin = {
-            top: 0,
+            top: 10,
             right: 10,
             bottom: 10,
             left: 10
@@ -20,7 +22,16 @@ class attentionAsymmetricComponent extends attentionComponent {
         this.pixelBars = [];
         this.widthscale = d3.scaleLinear().domain([0, 1]).range([0, 3]);
         this.aggregateSen = true;
-        this.yOffset = 35;
+        this.yOffset = 0;
+
+        this.p1PosY = 0;
+        this.p2PosY = 30;
+        this.attPosY = 60;
+        this.pixelBarXoffset = 30;
+    }
+
+    drawResult() {
+
     }
 
     parseDataUpdate(msg) {
@@ -34,6 +45,11 @@ class attentionAsymmetricComponent extends attentionComponent {
                 this.parseParagraph(msg["data"]["data"]["sentences"][0]);
                 this.question = msg["data"]["data"]["sentences"][1];
                 this.question = this.question.trim().split(/\s+/);
+                break;
+            case "prediction":
+                this.predP1 = this.data["prediction"][0][0];
+                this.predP2 = this.data["prediction"][1][0];
+                // console.log(this.predP1);
                 break;
         }
     }
@@ -100,24 +116,76 @@ class attentionAsymmetricComponent extends attentionComponent {
         this.segmentList = paragraph.trim().match(
             /([^\.!\?]+[\.!\?]+)|([^\.!\?]+$)/g);
         this.segmentList = this.segmentList.map(d => d.trim().split(/\s+/));
+        let segLen = this.segmentList.map(d => d.length);
+        this.paragraphLen = segLen.reduce(
+            (d1, d2) => d1 + d2);
         // console.log(this.segmentList)
+    }
+
+    drawPixelBar(values, yPos) {
+        let paragraphLen = this.paragraphLen;
+        let unit = this.width * 0.85 / paragraphLen;
+        let pos = this.pixelBarXoffset;
+        let minIndex = 0;
+
+        for (var i = 0; i < this.segmentList.length; i++) {
+            let senLen = this.segmentList[i].length;
+            let size = senLen * unit;
+            let maxIndex = minIndex + senLen;
+
+            let val = values.slice(minIndex, maxIndex +
+                1);
+            // console.log(minIndex, maxIndex, val);
+            let words = this.segmentList[i];
+            let indexRange = [minIndex, maxIndex];
+            minIndex = maxIndex;
+            // console.log(pos, yPos, size, val, words);
+            let pixel = new pixelBar(this.svg, [pos, yPos], [size, 20],
+                val, words, this.ratio,
+                this.probColormap, indexRange,
+                false);
+
+            pos += (size + 20);
+            pixel.draw();
+        }
     }
 
     draw() {
         this._updateWidthHeight();
         //adjust the heights
-        this.height = this.height - this.yOffset;
-        this.pheight = this.pheight - this.yOffset;
+        // this.height = this.height - this.yOffset;
+        // this.pheight = this.pheight - this.yOffset;
+
 
         if (this.rawAttention !== undefined) {
             // init svg
             this.initSvg();
+
+            if (this.predP1) {
+                this.drawPixelBar(this.predP1, this.p1PosY);
+                this.drawPixelBar(this.predP2, this.p2PosY);
+                this.svg.append("text")
+                    .text("p1")
+                    .attr("x", 1)
+                    .attr("y", this.p1PosY + 15);
+                this.svg.append("text")
+                    .text("p2")
+                    .attr("x", 1)
+                    .attr("y", this.p2PosY + 15);
+
+                this.svg.append("text")
+                    .text("att2")
+                    .attr("x", 1)
+                    .attr("y", this.attPosY + 15);
+
+            }
+
             let paragraphLen = this.rawAttention.length;
 
             // console.log("paragraphLen:", paragraphLen);
             //organize the pixelBar
             //for each text segment
-            let pos = 5;
+            let pos = this.pixelBarXoffset;
             let minIndex = 0
 
             ///FIXME duplicated code from attentionGraphComponent
@@ -134,11 +202,17 @@ class attentionAsymmetricComponent extends attentionComponent {
 
             var targAtt = attMatrix[0].map((d, i) => {
                 // console.log(d, i);
-                var sum = 0;
+                // var sum = 0;
+                var max = 0;
                 for (var j = 0; j < attMatrix.length; j++)
-                    sum += attMatrix[j][i];
-                return sum;
+                // sum += attMatrix[j][i];
+                    if (attMatrix[j][i] > max)
+                        max = attMatrix[j][i];
+                    // return sum;
+                return max;
             });
+            // console.log(targAtt);
+            // targAtt = this.softmax(targAtt);
             let targAttMax = Math.max(...targAtt);
             let targAttMin = Math.min(...targAtt);
             targAtt = targAtt.map(d =>
@@ -162,20 +236,22 @@ class attentionAsymmetricComponent extends attentionComponent {
                     for (var j = 0; j < this.segmentList[i].length; j++) {
                         this.paraPos.push({
                             "x": pos + (0.5 + j) * unit,
-                            "y": 35
+                            "y": this.attPosY + 20
                         });
                     }
                 } else {
                     this.paraPos.push({
                         "x": pos + (0.5 + senLen * 0.5) * unit,
-                        "y": 35
+                        "y": this.attPosY + 20
                     });
                 }
 
                 //////////////////////////////
-
-                let pixel = new pixelBar(this.svg, [pos, 15], [size, 20],
-                    atts, words, this.ratio, this.colormap, indexRange);
+                let pixel = new pixelBar(this.svg, [pos, this.attPosY], [
+                        size, 20
+                    ],
+                    atts, words, this.ratio, this.colormap, indexRange,
+                    true);
                 pixel.bindShowSentenceCallback(this.showParagraphSentence.bind(
                     this));
 
@@ -186,7 +262,6 @@ class attentionAsymmetricComponent extends attentionComponent {
                 // this.segmentList.push();
             }
 
-
             ////////////// draw question //////////////
             this.questionPos = this.drawSentence(this.question,
                 this.width - 20, 60, [10,
@@ -196,11 +271,12 @@ class attentionAsymmetricComponent extends attentionComponent {
 
             // console.log(this.questionPos);
             if (this.aggregateSen) {
-                this.aggregateMatrix = this.aggregateMatrixBySen(this.normAttention,
+                this.aggregateMatrix = this.aggregateMatrixBySen(this.rawAttention,
                     this.segmentList);
                 this.drawLink(this.paraPos, this.questionPos, this.aggregateMatrix);
+
             } else {
-                this.drawLink(this.paraPos, this.questionPos, this.normAttention);
+                this.drawLink(this.paraPos, this.questionPos, this.rawAttention);
             }
 
         }
@@ -220,7 +296,27 @@ class attentionAsymmetricComponent extends attentionComponent {
             })
             aggMat.push(maxList);
         }
+        aggMat = this.rowMaxFilter(aggMat);
         return aggMat;
+    }
+
+    rowMaxFilter(attMat) {
+        let max = 0;
+        attMat.map(d => {
+            let maxIndex = d.indexOf(Math.max(...d));
+            return d.map((e, i) => {
+                if (e > max)
+                    max = e;
+                if (i === maxIndex)
+                    return e;
+                else
+                    return 0.0;
+            })
+        });
+        // attMat = attMat.map(d => this.softmax(d));
+        // attMat = this.convertRawAtt(attMat, "row");
+        attMat = attMat.map(d => d.map(e => e / max));
+        return attMat;
     }
 
     /*
@@ -378,6 +474,8 @@ class attentionAsymmetricComponent extends attentionComponent {
             .curve(d3.curveBasis);
 
         this.svg.selectAll("." + classPrefix + "Link").remove();
+        // attMatrix = this.convertRawAtt(attMatrix,
+        //     'row');
 
         this.attList = [];
         for (var i = 0; i < attMatrix.length; i++) //src

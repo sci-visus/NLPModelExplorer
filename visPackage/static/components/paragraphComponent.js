@@ -68,7 +68,7 @@ class paragraphComponenet extends sentenceComponent {
         for (let i = indexS; i < indexE + 1; i++) {
             prob[i] = 1.0;
         }
-        console.log(indexS, indexE, prob);
+        // console.log(indexS, indexE, prob);
 
         let coloredSrc = this.colorSentenceByValue(this.source, prob,
             "yellow");

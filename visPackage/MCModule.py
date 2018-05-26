@@ -50,7 +50,7 @@ class MCModule(visModule):
 
     def predict(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
-        print sentencePair
+        # print sentencePair
         predictionResult = self.predictionHook(sentencePair)
         dataManager.setData("prediction", predictionResult)
         #use raw attention
