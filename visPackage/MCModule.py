@@ -20,7 +20,8 @@ exampleData = [
     "index": 0,
     "src": "A reusable launch system (RLS, or reusable launch vehicle, RLV) is a launch system which is capable of launching a payload into space more than once. This contrasts with expendable launch systems, where each launch vehicle is launched once and then discarded. No completely reusable orbital launch system has ever been created. Two partially reusable launch systems were developed, the Space Shuttle and Falcon 9. The Space Shuttle was partially reusable: the orbiter (which included the Space Shuttle main engines and the Orbital Maneuvering System engines), and the two solid rocket boosters were reused after several months of refitting work for each launch. The external tank was discarded after each flight. \n",
     "targ": "How many partially reusable launch systems were developed?",
-    "pred": "Two"
+    "pred": "Two",
+    "name":"launch system"
 }
 ]
 
@@ -32,7 +33,11 @@ class MCModule(visModule):
     def initSetup(self):
         dataManager.setData("sentenceList", exampleData)
         # dataManager.setData("pipeline", pipelineState)
-        dataManager.setData("currentPair", {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']})
+        dataManager.setData("currentPair", {
+            "sentences":[tokenizer(exampleData[0]['src']), tokenizer(exampleData[0]['targ'])],
+            "label":exampleData[0]['pred'],
+            "name": exampleData[0]['name']
+        })
 
     def setPredictionHook(self, callback):
         self.predictionHook = callback
@@ -45,6 +50,7 @@ class MCModule(visModule):
 
     def predict(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
+        print sentencePair
         predictionResult = self.predictionHook(sentencePair)
         dataManager.setData("prediction", predictionResult)
         #use raw attention

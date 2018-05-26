@@ -76,10 +76,6 @@ class bidafModelInterface:
 
     def mapToToken(self, sentence):
         tokenList = []
-        # sentence = nltk.word_tokenize(sentence)
-        # sentence = [t.replace("''", '"').replace("``", '"') for t in sentence]
-        #
-        # print "token: ", sentence
 
         sentence = sentence.rstrip().split(" ")
         for word in sentence:

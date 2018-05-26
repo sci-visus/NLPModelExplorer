@@ -19,6 +19,14 @@ class paragraphComponenet extends sentenceComponent {
                 break;
         }
     }
+    onUpdateCurrentPair() {
+        var currentPair = [d3.select(this.div + "src").property(
+                "value"),
+            d3.select(this.div + "targ").property("value")
+        ];
+        this.data["currentPair"]["sentences"] = currentPair;
+        this.setData("currentPair", this.data["currentPair"]);
+    }
 
     onReceiveCurrentPair() {
         var currentPair = this.data['currentPair']["sentences"];
