@@ -9,7 +9,6 @@ Without understanding the background meaning that features carry, visualization 
 on proper quantification analysis (cite). Such analysis is not easy to come up with,
 and is tied to specific task (cite).
 
-
 Recently attention networks become a widely-adopted setup (cite), partly because it yields
 intermediate representations (e.g. alignment) that are not just beneficially expressive for performance,
 but also intuitive to model. Indeed, the interpretability of attention networks introduce
@@ -23,11 +22,22 @@ decomposable attention networks which represents a series of strongly performing
 For the MC task, we present your visualization methods on bidirectional attention flow model,
 which also represents a line of strong models \cite{}.
 
-In summary, our contribution in this papers are:
+\begin{figure}[htbp]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=1.0\linewidth]{pipeline}
+ \caption{
+ Perturbation-Driven Exploration of the NLP Model.
+ }
+\label{fig:modelPipeline}
+\end{figure}
+
+
+In summary, our key contributions are:
 \begin{itemize}
-	\item 1. We present an interactive visualization system for word-attention neural
-	networks in NLP. Our system allows to...
-	\item 2. We demonstrate our system on two major NLP tasks with strong-performing
+	\item Introduce an flexible visualization system for creating customized interactive visual analytic environment for attention centric neural networks model in NLP. 
+	\item Illustrate the importance of streamlining the query to the model
+	\item Demonstrate our system on two major NLP tasks with strong-performing
 	models. We observe functional limitations of these models which can be helpful
 	for future improvement on modeling.
 \end{itemize}
