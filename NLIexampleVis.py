@@ -1,7 +1,5 @@
 ## FIXME fix the import ###
 from visPackage.nlizeModule import nlizeModule
-from visPackage.dependencyTree import dependencyTree
-
 from nli_src import modelInterface
 from NLPutility import translationPerturbation
 from NLPutility import dependencyTree
@@ -31,11 +29,11 @@ modelVis = nlizeModule(visLayout)
 
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
-modelVis.setPredictionUpdateHook(model.updatePrediction)
+# modelVis.setPredictionUpdateHook(model.updatePrediction)
 modelVis.setAttentionUpdateHook(model.updateAttention)
 modelVis.setReloadModelCallback(model.reloadModel)
 
-modelVis.setPipelineStatisticHook(model.pipelineStatistic)
+# modelVis.setPipelineStatisticHook(model.pipelineStatistic)
 
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
 modelVis.setSentenceParserHook(dep.getDependencyTree)

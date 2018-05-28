@@ -1,32 +1,21 @@
 from visPackage import MCModule
-# from nli_src import modelInterface
 from bidaf_src import bidafModelInterface
 from NLPutility import translationPerturbation
 
-#initialize NLP model
+#initialize machine comprehension model
 model = bidafModelInterface(
     wordDict="data/bidaf/squad.word.dict",
-    wordVec="data/bidaf/glove.hdf5", model="data/bidaf/bidaf_clip5_20.ema")
-# print model
+    wordVec="data/bidaf/glove.hdf5",
+    model="data/bidaf/bidaf_clip5_20.ema")
 
-# exit()
-# model = modelInterface(
-#     wordDict="data/snli_1.0/snli_1.0.word.dict",
-#     wordVec="data/glove.hdf5", model="data/local_300_parikh")
-
-#sentence perturbation
-# gen = sentenceGenerator()
 gen = translationPerturbation()
 
 # visualization components
 # attention is linked to paragraph
 visLayout = {
-    "column":[{"row":
-                [
-                "Paragraph",
-                "AttentionSubMatrix"
-                ]},
-            {"row":["AttentionAsymmetric"]}]
+    "column":[{"row": ["Paragraph",
+                        "AttentionSubMatrix"]},
+            {"row": ["AttentionAsymmetric"]}]
     }
 
 #setup interface
@@ -38,5 +27,4 @@ modelVis.setReloadModelCallback(model.reloadModel)
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
 
 #open browser for visualization
-# modelVis.show()
 modelVis.startServer()

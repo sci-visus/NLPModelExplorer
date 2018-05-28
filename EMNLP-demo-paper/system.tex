@@ -1,6 +1,43 @@
 \section{System}
-We design the proposed system with modularity in mind
+We design the visualization system with modularity and easy of use in mind.
+%The initial learning curve and workflow setup cost of the tool are often the most significant barriers for user adaptation.
+As a result, we designing the system as a Python library rather than as a monolithic standalone application. 
+Just like a plotting library (i.e., matplotlib), the different pieces of the visualization (i.e., matrix based attention encoding) can be accessed individually, which helps ease the initial learning curve. 
+The individual components can also be combined in any configuration desired by users via a simple API to better fit into one's workflow.
+More importantly, the library-based design allows easy integration with the existing model implemented in Python.
+%
+To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction, accessing attention, to link the visualization to their NLP models. 
 
+\begin{lstlisting}[language=Python, caption=Code for setting up the visualization system shown in the paper.]
+from visPackage import MCModule
+from bidaf_src import bidafModelInterface
+from NLPutility import translationPerturbation
+
+#initialize machine comprehension model
+model = bidafModelInterface(
+    wordDict="data/bidaf/squad.word.dict",
+    wordVec="data/bidaf/glove.hdf5",
+    model="data/bidaf/bidaf.ema")
+
+gen = translationPerturbation()
+
+# visualization components
+visLayout = {
+  "column":[{"row": ["Paragraph", "AttentionSubMatrix"]},
+            {"row": ["AttentionAsymmetric"]}]
+  }
+
+#setup interface
+modelVis = MCModule(visLayout)
+
+modelVis.setPredictionHook(model.predict)
+modelVis.setAttentionHook(model.attention)
+modelVis.setReloadModelCallback(model.reloadModel)
+modelVis.setSentenceHook(gen.perturbSentence)
+
+#open browser for visualization
+modelVis.startServer()
+\end{lstlisting}
 
 \begin{figure*}[t]
 \centering
