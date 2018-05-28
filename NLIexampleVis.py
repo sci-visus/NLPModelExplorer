@@ -17,11 +17,15 @@ gen = translationPerturbation()
 dep = dependencyTree()
 
 #visualization components
-visLayout = {
-    "column":[{"row":["Summary", "Sentence", "Pipeline"]},
-            {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
-    }
+# visLayout = {
+#     "column":[{"row":["Summary", "Sentence", "Pipeline"]},
+#             {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
+#     }
 
+visLayout = {
+    "column":[{"row":["Sentence", "Prediction"]},
+            {"row":["AttentionGraph", "AttentionMatrix"]}]
+    }
 #setup interface
 modelVis = nlizeModule(visLayout)
 

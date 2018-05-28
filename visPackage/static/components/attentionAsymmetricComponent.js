@@ -329,7 +329,7 @@ class attentionAsymmetricComponent extends attentionComponent {
             let width = this.width - 20;
             let height = 60;
             let posX = 10;
-            let posY = this.height * 0.3;
+            let posY = this.height * 0.35;
 
             let srcWidth = endPos[0] - startPos[0];
 
