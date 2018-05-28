@@ -1,7 +1,8 @@
 ## FIXME fix the import ###
 from visPackage.nlizeModule import nlizeModule
 from nli_src import modelInterface
-from NLPutility import translationPerturbation
+# from NLPutility import translationPerturbation
+from NLPutility import sentenceGenerator
 from NLPutility import dependencyTree
 
 #initialize NLP model
@@ -10,7 +11,9 @@ model = modelInterface(
     wordVec="data/glove.hdf5", model="data/local_300_parikh")
 
 #sentence perturbation
-gen = translationPerturbation()
+# gen = translationPerturbation()
+gen = sentenceGenerator()
+
 #dependency parsing
 dep = dependencyTree()
 
