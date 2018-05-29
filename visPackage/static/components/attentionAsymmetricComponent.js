@@ -121,8 +121,9 @@ class attentionAsymmetricComponent extends attentionComponent {
 
     drawPixelBar(values, yPos) {
         let paragraphLen = this.paragraphLen;
-        let unit = this.width * 0.85 / paragraphLen;
         let pos = this.pixelBarXoffset;
+        let unit = (this.width - (20 * this.segmentList.length - 1) - pos) /
+            paragraphLen;
         let minIndex = 0;
 
         for (var i = 0; i < this.segmentList.length; i++) {
@@ -214,7 +215,9 @@ class attentionAsymmetricComponent extends attentionComponent {
             targAtt = targAtt.map(d =>
                 (d - targAttMin) / (targAttMax - targAttMin));
 
-            let unit = this.width * 0.85 / paragraphLen;
+            let unit = (this.width - (20 * this.segmentList.length - 1) -
+                    pos) /
+                paragraphLen;
             this.paraPos = [];
             for (var i = 0; i < this.segmentList.length; i++) {
                 let senLen = this.segmentList[i].length;
@@ -446,7 +449,7 @@ class attentionAsymmetricComponent extends attentionComponent {
                     .node().getBBox();
                 // console.log(cbbox);
                 if (cbbox.height > cbbox.width)
-                    return "vertical-rl";
+                    return "vertical-lr";
                 else
                     return "hortizontal-rl";
             })
