@@ -4,31 +4,31 @@
 \vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{pipeline}
  \caption{
- Perturbation-driven exploration of the end-to-end models that follows the encoder, attention, and classifier structure. The user can generate small perturbation of the input (i.e., replacing synonyms, paraphrasing)
+ Perturbation-driven interrogation of the end-to-end models that follows the encoder, attention, and classifier structure. The user can generate small perturbation of the input (i.e., replacing synonyms, paraphrasing)
  }
 \label{fig:modelPipeline}
 \end{figure}
 
 \section{Visualization System}
-As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP model follows a similar encode, attent, and classify structure, in which the attention stage provide a window for peeking into the model decision making process. However, the static attention alone likely does not tell the whole story, instead we can learn more about the model by examining the dynamic between the input, the attention, and the output. To explore the relationship between different components of the pipeline, the proposed system utilizes a perturbation-driven exploration strategy, where the  user can manually or automatically generate small changes in the input sentence and then view the aggregated prediction information. Beside the perturbation of the input, the system also allows interactive modification of the attention values, where the prediction will instantaneously updated to reflect the changes. 
+As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP model follows a similar encoder, attention, and classifier structure, in which the attention stage provide a window for peeking into the model decision making process. However, the static attention alone likely does not tell the whole story, instead we can learn more about the model by examining the dynamic between the input, the attention, and the output. To allow the user to interrogate the relationship between different components of the pipeline, the proposed system utilizes a perturbation-driven exploration strategy, where the user can manually or automatically perturb the input sentence and then view the aggregated prediction information. Beside the perturbation of the input, the system also allows interactive modification of the attention values, where the prediction will instantaneously updated to reflect the changes. 
 %
 
 \subsection{Input Sentences Perturbation}
 \label{sec:perturb}
-Due to the discrete nature of the natural language, applying perturbation to sentence for sensitivity analysis can be particularly challenging compared to other problem domain, as small changes in words can leading to drastic different in the semantics of the sentences.
-To reduce the potential semantic deviation, we first devise a simple perturbation method by replacing \emph{nouns} and \emph{verbs} by their synonyms in the wordNet~\cite{Miller1995}. However, the limitation is apparent, as synonyms replacement does not guarantee the meaning of the sentence remain the same. And the wordNet also has a rather inclusive definition for synonyms, where many infrequent/obscure usages exists, which leads to less meaningful perturbed sentence. However, this method requires minimal computation and easy to code and understand. 
+Due to the discrete nature of the natural language, automatically applying perturbation to sentence for sensitivity analysis can be particularly challenging (compared to other domain, i.e., image), as small changes in words can leading to drastic differences in the semantics of the sentences.
+To reduce the potential semantic deviation, we first devise a straightforward perturbation method by replacing \emph{nouns} and \emph{verbs} by their synonyms in the wordNet~\cite{Miller1995}. However, the limitation is apparent, as synonyms replacement does not guarantee the meaning of the sentence remain the same. And the wordNet often produces infrequent/obscure usages that may leads to less meaningful perturbed sentences. However, this method requires minimal computation and is easy to implement. 
 
 \begin{figure}[htbp]
 \centering
 \vspace{-2mm}
  \includegraphics[width=0.9\linewidth]{sentence}
  \caption{
-The interface for showing input sentences. The user can manually alter the words or apply automatic perturbation/paraphrasing of the inputs. In the \emph{perturbed} dropdown menu, the blue words are the only not exist in the original sentence.
+The interface for showing input sentences. The user can manually alter the words or apply automatic perturbation/paraphrasing of the inputs. In the ``perturbed'' dropdown menu, the blue words are the only not exist in the original sentence.
  }
 \label{fig:sentence}
 \end{figure}
 
-To improve the perturbation quality, we also adopted a translation based paraphrasing technique that is similar to the method discussed in \cite{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages are then translate back into the English. Provided the translation produce correct result, we essential obtain paraphrasing of the original sentences (see Figure~\ref{fig:sentence}, where the drop-down menu shows the paraphrased/perturbed sentence).
+To improve the perturbation quality, we also adopted a translation based paraphrasing technique that is similar to the one discussed in \cite{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages and then translate back into English. Provided the translation produce correct result (in our case, we utilized the google cloud translation platform), we essential obtain paraphrasing of the original sentences (see Figure~\ref{fig:sentence}, where the drop-down menu shows the paraphrased/perturbed sentence).
 
 \begin{figure}[htbp]
 \centering
@@ -37,8 +37,7 @@ To improve the perturbation quality, we also adopted a translation based paraphr
  \caption{
 Summarize the prediction results of the perturbed input for the natural language inference model.
 the prediction is encoded as a point in the barycentric coordinate system of the triangle, in which each vertex corresponds to one prediction label, namely, \emph{entail}, \emph{contradict}, and \emph{neutral}.
- %
- }
+}
 \label{fig:prediction}
 \end{figure}
 
