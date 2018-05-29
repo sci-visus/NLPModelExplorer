@@ -44,7 +44,7 @@ the prediction is encoded as a point in the barycentric coordinate system of the
 
 \subsection{Prediction Visualization}
 Efficient visual encoding for prediction is crucial for communicating the model behavior. And to fully support the input perturbation feature, the visual encoding should also allow multiple predictions to be shown in the same visualization.
-
+%
 For the natural language inference task, as illustrated in Figure~\ref{fig:prediction}, the predicted probabilities is encoded in the triangle, where the three vertices represents the three possible prediction (namely, \emph{entail}, \emph{contradict}, and \emph{neutral}). The prediction for the original unperturbed input is illustrated by a larger yellow circle, whereas the prediction of perturbed inputs are represented by smaller grey circles.
 A density contour of the prediction is computed to emphasize the highly cluttered areas and distinguish the outliers.
 
@@ -69,13 +69,13 @@ As illustrated in Figure~\ref{fig:attentionVis}(a)(b), the most widely adopted t
 In the graph attention view (Fig.~\ref{fig:attentionVis}(a)), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. The color of the rectangle text block encodes the sum of all edge values connected to it (darker shade of blues correspond to higher values).
 %%%%%%%%
 The graph view is suitable for highlighting the most dominant alignments. However, the edges may become cluttered if multiple attention values are high. The matrix attention view (Fig.~\ref{fig:attentionVis}(b)) resolve these issues, despite being more verbose and less efficient in highlighting the dominant alignments. 
-%Together, the graph and matrix views complement each other and provide the same information from different perspectives. As illustrated by the pink arrowed lines, we can see how the same attention value is visualized in both the graph and the matrix view.
-To help the user recognize the correspondence during the exploration, we enable the linkage between highlighted actions in both views (see Fig.~\ref{fig:attentionVis}(a)(b), the attention of the two ``couple'' is highlighted).
+We also enable the linkage between highlighted actions in both views (see Fig.~\ref{fig:attentionVis}(a)(b), one the most dominant attention is highlighted in orange).
 %
-To address the challenge of visualizing long sentence, we incorporated the grammar structure.
-One augmentation 
+To facilitate the perturbation of attention (see Figure~\ref{fig:pipeline}), as illustrated in Figure~\ref{fig:attentionVis}(c), we implement an interface in the matrix view for user to directly manipulate the attention value.
 
-However, when the one of the text sequence become signification 
+To address the challenge of visualizing long sentence, we augmented the standard visual encoding with grammar structure, and allow dynamic simplification of the sentence based on the dependency tree (see Figure~\ref{fig:attentionVis}(a1)). We also show how the dependency information can potentially improve the prediction result in Section~\ref{sec:NLIexample}
+
+However, when the one of the text sequence become signification longer, i.e., a full paragraph as in the machine comprehension task, the even the simplified sentence can not be meaningfully represented in the graph or matrix visual encoding. To address this visualization challenge, as illustrated in Figure~\ref{fig:attentionVis}(d), we introduce the hierarchical representation. Here, a pure graphical encoding (the color bars marked by \emph{att2}) is used to capture the aggregated alignment information of the whole paragraph, and the user can focus on localized attention information by selecting the a pixel bar that presents a single sentence. We can also link this attention representation with matrix, such that whenever a sentence is selected the local attention relationship is allow shown in the matrix view (see Figure~\ref{MCexample}(a)).
 
 \subsection{Implementation}
 The initial setup cost and learning curve of the tool are often the barriers for user adaptation. To address these challenge, we design the visualization system as a Python library with modularity and easy accessibility in mind.
@@ -86,7 +86,7 @@ More importantly, the library-based design allows easy integration with the exis
 %
 To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction, accessing attention, to link the visualization to their NLP models. The the code required to create an interactive exploration environment for machine comprehension model is illustrated bellow.
 
-\begin{lstlisting}[language=Python, caption=Code for setting up the visualization system shown in the paper.]
+\begin{lstlisting}[language=Python, caption=Code for setting up the visualization system shown in Figure~\ref{fig:MCexample}(a).]
 from visPackage import MCModule
 from bidaf_src import bidafModelInterface
 from NLPutility import translationPerturbation
