@@ -12,6 +12,7 @@
 \section{Visualization System}
 As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP model follows a similar encoder, attention, and classifier structure, in which the attention stage provide a window for peeking into the model decision making process. However, the static attention alone likely does not tell the whole story, instead we can learn more about the model by examining the dynamic between the input, the attention, and the output. To allow the user to interrogate the relationship between different components of the pipeline, the proposed system utilizes a perturbation-driven exploration strategy, where the user can manually or automatically perturb the input sentence and then view the aggregated prediction information. Beside the perturbation of the input, the system also allows interactive modification of the attention values, where the prediction will instantaneously updated to reflect the changes. 
 %
+The system consistence several visualization components that can be combined to generate an functional interactive system. In the following section, we will cover some of the key components.
 
 \subsection{Input Sentences Perturbation}
 \label{sec:perturb}
@@ -36,16 +37,15 @@ To improve the perturbation quality, we also adopted a translation based paraphr
  \includegraphics[width=0.8\linewidth]{prediction}
  \caption{
 Summarize the prediction results of the perturbed input for the natural language inference model.
-the prediction is encoded as a point in the barycentric coordinate system of the triangle, in which each vertex corresponds to one prediction label, namely, \emph{entail}, \emph{contradict}, and \emph{neutral}.
+the prediction is encoded as a point in the barycentric coordinate system of the triangle, in which each vertex corresponds to one prediction label.
 }
 \label{fig:prediction}
 \end{figure}
 
-
 \subsection{Prediction Visualization}
+Efficient visual encoding for prediction is crucial for communicating the model behavior. And to fully support the input perturbation feature, the visual encoding should also allow multiple predictions to be shown in the same visualization.
 
-The prediction result for the original sentence pair is represented by a larger yellow circle and the prediction of perturbed pairs are illustrated by smaller grey circles.
-
+For the natural language inference task, as illustrated in Figure~\ref{fig:prediction}, the predicted probabilities is encoded in the triangle, where the three vertices represents the three possible prediction (namely, \emph{entail}, \emph{contradict}, and \emph{neutral}). The prediction for the original unperturbed input is illustrated by a larger yellow circle, whereas the prediction of perturbed inputs are represented by smaller grey circles.
 A density contour of the prediction is computed to emphasize the highly cluttered areas and distinguish the outliers.
 
 \begin{figure*}[t]
@@ -64,7 +64,6 @@ For highly asymmetric attention relationship, we utilized a zoomable hierarchica
 \end{figure*}
 
 \subsection{Attention Visualization}
-The system consistence several visualization components that can be combine to generate an functional interactive system. Here we will focus on the attention visualization components. 
 As illustrated in Figure~\ref{fig:attentionVis}(a)(b), the most widely adopted technique to bipartie graph (a), as well as the heatmap attention matrix representation (b). 
 %
 In the graph attention view (Fig.~\ref{fig:attentionVis}(a)), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. The color of the rectangle text block encodes the sum of all edge values connected to it (darker shade of blues correspond to higher values).

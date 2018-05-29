@@ -39,6 +39,16 @@ where $P$ and $H$ are input embedding matrices for the premise and the hypothesi
 and $\overrightarrow{A}$ are attentions, and $y$ is the predicted probabilities for candidate classes.
 Our system visualized the bidirectional attentions and their interaction with output distribution over labels.
 
+\begin{figure*}[t]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=1.0\linewidth]{MC_interface}
+  \vspace{-6mm}
+ \caption{
+An illustrate of an attention exploration session with the machine comprehension model.
+}
+\label{fig:MCexample}
+\end{figure*}
 
 \subsection{Machine Comprehension}
 In machine comprehension task, two sequences of texts are given: context and question.
@@ -56,3 +66,5 @@ $\overleftarrow{A}$ and $\overrightarrow{A}$ are bidirectional attention flows,
 $s$ and $e$ are probabilities for starting and ending indices of the answer span.
 Our system reveals the internal states of $\overleftarrow{A}$, $\overrightarrow{A}$,
 $s$ and $e$.
+
+As illustrated in Figure~\ref{fig:MCexample},
