@@ -22,16 +22,13 @@ class attentionAsymmetricComponent extends attentionComponent {
         this.pixelBars = [];
         this.widthscale = d3.scaleLinear().domain([0, 1]).range([0, 3]);
         this.aggregateSen = true;
-        this.yOffset = 0;
+        this.screenshotIcon = false;
 
+        this.yOffset = 0;
         this.p1PosY = 0;
         this.p2PosY = 30;
         this.attPosY = 60;
         this.pixelBarXoffset = 30;
-    }
-
-    drawResult() {
-
     }
 
     parseDataUpdate(msg) {

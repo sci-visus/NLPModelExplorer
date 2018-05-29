@@ -22,6 +22,7 @@ class attentionComponent extends baseComponent {
         this.srcIndexMaskSet = new Set();
         this.targIndexMaskSet = new Set();
         this.aggregationIndex = {};
+        this.screenshotIcon = true;
     }
 
     clear() {
@@ -41,9 +42,11 @@ class attentionComponent extends baseComponent {
                 .attr("transform", "translate(" + this.margin.left + "," +
                     this.margin.top + ")");
 
-            this.svgSave = new svgExporter(this.svgContainer, [this.width -
-                10, 10
-            ]);
+            if (this.screenshotIcon) {
+                this.svgSave = new svgExporter(this.svgContainer, [this.width -
+                    10, 10
+                ]);
+            }
         } else {
             this.svgContainer
                 .attr("width", this.pwidth)
@@ -52,8 +55,10 @@ class attentionComponent extends baseComponent {
             this.svg.selectAll(
                 "text,rect,path, #attData, defs").remove();
 
-            this.svgSave.updatePos([this.width - 10, 10])
-            this.svgSave.draw();
+            if (this.screenshotIcon) {
+                this.svgSave.updatePos([this.width - 10, 10]);
+                this.svgSave.draw();
+            }
         }
     }
 

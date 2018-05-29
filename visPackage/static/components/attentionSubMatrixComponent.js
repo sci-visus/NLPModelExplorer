@@ -3,7 +3,7 @@ class attentionSubMatrixComponent extends attentionMatrixComponent {
         super(uuid);
         //sub matrix
         this.subscribeDatabyNames(["selectionRange"]);
-        this.backgourndText = ['Paragraph', 'Question'];
+        this.backgourndText = ['Context', 'Question'];
     }
 
     parseDataUpdate(msg) {
