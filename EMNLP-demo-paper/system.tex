@@ -26,6 +26,7 @@ To reduce the potential semantic deviation, we first devise a straightforward pe
  \caption{
 The interface for showing input sentences. The user can manually alter the words or apply automatic perturbation/paraphrasing of the inputs. In the ``perturbed'' dropdown menu, the blue words are the only not exist in the original sentence.
  }
+ \vspace{-3mm}
 \label{fig:sentence}
 \end{figure}
 
@@ -39,6 +40,7 @@ To improve the perturbation quality, we also adopted a translation based paraphr
 Summarize the prediction results of the perturbed input for the natural language inference model.
 the prediction is encoded as a point in the barycentric coordinate system of the triangle, in which each vertex corresponds to one prediction label.
 }
+\vspace{-3mm}
 \label{fig:prediction}
 \end{figure}
 
@@ -60,6 +62,7 @@ We overlay the dependency tree ($a_1$) grammar structure to highlight important 
 %
 For highly asymmetric attention relationship, we utilized a zoomable hierarchical visual representation (d).
 }
+\vspace{-3mm}
 \label{fig:attentionVis}
 \end{figure*}
 
@@ -71,11 +74,11 @@ In the graph attention view (Fig.~\ref{fig:attentionVis}(a)), a bipartite graph 
 The graph view is suitable for highlighting the most dominant alignments. However, the edges may become cluttered if multiple attention values are high. The matrix attention view (Fig.~\ref{fig:attentionVis}(b)) resolve these issues, despite being more verbose and less efficient in highlighting the dominant alignments. 
 We also enable the linkage between highlighted actions in both views (see Fig.~\ref{fig:attentionVis}(a)(b), one the most dominant attention is highlighted in orange).
 %
-To facilitate the perturbation of attention (see Figure~\ref{fig:pipeline}), as illustrated in Figure~\ref{fig:attentionVis}(c), we implement an interface in the matrix view for user to directly manipulate the attention value.
+To facilitate the perturbation of attention (see Figure~\ref{fig:modelPipeline}), as illustrated in Figure~\ref{fig:attentionVis}(c), we implement an interface in the matrix view for user to directly manipulate the attention value.
 
 To address the challenge of visualizing long sentence, we augmented the standard visual encoding with grammar structure, and allow dynamic simplification of the sentence based on the dependency tree (see Figure~\ref{fig:attentionVis}(a1)). We also show how the dependency information can potentially improve the prediction result in Section~\ref{sec:NLIexample}
 
-However, when the one of the text sequence become signification longer, i.e., a full paragraph as in the machine comprehension task, the even the simplified sentence can not be meaningfully represented in the graph or matrix visual encoding. To address this visualization challenge, as illustrated in Figure~\ref{fig:attentionVis}(d), we introduce the hierarchical representation. Here, a pure graphical encoding (the color bars marked by \emph{att2}) is used to capture the aggregated alignment information of the whole paragraph, and the user can focus on localized attention information by selecting the a pixel bar that presents a single sentence. We can also link this attention representation with matrix, such that whenever a sentence is selected the local attention relationship is allow shown in the matrix view (see Figure~\ref{MCexample}(a)).
+However, when the one of the text sequence become signification longer, i.e., a full paragraph as in the machine comprehension task, the even the simplified sentence can not be meaningfully represented in the graph or matrix visual encoding. To address this visualization challenge, as illustrated in Figure~\ref{fig:attentionVis}(d), we introduce the hierarchical representation. Here, a pure graphical encoding (the color bars marked by \emph{att2}) is used to capture the aggregated alignment information of the whole paragraph, and the user can focus on localized attention information by selecting the a pixel bar that presents a single sentence. We can also link this attention representation with matrix, such that whenever a sentence is selected the local attention relationship is allow shown in the matrix view (see Figure~\ref{fig:MCexample}(a)).
 
 \subsection{Implementation}
 The initial setup cost and learning curve of the tool are often the barriers for user adaptation. To address these challenge, we design the visualization system as a Python library with modularity and easy accessibility in mind.
