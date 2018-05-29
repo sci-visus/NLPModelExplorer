@@ -30,21 +30,6 @@ The interface for showing input sentences. The user can manually alter the words
 
 To improve the perturbation quality, we also adopted a translation based paraphrasing technique that is similar to the method discussed in \cite{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages are then translate back into the English. Provided the translation produce correct result, we essential obtain paraphrasing of the original sentences (see Figure~\ref{fig:sentence}, where the drop-down menu shows the paraphrased/perturbed sentence).
 
-\subsection{Attention Visualization}
-The system consistence several visualization components that can be combine to generate an functional interactive system. Here we will focus on the attention visualization components. 
-As illustrated in Figure~\ref{fig:attentionVis}(a)(b), the most widely adopted technique to bipartie graph (a), as well as the heatmap attention matrix representation (b). 
-%
-In the graph attention view (Fig.~\ref{fig:attentionVis}(a)), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. The color of the rectangle text block encodes the sum of all edge values connected to it (darker shade of blues correspond to higher values).
-%%%%%%%%
-The graph view is suitable for highlighting the most dominant alignments. However, the edges may become cluttered if multiple attention values are high. The matrix attention view (Fig.~\ref{fig:attentionVis}(b)) resolve these issues, despite being more verbose and less efficient in highlighting the dominant alignments. 
-%Together, the graph and matrix views complement each other and provide the same information from different perspectives. As illustrated by the pink arrowed lines, we can see how the same attention value is visualized in both the graph and the matrix view.
-To help the user recognize the correspondence during the exploration, we enable the linkage between highlighted actions in both views (see Fig.~\ref{fig:attentionVis}(a)(b), the attention of the two ``couple'' is highlighted).
-%
-To address the challenge of visualizing long sentence, we incorporated the grammar structure.
-One augmentation 
-
-However, when the one of the text sequence become signification 
-
 \begin{figure}[htbp]
 \centering
 \vspace{-2mm}
@@ -79,6 +64,21 @@ For highly asymmetric attention relationship, we utilized a zoomable hierarchica
 \label{fig:attentionVis}
 \end{figure*}
 
+\subsection{Attention Visualization}
+The system consistence several visualization components that can be combine to generate an functional interactive system. Here we will focus on the attention visualization components. 
+As illustrated in Figure~\ref{fig:attentionVis}(a)(b), the most widely adopted technique to bipartie graph (a), as well as the heatmap attention matrix representation (b). 
+%
+In the graph attention view (Fig.~\ref{fig:attentionVis}(a)), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. The color of the rectangle text block encodes the sum of all edge values connected to it (darker shade of blues correspond to higher values).
+%%%%%%%%
+The graph view is suitable for highlighting the most dominant alignments. However, the edges may become cluttered if multiple attention values are high. The matrix attention view (Fig.~\ref{fig:attentionVis}(b)) resolve these issues, despite being more verbose and less efficient in highlighting the dominant alignments. 
+%Together, the graph and matrix views complement each other and provide the same information from different perspectives. As illustrated by the pink arrowed lines, we can see how the same attention value is visualized in both the graph and the matrix view.
+To help the user recognize the correspondence during the exploration, we enable the linkage between highlighted actions in both views (see Fig.~\ref{fig:attentionVis}(a)(b), the attention of the two ``couple'' is highlighted).
+%
+To address the challenge of visualizing long sentence, we incorporated the grammar structure.
+One augmentation 
+
+However, when the one of the text sequence become signification 
+
 \subsection{Implementation}
 The initial setup cost and learning curve of the tool are often the barriers for user adaptation. To address these challenge, we design the visualization system as a Python library with modularity and easy accessibility in mind.
 Instead of using the visualization system as a monolithic standalone application, just like a plotting library (i.e., matplotlib), the different pieces of the visualization (i.e., matrix based attention encoding) can be accessed individually.
@@ -98,23 +98,18 @@ model = bidafModelInterface(
     wordDict="data/bidaf/squad.word.dict",
     wordVec="data/bidaf/glove.hdf5",
     model="data/bidaf/bidaf.ema")
-
 gen = translationPerturbation()
-
-# visualization components
+#visualization components
 visLayout = {
   "column":[{"row": ["Paragraph", 
                      "AttentionSubMatrix"]},
             {"row": ["AttentionAsymmetric"]}]
   }
-
 #setup interface
 modelVis = MCModule(visLayout)
-
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
 modelVis.setSentenceHook(gen.perturbSentence)
-
 #open browser for the web-based visualization
 modelVis.show()
 \end{lstlisting}
