@@ -232,7 +232,7 @@
          x="-491.04584"
          y="459.00085"
          style="font-size:62.5px;text-align:center;text-anchor:middle"
-         id="tspan4269">Sentence </tspan><tspan
+         id="tspan4269">Sentences </tspan><tspan
          sodipodi:role="line"
          x="-500.99457"
          y="537.12585"
@@ -378,7 +378,7 @@
          x="-435.01181"
          y="1003.2776"
          style="font-size:62.5px;text-align:center;text-anchor:middle"
-         id="tspan4292">Sentence </tspan></text>
+         id="tspan4292">Inputs </tspan></text>
     <rect
        ry="39.427505"
        rx="19.437948"
@@ -422,20 +422,20 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:75px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="627.05792"
+       x="621.05792"
        y="923.74084"
        id="text12154"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="627.05792"
+         x="621.05792"
          y="923.74084"
          style="font-size:62.5px"
          id="tspan4750">Observe Changes</tspan><tspan
          sodipodi:role="line"
-         x="627.05792"
+         x="621.05792"
          y="1001.8658"
          style="font-size:62.5px"
-         id="tspan5224"> Aggregated Preds </tspan></text>
+         id="tspan5224">Aggregate Predicts </tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -454,8 +454,8 @@
        id="path4209"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:7.99999905;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4213)"
-       d="m -445.54204,830.37215 0,-229.30544"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:7.99999857;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4213)"
+       d="m -474.65818,849.08964 0,-246.85361"
        id="path4211"
        inkscape:connector-curvature="0" />
     <path
