@@ -133,8 +133,7 @@ class attentionAsymmetricComponent extends attentionComponent {
             let size = senLen * unit;
             let maxIndex = minIndex + senLen;
 
-            let val = values.slice(minIndex, maxIndex +
-                1);
+            let val = values.slice(minIndex, maxIndex);
             // console.log(minIndex, maxIndex, val);
             let words = this.segmentList[i];
             let indexRange = [minIndex, maxIndex];
@@ -225,8 +224,7 @@ class attentionAsymmetricComponent extends attentionComponent {
                 let size = senLen * unit;
                 let maxIndex = minIndex + senLen;
                 // console.log(minIndex, maxIndex);
-                let atts = this.srcAtt.slice(minIndex, maxIndex +
-                    1);
+                let atts = this.srcAtt.slice(minIndex, maxIndex);
                 let words = this.segmentList[i];
                 let indexRange = [minIndex, maxIndex];
                 minIndex = maxIndex;
