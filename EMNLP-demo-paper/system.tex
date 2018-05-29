@@ -1,14 +1,4 @@
 
-\begin{figure}[htbp]
-\centering
-\vspace{-2mm}
- \includegraphics[width=1.0\linewidth]{pipeline}
- \caption{
- Perturbation-driven interrogation of the end-to-end models that follows the encoder, attention, and classifier structure. The user can generate small perturbation of the input (i.e., replacing synonyms, paraphrasing)
- }
-\label{fig:modelPipeline}
-\end{figure}
-
 \section{Visualization System}
 As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP model follows a similar encoder, attention, and classifier structure, in which the attention stage provide a window for peeking into the model decision making process. However, the static attention alone likely does not tell the whole story, instead we can learn more about the model by examining the dynamic between the input, the attention, and the output. To allow the user to interrogate the relationship between different components of the pipeline, the proposed system utilizes a perturbation-driven exploration strategy, where the user can manually or automatically perturb the input sentence and then view the aggregated prediction information. Beside the perturbation of the input, the system also allows interactive modification of the attention values, where the prediction will instantaneously updated to reflect the changes. 
 %
@@ -23,10 +13,11 @@ To reduce the potential semantic deviation, we first devise a straightforward pe
 \centering
 \vspace{-2mm}
  \includegraphics[width=0.9\linewidth]{sentence}
+ \vspace{-2mm}
  \caption{
 The interface for showing input sentences. The user can manually alter the words or apply automatic perturbation/paraphrasing of the inputs. In the ``perturbed'' dropdown menu, the blue words are the only not exist in the original sentence.
  }
- \vspace{-3mm}
+ \vspace{-1mm}
 \label{fig:sentence}
 \end{figure}
 
