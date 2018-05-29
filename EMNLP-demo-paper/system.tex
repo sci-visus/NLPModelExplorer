@@ -21,7 +21,7 @@ To reduce the potential semantic deviation, we first devise a simple perturbatio
 \begin{figure}[htbp]
 \centering
 \vspace{-2mm}
- \includegraphics[width=1.0\linewidth]{sentence}
+ \includegraphics[width=0.9\linewidth]{sentence}
  \caption{
 The interface for showing input sentences. The user can manually alter the words or apply automatic perturbation/paraphrasing of the inputs. In the \emph{perturbed} dropdown menu, the blue words are the only not exist in the original sentence.
  }
@@ -29,22 +29,6 @@ The interface for showing input sentences. The user can manually alter the words
 \end{figure}
 
 To improve the perturbation quality, we also adopted a translation based paraphrasing technique that is similar to the method discussed in \cite{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages are then translate back into the English. Provided the translation produce correct result, we essential obtain paraphrasing of the original sentences (see Figure~\ref{fig:sentence}, where the drop-down menu shows the paraphrased/perturbed sentence).
-
-
-\begin{figure*}[t]
-\centering
-\vspace{-2mm}
- \includegraphics[width=1.0\linewidth]{attentionPanels}
-  \vspace{-6mm}
- \caption{
-Attention visualization. In the graph attention view (a), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. In the matrix attention view (b), the entries of $i^{th}$ row represent the probabilities of words in hypotheses align to the $i^{th}$ word in the premise.
-The user can alter the attention values via the pop-up interface illustrated in (c).
-We overlay the dependency tree ($a_1$) grammar structure to highlight important words and allow simplification of complex sentence based on the dependency tree.
-%
-For highly asymmetric attention relationship, we utilized a zoomable hierarchical visual representation (d).
-}
-\label{fig:attentionVis}
-\end{figure*}
 
 \subsection{Attention Visualization}
 The system consistence several visualization components that can be combine to generate an functional interactive system. Here we will focus on the attention visualization components. 
@@ -61,12 +45,39 @@ One augmentation
 
 However, when the one of the text sequence become signification 
 
+\begin{figure}[htbp]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=0.8\linewidth]{prediction}
+ \caption{
+Summarize the prediction results of the perturbed input for the natural language inference model.
+the prediction is encoded as a point in the barycentric coordinate system of the triangle, in which each vertex corresponds to one prediction label, namely, \emph{entail}, \emph{contradict}, and \emph{neutral}.
+ %
+ }
+\label{fig:prediction}
+\end{figure}
 
 
+\subsection{Prediction Visualization}
 
+The prediction result for the original sentence pair is represented by a larger yellow circle and the prediction of perturbed pairs are illustrated by smaller grey circles.
 
-\subsection{Prediction Summarization}
+A density contour of the prediction is computed to emphasize the highly cluttered areas and distinguish the outliers.
 
+\begin{figure*}[t]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=0.9\linewidth]{attentionPanels}
+  \vspace{-3mm}
+ \caption{
+Attention visualization. In the graph attention view (a), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. In the matrix attention view (b), the entries of $i^{th}$ row represent the probabilities of words in hypotheses align to the $i^{th}$ word in the premise.
+The user can alter the attention values via the pop-up interface illustrated in (c).
+We overlay the dependency tree ($a_1$) grammar structure to highlight important words and allow simplification of complex sentence based on the dependency tree.
+%
+For highly asymmetric attention relationship, we utilized a zoomable hierarchical visual representation (d).
+}
+\label{fig:attentionVis}
+\end{figure*}
 
 \subsection{Implementation}
 The initial setup cost and learning curve of the tool are often the barriers for user adaptation. To address these challenge, we design the visualization system as a Python library with modularity and easy accessibility in mind.
@@ -107,6 +118,7 @@ modelVis.setSentenceHook(gen.perturbSentence)
 #open browser for the web-based visualization
 modelVis.show()
 \end{lstlisting}
+
 
 
 
