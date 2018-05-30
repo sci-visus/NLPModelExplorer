@@ -14,18 +14,6 @@ Despite the difficulties, interpreting the model internals and reason about pred
 
 Recently, the attention networks have become a widely-adopted mechanism \cite{bahdanau2014neural,seo2016bidirectional,Parikh2016, VaswaniShazeerParmar2017}. The attention not only improves the model performance but also yields interpretable intermediate representations (i.e., alignment among words). As a result, attention is often considered as a natural interface for analyzing the internals of neural networks. Conduct analysis directly on the raw attention values can be challenging for human users, and therefore, visual representations that highlight word alignments between sentences have been proposed, such as bipartite graph and heatmap of the attention matrix \cite{LiChenHovy2015, li2016understanding, lee2017interactive}.  However, many challenges remain. Firstly, for some NLP tasks, the word sequences pair for which the attention is computed can be highly asymmetrical (i.e., in machine comprehension, the context paragraph can be much longer than the question sentence), which the standard visual encoding cannot adequately handle.  Also, many previous works present the attention in a static setting. However, the ability to provide an interactive environment, in which the user can instantaneously look at how changes in the input affect the attention, and how small variations in the attention alter the prediction, is crucial for interpreting the model. Finally, many previous visualization efforts, despite revealing many exciting results, focus more on illustrating potentially useful visualization technique than on providing a flexible software tool that can be easily integrated into an existing code base. As a result, applying these proposed techniques to real-world examples may involve substantial engineering effort that could prevent wide adoption.
 
-To address these challenges in interpreting attention-based models, 
-we introduce a flexible Python library that allows the user to easily generate a web-based interactive visual analytics environment for various usage via a composable visualization component design.
-%
-To facilitate exploratory analysis (see Figure~\ref{fig:modelPipeline}), we employ a fully interactive pipeline, in which the user can perturb the input text (via two perturbation schemes discussed in Section~\ref{sec:perturb}) and observe the effects on the attention and prediction, or modify the attention to understand how it affects predictions.
-%
-Finally, we demonstrate our system on two primary NLP tasks: natural language
-inference (NLI) and machine comprehension (MC). 
-%For the NLI task, we visualize
-%decomposable attention networks which represents a series of strongly performing models \cite{Parikh2016}.
-%For the MC task, we present your visualization methods on bidirectional attention flow model,
-%which also represents a line of state-of-the-art models \cite{Seo2016}.
-
 \begin{figure}[htbp]
 \centering
 \vspace{-2mm}
@@ -37,6 +25,19 @@ inference (NLI) and machine comprehension (MC).
  \vspace{-3mm}
 \label{fig:modelPipeline}
 \end{figure}
+
+
+To address these challenges in interpreting attention-based models, 
+we introduce a python library that allows users to create web-based interactive visual analytics environments,
+in which they can interrogate the model by perturbing the input text and observing the effects on the attention and prediction, or modifying the attention and studying how it affects predictions (see Figure~\ref{fig:modelPipeline}).
+%
+We demonstrate our system on two primary NLP tasks: natural language
+inference (NLI) and machine comprehension (MC). 
+%For the NLI task, we visualize
+%decomposable attention networks which represents a series of strongly performing models \cite{Parikh2016}.
+%For the MC task, we present your visualization methods on bidirectional attention flow model,
+%which also represents a line of state-of-the-art models \cite{Seo2016}.
+
 
 %In summary, our key contributions are:
 %\begin{itemize}
