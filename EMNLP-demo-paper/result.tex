@@ -14,8 +14,8 @@
  \includegraphics[width=1.0\linewidth]{NLIexample}
   \vspace{-6mm}
  \caption{
-An illustrate of the attention editing process. 
-By removing the alignment mistake between the two "green", the originally wrong prediction \emph{entailment} is corrected to \emph{netural}.
+An illustration of the attention editing process. 
+By removing the ``wrong'' alignment between the two ``green", the originally prediction \emph{entailment} is corrected to \emph{netural}.
 }
   \vspace{-3mm}
 \label{fig:NLIexample}
@@ -27,7 +27,11 @@ for the NLI task and the bi-directional attention flow network~\cite{Seo2016} fo
 
 \subsection{Natural Language Inference}
 \label{sec:NLIexample}
-The NLI task predict the relationship between a premise sentence (\textbf{P}) and a hypothesis sentence (\textbf{H}).
+The NLI task predicts the relationship between a premise sentence (\textbf{P}) and a hypothesis sentence (\textbf{H}).
+The attention matrix captures the alignment of words between these two sentences.
+Here we give an example of how a wrong prediction can be correct by editing the attention value.  
+
+%The model produces two attention matrices, representing alignment from premise to hypothesis, and from hypothesis to premise.
 %as either \emph{entailment}, \emph{contradiction}, or \emph{neutral}.
 %The model can be formalized as the following:
 %%\begin{align}
@@ -39,15 +43,11 @@ The NLI task predict the relationship between a premise sentence (\textbf{P}) an
 %where $P$ and $H$ are input embedding matrices for the premise and the hypothesis, $\overleftarrow{A}$
 %and $\overrightarrow{A}$ are attentions, and $y$ is the predicted probabilities for candidate classes.
 %Our system visualized the bidirectional attentions and their interaction with output distribution over labels.
-The model produces two attention matrices, representing alignment from premise to hypothesis, and from hypothesis to premise.
 
-Here we show an example, in which the wrong prediction can be fixed by correcting the attention value.  
-%In the proposed system, we overlay the sentence dependency tree with the attention, which enables researchers to conduct comparisons between attention and grammar structure.
-%
 As illustrated in Fig.~\ref{fig:NLIexample}(a), the input sentence pairs (\textbf{P}:``A woman in a green jacket is drinking tea.'' \textbf{H}:``A woman is drinking green tea.'') is predicted to be entailment, which is incorrect.
-By examining the attention, we can see the word \textbf{green} in ``\textbf{green} jacket" is aligned to the \textbf{green} in ``\textbf{green} tea", yet these two ``green'' decorate different nouns. Such a relationship can be confirmed by examining the dependency tree, where  \textbf{green} in \textbf{P} is attached to ``jacket'', whereas \textbf{green} in \textbf{H} is attached to ``tea''. However, the model does not aware of these the grammar information. As a result, the model mistakenly believes the two \textbf{greens} are used to describe the same thing (thus predict \emph{entailment}). 
+By examining the attention, we can see the word \emph{green} in ``\emph{green} jacket" is aligned to the \emph{green} in ``\emph{green} tea". However, these two ``green'' decorate different nouns, which lead to the wrong prediction. The grammar structure is captured by the dependency tree, i.e., \emph{green} in \textbf{P} is attached to ``jacket''. However, the model does not has access to the grammar information and mistakenly assume the two \emph{greens} are describing the same thing (thus predict \emph{entailment}). 
 %
-To correct the mistake, we edit the attention value and remove the align between these two "green" (see Figure~\ref{fig:NLIexample}(b)).
+To correct the mistake, we can edit the attention value and remove the align between these two "green" (see Figure~\ref{fig:NLIexample}(b)).
 As expected, the prediction label is corrected (\emph{neutral}) (see in Figure~\ref{fig:NLIexample}(c)).
 
 \begin{figure*}[t]

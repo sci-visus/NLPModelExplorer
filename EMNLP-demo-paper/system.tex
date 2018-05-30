@@ -1,8 +1,12 @@
 
 \section{Visualization System}
-As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP model follows a similar encoder, attention, and classifier structure, in which the attention stage provide a window for peeking into the model decision making process. However, the static attention alone likely does not tell the whole story, instead we can learn more about the model by examining the dynamic between the input, the attention, and the output. To allow the user to interrogate the relationship between different components of the pipeline, the proposed system utilizes a perturbation-driven exploration strategy, where the user can manually or automatically perturb the input sentence and then view the aggregated prediction information. Beside the perturbation of the input, the system also allows interactive modification of the attention values, where the prediction will instantaneously updated to reflect the changes. 
+As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP model follows a similar encoder, attention, and classifier structure, in which the attention stage provide a window for peeking into the model decision making process. 
+%However, the static attention alone likely does not tell the whole story, instead we can learn more about the model by examining the dynamic between the input, the attention, and the output. 
+To allow the user to interrogate the relationship between different components of the pipeline, the proposed system utilizes a perturbation-driven exploration strategy, where the user can manually or automatically perturb the input sentence and then view the aggregated prediction information. Beside the perturbation of the input, the system also allows interactive modification of the attention values, where the prediction will instantaneously updated to reflect the changes. 
 %
-The system consistence several visualization components that can be combined to generate an functional interactive system. In the following section, we will cover some of the key components.
+The system consistence several visualization components that can be combined to generate an functional interactive system. In the following section, we will cover some of the essential components (the usage of other components
+%such as a prediction summary statistics the entire development set, as well as a scheme to update the model based 
+can be found in the accompany video).
 
 \subsection{Input Sentences Perturbation}
 \label{sec:perturb}
@@ -47,11 +51,11 @@ A density contour of the prediction is computed to emphasize the highly cluttere
  \includegraphics[width=0.95\linewidth]{attentionPanels}
   \vspace{-3mm}
  \caption{
-Attention visualization. In the graph attention view (a), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. In the matrix attention view (b), the entries of $i^{th}$ row represent the probabilities of words in hypotheses align to the $i^{th}$ word in the premise.
-The user can alter the attention values via the pop-up interface illustrated in (c).
+Attention visualization. In the graph attention view (a), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. The same values can also be directly visualized in the matrix form (b). 
+The user can edit the attention values via the pop-up interface illustrated in (c).
 We overlay the dependency tree ($a_1$) grammar structure to highlight important words and allow simplification of complex sentence based on the dependency tree.
 %
-For highly asymmetric attention relationship, we utilized a zoomable hierarchical visual representation (d).
+For highly asymmetric attention relationship, we utilized a zoomable hierarchical visual representation (d). User can focus on individual sentence by clicking the rectangular bars.
 }
 \vspace{-3mm}
 \label{fig:attentionVis}
@@ -72,13 +76,14 @@ To address the challenge of visualizing long sentence, we augmented the standard
 However, when the one of the text sequence become signification longer, i.e., a full paragraph as in the machine comprehension task, the even the simplified sentence can not be meaningfully represented in the graph or matrix visual encoding. To address this visualization challenge, as illustrated in Figure~\ref{fig:attentionVis}(d), we introduce the hierarchical representation. Here, a pure graphical encoding (the color bars marked by \emph{att2}) is used to capture the aggregated alignment information of the whole paragraph, and the user can focus on localized attention information by selecting the a pixel bar that presents a single sentence. We can also link this attention representation with matrix, such that whenever a sentence is selected the local attention relationship is allow shown in the matrix view (see Figure~\ref{fig:MCexample}(a)).
 
 \subsection{Implementation}
-The initial setup cost and learning curve of the tool are often the barriers for user adaptation. To address these challenge, we design the visualization system as a Python library with modularity and easy accessibility in mind.
-Instead of using the visualization system as a monolithic standalone application, just like a plotting library (i.e., matplotlib), the different pieces of the visualization (i.e., matrix based attention encoding) can be accessed individually.
-% 
-Yet, the components can also be combined in any configuration desired by users via a simple API to better fit into one's workflow.
-More importantly, the library-based design allows easy integration with the existing model implemented in Python.
-%
-To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction, accessing attention, to link the visualization to their NLP models. The the code required to create an interactive exploration environment for machine comprehension model is illustrated bellow.
+The initial setup cost and learning curve of the tool are often the barriers for user adaptation. 
+Therefore, instead of design visualization system as a monolithic standalone application, 
+we implement the proposed system as a python library with modularity and ease of accessibility in mind.
+To fit one's workflow, the different pieces of the visualization (i.e., matrix based attention encoding) can be accessed individually, 
+or combined in any configuration desired by users via a simple API.
+More importantly, the library-based design allows easy integration with the existing model implemented in python.
+%To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction, accessing attention, to link the visualization to their NLP models. 
+The the code required to create an interactive exploration environment for machine comprehension model is illustrated bellow.
 
 \begin{lstlisting}[language=Python, caption=Code for setting up the visualization system shown in Figure~\ref{fig:MCexample}(a).]
 from visPackage import MCModule
