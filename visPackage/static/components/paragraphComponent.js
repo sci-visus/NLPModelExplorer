@@ -1,7 +1,7 @@
 class paragraphComponenet extends sentenceComponent {
     constructor(uuid) {
         super(uuid);
-        this.subscribeDatabyNames(["prediction"]);
+        this.subscribeDatabyNames(["prediction", "allPairsPrediction"]);
         //init
         this.callFunc("initSetup");
     }
@@ -17,15 +17,25 @@ class paragraphComponenet extends sentenceComponent {
                 // console.log(this.predP2, this.predP1)
                 this.showPrediction();
                 break;
+            case "allPairsPrediction":
+                this.showAggregatedPrediction();
+                break;
         }
     }
     onUpdateCurrentPair() {
-        var currentPair = [d3.select(this.div + "src").property(
-                "value"),
+        var currentPair = [d3.select(this.div + "src").text(),
             d3.select(this.div + "targ").property("value")
         ];
         this.data["currentPair"]["sentences"] = currentPair;
         this.setData("currentPair", this.data["currentPair"]);
+    }
+
+    perturbTarget() {
+        if (this.data["currentPair"]["sentences"] !== undefined) {
+            this.callFunc("perturbSentence", {
+                "sentence": this.data["currentPair"]["sentences"][1]
+            });
+        }
     }
 
     onReceiveCurrentPair() {
@@ -35,28 +45,26 @@ class paragraphComponenet extends sentenceComponent {
         this.source = currentPair[0];
         this.target = currentPair[1];
         if (this.data["allTargetSens"])
-            this.orig_source = this.data["allTargetSens"][0];
+            this.orig_targ = this.data["allTargetSens"][0];
 
         d3.select(this.div + "src").html(this.source);
         d3.select(this.div + "targ").property("value", this.target);
 
-        // console.log("----------", this.data["allSourceSens"]);
-        // if (this.data["allSourceSens"]) {
-        //     $(this.div + "src").highlightWithinTextarea({
-        //         highlight: this.getSentenceDiff(
-        //             this.data["allSourceSens"][0].substring(
-        //                 4),
-        //             currentPair[0].substring(
-        //                 4)), //
-        //         className: 'blue'
-        //     });
-        // }
         if (this.data["allTargetSens"]) {
+            // console.log("update list")
             $(this.div + "targ").highlightWithinTextarea({
-                highlight: this.getSentenceDiff(this.orig_source,
+                highlight: this.getSentenceDiff(this.orig_targ,
                     this.target), //
                 className: 'blue'
             });
+        }
+    }
+
+    updatePerturbedSentences(sentences) {
+        if (this.data["currentPair"]["sentences"][1] === sentences[0]) {
+            this.setData("allTargetSens", sentences);
+            this.addDropdown(this.div + "targInput", sentences, this.div +
+                "targ");
         }
     }
 

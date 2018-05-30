@@ -59,6 +59,34 @@ class MCModule(visModule):
         dataManager.setData("attention", attentionMatrix)
         return True
 
+    def predictAll(self):
+
+        allTargetSens = None
+        sentencePair = dataManager.getData("currentPair")['sentences']
+        source = sentencePair[0]
+        if dataManager.getData("allTargetSens") is not None:
+            allTargetSens = dataManager.getData("allTargetSens")
+        else:
+            allTargetSens = [sentencePair[1]]
+        # print "original s, t:"
+        print "all sens length:", len(allTargetSens)
+
+        ###### if there is only one pair #####
+        if len(allTargetSens) <= 1:
+            return False
+
+        allPairsPrediction = []
+
+        for j, target in enumerate(allTargetSens):
+            ######### only one perturbation is allow in each pair #######
+            predResult = self.predictionHook([source, target])
+            allPairsPrediction.push(predResult)
+                    # allPairsPrediction[j,i,:] = predResult
+        # print allPairsPrediction\
+        dataManager.setData("allPairsPrediction", allPairsPrediction)
+        # dataManager.setData("allAttention", allAttention)
+        return True
+
     def reloadModel(self):
         self.reloadModelCallback();
         self.predict()

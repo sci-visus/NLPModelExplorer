@@ -102,19 +102,19 @@ class sentenceComponent extends baseComponent {
         var currentPair = this.data['currentPair']["sentences"];
         // console.log(this.data["currentPair"]["sentences"]);
 
-        if (currentPair[0].startsWith("<s>")) {
-            this.source = currentPair[0].substring(4);
-            this.target = currentPair[1].substring(4);
-            if (this.data["allTargetSens"])
-                this.orig_source = this.data["allTargetSens"][0].substring(
-                    4);
-
-        } else {
-            this.source = currentPair[0];
-            this.target = currentPair[1];
-            if (this.data["allTargetSens"])
-                this.orig_source = this.data["allTargetSens"][0];
-        }
+        // if (currentPair[0].startsWith("<s>")) {
+        //     this.source = currentPair[0].substring(4);
+        //     this.target = currentPair[1].substring(4);
+        //     if (this.data["allTargetSens"])
+        //         this.orig_source = this.data["allTargetSens"][0].substring(
+        //             4);
+        //
+        // } else {
+        //     this.source = currentPair[0];
+        //     this.target = currentPair[1];
+        //     if (this.data["allTargetSens"])
+        //         this.orig_source = this.data["allTargetSens"][0];
+        // }
 
         d3.select(this.div + "src").property("value", this.source);
         d3.select(this.div + "targ").property("value", this.target);
@@ -123,17 +123,16 @@ class sentenceComponent extends baseComponent {
         if (this.data["allSourceSens"]) {
             $(this.div + "src").highlightWithinTextarea({
                 highlight: this.getSentenceDiff(
-                    this.data["allSourceSens"][0].substring(
-                        4),
-                    currentPair[0].substring(
-                        4)), //
+                    this.data["allSourceSens"][0].substring(4),
+                    currentPair[0].substring(4)), //
                 className: 'blue'
             });
         }
         if (this.data["allTargetSens"]) {
             $(this.div + "targ").highlightWithinTextarea({
-                highlight: this.getSentenceDiff(this.orig_source,
-                    this.target), //
+                highlight: this.getSentenceDiff(
+                    this.data["allTargetSens"][0].substring(4),
+                    currentPair[1].substring(4)), //
                 className: 'blue'
             });
         }
