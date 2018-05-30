@@ -192,6 +192,7 @@ class attentionAsymmetricComponent extends attentionComponent {
             // b));
             var srcAtt = attMatrix.map(d => Math.max(...d));
             this.srcAtt = this.softmax(srcAtt);
+            // console.log(srcAtt);
             let srcAttMax = Math.max(...srcAtt);
             let srcAttMin = Math.min(...srcAtt);
             this.srcAtt = srcAtt.map(d =>

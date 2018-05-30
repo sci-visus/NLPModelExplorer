@@ -71,6 +71,11 @@ class paragraphComponenet extends sentenceComponent {
     showPrediction() {
         let indexS = this.predP1.indexOf(Math.max(...this.predP1));
         let indexE = this.predP2.indexOf(Math.max(...this.predP2));
+        let answer = this.source.split(" ").slice(indexS, indexE +
+            1).join(" ");
+        // console.log(answer);
+        d3.select(this.div + "pred").property("value", answer);
+
         let prob = new Array(this.predP1.length).fill(0);
 
         for (let i = indexS; i < indexE + 1; i++) {
