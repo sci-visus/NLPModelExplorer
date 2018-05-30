@@ -83,6 +83,10 @@ class paragraphComponenet extends sentenceComponent {
         d3.select(this.div + "src").html(coloredSrc);
     }
 
+    showAggregatedPrediction() {
+        let allPrediction = this.data["allPairsPrediction"];
+    }
+
     colorSentenceByValue(sentence, prob, color) {
         let wordList = sentence.split(" ");
         var outputStr = "";
