@@ -1,17 +1,11 @@
 
 \section{Visualization System}
-As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP model follows a similar encoder, attention, and classifier structure, in which the attention stage provide a window for peeking into the model decision making process. 
-%However, the static attention alone likely does not tell the whole story, instead we can learn more about the model by examining the dynamic between the input, the attention, and the output. 
-To allow the user to interrogate the relationship between different components of the pipeline, the proposed system utilizes a perturbation-driven exploration strategy, where the user can manually or automatically perturb the input sentence and then view the aggregated prediction information. Beside the perturbation of the input, the system also allows interactive modification of the attention values, where the prediction will instantaneously updated to reflect the changes. 
+As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP model follows a similar encoder, attention, and classifier structure, in which the attention stage provide a window to peek into the model decision making process. 
+However, the static attention alone likely does not tell the whole story, 
+the proposed system utilizes a perturbation-driven exploration strategy that allows the user manually or automatically perturb part of the pipeline and observe the changes in others.
 %
-The system consistence several visualization components that can be combined to generate an functional interactive system. In the following section, we will cover some of the essential components (the usage of other components
+The system consists of several visualization components that can be selectively combined to form a functional interactive system for a given task. In the following section, we will cover some of the essential components (the usage of all components can be found in the accompanying video).
 %such as a prediction summary statistics the entire development set, as well as a scheme to update the model based 
-can be found in the accompany video).
-
-\subsection{Input Sentences Perturbation}
-\label{sec:perturb}
-Due to the discrete nature of the natural language, automatically applying perturbation to sentence for sensitivity analysis can be particularly challenging (compared to other domain, i.e., image), as small changes in words can leading to drastic differences in the semantics of the sentences.
-To reduce the potential semantic deviation, we first devise a straightforward perturbation method by replacing \emph{nouns} and \emph{verbs} by their synonyms in the wordNet~\cite{Miller1995}. However, the limitation is apparent, as synonyms replacement does not guarantee the meaning of the sentence remain the same. And the wordNet often produces infrequent/obscure usages that may leads to less meaningful perturbed sentences. However, this method requires minimal computation and is easy to implement. 
 
 \begin{figure}[htbp]
 \centering
@@ -19,13 +13,18 @@ To reduce the potential semantic deviation, we first devise a straightforward pe
  \includegraphics[width=0.9\linewidth]{sentence}
  \vspace{-2mm}
  \caption{
-The interface for showing input sentences. The user can manually alter the words or apply automatic perturbation/paraphrasing of the inputs. In the ``perturbed'' dropdown menu, the blue words are the only not exist in the original sentence.
+The interface for showing input sentences. The user can manually edit the words or apply automatic perturbation/paraphrasing of the inputs. In the ``perturbed'' drop-down menu, the blue words are the ones not exist in the original sentence.
  }
  \vspace{-1mm}
 \label{fig:sentence}
 \end{figure}
 
-To improve the perturbation quality, we also adopted a translation based paraphrasing technique that is similar to the one discussed in \cite{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages and then translate back into English. Provided the translation produce correct result (in our case, we utilized the google cloud translation platform), we essential obtain paraphrasing of the original sentences (see Figure~\ref{fig:sentence}, where the drop-down menu shows the paraphrased/perturbed sentence).
+\subsection{Input Sentences Perturbation}
+\label{sec:perturb}
+Due to the discrete nature of the natural language, automatically applying perturbation to sentence for sensitivity analysis can be particularly challenging (compared to other domain, i.e., image), as small changes in words can leading to drastic differences in the semantics of the sentences.
+To reduce the potential semantic deviation, we first devise a straightforward perturbation method by replacing \emph{nouns} and \emph{verbs} by their synonyms in the wordNet~\cite{Miller1995}. However, the limitation is apparent, as synonyms replacement does not guarantee the meaning of the sentence remains the same. And the WordNet often produces rare/obscure usages that may lead to less meaningful sentences. However, this method requires minimal computation and is easy to implement. 
+
+To improve the perturbation quality, we also adopted a translation based paraphrasing technique that is similar to the one discussed in \cite{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages and then translate back into English. Provided the translation produce correct result (in our case, we utilized the Google cloud translation platform), we obtain paraphrasing of the original sentences (see Figure~\ref{fig:sentence}, where the drop-down menu shows the some of the paraphrased/perturbed sentences).
 
 \begin{figure}[htbp]
 \centering
@@ -42,8 +41,8 @@ the prediction is encoded as a point in the barycentric coordinate system of the
 \subsection{Prediction Visualization}
 Efficient visual encoding for prediction is crucial for communicating the model behavior. And to fully support the input perturbation feature, the visual encoding should also allow multiple predictions to be shown in the same visualization.
 %
-For the natural language inference task, as illustrated in Figure~\ref{fig:prediction}, the predicted probabilities is encoded in the triangle, where the three vertices represents the three possible prediction (namely, \emph{entail}, \emph{contradict}, and \emph{neutral}). The prediction for the original unperturbed input is illustrated by a larger yellow circle, whereas the prediction of perturbed inputs are represented by smaller grey circles.
-A density contour of the prediction is computed to emphasize the highly cluttered areas and distinguish the outliers.
+For the natural language inference task, as illustrated in Figure~\ref{fig:prediction}, the predicted probabilities are encoded in the triangle barycentric coordinate, where the three vertices represent the three possible predictions (namely, \emph{entail}, \emph{contradict}, and \emph{neutral}). The prediction for the original unperturbed input is illustrated by a larger yellow circle, whereas the prediction of perturbed inputs is represented by smaller grey circles.
+A density contour of the prediction is computed to emphasize the highly cluttered areas and detect outliers.
 
 \begin{figure*}[t]
 \centering
@@ -53,19 +52,19 @@ A density contour of the prediction is computed to emphasize the highly cluttere
  \caption{
 Attention visualization. In the graph attention view (a), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. The same values can also be directly visualized in the matrix form (b). 
 The user can edit the attention values via the pop-up interface illustrated in (c).
-We overlay the dependency tree ($a_1$) grammar structure to highlight important words and allow simplification of complex sentence based on the dependency tree.
+We overlay the dependency tree ($a_1$) grammar structure to highlight important words and allow simplification of complex sentence based on the grammar structure.
 %
-For highly asymmetric attention relationship, we utilized a zoomable hierarchical visual representation (d). User can focus on individual sentence by clicking the rectangular bars.
+For highly asymmetric attention relationship, we utilized a zoomable hierarchical visual representation (d). The user can focus on the individual sentence by clicking the rectangular bars.
 }
 \vspace{-3mm}
 \label{fig:attentionVis}
 \end{figure*}
 
 \subsection{Attention Visualization}
-As illustrated in Figure~\ref{fig:attentionVis}(a)(b), the most widely adopted technique to bipartie graph (a), as well as the heatmap attention matrix representation (b). 
+As illustrated in Figure~\ref{fig:attentionVis}(a)(b), the most widely adopted technique to visualize attention matrix are bipartie graph (a) and heatmap (b). 
 %
-In the graph attention view (Fig.~\ref{fig:attentionVis}(a)), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. The color of the rectangle text block encodes the sum of all edge values connected to it (darker shade of blues correspond to higher values).
-%%%%%%%%
+In the graph attention view (Fig.~\ref{fig:attentionVis}(a)), a bipartite graph encoding is adopted, in which the edge thickness corresponds to the attention value. %The color of the rectangle text block encodes the sum of all edge values connected to it (darker shade of blues correspond to higher values).
+%
 The graph view is suitable for highlighting the most dominant alignments. However, the edges may become cluttered if multiple attention values are high. The matrix attention view (Fig.~\ref{fig:attentionVis}(b)) resolve these issues, despite being more verbose and less efficient in highlighting the dominant alignments. 
 We also enable the linkage between highlighted actions in both views (see Fig.~\ref{fig:attentionVis}(a)(b), one the most dominant attention is highlighted in orange).
 %
@@ -76,14 +75,14 @@ To address the challenge of visualizing long sentence, we augmented the standard
 However, when the one of the text sequence become signification longer, i.e., a full paragraph as in the machine comprehension task, the even the simplified sentence can not be meaningfully represented in the graph or matrix visual encoding. To address this visualization challenge, as illustrated in Figure~\ref{fig:attentionVis}(d), we introduce the hierarchical representation. Here, a pure graphical encoding (the color bars marked by \emph{att2}) is used to capture the aggregated alignment information of the whole paragraph, and the user can focus on localized attention information by selecting the a pixel bar that presents a single sentence. We can also link this attention representation with matrix, such that whenever a sentence is selected the local attention relationship is allow shown in the matrix view (see Figure~\ref{fig:MCexample}(a)).
 
 \subsection{Implementation}
-The initial setup cost and learning curve of the tool are often the barriers for user adaptation. 
+The initial setup cost and unnecessary learning curve are often the barriers to the broad adaptation of a tool. 
 Therefore, instead of design visualization system as a monolithic standalone application, 
-we implement the proposed system as a python library with modularity and ease of accessibility in mind.
-To fit one's workflow, the different pieces of the visualization (i.e., matrix based attention encoding) can be accessed individually, 
-or combined in any configuration desired by users via a simple API.
+we implement the proposed system as a python library with modularity and ease of use in mind.
+The different pieces of the visualization (i.e., matrix-based attention encoding) can be accessed individually, 
+or combined in other componenets to fit one's workflow via a simple API.
 More importantly, the library-based design allows easy integration with the existing model implemented in python.
 %To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction, accessing attention, to link the visualization to their NLP models. 
-The the code required to create an interactive exploration environment for machine comprehension model is illustrated bellow.
+The code for creating an interactive exploration environment for a machine comprehension model is illustrated below.
 
 \begin{lstlisting}[language=Python, caption=Code for setting up the visualization system shown in Figure~\ref{fig:MCexample}(a).]
 from visPackage import MCModule
