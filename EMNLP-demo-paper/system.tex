@@ -55,7 +55,7 @@ Attention visualization. A bipartite graph encoding is adopted in the graph atte
 The user can edit the attention values via the pop-up interface illustrated in (c).
 We overlay the dependency tree ($a_1$) grammar structure to highlight important words and allow simplification of complex sentences (shown in the video).
 %
-For highly asymmetric attention relationship, we utilized a zoomable hierarchical visual representation (d). The user can focus on the individual sentence by selecting in the summary visualization.
+For highly asymmetric attention, we utilized a zoomable hierarchical visual representation (d). The user can focus on the individual sentence by selecting in the summary visualization.
 }
 \vspace{-3mm}
 \label{fig:attentionVis}
@@ -74,7 +74,7 @@ The text can be dynamically simplified based on the dependency tree (see Figure~
 %
 To facilitate the perturbation of attention (see Figure~\ref{fig:modelPipeline}), as illustrated in Figure~\ref{fig:attentionVis}(c), we implement an interface for directly manipulating the attention value.
 
-However, when the text sequence becomes signification longer, i.e., a full paragraph in the machine comprehension task,  even the simplified sentence cannot be meaningfully represented in the graph or matrix visual encoding. To address this visualization challenge, as illustrated in Figure~\ref{fig:attentionVis}(d), we introduce a hierarchical representation. Here, a pure graphical encoding (the color bars marked by \emph{att2}) is used to capture the aggregated attention information for the whole paragraph. The user can focus on localized attention information by selecting a pixel bar that presents a single sentence (the colored blocks in the bar correspond to individual works). We can also link this attention representation with matrix form, such that whenever a sentence is selected the local attention relationship is shown in the matrix view (see Figure~\ref{fig:MCexample}(a)).
+However, when the text sequence becomes signification longer, i.e., a full paragraph in the machine comprehension task,  even the simplified sentence cannot be meaningfully represented in the graph or matrix visual encoding. To address this visualization challenge, as illustrated in Figure~\ref{fig:attentionVis}(d), we introduce a hierarchical representation. Here, a pure graphical encoding (the color bars marked by \emph{att2}) is used to capture the aggregated attention information for the whole paragraph. The user can focus on localized attention information by selecting a pixel bar that presents a single sentence (the colored blocks in the bar correspond to individual works). We also link this attention representation with matrix form, such that whenever a sentence is selected the local attention is shown in the matrix view (see Figure~\ref{fig:MCexample}(a)).
 
 \subsection{Implementation}
 The initial setup cost and unnecessary learning curve are often the barriers to the broad adaptation of a tool. 
