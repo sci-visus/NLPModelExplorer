@@ -12,7 +12,7 @@
 \centering
 \vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{NLIexample}
-  \vspace{-6mm}
+  \vspace{-7mm}
  \caption{
 An illustration of the attention editing process.
 The dependency structure is shown in (a), where the two ``green'' are decorating different nouns.
@@ -53,7 +53,7 @@ As expected, the prediction label is corrected (\emph{neutral}).
 
 \subsection{Machine Comprehension}
 \label{sec:MCexample}
-In machine comprehension task, two sequences of texts are given: context/paragraph and question.
+In machine comprehension task, two sequences of texts are given: context and question.
 The goal is to select a span of text from the context that answers the question. 
 %We provide a simple model formulation and refer the reader to the paper for details.
 %%\begin{align}
@@ -70,13 +70,13 @@ The goal is to select a span of text from the context that answers the question.
 %$s$ and $e$.
 The attention information is encoded as a bi-directional alignment (i.e., from context to question and vice versa). 
 %The key difference is how the question to context alignment is computed (see \cite{Seo2016} for more details).
-Here, we refer the context to question attention as \emph{att1}, and question to context attention as \emph{att2} (the \emph{att2} is a vector instead of a matrix, see \cite{Seo2016} for more details. In this demo, we applied a min max normalization for \emph{att2} after the softmax computation to better distinguish attention values).
+Here, we refer the context to question attention as \emph{att1}, and question to context attention as \emph{att2} (the \emph{att2} is a vector instead of a matrix, see \cite{Seo2016} for more details. In this demo, we applied a min max normalization for \emph{att2} after the softmax layer to better distinguish different attention values).
 
 \begin{figure*}[t]
 \centering
 \vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{MC_interface}
-  \vspace{-6mm}
+  \vspace{-7mm}
  \caption{
 In the machine comprehension visualization interface (a), the $p1$, $p2$ colored bar (in $a3$) illustrate the predicted start and end index of the answer in the context (the deeper the red the higher the probability). The most likely answer is shown in ($a1$). The global and local attention are visualized by ($a2$, $a3$).
 %
@@ -85,15 +85,18 @@ We can evaluate the robustness of the prediction by perturbing the question sent
 \label{fig:MCexample}
 \end{figure*}
 
-As illustrated in Figure~\ref{fig:MCexample}, we show \emph{att2} as the colored bars with \emph{yellow-green-blue} colormap. Each rectangular bar corresponds to one sentence. The user can focus on individual sentences by click on the bar (see Figure~\ref{fig:MCexample}).
+As illustrated in Figure~\ref{fig:MCexample}, we represent \emph{att2} as colored bars with \emph{yellow-green-blue} colormap. Each rectangular bar corresponds to one sentence. The user can focus on individual sentences by click on the bar (see Figure~\ref{fig:MCexample}).
 %The proposed visualization help reveal the potential alignment issues in the machine comprehension model.
-The $p1$, $p2$ colored bars (\emph{white-red} colormap) illustrate the predicted start and end index for the answer (deeper the red the higher the probability). The span of text defined by the start and end index with the highest probability is the answer.
+The $p1$, $p2$ colored bars (\emph{white-red} colormap) illustrate the predicted beginning and ending index for the answer (deeper the red the higher the probability). %The span of text defined by the beginning and end index with the highest probability is the answer.
 %
-As we can see in Figure~\ref{fig:MCexample} ($a3$), there are two spans of text that correspond to higher probabilities. We can examine the corresponding sentence in (a3) and (b2). Both sentences exhibit excellent alignment with the question. The spans with high probability are ``Two'' and ``No'' (highlight in orange), which both align well with the word ``many''.
-%Another interesting observation is that the number ``9'' (in ``Falcon 9') is also aligned with ``many'', yet in the prediction both ``Two'' and ``No'' have significantly higher probability.
-We can explore the robustness of the model by examining how the prediction varies when the question is perturbed.
+As we can see in Figure~\ref{fig:MCexample} ($a3$), there are two spans of text that correspond to higher probabilities. 
+In (a3), we examine the sentence that contains the answer, which exhibits excellent alignment with the question (e.g., ``Two'' is aligned with ``many''). 
+%The spans of text with high probability are ``Two'' and ``No'' (highlight in orange), both align well with the word ``many''.
+An interesting observation is that the number ``9'' (in ``Falcon 9') is also aligned with ``many'', which may potentially lead to problems.
+
+The user can explore the robustness of the model by examining how the prediction varies when the question is perturbed.
 %
-As illustrated in ($b1$, and $b2$), the perturbed sentence does not include the ``word'' partial, which lead to a different yet still correct answer ``No'', which also exhibits high probability for the original question.
+As illustrated in ($b1$, and $b2$), the perturbation removes the word ``partial'' in the original sentence, which leads the model to produce a different yet correct answer (``No''). Refer back to ($a1$), we can see the word ``No'' exhibits the second highest probability for the original question.
 %
-The user can manually edit the text directly. As shown in ($b3$), the model still produces the correct answer when changing the question from ``how many'' to ``which''.
+The user can also manually edit the text. As shown in ($b3$). The model still produces the correct answer when changing the question from ``how many'' to ``which''.
 %One possible explanation is the word ``Two'' has much higher \emph{att2} attention value compare to ``9'', which may contribute to the current outcome.
