@@ -15,8 +15,8 @@
   \vspace{-7mm}
  \caption{
 An illustration of the attention editing process.
-The dependency structure is shown in (a), where the two ``green'' are decorating different nouns.
-By removing the ``wrong'' alignment in (b), the originally prediction \emph{entailment} is corrected to \emph{netural} in (c).
+The dependency structure is shown in (a), where the two ``greens'' are decorating different nouns.
+By removing the ``wrong'' alignment in (b), the original prediction \emph{entailment} is corrected to \emph{netural} in (c).
 }
 \vspace{-2mm}
 \label{fig:NLIexample}
@@ -45,18 +45,18 @@ Here we give an example of how a wrong prediction can be correct by editing the 
 %and $\overrightarrow{A}$ are attentions, and $y$ is the predicted probabilities for candidate classes.
 %Our system visualized the bidirectional attentions and their interaction with output distribution over labels.
 
-As illustrated in Fig.~\ref{fig:NLIexample}(a), the input sentence pairs (P:``A woman in a green jacket is drinking tea.'' H:``A woman is drinking green tea.'') is predicted to be \emph{entailment}, which is incorrect.
-By examining the attention, we can see the word \emph{green} in ``\emph{green} jacket" is aligned to the \emph{green} in ``\emph{green} tea". However, these two \emph{green}`s decorate different nouns, which potentially lead to the wrong prediction. The grammar structure is visually presented by dependency tree.
+As illustrated in Fig.~\ref{fig:NLIexample}(a), the input sentence pair (P:``A woman in a green jacket is drinking tea.'' H:``A woman is drinking green tea.'') is predicted to be \emph{entailment}, which is incorrect.
+By examining the attention, we can see the word \emph{green} in ``\emph{green} jacket" is aligned to the \emph{green} in ``\emph{green} tea". However, these two \emph{greens} decorate different nouns, which potentially leads to the wrong prediction. The grammar structure is visually presented by dependency tree.
 %i.e., \emph{green} in \textbf{P} is attached to ``jacket''.
 However, the model does not has access to the grammar information and mistakenly assumes the two \emph{greens} are describing the same thing.
 % (thus predict \emph{entailment}). 
 %
-To correct the mistake, we can edit the attention value and remove the align between these two "green" (see (c)(b)).
+To correct the mistake, we can edit the attention value and remove the align between these two "greens" (see (c)(b)).
 As expected, the prediction label is corrected (\emph{neutral}).
 
 \subsection{Machine Comprehension}
 \label{sec:MCexample}
-In machine comprehension task, the goal is to select a span of text as the answer
+In the machine comprehension task, the goal is to select a span of text as the answer
 to a question sentence.
 %two sequences of texts are given: context and question.
 %The goal is to select a span of text from the context that answers the question. 
@@ -75,7 +75,7 @@ to a question sentence.
 %$s$ and $e$.
 The attention information is encoded as a bi-directional alignment (i.e., from context to question and vice versa). 
 %The key difference is how the question to context alignment is computed (see \cite{Seo2016} for more details).
-Here, we refer the context to question attention as \emph{att1}, and question to context attention as \emph{att2} (which is a vector instead of a matrix according to \citet{Seo2016}). In this demo, we apply a min max normalization for \emph{att2} after the softmax layer to better distinguish different attention values).
+Here, we refer the context to question attention as \emph{att1}; and the question to context attention as \emph{att2} (which is a vector instead of a matrix according to \citet{Seo2016}). In this demo, we apply a min max normalization for \emph{att2} after the softmax layer to better distinguish different attention values).
 
 \begin{figure*}[t]
 \centering
@@ -83,14 +83,14 @@ Here, we refer the context to question attention as \emph{att1}, and question to
  \includegraphics[width=1.0\linewidth]{MC_interface}
   \vspace{-7mm}
  \caption{
-In the machine comprehension visualization interface (a), the $p1$, $p2$ colored bar (in $a3$) illustrate the predicted start and end index of the answer in the context (the deeper the red the higher the probability). The most likely answer is shown in ($a1$). The global and local attention are visualized by ($a2$, $a3$).
+In the machine comprehension visualization interface (a), the $p1$, $p2$ colored bar (in $a3$) illustrates the predicted start and end index of the answer in the context (the deeper the red, the higher the probability). The most likely answer is shown in ($a1$). The global and local attention are visualized by ($a2$, $a3$).
 %
-We can evaluate the robustness of the prediction by perturbing the question sentence ($b1$, $b3$). As illustrated in ($b1$, $b2$) by removing the word ``partial'' the model still find the correct answer (albeit different, as the sentence perturbation changes the exact meaning of the question). 
+We can evaluate the robustness of the prediction by perturbing the question sentence ($b1$, $b3$). As illustrated in ($b1$, $b2$) by removing the word ``partial'', the model still finds the correct answer (albeit different, as the sentence perturbation changes the exact meaning of the question). 
 }
 \label{fig:MCexample}
 \end{figure*}
 
-As illustrated in Figure~\ref{fig:MCexample}, we represent \emph{att2} as colored bars with \emph{yellow-green-blue} colormap. Each rectangular bar corresponds to one sentence. The user can focus on individual sentences by click on the bar (see Figure~\ref{fig:MCexample}).
+As illustrated in Figure~\ref{fig:MCexample}, we represent \emph{att2} as colored bars with \emph{yellow-green-blue} colormap. Each rectangular bar corresponds to one sentence. The user can focus on individual sentences by clicking on the rectangular bar (see Figure~\ref{fig:MCexample}).
 %The proposed visualization help reveal the potential alignment issues in the machine comprehension model.
 The $p1$, $p2$ colored bars (\emph{white-red} colormap) illustrate the predicted probabilities of the start and the end index for the answer (the deeper the higher). %The span of text defined by the beginning and end index with the highest probability is the answer.
 %
@@ -105,4 +105,4 @@ The user can explore the robustness of the model by examining how the prediction
 As illustrated in ($b1$, and $b2$), the perturbation removes the word ``partial'' in the original sentence, which leads the model to produce a different yet correct answer (``No''). Referring back to ($a1$), we can see the word ``No'' exhibits the second highest probability for the original question.
 %
 The user can also manually edit the text. As shown in ($b3$). The model still produces the correct answer when changing the question from ``how many'' to ``which''.
-%One possible explanation is the word ``Two'' has much higher \emph{att2} attention value compare to ``9'', which may contribute to the current outcome.
+%One possible explanation is that the word ``Two'' has a much higher \emph{att2} attention value compared to ``9'', which may contribute to the current outcome.
