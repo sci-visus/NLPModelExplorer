@@ -22,9 +22,10 @@ The interface for showing input sentences. The user can manually edit the words 
 \subsection{Input Sentences Perturbation}
 \label{sec:perturb}
 Due to the discrete nature of the natural language, automatically applying perturbation to sentence for sensitivity analysis can be particularly challenging (compared to other domain, i.e., image), as small changes in words can leading to drastic differences in the semantics of the sentences.
-To reduce the potential semantic deviation, we first devise a straightforward perturbation method by replacing \emph{nouns} and \emph{verbs} by their synonyms in the wordNet~\cite{Miller1995}. However, the limitation is apparent, as synonyms replacement does not guarantee the meaning of the sentence remains the same. And the WordNet often produces rare words or obscure usages that may lead to less meaningful sentences. However, this method requires minimal computation and is easy to implement. 
+To reduce the potential semantic deviation, we first devise a straightforward perturbation method by replacing \emph{nouns} and \emph{verbs} by their synonyms in the WordNet~\cite{Miller1995}. However, synonyms replacement does not guarantee the meaning of the sentence remains the same. And the WordNet often produces rare words or obscure usages that may lead to less meaningful sentences.
+%However, this method requires minimal computation and is easy to implement. 
 
-To improve the perturbation quality, we also adopted a translation based paraphrasing technique that is similar to the one discussed in \cite{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages and then translate back into English. Provided the translation produce correct result (in our case, we utilize the Google cloud translation platform), we obtain paraphrasing of the original sentences (see Figure~\ref{fig:sentence}, where the drop-down menu shows some of the paraphrased/perturbed sentences).
+To improve the perturbation quality, we adopted a translation based paraphrasing technique similar to \citet{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages and then translate back into English. Provided the translation produces good result (in our case, we utilize the Google cloud translation platform), we can obtain paraphrases of the original sentence (see Figure~\ref{fig:sentence}, where the drop-down menu shows some of the perturbed sentences).
 
 \begin{figure}[htbp]
 \centering
