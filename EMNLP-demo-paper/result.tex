@@ -28,7 +28,7 @@ for the NLI task and the BIDAF model~\cite{Seo2016} for the MC task.
 
 \subsection{Natural Language Inference}
 \label{sec:NLIexample}
-The NLI task predicts the relationship between a premise sentence (\textbf{P}) and a hypothesis sentence (\textbf{H}).
+The NLI task predicts the relationship between a premise sentence (P) and a hypothesis sentence (H).
 The attention matrix captures the alignment of words between these two sentences.
 Here we give an example of how a wrong prediction can be correct by editing the attention value.  
 
@@ -45,7 +45,7 @@ Here we give an example of how a wrong prediction can be correct by editing the 
 %and $\overrightarrow{A}$ are attentions, and $y$ is the predicted probabilities for candidate classes.
 %Our system visualized the bidirectional attentions and their interaction with output distribution over labels.
 
-As illustrated in Fig.~\ref{fig:NLIexample}(a), the input sentence pairs (\textbf{P}:``A woman in a green jacket is drinking tea.'' \textbf{H}:``A woman is drinking green tea.'') is predicted to be \emph{entailment}, which is incorrect.
+As illustrated in Fig.~\ref{fig:NLIexample}(a), the input sentence pairs (P:``A woman in a green jacket is drinking tea.'' H:``A woman is drinking green tea.'') is predicted to be \emph{entailment}, which is incorrect.
 By examining the attention, we can see the word \emph{green} in ``\emph{green} jacket" is aligned to the \emph{green} in ``\emph{green} tea". However, these two \emph{green}`s decorate different nouns, which potentially lead to the wrong prediction. The grammar structure is visually presented by dependency tree.
 %i.e., \emph{green} in \textbf{P} is attached to ``jacket''.
 However, the model does not has access to the grammar information and mistakenly assumes the two \emph{greens} are describing the same thing.
