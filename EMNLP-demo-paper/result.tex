@@ -15,8 +15,8 @@
   \vspace{-7mm}
  \caption{
 An illustration of the attention editing process.
-The dependency structure is shown in (a), where the two ``greens'' are decorating different nouns.
-By removing the ``wrong'' alignment in (b), the original prediction \emph{entailment} is corrected to \emph{netural} in (c).
+The dependency structure is shown in (a), where the two ``greens'' decorate different nouns.
+By removing the ``wrong'' alignment in (b), the original prediction \emph{entailment} is corrected to \emph{neutral} in (c).
 }
 \vspace{-2mm}
 \label{fig:NLIexample}
@@ -83,28 +83,28 @@ Here, we refer the context to question attention as \emph{att1}; and the questio
  \includegraphics[width=1.0\linewidth]{MC_interface}
   \vspace{-7mm}
  \caption{
-In the machine comprehension visualization interface (a), the $p1$, $p2$ colored bar (in $a3$) illustrates the predicted start and end index of the answer in the context (the deeper the red, the higher the probability). The most likely answer is shown in ($a1$). The global and local attention are visualized by ($a2$, $a3$).
+In the machine comprehension visualization interface (a), the $p1$, $p2$ colored bar (in $a3$) illustrates the predicted start and end index of the answer in the context (the deeper the red, the higher the probability). The most likely answer is shown in ($a1$). The global attention and local attention are visualized by ($a2$, $a3$).
 %
-We can evaluate the robustness of the prediction by perturbing the question sentence ($b1$, $b3$). As illustrated in ($b1$, $b2$) by removing the word ``partial'', the model still finds the correct answer (albeit different, as the sentence perturbation changes the exact meaning of the question). 
+We can evaluate the robustness of the prediction by perturbing the question sentence ($b1$, $b3$). As illustrated in ($b1$, $b2$), by removing the word ``partial'', the model still finds the correct answer (albeit different, as the sentence perturbation changes the exact meaning of the question). 
 }
 \label{fig:MCexample}
 \end{figure*}
 
-As illustrated in Figure~\ref{fig:MCexample}, we represent \emph{att2} as colored bars with \emph{yellow-green-blue} colormap. Each rectangular bar corresponds to one sentence. The user can focus on individual sentences by clicking on the rectangular bar (see Figure~\ref{fig:MCexample}).
+As illustrated in Figure~\ref{fig:MCexample}, we represent \emph{att2} as colored bars with a \emph{yellow-green-blue} colormap. Each rectangular bar corresponds to one sentence. The user can focus on individual sentences by clicking on the rectangular bar (see Figure~\ref{fig:MCexample}).
 %The proposed visualization help reveal the potential alignment issues in the machine comprehension model.
 The $p1$, $p2$ colored bars (\emph{white-red} colormap) illustrate the predicted probabilities of the start and the end index for the answer (the deeper the higher). %The span of text defined by the beginning and end index with the highest probability is the answer.
 %
 %In Figure~\ref{fig:MCexample} ($a3$), there are two spans of text that correspond to higher probabilities. 
-In Figure~\ref{fig:MCexample}(a3), the sentence containing the answer exhibits good alignment with the question (e.g. ``Two'' with ``many'').
+In Figure~\ref{fig:MCexample}(a3), the sentence containing the answer exhibits good alignment with the question (e.g., ``Two'' with ``many'').
 %In (a3), we examine the sentence that contains the answer, which exhibits excellent alignment with the question (e.g., ``Two'' is aligned with ``many''). 
 %The spans of text with high probability are ``Two'' and ``No'' (highlight in orange), both align well with the word ``many''.
-Interestingly, the number ``9'' (in ``Falcon 9') is also aligned with ``many'', which may potentially lead to problems.
+Interestingly, the number ``9'' (in ``Falcon 9') is also aligned with ``many'', which may lead to problems.
 
 The user can explore the robustness of the model by examining how the prediction varies when the question is perturbed.
 %
-As illustrated in ($b1$, and $b2$), the perturbation removes the word ``partial'' in the original sentence, which leads the model to produce a different yet correct answer (``No''). Referring back to ($a1$), we can see the word ``No'' exhibits the second highest probability for the original question.
+As illustrated in ($b1$, and $b2$), the perturbation removes the word ``partial'' in the original sentence, which leads the model to produce a different yet correct answer (``No''). Referring to ($a1$), we can see the word ``No'' exhibits the second highest probability for the original question.
 %
-The user can also manually edit the text. As shown in ($b3$). The model still produces the correct answer when changing the question from ``how many'' to ``which''.
+The user can also manually edit the text. As shown in ($b3$), the model still produces the correct answer when changing the question from ``how many'' to ``which''.
 %One possible explanation is that the word ``Two'' has a much higher \emph{att2} attention value compared to ``9'', which may contribute to the current outcome.
 
 %%% Local Variables:
