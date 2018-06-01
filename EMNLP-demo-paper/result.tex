@@ -10,9 +10,8 @@
 %\end{figure*}
 \begin{figure*}[t]
 \centering
-\vspace{-2mm}
  \includegraphics[width=1.0\linewidth]{NLIexample}
-  \vspace{-7mm}
+  \vspace{-6mm}
  \caption{
 An illustration of the attention editing process.
 The dependency structure is shown in (a), where the two ``greens'' decorate different nouns.
@@ -56,12 +55,13 @@ As expected, the prediction label is corrected (\emph{neutral}).
 \begin{figure*}[t]
 \centering
  \includegraphics[width=1.0\linewidth]{MC_interface}
-  \vspace{-7mm}
+  \vspace{-6mm}
  \caption{
 In the machine comprehension visualization interface (a), the $p1$, $p2$ colored bar (in $a3$) illustrates the predicted start and end index of the answer in the context (the deeper the red, the higher the probability). The most likely answer is shown in ($a1$). The global attention and local attention are visualized by ($a2$, $a3$).
 %
 We can evaluate the robustness of the prediction by perturbing the question sentence ($b1$, $b3$). As illustrated in ($b1$, $b2$), by removing the word ``partial'', the model still finds the correct answer (albeit different, as the sentence perturbation changes the exact meaning of the question). 
 }
+\vspace{-2mm}
 \label{fig:MCexample}
 \end{figure*}
 
