@@ -28,9 +28,9 @@ for the NLI task and the BIDAF model~\cite{Seo2016} for the MC task.
 
 \subsection{Natural Language Inference}
 \label{sec:NLIexample}
-The NLI task predicts the relationship between a premise sentence (P) and a hypothesis sentence (H).
+The NLI task predicts the entailment relationship between a premise sentence (P) and a hypothesis sentence (H).
 The attention matrix captures the alignment of words between these two sentences.
-Here we give an example of how a wrong prediction can be correct by editing the attention value.  
+Here we give an example of how a wrong prediction can be corrected by editing attention values.  
 
 %The model produces two attention matrices, representing alignment from premise to hypothesis, and from hypothesis to premise.
 %as either \emph{entailment}, \emph{contradiction}, or \emph{neutral}.
@@ -46,9 +46,9 @@ Here we give an example of how a wrong prediction can be correct by editing the 
 %Our system visualized the bidirectional attentions and their interaction with output distribution over labels.
 
 As illustrated in Fig.~\ref{fig:NLIexample}(a), the input sentence pair (P:``A woman in a green jacket is drinking tea.'' H:``A woman is drinking green tea.'') is predicted to be \emph{entailment}, which is incorrect.
-By examining the attention, we can see the word \emph{green} in ``\emph{green} jacket" is aligned to the \emph{green} in ``\emph{green} tea". However, these two \emph{greens} decorate different nouns, which potentially leads to the wrong prediction. The grammar structure is visually presented by dependency tree.
+By examining the attention, we can see the word \emph{green} in ``\emph{green} jacket" is aligned to the \emph{green} in ``\emph{green} tea". However, these two \emph{greens} modify different nouns, which potentially leads to the wrong prediction. The grammatical structure is visually shown in the form of the dependency tree.
 %i.e., \emph{green} in \textbf{P} is attached to ``jacket''.
-However, the model does not has access to the grammar information and mistakenly assumes the two \emph{greens} are describing the same thing.
+However, the model does not have access to the syntactic information and mistakenly assumes the two \emph{greens} modify the same thing.
 % (thus predict \emph{entailment}). 
 %
 To correct the mistake, we can edit the attention value and remove the align between these two "greens" (see (c)(b)).
@@ -75,7 +75,7 @@ to a question sentence.
 %$s$ and $e$.
 The attention information is encoded as a bi-directional alignment (i.e., from context to question and vice versa). 
 %The key difference is how the question to context alignment is computed (see \cite{Seo2016} for more details).
-Here, we refer the context to question attention as \emph{att1}; and the question to context attention as \emph{att2} (which is a vector instead of a matrix according to \citet{Seo2016}). In this demo, we apply a min max normalization for \emph{att2} after the softmax layer to better distinguish different attention values).
+Here, we refer the context to question attention as \emph{att1}; and the question to context attention as \emph{att2} (which is a vector instead of a matrix according to \citet{Seo2016}). In this demo, we apply a min max normalization for \emph{att2} after the softmax layer to better distinguish different attention values.
 
 \begin{figure*}[t]
 \centering
@@ -106,3 +106,8 @@ As illustrated in ($b1$, and $b2$), the perturbation removes the word ``partial'
 %
 The user can also manually edit the text. As shown in ($b3$). The model still produces the correct answer when changing the question from ``how many'' to ``which''.
 %One possible explanation is that the word ``Two'' has a much higher \emph{att2} attention value compared to ``9'', which may contribute to the current outcome.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "NLPVis-demo-paper"
+%%% End:
