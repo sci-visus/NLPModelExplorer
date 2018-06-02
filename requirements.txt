@@ -1,3 +1,8 @@
 nltk
 requests
 ujson
+google-cloud
+python-socketio 
+eventlet
+pattern
+nltk
