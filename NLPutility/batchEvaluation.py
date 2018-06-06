@@ -10,7 +10,7 @@ from modelInterface import *
 from sentenceGenerator import *
 import pickle
 import itertools
-# from __future__ import print_function
+
 labels = ["entailment", "neutral", "contradiction"]
 
 class batchEvaluation:

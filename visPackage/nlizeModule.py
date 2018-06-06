@@ -67,6 +67,7 @@ class nlizeModule(visModule):
     def initSetup(self):
         dataManager.setData("sentenceList", exampleData)
         dataManager.setData("pipeline", pipelineState)
+        # print {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']}
         dataManager.setData("currentPair", {"sentences":[exampleData[0]['src'], exampleData[0]['targ']],"label":exampleData[0]['pred']})
 
     def loadSummaryStatistic(self, filename):

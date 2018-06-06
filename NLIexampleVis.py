@@ -18,25 +18,25 @@ gen = sentenceGenerator()
 dep = dependencyTree()
 
 #visualization components
-# visLayout = {
-#     "column":[{"row":["Summary", "Sentence", "Pipeline"]},
-#             {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
-#     }
-
 visLayout = {
-    "column":[{"row":["Summary", "Sentence", "Prediction"]},
-            {"row":["AttentionGraph", "AttentionMatrix"]}]
+    "column":[{"row":["Summary", "Sentence", "Pipeline"]},
+            {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
     }
+
+# visLayout = {
+#     "column":[{"row":["Summary", "Sentence", "Prediction"]},
+#             {"row":["AttentionGraph", "AttentionMatrix"]}]
+#     }
 #setup interface
 modelVis = nlizeModule(visLayout)
 
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
-# modelVis.setPredictionUpdateHook(model.updatePrediction)
+modelVis.setPredictionUpdateHook(model.updatePrediction)
 modelVis.setAttentionUpdateHook(model.updateAttention)
 modelVis.setReloadModelCallback(model.reloadModel)
 
-# modelVis.setPipelineStatisticHook(model.pipelineStatistic)
+modelVis.setPipelineStatisticHook(model.pipelineStatistic)
 
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
 modelVis.setSentenceParserHook(dep.getDependencyTree)

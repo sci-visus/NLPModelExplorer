@@ -22,6 +22,7 @@ class paragraphComponenet extends sentenceComponent {
                 break;
         }
     }
+    
     onUpdateCurrentPair() {
         var currentPair = [d3.select(this.div + "src").text(),
             d3.select(this.div + "targ").property("value")

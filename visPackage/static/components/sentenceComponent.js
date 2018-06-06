@@ -36,6 +36,7 @@ class sentenceComponent extends baseComponent {
         // if (this.data["sentenceList"] !== undefined) {
         //     this.onReceiveSentenceList();
         // }
+
         //update currentPair display
         if (this.data["currentPair"]["sentences"] !== undefined) {
             this.onReceiveCurrentPair();
@@ -44,13 +45,14 @@ class sentenceComponent extends baseComponent {
 
     parseDataUpdate(msg) {
         super.parseDataUpdate(msg);
+        console.log(msg);
 
         switch (msg['name']) {
             case "sentenceList":
                 this.onReceiveSentenceList();
                 break;
             case "currentPair":
-                // console.log(msg, this.data["currentPair"]["sentences"]);
+                console.log(msg, this.data["currentPair"]["sentences"]);
                 let pair = msg["data"]["data"]["sentences"];
                 if (this.oldPair) {
                     if (this.oldPair[0].split(" ").length !== pair[0].split(
@@ -115,6 +117,8 @@ class sentenceComponent extends baseComponent {
         //     if (this.data["allTargetSens"])
         //         this.orig_source = this.data["allTargetSens"][0];
         // }
+        this.source = currentPair[0].substring(4);
+        this.target = currentPair[1].substring(4);
 
         d3.select(this.div + "src").property("value", this.source);
         d3.select(this.div + "targ").property("value", this.target);
@@ -316,7 +320,6 @@ class sentenceComponent extends baseComponent {
         }
 
         // console.log(wordList);
-
         return wordList;
     }
 }
