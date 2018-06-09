@@ -1,7 +1,7 @@
 Summary Review
 
 The Summary Review
-Reviewers were split on whether or not to accept the paper. R2 and R4 rated the paper very highly (5 and 4.5), while R1 and R3 gave lower scores of neutral or weak reject (3 and 2.5). As the scores average to 3.75, and because the primary and secondary reviewers are in agreement, we are advocating for an "Accept". However, the authors should pay careful attention to the comments by reviewers, and use the time remaining before the next version is due to revise the paper for clarity, to emphasize the main contributions of the paper, to provide rationale for the design choices, to provide more detailed information about the domain-expert collaborators, and to better justify the results of the task analysis. Some reviewers advocated for reducing the number of usage scenarios and providing a more in-depth examination of a single scenario, or a scenario composed of a series of sub-investigations. On the other hand, other reviewers found the breadth of potential analyses to be a positive component of the paper. 
+Reviewers were split on whether or not to accept the paper. R2 and R4 rated the paper very highly (5 and 4.5), while R1 and R3 gave lower scores of neutral or weak reject (3 and 2.5). As the scores average to 3.75, and because the primary and secondary reviewers are in agreement, we are advocating for an "Accept". However, the authors should pay careful attention to the comments by reviewers, and use the time remaining before the next version is due to revise the paper for clarity, to emphasize the main contributions of the paper, to provide rationale for the design choices, to provide more detailed information about the domain-expert collaborators, and to better justify the results of the task analysis. Some reviewers advocated for reducing the number of usage scenarios and providing a more in-depth examination of a single scenario, or a scenario composed of a series of sub-investigations. On the other hand, other reviewers found the breadth of potential analyses to be a positive component of the paper.
 
 R1:
 + interesting topic
@@ -22,70 +22,65 @@ R2:
 + system supports debugging of inference models
 - scalability of system is not discussed
 
-R3: 
+R3:
 - article is dense and difficult to read
 - rationale for design choices are not clear
 - core contributions are not highlighted, too much emphasis on background material (explanation of NLI), not enough on the visualization system itself
 - claims based on user evaluation aren?t supported
 
 Reviewer 1
-Paper type
-Application / Design Study
-Expertise
-Knowledgeable
-Overall Rating
-<b>3 - Possible Accept</b><br/> The paper is not acceptable in its current state, but might be made acceptable with significant revisions within the conference review cycle.<br/>If the specified revisions are addressed fully and effectively I may be able to return a score of '4 - Accept'.
-Supplemental Materials
+
 Acceptable
 Justification
 This paper presents an interactive visualization system for analyzing natural language inference models with attention mechanisms. The perturbation-driven paradigm proposed by the authors are well implemented with various visualization components. However, there is still room to improve the presentation of the task analysis and the system design. The contribution of the visualization tool is limited to NLI models and it?s unclear how it could be extended to support the analysis of other tasks/models.
 The Review
-This paper presents an interactive visualization system, NLIZE, for analyzing natural language inference models. Based on a perturbation-driven exploration scheme and a regularized optimization scheme, the system allows users to interrogate how the prediction or the model would change if the input, attention or the predicted label changed. The system implemented visualization as a list of flexible visualization components that allow easy integration. The usefulness of the system is demonstrated through five usage scenarios and the system is evaluated through the feedback from both VIS and NLP researchers. 
 
-Understanding and analyzing the inner mechanisms of deep neural nets for NLP tasks is an interesting and unexplored topic. A flexible visualization tool might indeed help researchers develop more powerful models. The main contribution of this paper is the novel perturbation-driven scheme that allows domain experts flexibly explore the stability and the internals of an NLI model. The proposed analytic scheme treats a trained model as dynamic and allows modifications of the model on the fly. 
 
-The proposed idea is interesting, and the flexible design of the tool may also increase the adoption of the tool. The usage scenarios also look interesting, especially the Scenario 3. Does the result to some extent suggest that the attention mechanism is not a very efficient component in this task? I expect the authors dig it further.
+Q1. The usage scenarios also look interesting, especially the Scenario 3. Does the result to some extent suggest that the attention mechanism is not a very efficient component in this task? I expect the authors dig it further.
 
-However, the current shape of this paper may require a major revision before it is in an acceptable shape.
+A:
 
-My major concern is the presentation of the paper.
+Q2. In Section 2, the neural net in NLP and attention mechanisms are introduced. But the descriptions are unsatisfactory. There is no formal definition or description of the model and the attention mechanism. It's still unclear how the attention mechanism is applied in the model. I would suggest the authors include a concise and formal introduction in the background part and include some formula.
 
-1. In Section 2, the neural net in NLP and attention mechanisms are introduced. But the descriptions are unsatisfactory. There is no formal definition or description of the model and the attention mechanism. It?s still unclear how the attention mechanism is applied in the model. I would suggest the authors include a concise and formal introduction in the background part and include some formula.
+A:
 
-2. In Section 4, the paper indicates that the system is developed under a long-term collaboration with NLP experts, but there is no description describing the details of the collaboration (the number of experts, the length and the form of the collaboration, the frequency of the meetings). It?s not until Section 7 did I learn that there are 2 NLP experts in collaboration. The task analysis can also be improved by including more detailed justification of the three tasks.
+Q, In Section 4, the paper indicates that the system is developed under a long-term collaboration with NLP experts, but there is no description describing the details of the collaboration (the number of experts, the length and the form of the collaboration, the frequency of the meetings). It?s not until Section 7 did I learn that there are 2 NLP experts in collaboration. The task analysis can also be improved by including more detailed justification of the three tasks.
 
-3. The presentation of the system design in Section 5 could be improved. 
-- In Section 5.2, Attention View include both a bipartite graph and a matrix view, which visualize the same information. From the description of the paper, the graph view is only good for highlighting the most dominant alignments. I suspect that matrix view can also reveal the most dominant alignments by identifying the most salient color. Please justify the design decision. 
-- It?s unclear how the simplification of attention representation is done from Section 5.2, please include more details.
-- In Section 5.3, how do you compute the density contour? Why is a contour needed in the analysis?
-- It?s better if the authors present the relation between Section 5.3 and 5.4 in a clearer way. It?s confusing to read how one can perturb a prediction in Section 5.3 before he/she read the algorithm in Section 5.4. I suggest put the algorithm along with the perturbation-driven paradigm at the beginning of Section 5
+Q The presentation of the system design in Section 5 could be improved.
+- In Section 5.2, Attention View include both a bipartite graph and a matrix view, which visualize the same information. From the description of the paper, the graph view is only good for highlighting the most dominant alignments. I suspect that matrix view can also reveal the most dominant alignments by identifying the most salient color. Please justify the design decision.
 
-Except for the presentation issue, the contribution of this paper is somewhat limited to only NLI models with attention mechanisms. It?s not sure how the visualization can be easily extended for other NLP tasks. For example, I am not sure how the proposed visualization can easily adapt to machine translation, considering that there are no neutral/contradiction/entailment labels.
+Q, It's unclear how the simplification of attention representation is done from Section 5.2, please include more details.
 
-In addition, the perturbation-driven scheme is somewhat related to the gradient-based analysis (both are the local analysis of the model on a specific prediction). It is better if the authors discuss the two and differentiate them.
+Q, In Section 5.3, how do you compute the density contour? Why is a contour needed in the analysis?
 
-The evaluation is acceptable but a bit weak. There is no description of what questions have the authors asked during the evaluation sessions. It would be better to have formal interviews and ask the participants to perform specific tasks and observe how they performed.
+Q, It's better if the authors present the relation between Section 5.3 and 5.4 in a clearer way. It?s confusing to read how one can perturb a prediction in Section 5.3 before he/she read the algorithm in Section 5.4. I suggest put the algorithm along with the perturbation-driven paradigm at the beginning of Section 5
 
-Please also proofread the work and fix typos. For example, the word ?work? in Section 3 should be uncountable; In Section 5.3 ?the three points defines a triangle? -> ?the three points defining a triangle?
-Reviewer 2
-Paper type
-Technique
-Expertise
-Expert
-Overall Rating
-<b>5 - Strong Accept</b><br/> The paper is an excellent contribution and should certainly be accepted, possibly with some minor revisions.<br/>It more than meets the quality standard.
-Supplemental Materials
-Acceptable
-Justification
-Overall, this is an excellent contribution, it successfully demonstrates the value of visualization, and sheds light on hidden mechanisms performed by complex models.
-It also closes the analysis loop by enabling experts to introduce model adjustments and examine their effectiveness in mitigating mis-predictions.
+Q Except for the presentation issue, the contribution of this paper is somewhat limited to only NLI models with attention mechanisms. It's not sure how the visualization can be easily extended for other NLP tasks. For example, I am not sure how the proposed visualization can easily adapt to machine translation, considering that there are no neutral/contradiction/entailment labels.
+
+A: The composability of the system is the key to extend its capability
+
+Q, In addition, the perturbation-driven scheme is somewhat related to the gradient-based analysis (both are the local analysis of the model on a specific prediction). It is better if the authors discuss the two and differentiate them.
+
+A: connection with sensitivity analysis
+
+Q, The evaluation is acceptable but a bit weak. There is no description of what questions have the authors asked during the evaluation sessions. It would be better to have formal interviews and ask the participants to perform specific tasks and observe how they performed.
+
+A:
+
+Please also proofread the work and fix typos. For example, the word 'work' in Section 3 should be uncountable; In Section 5.3, "the three points defines a triangle" -> "the three points defining a triangle"
+
+A:
+
+
 The Review
+
 The authors propose a system to debug the predictions of deep inference models in language domain.
-These models focus on predicting whether a hypothesis entails, contradicts, or is neutral to a given premise. 
+These models focus on predicting whether a hypothesis entails, contradicts, or is neutral to a given premise.
 This is a very essential task in natural language understanding that goes beyond machine translation where the models transform an input language to an output language without being able to evaluate logical entailment between sentences nor to answer questions based on given text.
 
 The system is very well designed and the article is very well written.
 The authors employ five linked views to show different facets about the model at varying granularity and at stages in the model pipeline. The visualization design in each of these views is mapped smoothly from the data it shows and the analysis task it serves.
+
 Likewise, the linkage between these views and the corresponding interactions are well suited for debugging purposes. In particular:
 - they enable tracing the root cause of certain entailment predictions e.g. by exposing the model attention computed at any selected part of an input sentence.
 - they enable examining different perturbations of the input sentence and easily identifying the ones that lead to changes in the prediction, hence revealing the language features behind these predictions and the corresponding attention values computed by the model.
@@ -112,7 +107,7 @@ Can it handle a large number of sentences? This is important for the noted futur
 Language mispredictions (misspelling):
 As discussion in [8, 13]
 tasks T1-3 (maybe T1-T3?)
-correspondance 
+correspondance
 studys
 Reviewer 3
 Paper type
@@ -145,7 +140,7 @@ More importantly, there is little rationale for the visual representation design
 * Why a treemap in the summary view? It's just a 3x3 set of quantities. A simple 3x3 matrix heatmap would be more familiar, more readable, and assure that all of the prediction/label combinations are large enough to select easily.
 * The description of interaction for the E/E category in the summary view says what one can do, but it's not clear how or why.
 
-Part of the problem is that the language is very dense in this paper. Although the grammar is acceptable, it was a slow read and there were some passages that I found all but indecipherable, such as the figure 7 caption, the last paragraph of section 5.5, and the bullet list at the end of the introduction. 
+Part of the problem is that the language is very dense in this paper. Although the grammar is acceptable, it was a slow read and there were some passages that I found all but indecipherable, such as the figure 7 caption, the last paragraph of section 5.5, and the bullet list at the end of the introduction.
 
 There were many small errors that need correcting, too many to bother listing here. There was also some hyperbole ("stunning", "unprecedented", "vision", "paradigm") that distracts me as a serious reader and should be replaced. A thorough copyediting should fix both issues.
 
@@ -176,9 +171,9 @@ This paper introduces an application that lets a user to visualize aspects of a 
 
 ? The related work is sufficiently comprehensive and clearly contextualizes the main contributions of the NLIZE application
 
-? I appreciated the task analysis in section 4. However, it seems a bit too brief, and the tasks don?t seem to directly follow from the description of the authors experience with the NLP researchers. The scenarios described in Section 6 provide much more detail about these tasks, and Section 5 clarifies them as well, but a bit more detail here would be useful. For example, it?s not clear who the NLP researchers are, how many of them were interviewed, what type of NLP projects they were working on, etc. 
+? I appreciated the task analysis in section 4. However, it seems a bit too brief, and the tasks don?t seem to directly follow from the description of the authors experience with the NLP researchers. The scenarios described in Section 6 provide much more detail about these tasks, and Section 5 clarifies them as well, but a bit more detail here would be useful. For example, it?s not clear who the NLP researchers are, how many of them were interviewed, what type of NLP projects they were working on, etc.
 
-? The visual interface described in Section 5 seems very useful for performing the three main tasks. Some of the elements of the application are quite dense upon first encounter, but a lot of thought has gone into how they work together to provide different windows into the NN. 
+? The visual interface described in Section 5 seems very useful for performing the three main tasks. Some of the elements of the application are quite dense upon first encounter, but a lot of thought has gone into how they work together to provide different windows into the NN.
 
 ? Work by Ma et al. ("Visualizing dynamic brain networks using an animated dual-representation? from EuroVis 2015) is work related to NLIZE having both graph and matrix views that complement each other and provide the same information from different perspectives, as described in Section 5.2.
 
@@ -197,6 +192,3 @@ A:
 In sum, this paper presents an exciting approach to analyzing complex inference models? one which could in theory be extended easily to other NLP tasks and other inference models. The visualization, although somewhat complicated, seems to aid domain experts in understanding nuances of NLI tasks, and giving them a playground in which to formulate and test hypothesis through perturbing various elements within the system and seeing how they change others. The application scenarios are all quite brief and come across as somewhat preliminary, but on the other hand, the range of tasks that are supported shows the promise of such an approach. It might make more sense to focus more on only one or two scenarios and cover them in more depth. Overall, despite some of the issues mentioned above, the paper presents innovation in interactive visualization to better understand NNs for language inference tasks, and I think this paper is a strong accept.
 
 A:
-
-
-
