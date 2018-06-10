@@ -3,7 +3,8 @@
 
 % (What is the high level motivation)
 % What is the obstacle for effectively apply machine learning model
-Based on some stunning recent advances, neural networks based machine learning approaches have gained unprecedented popularity, and have been adopted in a wide variety of applications.
+%Based on some stunning recent advances, neural networks based machine learning approaches have gained unprecedented popularity, and have been adopted in a wide variety of applications.
+Demonstrated by many recent successes, neural networks based machine learning approaches have garnered increasing popularity, and have been adopted in a wide variety of applications.
 %
 However, researchers as well as practitioners often need to overcome many obstacles during the training, debugging, and tuning processes to realize the full potential of these models.
 %
@@ -38,8 +39,9 @@ Instead, new exploration paths arise as we investigate and analyze previous obse
 
 Here, we aim to provide immediate and informative answers to these \emph{``what if''} questions by combining the expressive power of visualization and direct online query/optimization of the neural network model. Instead of viewing the models as invariant objects, we approach the interpretability challenge by studying them in a dynamic environment. By employing a perturbation-driven paradigm, we probe the internal states of the model and examine how changes in one part of the pipeline (the input, internal states, and output prediction, see Fig.~\ref{fig:modelPipeline}) affect others, which in turn provides a new perspective to address the model interpretation problem.
 
-We implement our vision of the perturbation-driven exploration in an interactive visualization system for natural language inference models~\cite{Parikh2016}.
-However, the components of the visualization and the overall paradigm can be readily extended to other NLP tasks, such as question and answer, text summarization, etc.
+We materialize the goal of the perturbation-driven exploration in an interactive visualization system for natural language inference models~\cite{Parikh2016}.
+%We implement our vision of the perturbation-driven exploration in an interactive visualization system for natural language inference models~\cite{Parikh2016}.
+However, the components of the visualization and the overall concept can be readily extended to other NLP tasks, such as question and answer, text summarization, etc.
 %
 In the simplest form, the inference task asks whether the
 relationship between \textbf{sentence A} and \textbf{sentence B}: (1) is \emph{entailment} (one can infer \textbf{B} from \textbf{A}), (2) \emph{contradiction} (\textbf{B} disagrees with \textbf{A}) or (3) is \emph{neutral} (\textbf{A} and \textbf{B} talk about different/unrelated things).
