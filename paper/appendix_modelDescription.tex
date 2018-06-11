@@ -133,15 +133,16 @@ Denote the premise sentence as $\overline{\boldsymbol{P}} = (\overline{\boldsymb
   \boldsymbol{H} &= F(\overline{\boldsymbol{H}})
 \end{align}
 
-where $F$ function is the encoder layer (e.g. a context-free two-layer ReLU). Let $\boldsymbol{P}$ denote the output premise encoding of size $m \times d$, and $\boldsymbol{H}$ the hypothesis encoding of size $n \times d$ where $d$ is the encoding size.
+where $F$ function is the encoder layer (e.g. a context-free layer with ReLU activation). Let $\boldsymbol{P}$ denote the output premise encoding of size $m \times d$, and $\boldsymbol{H}$ the hypothesis encoding of size $n \times d$ where $d$ is the encoding size.
 
 \subsection{Attention} \label{sec:att}
-The job of attention layer is to capture pairwise interaction between encodings of premise and hypothesis. First we compute a similarity score matrix $\boldsymbol{S}$ ($m \times n$) by the following
+The job of the attention layer is to capture pairwise interaction between encodings of premise and hypothesis. First we get transformed encodings that are specialized for attention and then compute a similarity score matrix $\boldsymbol{S}$ ($m \times n$) by the following
 \begin{align}
-  S_{ij} &= \boldsymbol{p}_i ^T \boldsymbol{h}_j
+  \boldsymbol{P}^\prime, \boldsymbol{H}^\prime &= R(\boldsymbol{P}), R(\boldsymbol{H})\\
+  S_{ij} &= \boldsymbol{p}^{\prime T}_i \boldsymbol{h}^\prime_j
 \end{align}
-
-Then attention weights are obtained by normalizing $\boldsymbol{S}$ bidirectionally. We will use $\leftarrow$ and $\rightarrow$ to differentiate the notation. That is, for premise token $\boldsymbol{p}_i$, a probability distribution over all $\boldsymbol{h}_j$`s are done as
+where $R$ is the specialized transformation layer (e.g. a two-layer feedforward network with ReLU activation).
+Attention weights are obtained by normalizing $\boldsymbol{S}$ bidirectionally. We will use $\leftarrow$ and $\rightarrow$ to differentiate the notation. That is, for premise token $\boldsymbol{p}_i$, a probability distribution over all $\boldsymbol{h}_j$`s are done as
 \begin{align}
   \overleftarrow{\boldsymbol{a}}_i &= \frac{exp(S_{ij})}{\sum_{j \in h} exp(S_{ij})}
 \end{align}
@@ -158,8 +159,8 @@ where $\overrightarrow{\boldsymbol{a}}_j$ is a $1 \times m$ dimension. In case a
 \subsection{Classifier} \label{sec:cls}
 Classifier takes features from previous steps and predict a probability distribution over three labels. First, it aggregates features following the bidirectional attentions as
 \begin{align}
-  \boldsymbol{u}_i &= G([\overleftarrow{\boldsymbol{a}}_i \cdot \boldsymbol{H} \hspace{1ex} | \hspace{1ex}  \overline{\boldsymbol{p}}_i]) \\
-  \boldsymbol{v}_j &= G([\overrightarrow{\boldsymbol{a}}_j \cdot \boldsymbol{P} \hspace{1ex}  | \hspace{1ex}  \overline{\boldsymbol{h}}_j])
+  \boldsymbol{u}_i &= G([\overleftarrow{\boldsymbol{a}}_i \cdot \boldsymbol{H} \hspace{1ex} | \hspace{1ex}  \boldsymbol{p}_i]) \\
+  \boldsymbol{v}_j &= G([\overrightarrow{\boldsymbol{a}}_j \cdot \boldsymbol{P} \hspace{1ex}  | \hspace{1ex} \boldsymbol{h}_j])
 \end{align}
 
 where G is the aggregation layer (e.g. two-layer ReLU) and $[\cdot|\cdot]$ denotes concatenation. With the aggregated premise feature $\boldsymbol{u}_i$ and hypothesis feature $\boldsymbol{v}_j$, the classifier does further feature conjunction to predict score on each entailment label:
