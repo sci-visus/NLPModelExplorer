@@ -11,9 +11,11 @@ Q1,
 - Formal definition for attention
 Q2
 
-- Why treemap for prediction summary, what about the heatmap matrix
+- Why treemap for prediction summary, what about the heatmap matrix, confusion matrix, showing errors
 
-R1:
+- is perturbation contribution, learned perturbation, user perturbation (part of interactive system)
+
+R1(3):
 + interesting topic
 + usage scenarios are interesting
 - description of NLP NN and attention models are not sufficiently detailed in the paper
@@ -25,18 +27,18 @@ R1:
 - need to clarify difference between proposed perturbation-driven analysis and gradient-based analysis
 - qualitative evaluation is weak
 
-R2:
+R2 (5):
 + important area for visualization research
 + article is well-written
 + application with linked views is well-designed and powerful
 + system supports debugging of inference models
 - scalability of system is not discussed
 
-R3:
+R3 (2.5):
 - article is dense and difficult to read
 - rationale for design choices are not clear
 - core contributions are not highlighted, too much emphasis on background material (explanation of NLI), not enough on the visualization system itself
-- claims based on user evaluation aren?t supported
+- claims based on user evaluation aren't supported
 
 Response to the summary:
 
@@ -46,15 +48,17 @@ Response to the summary:
 
 Q1. The usage scenarios also look interesting, especially the Scenario 3. Does the result to some extent suggest that the attention mechanism is not a very efficient component in this task? I expect the authors dig it further.
 
+Refer to review 4, Q34, for NLP expert to explore
+[figure 10, gradient based update, attention operation is not tunable parameter]
 A: The separation between different stages is based on the specific model implementation, so the result should be analyzed on a per implementation basis. In addition, the result in Scenario 3 does not necssarily imply the attention mechanism is not very efficient, since the core attention operation does not include tunable parameters. What the result indicates is that the weight of the transformation operation before the attention operation (also implemented in the attention stage of the pipeline) has less impact on the prediction compare to others.  [how to interpret this from NLP perspective]
 
 Q2. In Section 2, the neural net in NLP and attention mechanisms are introduced. But the descriptions are unsatisfactory. There is no formal definition or description of the model and the attention mechanism. It's still unclear how the attention mechanism is applied in the model. I would suggest the authors include a concise and formal introduction in the background part and include some formula.
 
-A: []
+A: [not formal definition]
 
 Q3, In Section 4, the paper indicates that the system is developed under a long-term collaboration with NLP experts, but there is no description describing the details of the collaboration (the number of experts, the length and the form of the collaboration, the frequency of the meetings). It's not until Section 7 did I learn that there are 2 NLP experts in collaboration. The task analysis can also be improved by including more detailed justification of the three tasks.
 
-A:
+A: [mention NLP experts early on]
 
 Q4, The presentation of the system design in Section 5 could be improved.
 - In Section 5.2, Attention View include both a bipartite graph and a matrix view, which visualize the same information. From the description of the paper, the graph view is only good for highlighting the most dominant alignments. I suspect that matrix view can also reveal the most dominant alignments by identifying the most salient color. Please justify the design decision.
@@ -131,11 +135,12 @@ A: these errors have been fixed.
 
 Q20, After the teaser image, the paper spends the first four pages on neural networks, NLP, and inference. One has to look hard to detect the lede in the next to last paragraph of the introduction ("Moreover, we propose...") Highlight it!
 
+[highlight ]
 A: The introduction, related works, and background took first three pages. The task analysis which is an essential part of a given visualization system is started on page 4. The text following "Moreover, we propose..." is not the only visualization contributions, to better convey the core visualization contributions, [we update the intro to highlight the visualization components],
 
 Q21, Even as a visualization-centric researcher who is aware of NNs and has done a little direct work in NLP, I found it hard to connect to the organization and balance of coverage of these topics in the paper. Despite the prominent teaser visualization and the description of individual views in section 5, the paper comes off as very visualization-light.
 
-A:
+A: self-contained information, technical detail drive visualization
 
 Q22,For each view there it's clear what the visual representation is, but the majority of description is dedicated to the underlying mechanics of calculating and thinking about the NL inference. The specific interactions involved are also mostly implied, although I was able to deduce them. They should be made explicit.
 
@@ -206,7 +211,7 @@ A:
 
 Q28, I was confused by the distinction between image networks and language networks. CNNs are not only used to make binary classifications, and there are certainly challenges in image networks that do not provide ?clear meaning? and seem like they would also benefit from the proposed work. In other words, I understand the focus on NLP tasks, but the reasoning for it doesn't seem accurate (in the 3rd paragraph of the introduction).
 
-A:
+A: Clarify in the intro, input modality different, very often CV have human interpretable neuron filter, in NLP such often not,   attention is the exception,
 
 Q29, It was unclear to me if the idea of perturbing a model is novel, or an extension/visualization of previously introduced work in this area applied to NLP NNs. If it?s the former (as it seems to be), then I think this needs to be emphasized in the introduction.
 
@@ -222,7 +227,7 @@ A:
 
 Q32, Placing the grammar dependency tree over the matrix / bipartite graph is interesting (described in Section 5 and Section 6.4). I wonder if it would make sense to use other types of annotations here, such as those created from event extraction tools or information extraction tools that would highlight other structures (besides grammar/POS) that could be useful in helping understanding the inference model. Work by Forbes et al. supports the use of semantic hypergraphs to provide richer textual annotations alongside text sequences ("Text annotation graphs: Annotating complex natural language phenomena? from LREC 2018).
 
-A:
+A: agree, point out the interesting direction [graph anotation] linear + graph structure
 
 Q33, In Sections 6.1 and 6.2, the application scenario gives an example of having a user perturbing the model by changing the input words (switching ?pile? with ?heap?). This updates the system and changes the inference output. Are the successful results of such an interaction remembered by the system? That is, could NLIZE be used to tweak/update the model so that, say, the ambiguity between pile and heap is automatically and more accurately resolved in future queries?
 
@@ -230,7 +235,7 @@ A:
 
 Q34, Section 6.3 is very interesting, but I don't understand why perturbing the attention stage has less of an effect that the other perturbations. This seems like a preliminary contribution in and of itself (i.e., that using the NLIZE application leads to global understanding such as this), and worthy of further examination.
 
-A:
+A: NLP question, further explore NLP
 
 Q35, The application scenarios are all quite brief and come across as somewhat preliminary, but on the other hand, the range of tasks that are supported shows the promise of such an approach. It might make more sense to focus more on only one or two scenarios and cover them in more depth.
 
