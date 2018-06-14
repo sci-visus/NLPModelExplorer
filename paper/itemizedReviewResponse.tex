@@ -4,6 +4,13 @@ Reviewers were split on whether or not to accept the paper. R2 and R4 rated the 
 
 However, the authors should pay careful attention to the comments by reviewers, and use the time remaining before the next version is due to revise the paper for clarity, to emphasize the main contributions of the paper, to provide rationale for the design choices, to provide more detailed information about the domain-expert collaborators, and to better justify the results of the task analysis. Some reviewers advocated for reducing the number of usage scenarios and providing a more in-depth examination of a single scenario, or a scenario composed of a series of sub-investigations. On the other hand, other reviewers found the breadth of potential analyses to be a positive component of the paper.
 
+///// for discussion ////
+- How to interpret MIRA show attention has less impact
+Q1,
+
+- Formal definition for attention
+Q2
+
 R1:
 + interesting topic
 + usage scenarios are interesting
@@ -37,77 +44,80 @@ Response to the summary:
 
 Q1. The usage scenarios also look interesting, especially the Scenario 3. Does the result to some extent suggest that the attention mechanism is not a very efficient component in this task? I expect the authors dig it further.
 
-A:
+A: The separation between different stages is based on the specific model implementation, so the result should be analyzed on a per implementation basis. In addition, the result in Scenario 3 does not necssarily imply the attention mechanism is not very efficient, since the core attention operation does not include tunable parameters. What the result indicates is that the weight of the transformation operation before the attention operation (also implemented in the attention stage of the pipeline) has less impact on the prediction compare to others.  [how to interpret this from NLP perspective]
 
 Q2. In Section 2, the neural net in NLP and attention mechanisms are introduced. But the descriptions are unsatisfactory. There is no formal definition or description of the model and the attention mechanism. It's still unclear how the attention mechanism is applied in the model. I would suggest the authors include a concise and formal introduction in the background part and include some formula.
 
+A: []
+
+Q3, In Section 4, the paper indicates that the system is developed under a long-term collaboration with NLP experts, but there is no description describing the details of the collaboration (the number of experts, the length and the form of the collaboration, the frequency of the meetings). It's not until Section 7 did I learn that there are 2 NLP experts in collaboration. The task analysis can also be improved by including more detailed justification of the three tasks.
+
 A:
 
-Q, In Section 4, the paper indicates that the system is developed under a long-term collaboration with NLP experts, but there is no description describing the details of the collaboration (the number of experts, the length and the form of the collaboration, the frequency of the meetings). It?s not until Section 7 did I learn that there are 2 NLP experts in collaboration. The task analysis can also be improved by including more detailed justification of the three tasks.
-
-A:
-
-Q The presentation of the system design in Section 5 could be improved.
+Q4, The presentation of the system design in Section 5 could be improved.
 - In Section 5.2, Attention View include both a bipartite graph and a matrix view, which visualize the same information. From the description of the paper, the graph view is only good for highlighting the most dominant alignments. I suspect that matrix view can also reveal the most dominant alignments by identifying the most salient color. Please justify the design decision.
 
-A:
+A: The advantage of the bipartite graph is not only the ability to allow the domain experts quickly understand the domain alignment but more importantly the corresponding words. However, in the matrix view, it is much harder to instantaously link the alignment with the corresponding words. [We update the text to better reflect this point]
 
-Q, It's unclear how the simplification of attention representation is done from Section 5.2, please include more details.
-
-A:
-
-Q, In Section 5.3, how do you compute the density contour? Why is a contour needed in the analysis?
+Q5, It's unclear how the simplification of attention representation is done from Section 5.2, please include more details.
 
 A:
 
-Q, It's better if the authors present the relation between Section 5.3 and 5.4 in a clearer way. It?s confusing to read how one can perturb a prediction in Section 5.3 before he/she read the algorithm in Section 5.4. I suggest put the algorithm along with the perturbation-driven paradigm at the beginning of Section 5.
+Q6, In Section 5.3, how do you compute the density contour? Why is a contour needed in the analysis?
 
 A:
 
-Q Except for the presentation issue, the contribution of this paper is somewhat limited to only NLI models with attention mechanisms. It's not sure how the visualization can be easily extended for other NLP tasks. For example, I am not sure how the proposed visualization can easily adapt to machine translation, considering that there are no neutral/contradiction/entailment labels.
+Q7, It's better if the authors present the relation between Section 5.3 and 5.4 in a clearer way. It?s confusing to read how one can perturb a prediction in Section 5.3 before he/she read the algorithm in Section 5.4. I suggest put the algorithm along with the perturbation-driven paradigm at the beginning of Section 5.
+
+A:
+
+Q8, Except for the presentation issue, the contribution of this paper is somewhat limited to only NLI models with attention mechanisms. It's not sure how the visualization can be easily extended for other NLP tasks. For example, I am not sure how the proposed visualization can easily adapt to machine translation, considering that there are no neutral/contradiction/entailment labels.
 
 A: The composability of the system is the key to extend its capability
 
-Q, In addition, the perturbation-driven scheme is somewhat related to the gradient-based analysis (both are the local analysis of the model on a specific prediction). It is better if the authors discuss the two and differentiate them.
+Q9, In addition, the perturbation-driven scheme is somewhat related to the gradient-based analysis (both are the local analysis of the model on a specific prediction). It is better if the authors discuss the two and differentiate them.
 
 A: connection with sensitivity analysis
 
-Q, The evaluation is acceptable but a bit weak. There is no description of what questions have the authors asked during the evaluation sessions. It would be better to have formal interviews and ask the participants to perform specific tasks and observe how they performed.
+Q10, The evaluation is acceptable but a bit weak. There is no description of what questions have the authors asked during the evaluation sessions. It would be better to have formal interviews and ask the participants to perform specific tasks and observe how they performed.
 
 A:
 
-Please also proofread the work and fix typos. For example, the word 'work' in Section 3 should be uncountable; In Section 5.3, "the three points defines a triangle" -> "the three points defining a triangle"
+Q11, Please also proofread the work and fix typos. For example, the word 'work' in Section 3 should be uncountable; In Section 5.3, "the three points defines a triangle" -> "the three points defining a triangle"
 
 A:
 
 ------------------------------- Reviewer 2 -------------------------------
 
-Q, A brief guidance of how to interpret visual patterns that emerge in each view would be very beneficial. In particular, did the authors notice any systematic / repetitive patterns in the triangular prediction view? Do these patterns indicate certain issues in the model / attention / perturbation schemes?
+Q12, A brief guidance of how to interpret visual patterns that emerge in each view would be very beneficial. In particular, did the authors notice any systematic / repetitive patterns in the triangular prediction view? Do these patterns indicate certain issues in the model / attention / perturbation schemes?
+
+A: [grouping pattern]
+
+Q13, Same thing applies to the attention heatmap, the parameter histograms, and the overview scatterplots in Figure 8 (e.g. does the curve in Figure 8d tell us something?)
 
 A:
 
-Q, Same thing applies to the attention heatmap, the parameter histograms, and the overview scatterplots in Figure 8 (e.g. does the curve in Figure 8d tell us something?)
-- Discuss scalability of the system. Can it visually handle long sentences? Would collapsing the heatmaps help here?
+Q14, Discuss scalability of the system. Can it visually handle long sentences? Would collapsing the heatmaps help here? Can it handle a large number of sentences? This is important for the noted future applicability to question answering where the data items can be as large as text documents.
+
+A: The collasping will have visually handle long sentences, however, different collasping strategy 
+
+Q15, Explain more about the Bowman's dataset in use [24], its dimensionality, coverage, complexity, language features, etc.
 
 A:
 
-Q, Can it handle a large number of sentences? This is important for the noted future applicability to question answering where the data items can be as large as text documents.
-
-Q, Explain more about the Bowman's dataset in use [24], its dimensionality, coverage, complexity, language features, etc.
-
-Q, A brief discussion of the applicability to other languages would be interesting maybe? Any anticipated challenges?
+Q16, A brief discussion of the applicability to other languages would be interesting maybe? Any anticipated challenges?
 
 A:
 
-Q, Add label to the color scale in Figure 3 (the caption mentions attention by just to avoid confusion). Same for Figure 7a (frequency to the vertical axis), Figure 8b, and Figure 9a-c.
+Q17, Add label to the color scale in Figure 3 (the caption mentions attention by just to avoid confusion). Same for Figure 7a (frequency to the vertical axis), Figure 8b, and Figure 9a-c.
 
 A:
 
-Q, Add narration to the video and maybe include a 1-min self-contained demo of the system before illustrating the use cases in the video.
+Q18, Add narration to the video and maybe include a 1-min self-contained demo of the system before illustrating the use cases in the video.
 
 A:
 
-Q, Language mispredictions (misspelling):
+Q19, Language mispredictions (misspelling):
 As discussion in [8, 13]
 tasks T1-3 (maybe T1-T3?)
 correspondance
@@ -117,19 +127,19 @@ A: these errors have been fixed.
 
 ------------------------------- Reviewer 3 -------------------------------
 
-Q, After the teaser image, the paper spends the first four pages on neural networks, NLP, and inference. One has to look hard to detect the lede in the next to last paragraph of the introduction ("Moreover, we propose...") Highlight it!
+Q20, After the teaser image, the paper spends the first four pages on neural networks, NLP, and inference. One has to look hard to detect the lede in the next to last paragraph of the introduction ("Moreover, we propose...") Highlight it!
 
 A:
 
-Q, Even as a visualization-centric researcher who is aware of NNs and has done a little direct work in NLP, I found it hard to connect to the organization and balance of coverage of these topics in the paper. Despite the prominent teaser visualization and the description of individual views in section 5, the paper comes off as very visualization-light.
+Q21, Even as a visualization-centric researcher who is aware of NNs and has done a little direct work in NLP, I found it hard to connect to the organization and balance of coverage of these topics in the paper. Despite the prominent teaser visualization and the description of individual views in section 5, the paper comes off as very visualization-light.
 
 A:
 
-Q,For each view there it's clear what the visual representation is, but the majority of description is dedicated to the underlying mechanics of calculating and thinking about the NL inference. The specific interactions involved are also mostly implied, although I was able to deduce them. They should be made explicit.
+Q22,For each view there it's clear what the visual representation is, but the majority of description is dedicated to the underlying mechanics of calculating and thinking about the NL inference. The specific interactions involved are also mostly implied, although I was able to deduce them. They should be made explicit.
 
 A:
 
-Q, More importantly, there is little rationale for the visual representation designs of the various views. The design choices do make sense (at least to an experienced visualization designer) but there are alternatives in each case. It's not clear that the visualization are particularly good or bad for their intended uses as described in section 6. A few questions that arise:
+Q23, More importantly, there is little rationale for the visual representation designs of the various views. The design choices do make sense (at least to an experienced visualization designer) but there are alternatives in each case. It's not clear that the visualization are particularly good or bad for their intended uses as described in section 6. A few questions that arise:
 
 * How does one handle very different sentence lengths in the sentence view?
 
@@ -171,55 +181,55 @@ A:
 
 A:
 
-Q, Part of the problem is that the language is very dense in this paper. Although the grammar is acceptable, it was a slow read and there were some passages that I found all but indecipherable, such as the figure 7 caption, the last paragraph of section 5.5, and the bullet list at the end of the introduction.
+Q24, Part of the problem is that the language is very dense in this paper. Although the grammar is acceptable, it was a slow read and there were some passages that I found all but indecipherable, such as the figure 7 caption, the last paragraph of section 5.5, and the bullet list at the end of the introduction.
 
 A:
 
-Q, There were many small errors that need correcting, too many to bother listing here. There was also some hyperbole ("stunning", "unprecedented", "vision", "paradigm") that distracts me as a serious reader and should be replaced. A thorough copyediting should fix both issues.
+Q25, There were many small errors that need correcting, too many to bother listing here. There was also some hyperbole ("stunning", "unprecedented", "vision", "paradigm") that distracts me as a serious reader and should be replaced. A thorough copyediting should fix both issues.
 
 A: We remove/replace the words mentioned by the reviewer. For example, the following is the updated first sentence of the introduction in which "stunning", "unprecedented" are removed. "Demonstrated by many recent successes, neural networks based machine learning approaches have garnered increasing popularity, and have been adopted in a wide variety of applications."
 
 
-Q, The application scenarios in section 6 look useful taken individually, but I wonder about how they are used in combination. The scenarios essentially describe individual tasks that experts might perform in individual views. Scenario 4 goes a little further, but is brief. The paper would very much benefit from a more complete example story of how an analyst might work with the various views in concert to perform higher-level activities. For an application paper like this, some sense of those activities, and how well the tool design works for them, is needed. The last couple paragraphs of section 7 offers only a glimpse of "interrogation" as the authors say.
+Q26, The application scenarios in section 6 look useful taken individually, but I wonder about how they are used in combination. The scenarios essentially describe individual tasks that experts might perform in individual views. Scenario 4 goes a little further, but is brief. The paper would very much benefit from a more complete example story of how an analyst might work with the various views in concert to perform higher-level activities. For an application paper like this, some sense of those activities, and how well the tool design works for them, is needed. The last couple paragraphs of section 7 offers only a glimpse of "interrogation" as the authors say.
 Their conclusion (participants believe it convenient) isn't sufficiently supported. As it stands, there isn't clear justification of the many visualization design choices. A longer scenario encompassing the larger process would go a long way toward rectifying that.
 
 A:
 
-Q: The supplemental materials are okay. The video should be editing to speed up the (slow!) interactions and preferably include audio.
+Q27, The supplemental materials are okay. The video should be editing to speed up the (slow!) interactions and preferably include audio.
 
 A:
 
 
 ------------------------------- Reviewer 4 -------------------------------
 
-Q, I was confused by the distinction between image networks and language networks. CNNs are not only used to make binary classifications, and there are certainly challenges in image networks that do not provide ?clear meaning? and seem like they would also benefit from the proposed work. In other words, I understand the focus on NLP tasks, but the reasoning for it doesn't seem accurate (in the 3rd paragraph of the introduction).
+Q28, I was confused by the distinction between image networks and language networks. CNNs are not only used to make binary classifications, and there are certainly challenges in image networks that do not provide ?clear meaning? and seem like they would also benefit from the proposed work. In other words, I understand the focus on NLP tasks, but the reasoning for it doesn't seem accurate (in the 3rd paragraph of the introduction).
 
 A:
 
-Q, It was unclear to me if the idea of perturbing a model is novel, or an extension/visualization of previously introduced work in this area applied to NLP NNs. If it?s the former (as it seems to be), then I think this needs to be emphasized in the introduction.
+Q29, It was unclear to me if the idea of perturbing a model is novel, or an extension/visualization of previously introduced work in this area applied to NLP NNs. If it?s the former (as it seems to be), then I think this needs to be emphasized in the introduction.
 
 A:
 
-Q, I appreciated the task analysis in section 4. However, it seems a bit too brief, and the tasks don?t seem to directly follow from the description of the authors experience with the NLP researchers. The scenarios described in Section 6 provide much more detail about these tasks, and Section 5 clarifies them as well, but a bit more detail here would be useful. For example, it's not clear who the NLP researchers are, how many of them were interviewed, what type of NLP projects they were working on, etc.
+Q30, I appreciated the task analysis in section 4. However, it seems a bit too brief, and the tasks don?t seem to directly follow from the description of the authors experience with the NLP researchers. The scenarios described in Section 6 provide much more detail about these tasks, and Section 5 clarifies them as well, but a bit more detail here would be useful. For example, it's not clear who the NLP researchers are, how many of them were interviewed, what type of NLP projects they were working on, etc.
 
 A:
 
-Q, Work by Ma et al. ("Visualizing dynamic brain networks using an animated dual-representation? from EuroVis 2015) is work related to NLIZE having both graph and matrix views that complement each other and provide the same information from different perspectives, as described in Section 5.2.
+Q31, Work by Ma et al. ("Visualizing dynamic brain networks using an animated dual-representation? from EuroVis 2015) is work related to NLIZE having both graph and matrix views that complement each other and provide the same information from different perspectives, as described in Section 5.2.
 
 A:
 
-Q, Placing the grammar dependency tree over the matrix / bipartite graph is interesting (described in Section 5 and Section 6.4). I wonder if it would make sense to use other types of annotations here, such as those created from event extraction tools or information extraction tools that would highlight other structures (besides grammar/POS) that could be useful in helping understanding the inference model. Work by Forbes et al. supports the use of semantic hypergraphs to provide richer textual annotations alongside text sequences ("Text annotation graphs: Annotating complex natural language phenomena? from LREC 2018).
+Q32, Placing the grammar dependency tree over the matrix / bipartite graph is interesting (described in Section 5 and Section 6.4). I wonder if it would make sense to use other types of annotations here, such as those created from event extraction tools or information extraction tools that would highlight other structures (besides grammar/POS) that could be useful in helping understanding the inference model. Work by Forbes et al. supports the use of semantic hypergraphs to provide richer textual annotations alongside text sequences ("Text annotation graphs: Annotating complex natural language phenomena? from LREC 2018).
 
 A:
 
-Q, In Sections 6.1 and 6.2, the application scenario gives an example of having a user perturbing the model by changing the input words (switching ?pile? with ?heap?). This updates the system and changes the inference output. Are the successful results of such an interaction remembered by the system? That is, could NLIZE be used to tweak/update the model so that, say, the ambiguity between pile and heap is automatically and more accurately resolved in future queries?
+Q33, In Sections 6.1 and 6.2, the application scenario gives an example of having a user perturbing the model by changing the input words (switching ?pile? with ?heap?). This updates the system and changes the inference output. Are the successful results of such an interaction remembered by the system? That is, could NLIZE be used to tweak/update the model so that, say, the ambiguity between pile and heap is automatically and more accurately resolved in future queries?
 
 A:
 
-Q, Section 6.3 is very interesting, but I don?t understand why perturbing the attention stage has less of an effect that the other perturbations. This seems like a preliminary contribution in and of itself (i.e., that using the NLIZE application leads to global understanding such as this), and worthy of further examination.
+Q34, Section 6.3 is very interesting, but I don't understand why perturbing the attention stage has less of an effect that the other perturbations. This seems like a preliminary contribution in and of itself (i.e., that using the NLIZE application leads to global understanding such as this), and worthy of further examination.
 
 A:
 
-Q, The application scenarios are all quite brief and come across as somewhat preliminary, but on the other hand, the range of tasks that are supported shows the promise of such an approach. It might make more sense to focus more on only one or two scenarios and cover them in more depth.
+Q35, The application scenarios are all quite brief and come across as somewhat preliminary, but on the other hand, the range of tasks that are supported shows the promise of such an approach. It might make more sense to focus more on only one or two scenarios and cover them in more depth.
 
-A:
+A: [additional discussion of]
