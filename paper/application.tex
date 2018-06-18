@@ -2,7 +2,12 @@
 \label{sec:caseStudy}
 % \shusen{A full case study that driven by the visualization task and the question associated with them}
 %In this section, we discuss application scenarios, in which the domain experts utilize the
-To better illustrate how the proposed perturbation-driven exploration tool helps researchers interpret the neural network model, we present five application scenarios (first three roughly correspond to \textbf{T1-3}) gathered by the domain experts who integrated the proposed tool into their analysis workflow.
+To illustrate how the proposed perturbation-driven exploration tool helps researchers interpret the neural network model,
+\shusen{we present five interconnected application scenarios a domain expert may employ in their analysis workflow.
+For example, the users can start the exploration by examining the stability of prediction (Scenario 1), from which they may identify the individual instances worth further investigation (Scenario 2, 3, 4). Alternatively, the user can also start with handcrafted common/extreme cases (Scenario 5) and further the exploration based on the instantaneous feedbacks provide by the visualization tool.
+}
+%we present five application scenarios
+%(first three roughly correspond to \textbf{T1-3}) gathered by the domain experts who integrated the proposed tool into their analysis workflow.
 
 \begin{figure}[htbp]
 \centering
@@ -78,7 +83,7 @@ To test whether the alignment is what contributes to the misclassification, the 
 %
 After the edit, the original prediction (Fig.~\ref{fig:att2pred}(c)) has been moved from neutral to the classification boundary (Fig.~\ref{fig:att2pred}(d)), but the corrected attention fails to produce a conclusive \emph{entailment} prediction (another example, in which the attention edit corrects the final prediction, is shown in Fig.~\ref{fig:depTreeExample}).
 %
-%Interestingly, the original pair's attention is almost identical to the edited attention (the comparison is not shown in the figure). 
+%Interestingly, the original pair's attention is almost identical to the edited attention (the comparison is not shown in the figure).
 Such an observation implies that the model does not firmly believe ``\textbf{heap} of snow'' and ``\textbf{pile} of snow'' have the same meaning, which may indicate a potential issue with the encoder or word embedding.
 
 
@@ -99,13 +104,13 @@ Such an observation implies that the model does not firmly believe ``\textbf{hea
 %By looking into the model decision making process, we can assess whether the model is behaving as intended. For the attention based NLI model, one underlying assumption is that the attention should capture the correct alignment between words in the premise and hypothesis sentence for the classifier to make an informed/correct decision.
 We have shown that the perfect alignment does not necessarily guarantee a correct prediction.
 %
-On the flip side, we may produce the right predictions for the ``wrong'' reason (i.e., incorrect attention). 
-%As illustrated in Fig.~\ref{fig:wrongAlignRightPred}, 
+On the flip side, we may produce the right predictions for the ``wrong'' reason (i.e., incorrect attention).
+%As illustrated in Fig.~\ref{fig:wrongAlignRightPred},
 For example, in the sentence pair (\textbf{P}: ``A couple is taking a break from bicycling'', \textbf{H}: ``sisters sit next to their bikes''), the words \textbf{take} and \textbf{next} should not align with each other,
 yet it still produces the correct label (\emph{neutral}).% (Fig.~\ref{fig:wrongAlignRightPred}(b)).
 
-%By looking into the model decision making process, we can assess whether the model is behaving as intended. 
-%These situations demonstrate the important of understanding the model decision making process, we can assess whether the model is behaving as intended. 
+%By looking into the model decision making process, we can assess whether the model is behaving as intended.
+%These situations demonstrate the important of understanding the model decision making process, we can assess whether the model is behaving as intended.
 
 
 %%%% hypothesis on which part of model is wrong? %%%%%
@@ -132,7 +137,14 @@ The system also includes an automatic option to test all the possible configurat
 
 Interestingly, all configurations except one are concentrated around the full \emph{neutral} prediction. Referring back to the pipeline visualization, we observe that the only configuration that failed to produce the correct label is the one for which we allow only updating of the attention stage of the model.
 %
-In other words, the updating of the attention stage seems to have significantly less impact on the prediction result compared to the classifier or encoder stage of the model. Similar observations can be obtained for most examples we have experimented with.
+%In other words, the updating of the attention stage seems to have significantly less impact on the prediction result compared to the classifier or encoder stage of the model.
+%Similar observations can be obtained for most examples we have experimented with.
+\shusen{
+To interpret the result, we need to carry out a case by case analysis, as the separation of the stages depends on the individual implementation.
+In our case, the result indicates that the tunable parameters of the attention stage (the transformation before the alignment operation, see details in Appendix A) has less impact on the final prediction compared to the other two stages.
+The domain experts comment that this observation is interesting and worth further investigation from the perspective of NLP research.
+However, this result does not necessarily imply the limitation of attention mechanism as the core alignment computation does not have tunable parameters that can be modified by the proposed optimization.
+}
 %The attention layer is less sensitive compared to encoding layer and classification layer.
 %When examined other sentences pairs, such an observation remains.
 %This gives domain expert some hint about the significance of the role of each pipeline stage play in this model.
@@ -147,9 +159,9 @@ In other words, the updating of the attention stage seems to have significantly 
   \vspace{-6mm}
  \caption{
 The dependency tree provides valuable information that can help fix the prediction error.
-In (a), the model mistakenly aligns the word green, which leads to an incorrect prediction.  
+In (a), the model mistakenly aligns the word green, which leads to an incorrect prediction.
 After examining the dependency tree (highlighted by pink squares), we can see the two \textbf{greens} are attached to different words.
-In (b), by editing the attention and forcing the alignment of the two \textbf{greens} to be zero, the prediction label is corrected to \emph{neutral}. 
+In (b), by editing the attention and forcing the alignment of the two \textbf{greens} to be zero, the prediction label is corrected to \emph{neutral}.
  }
 \label{fig:depTreeExample}
  \vspace{-4mm}
@@ -159,8 +171,8 @@ In (b), by editing the attention and forcing the alignment of the two \textbf{gr
 \subsection{Scenario 4: Explore the Relationship Between Grammar and Attention}
 \label{sec:grammarAttention}
 The attention computation in the NLI model does not take the grammar structure of the sentences into consideration,
-yet the attention often highlights key elements of the sentence. 
-Therefore, domain experts wish to understand whether attention alone is sufficient to capture sentence structure; 
+yet the attention often highlights key elements of the sentence.
+Therefore, domain experts wish to understand whether attention alone is sufficient to capture sentence structure;
 and, more importantly, what kind of benefit the additional information from grammar parsing can help address the NLI challenge.
 
 In the proposed system, we overlay the sentence dependency tree with the attention, which enables researchers to conduct comparisons between attention and grammar structure.
@@ -168,7 +180,7 @@ As illustrated in Fig.~\ref{fig:depTreeExample}(a), the prediction of the senten
 %
 This experiment demonstrates the potential benefit of including grammar structure in the alignment computation. %This stresses the importance of dependency tree in our tool.
 %
-And interestingly, as illustrated in Fig.~\ref{fig:depTreeExample}(b), by editing the attention and forcing the alignment of the two \textbf{greens} to be zero, the prediction label is corrected (\emph{neutral}). 
+And interestingly, as illustrated in Fig.~\ref{fig:depTreeExample}(b), by editing the attention and forcing the alignment of the two \textbf{greens} to be zero, the prediction label is corrected (\emph{neutral}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Scenario 5: Handcrafted Example Exploration}
