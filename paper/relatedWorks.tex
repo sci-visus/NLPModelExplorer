@@ -11,10 +11,10 @@ In the machine learning community, one of the most studied areas in model interp
 %
 These methods either identify the pattern that maximally activates a part of the network (referred to as \emph{feature visualization}, i.e., what feature does the given neuron, channel, or layer captures?), or reveals what areas in the input that contribute most to the predicted label (often referred to as \emph{attribution}, i.e., attribute the prediction label in the input domain).
 %
-Besides the techniques designed for specific types of models, a few works~\cite{RibeiroSinghGuestrin2016, KrausePererNg2016, LundbergLee2017} approach the interpretability challenge from a model agnostic perspective, which makes them applicable to different applications. In the LIME~\cite{RibeiroSinghGuestrin2016} work, a simpler linear model is fitted near the prediction of interests to provide a simpler but easier to understand snapshot of the classifier near a specific input.
+Besides the techniques designed for specific types of models, a few work~\cite{RibeiroSinghGuestrin2016, KrausePererNg2016, LundbergLee2017} approach the interpretability challenge from a model agnostic perspective, which makes them applicable to different applications. In the LIME~\cite{RibeiroSinghGuestrin2016} work, a simpler linear model is fitted near the prediction of interests to provide a simpler but easier to understand snapshot of the classifier near a specific input.
 %
-Despite being invaluable for generating a human understandable explanation, however, the lack of the ability to access and explore the internal states of the system limits their application. 
-%which is vitally important for making sense of the inner works of a model, 
+Despite being invaluable for generating a human understandable explanation, however, the lack of the ability to access and explore the internal states of the system limits their application.
+%which is vitally important for making sense of the inner works of a model,
 To avoid similar limitations, the proposed system enables direct access and manipulation of the internals of the model.
 
 \textbf{Visual Exploration of Neural Network Models.}
@@ -50,10 +50,10 @@ The early work on character-level recurrent networks~\cite{KarpathyJohnson2015} 
 In the RNNVis~\cite{MingCaoZhang2017} work, Ming et al. visualize the hidden state units in a recurrent neural network based on their expected responses to model input.
 The RNNbow~\cite{CashmanPattersonMosca2017} system helps domain experts understand how the model is trained by visualizing the backpropagation gradient information.
 The LSTMvis~\cite{StrobeltGehrmannPfister2018} work employs a line plot style visual encoding to represent the time varying hidden states of the recurrent neural network. The word embedding visualization work~\cite{LiuBremerJayaraman2018} illustrates how semantic relationship can be recovered by linear projections in the high-dimensional word embedding space (e.g., word2vec~\cite{MikolovSutskeverChen2013} or Glove~\cite{PenningtonSocherManning2014}).
-%As discussed in the introduction, the experts guided exploration calls for the ability to interact with internal of the model in a dynamic setting. 
+%As discussed in the introduction, the experts guided exploration calls for the ability to interact with internal of the model in a dynamic setting.
 %
 All the previously discussed NLP model visualization works either focus on the training process or examine the trained model as a fixed object. In contrast, the proposed method allows direct user interaction with the internals of the trained model in a dynamic environment, which enables unrestrictive exploratory analysis that is not possible before.
-%In addition, instead of exploring a language model or low-level, the proposed method focus on a specific NLP task, which provide insight on 
+%In addition, instead of exploring a language model or low-level, the proposed method focus on a specific NLP task, which provide insight on
 
 %%% Local Variables:
 %%% mode: latex

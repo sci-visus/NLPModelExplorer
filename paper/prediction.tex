@@ -3,7 +3,7 @@
 \label{sec:prediction}
 For a given sentence pair, the model predicts a discrete probability distribution of the three labels (neutral, contradiction, and entailment).
 %
-In the prediction view, as illustrated in Fig.~\ref{fig:predictionView}(a), a prediction probability is encoded as a point in the barycentric coordinate system of the triangle. 
+In the prediction view, as illustrated in Fig.~\ref{fig:predictionView}(a), a prediction probability is encoded as a point in the barycentric coordinate system of the triangle.
 Let $\mathbf{C_1}$,$\mathbf{C_2}$,$\mathbf{C_3}$ be the three points defining a triangle, and let $p_1$, $p_2$, $p_3$ be the probabilities the label is neutral, contradiction or entailment. The coordinate of the prediction $\mathbf{C_p}$ in the triangle is computed as $\mathbf{C_p} = p_1\mathbf{C_1}+p_2\mathbf{C_2}+p_3\mathbf{C_3}$.
 In the triangle, the distinctly colored background (grey, light grey, and light green) indicates the regions that correspond to different labels. The prediction result for the original sentence pair is represented by the larger yellow circle, whereas the smaller gray circles illustrate the perturbed sentence pairs. A density contour of the prediction is computed to emphasize the highly cluttered areas and distinguish the outliers.
 
@@ -24,5 +24,4 @@ As illustrated in (b), the predicted label does not match the ground truth. Ther
 \label{fig:predictionView}
 \end{figure}
 
-To perturb the prediction (\textbf{T3}), we need a way to communicate the reassignment of the predicted label. As illustrated in Fig.~\ref{fig:predictionView}(b), we integrate such an operation in the prediction view. When pressing and dragging the prediction (represented as a circle), the user is presented with the three options (E, N, C) corresponding to the labels. When the user hovers on one of the options, a dotted line is shown to indicate the newly assigned label. The reassignment is applied when the user releases the mouse while hovering on the label of choice.
-
+To perturb the prediction (\textbf{T3}) (optimization for solving the prediction perturbation is discussed in Section~\ref{sec:pipeline}), we need a way to communicate the reassignment of the predicted label. As illustrated in Fig.~\ref{fig:predictionView}(b), we integrate such an operation in the prediction view. When pressing and dragging the prediction (represented as a circle), the user is presented with the three options (E, N, C) corresponding to the labels. When the user hovers on one of the options, a dotted line is shown to indicate the newly assigned label. The reassignment is applied when the user releases the mouse while hovering on the label of choice.

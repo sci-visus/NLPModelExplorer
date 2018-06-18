@@ -40,7 +40,8 @@ R3 (2.5):
 - core contributions are not highlighted, too much emphasis on background material (explanation of NLI), not enough on the visualization system itself
 - claims based on user evaluation aren't supported
 
-Response to the summary:
+Summary of major changes:
+1. Revise section 6 to better convey the relationship between the different senarios and provide further clarification on the result observered in 6.3
 
 
 ------------------------------- Reviewer 1 -------------------------------
@@ -48,17 +49,16 @@ Response to the summary:
 
 Q1. The usage scenarios also look interesting, especially the Scenario 3. Does the result to some extent suggest that the attention mechanism is not a very efficient component in this task? I expect the authors dig it further.
 
-Refer to review 4, Q34, for NLP expert to explore
-[figure 10, gradient based update, attention operation is not tunable parameter]
-A: The separation between different stages is based on the specific model implementation, so the result should be analyzed on a per implementation basis. In addition, the result in Scenario 3 does not necssarily imply the attention mechanism is not very efficient, since the core attention operation does not include tunable parameters. What the result indicates is that the weight of the transformation operation before the attention operation (also implemented in the attention stage of the pipeline) has less impact on the prediction compare to others.  [how to interpret this from NLP perspective]
+A: To interpret the result, we need to carry out a case by case analysis, as the separation of the stages depends on the individual implementation. In this case, the result indicates that the tunable parameters of the attention stage (the transformation before the alignment operation, see details in Appendix A) has less impact on the final prediction compared to the other two stages. The domain experts comment that this observation is interesting and worth further investigation from the perspective of NLP research. However, this result does not necessarily imply the limitation of attention mechanism as the core alignment computation does not have tunable parameters that can be modified by the proposed optimization. We revised section 6.3 to clarify this point.
+
 
 Q2. In Section 2, the neural net in NLP and attention mechanisms are introduced. But the descriptions are unsatisfactory. There is no formal definition or description of the model and the attention mechanism. It's still unclear how the attention mechanism is applied in the model. I would suggest the authors include a concise and formal introduction in the background part and include some formula.
 
-A: [not formal definition]
+A: The exact computation of attention can vary from model to model, though the overall concept is shared as they are specially designed for understanding the corresponding relationship between sequence of texts.
 
 Q3, In Section 4, the paper indicates that the system is developed under a long-term collaboration with NLP experts, but there is no description describing the details of the collaboration (the number of experts, the length and the form of the collaboration, the frequency of the meetings). It's not until Section 7 did I learn that there are 2 NLP experts in collaboration. The task analysis can also be improved by including more detailed justification of the three tasks.
 
-A: [mention NLP experts early on]
+A: We had added additional details of the collobration in the begining of the section 4, include the number of NLP collaborators, frequency, duration of the meeting for this specific tasks.
 
 Q4, The presentation of the system design in Section 5 could be improved.
 - In Section 5.2, Attention View include both a bipartite graph and a matrix view, which visualize the same information. From the description of the paper, the graph view is only good for highlighting the most dominant alignments. I suspect that matrix view can also reveal the most dominant alignments by identifying the most salient color. Please justify the design decision.
@@ -67,31 +67,31 @@ A: The advantage of the bipartite graph is not only the ability to allow the dom
 
 Q5, It's unclear how the simplification of attention representation is done from Section 5.2, please include more details.
 
-A:
+A: The simplification is achieve by collapsing the dependency tree structure. We assume by focusing on the more important grammar structure, we can remove the decorative words and the reduce sentence length to focus on the more crucial part of the sentences.
 
 Q6, In Section 5.3, how do you compute the density contour? Why is a contour needed in the analysis?
 
-A:
+A: We employed the standard kernel density estimation technique in 2D. As stated in Section 5.3, the primary motivation is to highlight overlaped point (where multiple prediction fall on top of each other) and identify outliers.
 
-Q7, It's better if the authors present the relation between Section 5.3 and 5.4 in a clearer way. It?s confusing to read how one can perturb a prediction in Section 5.3 before he/she read the algorithm in Section 5.4. I suggest put the algorithm along with the perturbation-driven paradigm at the beginning of Section 5.
+Q7, It's better if the authors present the relation between Section 5.3 and 5.4 in a clearer way. It's confusing to read how one can perturb a prediction in Section 5.3 before he/she read the algorithm in Section 5.4. I suggest put the algorithm along with the perturbation-driven paradigm at the beginning of Section 5.
 
-A:
+A: Thanks for catching the ordering problem and providing a soluation. To address the problem, we add references to the optimization discussed in section 5.4 in the beginning of section 5 as well as in section 5.3. We didn't move all the optimization discussion in the beginning of the section 5, because we believe that presenting details of the all three perturbations (input, attention, prediciton) without any discussion about the interface can also be confusing. And the separation between the operation and UI componenet may also make the description hard to read (requre the reader to refer back to the computation discussion while describing the user interface)
 
 Q8, Except for the presentation issue, the contribution of this paper is somewhat limited to only NLI models with attention mechanisms. It's not sure how the visualization can be easily extended for other NLP tasks. For example, I am not sure how the proposed visualization can easily adapt to machine translation, considering that there are no neutral/contradiction/entailment labels.
 
-A: The composability of the system is the key to extend its capability
+A: The composability of the system is the key to extend its capability. The proposed API allow user to include only the panel that is necessary for the given task. For new task (i.e., machine translation), we do not need to include the prediction view for NLI task. We can reuse the attention view to representating the alignment between the original sentence and the translated sentence and introduce new panel for visualizing other information that may not present in the NLI model. However, the main idea is to allow use the combine the panels/functionality to suit their goals.
 
 Q9, In addition, the perturbation-driven scheme is somewhat related to the gradient-based analysis (both are the local analysis of the model on a specific prediction). It is better if the authors discuss the two and differentiate them.
 
-A: connection with sensitivity analysis
+A: Gradient-based sensitivity analysis can often be carried out for domain that is differentiable (i.e., image pixel values), however, for natural language sentences these techniques often can not directly be adopted directly. [?? add the discussion to where?]
 
 Q10, The evaluation is acceptable but a bit weak. There is no description of what questions have the authors asked during the evaluation sessions. It would be better to have formal interviews and ask the participants to perform specific tasks and observe how they performed.
 
-A:
+A: We didn't design a specific list tasks and answers due to the exploratory nature of system as well as the open ended analysis goal. If the user didn't follow the particular exploration path the designer of the question goes, it may find some unexpected result that may not directly corresponds to the "correct" answer, but view the problem from a different perspective. However, to properly evaluation the proposed technique is extremely important, so we plan to recurite more domain experts to test and evaluation the system in the new future. 
 
 Q11, Please also proofread the work and fix typos. For example, the word 'work' in Section 3 should be uncountable; In Section 5.3, "the three points defines a triangle" -> "the three points defining a triangle"
 
-A:
+A: Thanks for pointing out the grammar issues, we have fixed the mentioned problem. And the renew version has been through a thorough copy edit pass by an editor.
 
 ------------------------------- Reviewer 2 -------------------------------
 
