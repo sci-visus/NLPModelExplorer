@@ -1,44 +1,6 @@
-Summary Review
+Response to the reviews
 
-Reviewers were split on whether or not to accept the paper. R2 and R4 rated the paper very highly (5 and 4.5), while R1 and R3 gave lower scores of neutral or weak reject (3 and 2.5). As the scores average to 3.75, and because the primary and secondary reviewers are in agreement, we are advocating for an "Accept".
-
-However, the authors should pay careful attention to the comments by reviewers, and use the time remaining before the next version is due to revise the paper for clarity, to emphasize the main contributions of the paper, to provide rationale for the design choices, to provide more detailed information about the domain-expert collaborators, and to better justify the results of the task analysis. Some reviewers advocated for reducing the number of usage scenarios and providing a more in-depth examination of a single scenario, or a scenario composed of a series of sub-investigations. On the other hand, other reviewers found the breadth of potential analyses to be a positive component of the paper.
-
-///// for discussion ////
-- How to interpret MIRA show attention has less impact
-Q1,
-
-- Formal definition for attention
-Q2
-
-- Why treemap for prediction summary, what about the heatmap matrix, confusion matrix, showing errors
-
-- is perturbation contribution, learned perturbation, user perturbation (part of interactive system)
-
-R1(3):
-+ interesting topic
-+ usage scenarios are interesting
-- description of NLP NN and attention models are not sufficiently detailed in the paper
-- details of collaboration with domain experts are missing
-- justification of tasks are not sufficiently detailed
-- differences between graph and matrix view should be explained in more detail
-- density contour in the prediction view needs to be explained in more detail
-- claims about extension of visualization system to non-NLI tasks is not supported
-- need to clarify difference between proposed perturbation-driven analysis and gradient-based analysis
-- qualitative evaluation is weak
-
-R2 (5):
-+ important area for visualization research
-+ article is well-written
-+ application with linked views is well-designed and powerful
-+ system supports debugging of inference models
-- scalability of system is not discussed
-
-R3 (2.5):
-- article is dense and difficult to read
-- rationale for design choices are not clear
-- core contributions are not highlighted, too much emphasis on background material (explanation of NLI), not enough on the visualization system itself
-- claims based on user evaluation aren't supported
+We greatly appreciate all reviewers' valuable comments. The summary of major changes are listed below. We have itemized the 35 questions/comments and answer each individually.
 
 Summary of major changes:
 1. Revise section 6 to better convey the relationship between the different senarios and provide further clarification on the result observered in 6.3
@@ -87,7 +49,7 @@ A: Gradient-based sensitivity analysis can often be carried out for domain that 
 
 Q10, The evaluation is acceptable but a bit weak. There is no description of what questions have the authors asked during the evaluation sessions. It would be better to have formal interviews and ask the participants to perform specific tasks and observe how they performed.
 
-A: We didn't design a specific list tasks and answers due to the exploratory nature of system as well as the open ended analysis goal. If the user didn't follow the particular exploration path the designer of the question goes, it may find some unexpected result that may not directly corresponds to the "correct" answer, but view the problem from a different perspective. However, to properly evaluation the proposed technique is extremely important, so we plan to recurite more domain experts to test and evaluation the system in the new future. 
+A: We didn't design a specific list tasks and answers due to the exploratory nature of system as well as the open ended analysis goal. If the user didn't follow the particular exploration path the designer of the question goes, it may find some unexpected result that may not directly corresponds to the "correct" answer, but view the problem from a different perspective. However, to properly evaluation the proposed technique is extremely important, so we plan to recurite more domain experts to test and evaluation the system in the new future.
 
 Q11, Please also proofread the work and fix typos. For example, the word 'work' in Section 3 should be uncountable; In Section 5.3, "the three points defines a triangle" -> "the three points defining a triangle"
 
@@ -105,7 +67,7 @@ A:
 
 Q14, Discuss scalability of the system. Can it visually handle long sentences? Would collapsing the heatmaps help here? Can it handle a large number of sentences? This is important for the noted future applicability to question answering where the data items can be as large as text documents.
 
-A: The collasping will have visually handle long sentences, however, different collasping strategy
+A: The key rational for collasping the sentence to reduce the length while still preserving the main structure of the sentence. Therefore, the collasping operation will greatly improve the scability of the show a long sentence. However, it may not suitable for a whole paragraph (multiple sentence), when the length of collapsed sentence can still be too long to be effectively represented in the matrix or biparite graph view. For task such as machine comprehension, in which the context paragraph and be extremely long, we likely will need a hierarchical type of structure.
 
 Q15, Explain more about the Bowman's dataset in use [24], its dimensionality, coverage, complexity, language features, etc.
 
@@ -113,7 +75,7 @@ A:
 
 Q16, A brief discussion of the applicability to other languages would be interesting maybe? Any anticipated challenges?
 
-A:
+A: Since we utilize unicode text representation through out the code, the proposed system can be easily adapting to other aphateical language (however, we have not test the capability). One potential challenge may originated from NLP training set, as there are not as many large scale training data in language other than english.
 
 Q17, Add label to the color scale in Figure 3 (the caption mentions attention by just to avoid confusion). Same for Figure 7a (frequency to the vertical axis), Figure 8b, and Figure 9a-c.
 
