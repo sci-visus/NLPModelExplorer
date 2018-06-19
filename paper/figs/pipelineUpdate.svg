@@ -10,9 +10,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="824.82233mm"
+   width="832.5141mm"
    height="262.87479mm"
-   viewBox="0 0 2922.5988 931.44609"
+   viewBox="0 0 2949.8531 931.44609"
    id="svg4213"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -91,8 +91,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="1818.9882"
-     inkscape:cy="382.98692"
+     inkscape:cx="1788.1277"
+     inkscape:cy="382.98687"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -102,8 +102,8 @@
      fit-margin-bottom="0"
      inkscape:window-width="1440"
      inkscape:window-height="856"
-     inkscape:window-x="154"
-     inkscape:window-y="47"
+     inkscape:window-x="-9"
+     inkscape:window-y="0"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata4218">
@@ -121,7 +121,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(2020.5714,296.65527)">
+     transform="translate(2039.7109,296.65527)">
     <image
        y="-267.20923"
        x="-1048.5714"
@@ -329,5 +329,57 @@
          x="-93.428627"
          id="tspan5578"
          sodipodi:role="line">Allow update in the encoder and classifier stages</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:75px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-67.580231"
+       y="-2016.9296"
+       id="text5567"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan5569"
+         x="-67.580231"
+         y="-2016.9296"
+         style="font-size:31.25px">Frequency</tspan></text>
+    <text
+       transform="matrix(0,-1,1,0,0,0)"
+       sodipodi:linespacing="125%"
+       id="text5571"
+       y="-2010.3582"
+       x="-535.58026"
+       style="font-style:normal;font-weight:normal;font-size:75px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-size:31.25px"
+         y="-2010.3582"
+         x="-535.58026"
+         id="tspan5573"
+         sodipodi:role="line">Frequency</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:75px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-547.00885"
+       y="897.92755"
+       id="text5575"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan5577"
+         x="-547.00885"
+         y="897.92755"
+         style="font-size:31.25px">Frequency</tspan></text>
+    <text
+       transform="matrix(0,-1,1,0,0,0)"
+       sodipodi:linespacing="125%"
+       id="text5579"
+       y="903.64185"
+       x="-85.580276"
+       style="font-style:normal;font-weight:normal;font-size:75px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-size:31.25px"
+         y="903.64185"
+         x="-85.580276"
+         id="tspan5581"
+         sodipodi:role="line">Frequency</tspan></text>
   </g>
 </svg>

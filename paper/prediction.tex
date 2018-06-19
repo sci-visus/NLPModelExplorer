@@ -16,8 +16,11 @@ In the triangle, the distinctly colored background (grey, light grey, and light 
 In the prediction view, the prediction is encoded as a point in the barycentric coordinate system of the triangle shown in (a).
  %
 % The prediction result for the original sentence pair is represented by a larger yellow circle and the prediction of perturbed pairs are illustrated by smaller grey circles.
-A density contour of the prediction is computed to emphasize the highly cluttered areas and distinguish the outliers.
+A density contour of the prediction is computed via kernal density estimation to emphasize the highly cluttered areas and distinguish the outliers.
 As illustrated in (b), the predicted label does not match the ground truth. Therefore, we apply a label reassignment operation, which triggers a model update.
+\shusen{
+The prediction spread pattern of the perturbed pairs directly convey the stability of the model for the given instance. However, we should also take the length of the sentence into consideration as more nouns and verbs will lead to more perturbed inputs.
+}
 % when press and drag the circle (prediction), the user is presented with the three option corresponds to the labels. The dotted line and arrow indicate the newly assigned label.
  }
   \vspace{-2mm}

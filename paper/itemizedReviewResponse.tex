@@ -49,7 +49,7 @@ A: Gradient-based sensitivity analysis can often be carried out for domain that 
 
 Q10, The evaluation is acceptable but a bit weak. There is no description of what questions have the authors asked during the evaluation sessions. It would be better to have formal interviews and ask the participants to perform specific tasks and observe how they performed.
 
-A: We didn't design a specific list tasks and answers due to the exploratory nature of system as well as the open ended analysis goal. If the user didn't follow the particular exploration path the designer of the question goes, it may find some unexpected result that may not directly corresponds to the "correct" answer, but view the problem from a different perspective. However, to properly evaluation the proposed technique is extremely important, so we plan to recurite more domain experts to test and evaluation the system in the new future.
+A: We didn't design a specific list tasks and the corresponding answers due to the exploratory nature of system as well as the open ended analysis goal. If the user didn't follow the particular exploration path the designer of the question goes, it may find some unexpected result that may not directly corresponds to the "correct" answer, but view the problem from a different perspective. However, to properly evaluation the proposed technique is extremely important, so we plan to recurite more domain experts to test and evaluation the system in the new future.
 
 Q11, Please also proofread the work and fix typos. For example, the word 'work' in Section 3 should be uncountable; In Section 5.3, "the three points defines a triangle" -> "the three points defining a triangle"
 
@@ -59,11 +59,11 @@ A: Thanks for pointing out the grammar issues, we have fixed the mentioned probl
 
 Q12, A brief guidance of how to interpret visual patterns that emerge in each view would be very beneficial. In particular, did the authors notice any systematic / repetitive patterns in the triangular prediction view? Do these patterns indicate certain issues in the model / attention / perturbation schemes?
 
-A: [grouping pattern]
+A: As discussed in the experiment of section 6.1, the spread of the pattern directly corresponds to the stability of the prediction. A recurring pattern we noticed is illustrated in Fig. 9(d), where the given sentence pair have low stability due to the fact the original prediction is a boundary prediction (probability is in between two classes). In addition, the perturbation procedure will also affect the pattern as longer sentence will likely have more perturbed variations (contains more nouns and verbs). We include a brief discusison on the potential variability caused by the perturbation procedure in section 5.4. 
 
 Q13, Same thing applies to the attention heatmap, the parameter histograms, and the overview scatterplots in Figure 8 (e.g. does the curve in Figure 8d tell us something?)
 
-A:
+A: The curve pattern in the Figure 8d are likely cause by the different number of words that was perturbed (i.e., each line pattern corresponds to sentence pair that include the same number of nouns and verbs that to be perturbed). This illustrate the additional variation the perturbation bring into the system. We include a brief discusison on the potential variability caused by the perturbation procedure in section 5.4.
 
 Q14, Discuss scalability of the system. Can it visually handle long sentences? Would collapsing the heatmaps help here? Can it handle a large number of sentences? This is important for the noted future applicability to question answering where the data items can be as large as text documents.
 
@@ -71,7 +71,7 @@ A: The key rational for collasping the sentence to reduce the length while still
 
 Q15, Explain more about the Bowman's dataset in use [24], its dimensionality, coverage, complexity, language features, etc.
 
-A:
+A: The SNLI dataset (https://nlp.stanford.edu/projects/snli/) includes "570k human-written English sentence pairs manually labeled for balanced classification with the labels entailment, contradiction, and neutral". Therefore, it does not have direct connection to the word embedding dimension or language features. It is a benchmark dataset for natural language processing task, which can be attacked by different type of models. In our case, we investigated a neural network based approach.
 
 Q16, A brief discussion of the applicability to other languages would be interesting maybe? Any anticipated challenges?
 
@@ -79,11 +79,11 @@ A: Since we utilize unicode text representation through out the code, the propos
 
 Q17, Add label to the color scale in Figure 3 (the caption mentions attention by just to avoid confusion). Same for Figure 7a (frequency to the vertical axis), Figure 8b, and Figure 9a-c.
 
-A:
+A: We've added caption "attention" to the color scale as well as the "frequency" captions to the histograms.
 
 Q18, Add narration to the video and maybe include a 1-min self-contained demo of the system before illustrating the use cases in the video.
 
-A:
+A: We add an introduction section to illustrate the NLP problem and interface. We also include voice over to better convey the contains.
 
 Q19, Language mispredictions (misspelling):
 As discussion in [8, 13]
