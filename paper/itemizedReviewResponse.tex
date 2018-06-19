@@ -59,7 +59,7 @@ A: Thanks for pointing out the grammar issues, we have fixed the mentioned probl
 
 Q12, A brief guidance of how to interpret visual patterns that emerge in each view would be very beneficial. In particular, did the authors notice any systematic / repetitive patterns in the triangular prediction view? Do these patterns indicate certain issues in the model / attention / perturbation schemes?
 
-A: As discussed in the experiment of section 6.1, the spread of the pattern directly corresponds to the stability of the prediction. A recurring pattern we noticed is illustrated in Fig. 9(d), where the given sentence pair have low stability due to the fact the original prediction is a boundary prediction (probability is in between two classes). In addition, the perturbation procedure will also affect the pattern as longer sentence will likely have more perturbed variations (contains more nouns and verbs). We include a brief discusison on the potential variability caused by the perturbation procedure in section 5.4. 
+A: As discussed in the experiment of section 6.1, the spread of the pattern directly corresponds to the stability of the prediction. A recurring pattern we noticed is illustrated in Fig. 9(d), where the given sentence pair have low stability due to the fact the original prediction is a boundary prediction (probability is in between two classes). In addition, the perturbation procedure will also affect the pattern as longer sentence will likely have more perturbed variations (contains more nouns and verbs). We include a brief discusison on the potential variability caused by the perturbation procedure in section 5.4.
 
 Q13, Same thing applies to the attention heatmap, the parameter histograms, and the overview scatterplots in Figure 8 (e.g. does the curve in Figure 8d tell us something?)
 
@@ -97,12 +97,12 @@ A: these errors have been fixed.
 
 Q20, After the teaser image, the paper spends the first four pages on neural networks, NLP, and inference. One has to look hard to detect the lede in the next to last paragraph of the introduction ("Moreover, we propose...") Highlight it!
 
-[highlight ]
-A: The introduction, related works, and background took first three pages. The task analysis which is an essential part of a given visualization system is started on page 4. The text following "Moreover, we propose..." is not the only visualization contributions, to better convey the core visualization contributions, [we update the intro to highlight the visualization components],
+A: We have revise the last paragraph of the introduction to highlight the visualization contributions. The text following "Moreover, we propose..." is not the only place describe visualization contributions, the integrated model pipeline that allow user perturbation in all stages is another contribution, the same holds for the visual encoding for the prediction for the NLI problem.
 
 Q21, Even as a visualization-centric researcher who is aware of NNs and has done a little direct work in NLP, I found it hard to connect to the organization and balance of coverage of these topics in the paper. Despite the prominent teaser visualization and the description of individual views in section 5, the paper comes off as very visualization-light.
 
-A: self-contained information, technical detail drive visualization
+A: We appreciated the reviewer concern as organizing a visualization paper for a domain specific application is a very challenge task. The rational for our current orgnaiziation is that the NLP background provides the minimally necessary information for the average reader to understand the application problem. It is an essential part of the paper which make it self-contained. In addition, a lot of the technical details is directly connected to how the visualization encoding is designed (such as the attention view and prediction view). Without a highlevel understanding of the model, it would be impossible for the reader to understand the purpose of most views and the application senarios. Finally, we also try to compress the background information, we spend less than one page on the background, even through other sections mentioned NLP related topics but they mostly still focus on presenting the visualization system.
+
 
 Q22,For each view there it's clear what the visual representation is, but the majority of description is dedicated to the underlying mechanics of calculating and thinking about the NL inference. The specific interactions involved are also mostly implied, although I was able to deduce them. They should be made explicit.
 
@@ -116,7 +116,7 @@ A:
 
 * What if the sentence structures between premise and hypothesis are not drastically different; will the matrix be as effective, and thus the graph need to be focused on?
 
-A:
+A: The biggest benefit of the graph is the ability for the domain expert to directly see the connection between words. In the matrix, one need to first identify the high value entry and then finding the corresponding row and column to identify the words. If there are multiple correspondence, the user need to check one by one.
 
 * In the matrix view, how hard is it to control rows when they're renormalizing?
 
@@ -144,7 +144,7 @@ A:
 
 * Why a treemap in the summary view? It's just a 3x3 set of quantities. A simple 3x3 matrix heatmap would be more familiar, more readable, and assure that all of the prediction/label combinations are large enough to select easily.
 
-A:
+A: We agree that a 3x3 heatmap (confusion matrix) is also an efficient alternative to represent the summary prediction result. The motivation is use treemap is that it provides a more direct encoding for conveying the count (area instead of variation of colors). And the separate between orange and green tile intuitively convey the correct and incorrect predictions. However, we do think a confusion matrix like encoding could also be beneficial. In the future, we plan to add the confusion matrix as an alternative, so the user can use either one of them based on their preference.
 
 * The description of interaction for the E/E category in the summary view says what one can do, but it's not clear how or why.
 
@@ -152,7 +152,7 @@ A:
 
 Q24, Part of the problem is that the language is very dense in this paper. Although the grammar is acceptable, it was a slow read and there were some passages that I found all but indecipherable, such as the figure 7 caption, the last paragraph of section 5.5, and the bullet list at the end of the introduction.
 
-A:
+A: These sections has been revised to improve the readability.
 
 Q25, There were many small errors that need correcting, too many to bother listing here. There was also some hyperbole ("stunning", "unprecedented", "vision", "paradigm") that distracts me as a serious reader and should be replaced. A thorough copyediting should fix both issues.
 
@@ -162,11 +162,11 @@ A: We remove/replace the words mentioned by the reviewer. For example, the follo
 Q26, The application scenarios in section 6 look useful taken individually, but I wonder about how they are used in combination. The scenarios essentially describe individual tasks that experts might perform in individual views. Scenario 4 goes a little further, but is brief. The paper would very much benefit from a more complete example story of how an analyst might work with the various views in concert to perform higher-level activities. For an application paper like this, some sense of those activities, and how well the tool design works for them, is needed. The last couple paragraphs of section 7 offers only a glimpse of "interrogation" as the authors say.
 Their conclusion (participants believe it convenient) isn't sufficiently supported. As it stands, there isn't clear justification of the many visualization design choices. A longer scenario encompassing the larger process would go a long way toward rectifying that.
 
-A:
+A: These different senarios should naturally arise during the exploration session, the senarios 1 is often the first step to identify the sentence pair of interests (the user can also manually type the one they interested in senarios 6).
 
 Q27, The supplemental materials are okay. The video should be editing to speed up the (slow!) interactions and preferably include audio.
 
-A:
+A: We have revised the video and include voice over and an simple introduction in the begninning.
 
 
 ------------------------------- Reviewer 4 -------------------------------
