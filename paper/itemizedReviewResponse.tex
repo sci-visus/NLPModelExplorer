@@ -171,15 +171,15 @@ A: We have revised the video and include voice over and an simple introduction i
 
 ------------------------------- Reviewer 4 -------------------------------
 
-Q28, I was confused by the distinction between image networks and language networks. CNNs are not only used to make binary classifications, and there are certainly challenges in image networks that do not provide ?clear meaning? and seem like they would also benefit from the proposed work. In other words, I understand the focus on NLP tasks, but the reasoning for it doesn't seem accurate (in the 3rd paragraph of the introduction).
+Q28, I was confused by the distinction between image networks and language networks. CNNs are not only used to make binary classifications, and there are certainly challenges in image networks that do not provide "clear meaning" and seem like they would also benefit from the proposed work. In other words, I understand the focus on NLP tasks, but the reasoning for it doesn't seem accurate (in the 3rd paragraph of the introduction).
 
-A: Clarify in the intro, input modality different, very often CV have human interpretable neuron filter, in NLP such often not,   attention is the exception,
+A: In the introduction we want to highlgith the input modality different. Continuous for image, and discrete for natural language. The different has introduced additional challenge especially regarding optimization as well as interpretation. In addition, in CNN we often can reveal human interpretable neuron filter, but these method has been generalized for NLP. The attention is the exception, which represent often the only interpretable part of the model.
 
-Q29, It was unclear to me if the idea of perturbing a model is novel, or an extension/visualization of previously introduced work in this area applied to NLP NNs. If it?s the former (as it seems to be), then I think this needs to be emphasized in the introduction.
+Q29, It was unclear to me if the idea of perturbing a model is novel, or an extension/visualization of previously introduced work in this area applied to NLP NNs. If it's the former (as it seems to be), then I think this needs to be emphasized in the introduction.
 
-A:
+A: The perturbation of nous and verbs on itself is not novel from NLP perspective, and truly solving the challenge of producing grammarly correct and meaningful perturbation/paraphrasing is still an open research area. In our case, we believe the novality come from the integration of the model with the three stage perturbation scheme in an explorable visual analytic system.
 
-Q30, I appreciated the task analysis in section 4. However, it seems a bit too brief, and the tasks don?t seem to directly follow from the description of the authors experience with the NLP researchers. The scenarios described in Section 6 provide much more detail about these tasks, and Section 5 clarifies them as well, but a bit more detail here would be useful. For example, it's not clear who the NLP researchers are, how many of them were interviewed, what type of NLP projects they were working on, etc.
+Q30, I appreciated the task analysis in section 4. However, it seems a bit too brief, and the tasks don't seem to directly follow from the description of the authors experience with the NLP researchers. The scenarios described in Section 6 provide much more detail about these tasks, and Section 5 clarifies them as well, but a bit more detail here would be useful. For example, it's not clear who the NLP researchers are, how many of them were interviewed, what type of NLP projects they were working on, etc.
 
 A:
 
@@ -193,7 +193,7 @@ A: agree, point out the interesting direction [graph anotation] linear + graph s
 
 Q33, In Sections 6.1 and 6.2, the application scenario gives an example of having a user perturbing the model by changing the input words (switching ?pile? with ?heap?). This updates the system and changes the inference output. Are the successful results of such an interaction remembered by the system? That is, could NLIZE be used to tweak/update the model so that, say, the ambiguity between pile and heap is automatically and more accurately resolved in future queries?
 
-A:
+A: In the current system, we did not record the user interaction/correction result. The mira optimization update may correct the model for the given example (to some extend overfit to the example), however, we don't think there is guarantee that the fix can be easily generalized to other examples. In addition, the ambiguity between pile and heap may also originated from the word embedding (the input numerical representation for words). What the proposed system do is to communicate to the NLP experts that the ambiguity between pile and heap is likely the cause of the wrong prediciton. The experts can chose to dive further and examine the problem with their NLP background.
 
 Q34, Section 6.3 is very interesting, but I don't understand why perturbing the attention stage has less of an effect that the other perturbations. This seems like a preliminary contribution in and of itself (i.e., that using the NLIZE application leads to global understanding such as this), and worthy of further examination.
 
@@ -201,4 +201,4 @@ A: NLP question, further explore NLP
 
 Q35, The application scenarios are all quite brief and come across as somewhat preliminary, but on the other hand, the range of tasks that are supported shows the promise of such an approach. It might make more sense to focus more on only one or two scenarios and cover them in more depth.
 
-A: [additional discussion of]
+A: We added a overview in the begining of the section 6 to illustrate how different tasks related to one another and provide addtional discussion on section 6.3.

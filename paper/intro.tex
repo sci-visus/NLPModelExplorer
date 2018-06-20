@@ -16,10 +16,11 @@ Recently, significant research has been developed to combat the model interpreta
 Both the machine learning as well as the visualization community have proposed a number of promising techniques aimed at interpreting convolution neural networks (CNN)~\cite{SimonyanVedaldiZisserman2013, ZeilerFergus2014, YosinskiCluneNguyen2015, OlahMordvintsevSchubert2017, LiuShiLi2017, OlahSatyanarayanJohnson2018, BilalJourablooYe2018}.
 At the same time, these approaches also remind us how little we truly understand about the inner mechanisms of such deep neural networks.
 
-Compared to image classification tasks, natural language processing (NLP) systems have innate restrictions (e.g., the discrete nature of words) that make the road to interpretation even more challenging.
+Compared to image classification tasks, natural language processing (NLP) systems often involve additional challenges such as the discrete nature of words.
 For example, \emph{feature visualization}~\cite{OlahMordvintsevSchubert2017}, an often deployed technique for illustrating what image features a given part of the network (e.g., neuron, layer, or channel) captures, cannot be readily generalized to natural language.
-An image (pixel values) represents a continuous solution space, in which human can quickly recognize the existence (or the absence) of patterns or shapes.
-For natural language, even though we can encode a word as a vector~\cite{MikolovSutskeverChen2013, PenningtonSocherManning2014}, the word embedding space is still discretely defined, in which the interpolation of two vectors (i.e., two words) does not hold clear meaning.
+\shusen{
+An image (pixel values) corresponds to a continuous solution space. which is more accessable for optimization and human visual recognation (i.e., the existence or the absence of patterns).
+For natural language, even though we can encode a word as a vector~\cite{MikolovSutskeverChen2013, PenningtonSocherManning2014}, the word embedding space is still discretely defined, in which the interpolation of two vectors (i.e., two words) does not hold clear meaning.}
 %
 These restrictions call for new avenues for solving the interpretation challenges of natural language models, which motivates the proposed work.
 
