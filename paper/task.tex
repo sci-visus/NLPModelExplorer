@@ -21,20 +21,24 @@ In such an exploration workflow, NLP researchers often need to utilize multiple 
 Therefore, the expert driven exploration process can greatly benefit from the introduction of an interactive visual exploration environment, where the researchers can easily express their hypotheses and obtain quick visual feedback of the results.
 %
 Moreover, by introducing new visual encodings and summarizations, we can drastically expand the ways domain experts interact with the model, enable exploration options that previously were not possible either due to tedious manual operation or the lack of communication channels.
-
 %
 %In such a highly exploratory process, the expert likely will have many ``what if'' type of questions (e.g., what if I make change to this word in the input, what if I force the words to align correctly in the attention), get responsive answers to these queries is essential to maintain the flow of reasoning.
 %
+\shusen{
 To support the exploratory workflow for analyzing NLI models,
 we aim to address the following tasks based on our extensive discussions with NLP experts.
+}
 
 \begin{itemize}
+    \item \textbf{T1}: Understand the stability of a prediction, i.e., how perturbations of the input affect the behavior of the model?
 
-\item \textbf{T1}: Understand the stability of a prediction, i.e., how perturbations of the input affect the behavior of the model?
+    \item \textbf{T2}: Examine the attention mechanism, i.e., what is the relationship between the input and the attention, and how does the attention affect the prediction?
 
-\item \textbf{T2}: Examine the attention mechanism, i.e., what is the relationship between the input and the attention, and how does the attention affect the prediction?
+    \item \textbf{T3}: When the predicted label is wrong, how can we update the model to correct the prediction? What are the effects of updating different parts of the model?
+\end{itemize}
 
-\item \textbf{T3}: When the predicted label is wrong, how can we update the model to correct the prediction? What are the effects of updating different parts of the model?
+In Section~\ref{sec:caseStudy}, we will discussion in detail how we can use the proposed tool to address these tasks. The application Senarios 1,2,3 corresponds to \textbf{T1-T3}, respectively.
+
 
 %\item To begin with, understanding how perturbation (e.g., replacing words with synonymous) of the input affects the prediction is the crucial part of error analysis. It not only measures the prediction sensitivity, but also helps reveal the potential source of the errors in the input (\textbf{T1}).
 
@@ -45,7 +49,6 @@ we aim to address the following tasks based on our extensive discussions with NL
 %\item So far, we focus on how changes in earlier stage of the model affect later stages or the final prediction. However, what if the current prediction is wrong, how can we apply minimal update to the model to produce correct prediction. and how would such a modification affect attention (\textbf{T3}).
 % Therefore, thirdly, we want to explore how model should be updated to produce the desirable change of prediction, and how the attention respond to such a change (\textbf{T3}).
 
-\end{itemize}
 %Through many rounds of discussions with NLP experts,
 %In such a highly exploratory process, the expert likely will have many ``what if'' type of questions (e.g., what if I make change to this word in the input, what if I force the words to align correctly in the attention), get responsive answers to these queries is essential to maintain the flow of reasoning.
 

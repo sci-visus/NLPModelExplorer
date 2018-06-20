@@ -181,15 +181,15 @@ A: The perturbation of nous and verbs on itself is not novel from NLP perspectiv
 
 Q30, I appreciated the task analysis in section 4. However, it seems a bit too brief, and the tasks don't seem to directly follow from the description of the authors experience with the NLP researchers. The scenarios described in Section 6 provide much more detail about these tasks, and Section 5 clarifies them as well, but a bit more detail here would be useful. For example, it's not clear who the NLP researchers are, how many of them were interviewed, what type of NLP projects they were working on, etc.
 
-A:
+A: We moved the description of the collabration into the beginning of section 4, in which we describe the number of NLP experts, frequency, and the duration of the meeting for this specific projects. We also add pointer to application senarios that corresponds to the tasks to instantiate the more abstract concepts.
 
-Q31, Work by Ma et al. ("Visualizing dynamic brain networks using an animated dual-representation? from EuroVis 2015) is work related to NLIZE having both graph and matrix views that complement each other and provide the same information from different perspectives, as described in Section 5.2.
+Q31, Work by Ma et al. ("Visualizing dynamic brain networks using an animated dual-representation" from EuroVis 2015) is work related to NLIZE having both graph and matrix views that complement each other and provide the same information from different perspectives, as described in Section 5.2.
 
-A:
+A: We've citated this work in Section 5.2 when discussing the due visual representations.
 
-Q32, Placing the grammar dependency tree over the matrix / bipartite graph is interesting (described in Section 5 and Section 6.4). I wonder if it would make sense to use other types of annotations here, such as those created from event extraction tools or information extraction tools that would highlight other structures (besides grammar/POS) that could be useful in helping understanding the inference model. Work by Forbes et al. supports the use of semantic hypergraphs to provide richer textual annotations alongside text sequences ("Text annotation graphs: Annotating complex natural language phenomena? from LREC 2018).
+Q32, Placing the grammar dependency tree over the matrix / bipartite graph is interesting (described in Section 5 and Section 6.4). I wonder if it would make sense to use other types of annotations here, such as those created from event extraction tools or information extraction tools that would highlight other structures (besides grammar/POS) that could be useful in helping understanding the inference model. Work by Forbes et al. supports the use of semantic hypergraphs to provide richer textual annotations alongside text sequences ("Text annotation graphs: Annotating complex natural language phenomena" from LREC 2018).
 
-A: agree, point out the interesting direction [graph anotation] linear + graph structure
+A: After discussing with domain experts, they believe this would be a very interesting direction for future works. Coming up with efficient visual encoding for these type of information they go beyond grammar tree is a challenge on its own. For example the extract structure can be graph, which likely require a complete redesign of the annotation visualization.
 
 Q33, In Sections 6.1 and 6.2, the application scenario gives an example of having a user perturbing the model by changing the input words (switching ?pile? with ?heap?). This updates the system and changes the inference output. Are the successful results of such an interaction remembered by the system? That is, could NLIZE be used to tweak/update the model so that, say, the ambiguity between pile and heap is automatically and more accurately resolved in future queries?
 
@@ -197,7 +197,7 @@ A: In the current system, we did not record the user interaction/correction resu
 
 Q34, Section 6.3 is very interesting, but I don't understand why perturbing the attention stage has less of an effect that the other perturbations. This seems like a preliminary contribution in and of itself (i.e., that using the NLIZE application leads to global understanding such as this), and worthy of further examination.
 
-A: NLP question, further explore NLP
+A: As discussion in the answer for Q1, the core attention operation is not tunable, only the intial transformation in the beginning of the attention stage includes tunable parameters. This can partially explain the result. However, the domain experts mentioned they are interested in exploring more from NLP perspective to understand this result fully.
 
 Q35, The application scenarios are all quite brief and come across as somewhat preliminary, but on the other hand, the range of tasks that are supported shows the promise of such an approach. It might make more sense to focus more on only one or two scenarios and cover them in more depth.
 
