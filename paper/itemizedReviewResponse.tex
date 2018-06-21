@@ -106,45 +106,47 @@ A: We appreciated the reviewer concern as organizing a visualization paper for a
 
 Q22,For each view there it's clear what the visual representation is, but the majority of description is dedicated to the underlying mechanics of calculating and thinking about the NL inference. The specific interactions involved are also mostly implied, although I was able to deduce them. They should be made explicit.
 
-A:
+A: [We've revised descriptions to make interaction more explicit. TODO]
+
 
 Q23, More importantly, there is little rationale for the visual representation designs of the various views. The design choices do make sense (at least to an experienced visualization designer) but there are alternatives in each case. It's not clear that the visualization are particularly good or bad for their intended uses as described in section 6. A few questions that arise:
 
 * How does one handle very different sentence lengths in the sentence view?
 
-A:
+A: One can expand the text box to include multiple line to show the longer sentence. There is no special encoding here, since we are just showing the raw text.
 
 * What if the sentence structures between premise and hypothesis are not drastically different; will the matrix be as effective, and thus the graph need to be focused on?
 
-A: The biggest benefit of the graph is the ability for the domain expert to directly see the connection between words. In the matrix, one need to first identify the high value entry and then finding the corresponding row and column to identify the words. If there are multiple correspondence, the user need to check one by one.
+A: If the sentence structures are drastically different, the matrix view may have benefit as the structure difference likely result in crossed lines in the biparite graph view, which can lead to poorer perception. The biggest benefit of the graph is the ability for the domain expert to directly see the connection between words. In the matrix, one need to first identify the high value entry and then finding the corresponding row and column to identify the words. If there are multiple correspondences, the user need to check them one by one in the matrix view.
 
 * In the matrix view, how hard is it to control rows when they're renormalizing?
 
-A:
+A: For the given model there are two attention matrices, one have row normalization while the other have column normalization. We follow the same rule to apply renormalization after sentence collapsing.
 
 * How much reduction in the grammar dependency tree is necessary to combat visual clutter, and how does that relate to the expert's ability to dissect sentences at the desired level of detail?
 
-A:
+A: The amount of necessary reduction is influenced by the structure of the sentences as well as the capability of the parser. There is a trade-off between visual clutter and text readability. The more collapse is equal to less visual clutter, but likely reduce the readability of the text. The From our experiment, we notice the NLP experts have far better ability to understand the collapsed sentence compared to others. The desired level should be a good trade-off based on the experts preference.
 
 * How do the matrices combined in figure 5f align for comparison?
 
-A:
+A: We make sure to only compute the comparison when the two matrices are of same size and utilizing the same normalization pattern.
 
 * Why does the prediction view use a continuous interaction like drag when the target is to select one of only three discrete options?
 
-A:
+A: There are two rational to design the re-assignment as drag. Firstly, the semantic of changing prediction corresponds well to a drag operation. We intially plan to implement the re-assignment as a continuous drag operation. However, we believe it is more meaningful for human to assign discrete label (instead of a probability). Secondly, we want to distingish this action with click which is already reserved for selection operation.
 
 * What happens in the prediction view if many predictions are close to each other? Between the predictions and the density contour map, the view could get very dense, particular if much data is involved from the 10k set.
 
-A:
+A: The number of points in the prediction view is limited by the number of perturbations per sentence pair. In another work, we will only look at one sentence pair at a time for the detailed analysis. The motivation for including the density contour is to help convey the overlapping information.
 
 * In the pipeline view, doesn't the formulation to approximate the assigned label introduce another black box that the user need to factor into their analytic thinking?
 
-A:
+A: The MIRA optimization process indeed introduces unpredibility and opaqueness in the solution. To mitigate the limitation, we provide summary of the paramter changes in the pipeline view to help reveal the effect of the optimization on the parameter. Morever, we can also utilizing the attention visualization to interpret the effect the optimiztion. Finally, compared to a end-to-end neural network (which is often referred to as a blackbox) this optimization has a more restricted setting as we are only fitting the model to the given example instead of jointly optimizing for the entire dataset.
+
 
 * Why a treemap in the summary view? It's just a 3x3 set of quantities. A simple 3x3 matrix heatmap would be more familiar, more readable, and assure that all of the prediction/label combinations are large enough to select easily.
 
-A: We agree that a 3x3 heatmap (confusion matrix) is also an efficient alternative to represent the summary prediction result. The motivation is use treemap is that it provides a more direct encoding for conveying the count (area instead of variation of colors). And the separate between orange and green tile intuitively convey the correct and incorrect predictions. However, we do think a confusion matrix like encoding could also be beneficial. In the future, we plan to add the confusion matrix as an alternative, so the user can use either one of them based on their preference.
+A: We agree that a 3x3 heatmap (essentially a confusion matrix) is also an efficient alternative to represent the summary prediction result. The motivation is use treemap is that it provides a more direct encoding for conveying the count (area instead of variation of colors). And the separate between orange and green tile intuitively convey the correct and incorrect predictions. However, we do think a confusion matrix like encoding could also be beneficial. In the future, we plan to add the confusion matrix as an alternative, so the user can use either one of them based on their preference.
 
 * The description of interaction for the E/E category in the summary view says what one can do, but it's not clear how or why.
 
@@ -166,7 +168,7 @@ A: These different senarios should naturally arise during the exploration sessio
 
 Q27, The supplemental materials are okay. The video should be editing to speed up the (slow!) interactions and preferably include audio.
 
-A: We have revised the video and include voice over and an simple introduction in the begninning.
+A: We have revised the video and included voice over and a simple introduction in the begninning.
 
 
 ------------------------------- Reviewer 4 -------------------------------
