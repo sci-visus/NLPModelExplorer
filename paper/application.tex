@@ -140,10 +140,12 @@ Interestingly, all configurations except one are concentrated around the full \e
 %In other words, the updating of the attention stage seems to have significantly less impact on the prediction result compared to the classifier or encoder stage of the model.
 %Similar observations can be obtained for most examples we have experimented with.
 \shusen{
-To interpret the result, we need to carry out a case by case analysis, as the separation of the stages depends on the individual implementation.
-In our case, the result indicates that the tunable parameters of the attention stage (the transformation before the alignment operation, see details in Appendix A) has less impact on the final prediction compared to the other two stages.
 The domain experts comment that this observation is interesting and worth further investigation from the perspective of NLP research.
-However, this result does not necessarily imply the limitation of attention mechanism as the core alignment computation does not have tunable parameters that can be modified by the proposed optimization.
+The domain experts suggest a preliminary understanding as the following.
+Attention provides a way to compose word semantics. Individual word semantics are yielded by the encoder and input embedding, while the composed semantics participate in classification layer. We can see from this analysis that, only adjusting the word alignment only affects composed semantics but has no effect on word semantics while the later plays a significant role in good model (as this was also justified by recent works in word embeddings, e.g. Elmo). Without proper semantics (in both encoder and classifier), only adjusting alignment is not sufficient to yield good model. 
+%To interpret the result, we need to carry out a case by case analysis, as the separation of the stages depends on the individual implementation.
+%In our case, the result indicates that the tunable parameters of the attention stage (the transformation before the alignment operation, see details in Appendix A) has less impact on the final prediction compared to the other two stages.
+%However, this result does not necessarily imply the limitation of attention mechanism as the core alignment computation does not have tunable parameters that can be modified by the proposed optimization.
 }
 %The attention layer is less sensitive compared to encoding layer and classification layer.
 %When examined other sentences pairs, such an observation remains.

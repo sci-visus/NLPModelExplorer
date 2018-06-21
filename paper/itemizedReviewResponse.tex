@@ -7,54 +7,62 @@ Summary of major changes:
 - Revise the introduction to remove hyperbole words, clarify the NLP vs. CNN data modality comparison, and simplify the contribution list.
 - Clarify the domain experts involvement in the beginning of section 4.
 - Revise section 5 to better explain the user interactions and add discussion on how to interpret the visual encodings.
+- Reworked the video, included a new introduction section and added the voice over.
+
 ------------------------------- Reviewer 1 -------------------------------
 
 
 Q1. The usage scenarios also look interesting, especially the Scenario 3. Does the result to some extent suggest that the attention mechanism is not a very efficient component in this task? I expect the authors dig it further.
 
-A: To interpret the result, we need to carry out a case by case analysis, as the separation of the stages depends on the individual implementation. In this case, the result indicates that the tunable parameters of the attention stage (the transformation before the core alignment computation, see details in Appendix A) has less impact on the final prediction compared to the other two stages. The domain experts comment that this observation is interesting and worth further investigation from the perspective of NLP research. However, this result does not necessarily imply the limitation of attention mechanism as the core alignment computation does not have tunable parameters that can be modified by the proposed optimization. We revised section 6.3 to clarify this point.
-
-\emph{tli} The attention layer indeed has tunable parameters (there is a two-layer ReLU specialized for attention layer, checkout the revised appendix). The explanation can be this: Attention provides a way to compose word semantics. Individual word semantics are yielded by encoder and input embedding, while the composed semantics participate in classification layer. We can see from this analysis that, only adjusting the word alignment only affects composed semantics but has no effect on word semantics while the later plays a significant role in good model (as this was also justified by recent works in word embeddings, e.g. Elmo). Without proper semantics (in both encoder and classifier), only adjusting alignment is not sufficient to yield good model.
+A: The domain experts provide the following way to interpret the result. Attention provides a way to compose word semantics. Individual word semantics are yielded by encoder and input embedding, while the composed semantics participate in classification layer. We can see from this analysis that, only adjusting the word alignment only affects composed semantics but has no effect on word semantics while the later plays a significant role in good model (as this was also justified by recent works in word embeddings, e.g. Elmo). Without proper semantics (in both encoder and classifier), only adjusting alignment is not sufficient to yield good model. 
+We revised section 6.3 to clarify this point.
 
 
 Q2. In Section 2, the neural net in NLP and attention mechanisms are introduced. But the descriptions are unsatisfactory. There is no formal definition or description of the model and the attention mechanism. It's still unclear how the attention mechanism is applied in the model. I would suggest the authors include a concise and formal introduction in the background part and include some formula.
 
 A: The exact computation of attention can vary from model to model despite the overall concept is shared. As a result, when we discuss the general concept of attention we can not fix on a single mathematical formulation (the detailed formulation for the model we investigated is discussed in Appendix A ). 
 
+
 Q3, In Section 4, the paper indicates that the system is developed under a long-term collaboration with NLP experts, but there is no description describing the details of the collaboration (the number of experts, the length and the form of the collaboration, the frequency of the meetings). It's not until Section 7 did I learn that there are 2 NLP experts in collaboration. The task analysis can also be improved by including more detailed justification of the three tasks.
 
 A: We had added additional details of the collaboration at the beginning of section 4, including the number of NLP collaborators, frequency, duration of the meeting for the proposed work.
+
 
 Q4, The presentation of the system design in Section 5 could be improved.
 - In Section 5.2, Attention View includes both a bipartite graph and a matrix view, which visualize the same information. From the description of the paper, the graph view is only good for highlighting the most dominant alignments. I suspect that matrix view can also reveal the most dominant alignments by identifying the most salient color. Please justify the design decision.
 
 A: The advantage of the bipartite graph is the ability to allow the domain experts to quickly uncover not only the most dominant alignments but also the corresponding words. However, in the matrix view, it take more efforts to link the strong alignment with the corresponding words (especially if there are several strong alignments). [We have updated the text to better reflect this point]
 
+
 Q5, It's unclear how the simplification of attention representation is done from Section 5.2, please include more details.
 
 A: The simplification is achieved by replacing the children of the dependency tree structure with the parents. We assume by focusing on the more important grammar structure, we can remove the decorative words and the reduce sentence length to focus on the more crucial part of the sentences.
+
 
 Q6, In Section 5.3, how do you compute the density contour? Why is a contour needed in the analysis?
 
 A: We employed the standard kernel density estimation technique in 2D. As stated in Section 5.3, the primary motivation is to highlight overlapped point (where multiple predictions fall on top of/near each other) and identify outliers.
 
+
 Q7, It's better if the authors present the relation between Section 5.3 and 5.4 in a clearer way. It's confusing to read how one can perturb a prediction in Section 5.3 before he/she read the algorithm in Section 5.4. I suggest put the algorithm along with the perturbation-driven paradigm at the beginning of Section 5.
 
 A: Thanks for catching the ordering problem and providing a solution. To address the issue, we add references to the optimization discussed in section 5.4 at the beginning of section 5 as well as in section 5.3. We didn't move all the optimization discussion at the beginning of section 5, because we believe that presenting details of the all three perturbations (input, attention, prediction) without any discussion about the interface can also be very confusing. And the separation between the operation and UI component may also make the description hard to read (require the reader to refer back to the computation discussion while describing the user interface). We believe the revised version provide a decent compromise.
+
 
 Q8, Except for the presentation issue, the contribution of this paper is somewhat limited to only NLI models with attention mechanisms. It's not sure how the visualization can be easily extended for other NLP tasks. For example, I am not sure how the proposed visualization can easily adapt to machine translation, considering that there are no neutral/contradiction/entailment labels.
 
 A: The composability of the system is the key to extend its capability. The proposed API allows the user to include only the view that is necessary for the given task. For new task (i.e., machine translation), we do not need to include the prediction view for the NLI task. We can reuse the attention views to representing the alignment between the original sentence and the translated sentence and introduce new views for visualizing other information that may not present in the NLI model. The main idea is to allow user to combine the view/functionality to suit their analysis goals.
 
+
 Q9, In addition, the perturbation-driven scheme is somewhat related to the gradient-based analysis (both are the local analysis of the model on a specific prediction). It is better if the authors discuss the two and differentiate them.
 
-A: Gradient-based sensitivity analysis can often be carried out for domain that is differentiable (i.e., image pixel values), however, for natural language sentences these techniques often can not directly be adopted directly. In the proposed work, we can think the perturbation as way to approximate gradient-based analysis for discrete domain. [add the discussion to where? TODO]
+A: Gradient-based sensitivity analysis can often be carried out for domain that is differentiable (i.e., image pixel values). In the proposed work, the challenge of using gradient-based method in NLP actually inspired us to utilize perturbation. This is related to discussion in the introduction where the difference between NLP and CV is highlighted.
 
-\emph{tli} I think we might add it when we introduce perturbation, as something like the challenge of using gradient-based method in NLP inspired us to use perturbation.
 
 Q10, The evaluation is acceptable but a bit weak. There is no description of what questions have the authors asked during the evaluation sessions. It would be better to have formal interviews and ask the participants to perform specific tasks and observe how they performed.
 
 A: We didn't design a specific list of tasks and the corresponding answers due to the exploratory nature of the system as well as the open-ended analysis goal. If the user didn't follow the particular exploration path the designer of the question goes, he/she might find some unexpected result that may not directly correspond to the "correct" answer, but view the problem from a different perspective. However, to properly evaluate the proposed technique is extremely important, so we plan to recruit more domain experts to test and evaluate the system in the new future.
+
 
 Q11, Please also proofread the work and fix typos. For example, the word 'work' in Section 3 should be uncountable; In Section 5.3, "the three points defines a triangle" -> "the three points defining a triangle"
 
@@ -76,9 +84,8 @@ A: The key rationale for collapsing the sentence to reduce the length while stil
 
 Q15, Explain more about the Bowman's dataset in use [24], its dimensionality, coverage, complexity, language features, etc.
 
-A: The SNLI dataset (https://nlp.stanford.edu/projects/snli/) includes "570k human-written English sentence pairs manually labeled for balanced classification with the labels entailment, contradiction, and neutral". Therefore, it does not have a direct connection to the word embedding dimension or language features. It is a benchmark dataset for natural language processing task, which can be attacked by different types of models. In our case, we investigated a neural network based approach.
+A: The SNLI dataset (https://nlp.stanford.edu/projects/snli/) includes "570k human-written English sentence pairs manually labeled for balanced classification with the labels entailment, contradiction, and neutral". Therefore, it does not have a direct connection to the word embedding dimension or language features. It is a benchmark dataset for natural language processing task, which can be attacked by different types of models. In our case, we investigated a typical neural network based approach.
 
-\emph{tli}: In our case, we investigated a typical neural network based approach.
 
 Q16, A brief discussion of the applicability to other languages would be interesting maybe? Any anticipated challenges?
 
@@ -152,9 +159,8 @@ A: The number of points in the prediction view is limited by the number of pertu
 
 Q30, n the pipeline view, doesn't the formulation to approximate the assigned label introduce another black box that the user need to factor into their analytic thinking?
 
-A: The MIRA optimization process indeed introduces unpredictability and opaqueness in the solution. To mitigate the limitation, we provide a summary of the parameter changes in the pipeline view to help reveal the effect of the optimization on the parameters. Moreover, we can also utilize the attention visualization to interpret the impact of the optimization. Finally, compared to an end-to-end neural network (which is often referred to as a black box) this optimization has a more restricted setting that is easier to interpret as we are only fitting the model to the given instance.
+A: The MIRA optimization process indeed introduces unpredictability and opaqueness in the solution. To mitigate the limitation, we provide a summary of the parameter changes in the pipeline view to help reveal the effect of the optimization on the parameters. Moreover, we can also utilize the attention visualization to interpret the impact of the optimization. Finally, our MIRA optimization is a simplified version that only added a L2 regularization on the weight change during backpropagation. Compared to an end-to-end neural network (which is often referred to as a black box) this optimization has a more restricted setting that is easier to interpret as we are only fitting the model to the given instance. 
 
-\emph{tli} Our MIRA optimization is a simplified version that only added a L2 regularization on the weight change during backpropagation. And yes, it is much more intuitive than a deep neural black box.
 
 
 Q31, Why a treemap in the summary view? It's just a 3x3 set of quantities. A simple 3x3 matrix heatmap would be more familiar, more readable, and assure that all of the prediction/label combinations are large enough to select easily.
@@ -213,7 +219,7 @@ A: In the current system, we did not record the user interaction/correction resu
 
 Q43, Section 6.3 is very interesting, but I don't understand why perturbing the attention stage has less of an effect that the other perturbations. This seems like a preliminary contribution in and of itself (i.e., that using the NLIZE application leads to global understanding such as this), and worthy of further examination.
 
-A: As discussed in the answer for Q1, the core attention operation is not tunable, only the initial transformation at the beginning of the attention stage includes tunable parameters. This can partially explain the result. However, the domain experts mentioned they are interested in exploring more from NLP perspective to understand this result fully.
+A: As discussed in the answer for Q1, the domain experts mentioned they are interested in exploring more from NLP perspective to understand this result fully. They also provide some preliminary explanation. We included them in the revise 6.3 section.
 
 Q44, The application scenarios are all quite brief and come across as somewhat preliminary, but on the other hand, the range of tasks that are supported shows the promise of such an approach. It might make more sense to focus more on only one or two scenarios and cover them in more depth.
 
