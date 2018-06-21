@@ -50,6 +50,8 @@ Q9, In addition, the perturbation-driven scheme is somewhat related to the gradi
 
 A: Gradient-based sensitivity analysis can often be carried out for domain that is differentiable (i.e., image pixel values), however, for natural language sentences these techniques often can not directly be adopted directly. In the proposed work, we can think the perturbation as way to approximate gradient-based analysis for discrete domain. [add the discussion to where? TODO]
 
+\emph{tli} I think we might add it when we introduce perturbation, as something like the challenge of using gradient-based method in NLP inspired us to use perturbation.
+
 Q10, The evaluation is acceptable but a bit weak. There is no description of what questions have the authors asked during the evaluation sessions. It would be better to have formal interviews and ask the participants to perform specific tasks and observe how they performed.
 
 A: We didn't design a specific list of tasks and the corresponding answers due to the exploratory nature of the system as well as the open-ended analysis goal. If the user didn't follow the particular exploration path the designer of the question goes, he/she might find some unexpected result that may not directly correspond to the "correct" answer, but view the problem from a different perspective. However, to properly evaluate the proposed technique is extremely important, so we plan to recruit more domain experts to test and evaluate the system in the new future.
@@ -75,6 +77,8 @@ A: The key rationale for collapsing the sentence to reduce the length while stil
 Q15, Explain more about the Bowman's dataset in use [24], its dimensionality, coverage, complexity, language features, etc.
 
 A: The SNLI dataset (https://nlp.stanford.edu/projects/snli/) includes "570k human-written English sentence pairs manually labeled for balanced classification with the labels entailment, contradiction, and neutral". Therefore, it does not have a direct connection to the word embedding dimension or language features. It is a benchmark dataset for natural language processing task, which can be attacked by different types of models. In our case, we investigated a neural network based approach.
+
+\emph{tli}: In our case, we investigated a typical neural network based approach.
 
 Q16, A brief discussion of the applicability to other languages would be interesting maybe? Any anticipated challenges?
 
@@ -149,6 +153,8 @@ A: The number of points in the prediction view is limited by the number of pertu
 Q30, n the pipeline view, doesn't the formulation to approximate the assigned label introduce another black box that the user need to factor into their analytic thinking?
 
 A: The MIRA optimization process indeed introduces unpredictability and opaqueness in the solution. To mitigate the limitation, we provide a summary of the parameter changes in the pipeline view to help reveal the effect of the optimization on the parameters. Moreover, we can also utilize the attention visualization to interpret the impact of the optimization. Finally, compared to an end-to-end neural network (which is often referred to as a black box) this optimization has a more restricted setting that is easier to interpret as we are only fitting the model to the given instance.
+
+\emph{tli} Our MIRA optimization is a simplified version that only added a L2 regularization on the weight change during backpropagation. And yes, it is much more intuitive than a deep neural black box.
 
 
 Q31, Why a treemap in the summary view? It's just a 3x3 set of quantities. A simple 3x3 matrix heatmap would be more familiar, more readable, and assure that all of the prediction/label combinations are large enough to select easily.
