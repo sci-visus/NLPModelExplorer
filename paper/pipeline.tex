@@ -18,11 +18,14 @@ With this formulation, we try to find a good approximation to the newly assigned
  \includegraphics[width=0.95\linewidth]{pipelineView}
  \vspace{-2mm}
  \caption{
-The pipeline view provides the visual representation of the three-stage (encoder, attention, classifier) model. 
+The pipeline view provides the visual representation of the three-stage (encoder, attention, classifier) of the NLI model. 
 %
-In the proposed tool, we allow model parameters to be updated to correct a prediction error. 
-The optimization hyperparameters are shown in (a), and each of the stages is illustrated in (b), where the user can click on the blue rectangle marked with the word ``parameter'' to enable or disable its update (the legend is shown in (d)). In (c), we select whether we want to use the current pipeline setting as displayed or try all the pipeline configuration combinations as the parameter update operation can be enabled or disabled for each stage.
- }
+In the proposed tool, we allow model parameters to be updated to correct a prediction error via a constrained optimization.
+The hyperparameters for this optimization are shown in (a). 
+In (b), we utilizes a graphical representation for each stage of the pipeline.
+% where the user can click on the blue rectangle marked with the word ``parameter'' to enable or disable its update (the legend is shown in (d)). 
+In (c), the user can select whether to use the current pipeline configuration as displayed or try all the pipeline configuration combinations for the optimization. %whether we want to use the current pipeline configuration as displayed or try all the pipeline configuration combinations as the parameter update operation can be enabled or disabled for each stage.
+}
 \label{fig:pipelineView}
 \vspace{-2mm}
 \end{figure}

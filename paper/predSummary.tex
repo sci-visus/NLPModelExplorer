@@ -1,19 +1,4 @@
-\begin{figure}[htbp]
-\centering
-\vspace{-2mm}
- \includegraphics[width=1.0\linewidth]{summaryView}
- \vspace{-6mm}
- \caption{
-%Summarize the prediction results and sensitivity of the entire development set, and provide an explorative interface to select an example of interest.
-We summarize all the prediction results in (a), where the green block indicates correct predictions, the orange block indicates wrong predictions, and the label (e.g., E/E, E/N) shows the ground truth label and the predicted label (N-Neural, E-Entailment, C-Contradiction).
-%
-The user can select the treemap node to focus on the specific type of scenarios (e.g., E/E) and reveal the histogram (b) and scatterplot (c) for displaying the selected subset.
-The selection can be further narrowed down by selecting the bin in the histogram.
-In (c) and (d), each point corresponds to one sentence pair.
- }
- \vspace{-2mm}
-\label{fig:summaryView}
-\end{figure}
+
 
 \subsection{Summary View}
 \label{sec:allPairs}
@@ -25,6 +10,23 @@ In addition, the experts are also interested in obtaining a high-level understan
 %
 These two goals are the two sides of the same coin. 
 The selection task will become easier if we can generate a good visual summary of the $10k$ examples.% that could also help experts obtain a deeper understanding of the whole $10k$ examples.
+
+\begin{figure}[htbp]
+\centering
+\vspace{-2mm}
+ \includegraphics[width=1.0\linewidth]{summaryView}
+ \vspace{-6mm}
+ \caption{
+%Summarize the prediction results and sensitivity of the entire development set, and provide an explorative interface to select an example of interest.
+We summarize all the prediction results in (a), where the green block indicates correct predictions, the orange block indicates wrong predictions, and the label (e.g., E/E, E/N) shows the ground truth label and the predicted label (N-Neural, E-Entailment, C-Contradiction).
+%
+The user can click on the treemap node to focus on the specific type of scenarios (e.g., E/E) to automatically reveal the histogram (b) and scatterplot (c) for displaying the selected subset.
+The selection can be further narrowed down by selecting the bin in the histogram.
+In (c) and (d), each point corresponds to one sentence pair.
+ }
+ \vspace{-2mm}
+\label{fig:summaryView}
+\end{figure}
 
 To address these challenges, we introduce the summary view (see Fig.~\ref{fig:teaser}(a)), which consists of a treemap, a histogram, and a scatterplot, to summarize the prediction results of the $10k$ examples and provide the ability to drill down to individual examples for detailed analysis.
 %treemap for prediction
