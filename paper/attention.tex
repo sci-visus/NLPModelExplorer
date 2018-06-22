@@ -14,10 +14,10 @@ The matrix attention view (Fig.~\ref{fig:attentionVis}(b)), despite being more v
 %As illustrated by the pink arrowed lines, we can see how the same attention value is visualized in both the graph and the matrix view.
 To help the user recognize the correspondence during the exploration, we enable the linkage between highlighted actions in both views (see Fig.~\ref{fig:attentionVis}(a)(b), the attention of the two ``couple'' is highlighted).
 
-To support the ability to perturb the attention values (\textbf{T2}), we include the attention editing functionality. The attention matrix view is the most suitable place to conduct the edit operation since it provides a direct mapping of attention value.
+To support the ability to perturb the attention values (\textbf{T2}), we include the attention editing functionality. The attention matrix view is the most suitable place to conduct the editing operation since it provides a direct mapping of attention value.
 As we can see in Fig.~\ref{fig:attentionVis}(c), when a user clicks the cell of the matrix, a sider will pop up for customizing the attention value (as the user edits the value, each row is automatically renormalized).
 %
-As illustrated in Fig.~\ref{fig:attentionVis}($a_{2}$)(f), we allow the user to compare currently and previously displayed attentions by computing and visualizing their difference.
+As illustrated in Fig.~\ref{fig:attentionVis}($a_{2}$)(f), we also allow the user to compare currently and previously displayed attentions by computing and visualizing their cell-wise difference (the user can toggle between different display modes using the C (current), P (previous), D (difference) buttons bellow the colormap).
 
 
 Even though the attention does not explicitly encode any grammar, it often highlights essential words in the sentence structure.
