@@ -14,7 +14,7 @@ Summary of major changes:
 
 Q1. The usage scenarios also look interesting, especially the Scenario 3. Does the result to some extent suggest that the attention mechanism is not a very efficient component in this task? I expect the authors dig it further.
 
-A: The domain experts indeed find this observation very interesting and suggest a preliminary interpretation. They believe the attention provides a way to compose word semantics. Individual word semantics are yielded from the encoder and input embedding, while the composed semantics participate in classification layer. From the result from Scenario 3, we can extrapolate that the ultimate decision relies on the semantics (i.e., encodings and composed encodings in classifier). The encoder and classifier layer can swiftly adjust weights for word/composed semantics to correct prediction. But the attention layer, which only works on how individual words are aligned, affects the prediction less significantly. Recent works also support this observation in word embeddings, e.g., ELMo~\cite{salant2017contextualized}, where better word embeddings can substantially benefit a model. However, it by no means implies attention is not useful, as it serves as a way to compose word semantics although it does not directly output that. We revised section 6.3 to include this comment on the interpretation of the visualization result.
+A: The domain experts indeed find this observation very interesting and suggest a preliminary interpretation. They believe the attention provides a way to compose word semantics. Individual word semantics are yielded from the encoder and input embedding, while the composed semantics participate in classification layer. From the result from Scenario 3, we can extrapolate that the ultimate decision relies on the semantics (i.e., encodings and composed encodings in classifier). The encoder and classifier layer can swiftly adjust weights for word/composed semantics to correct prediction. But the attention layer, which only works on how individual words are aligned, affects the prediction less significantly. Recent works also support this observation in word embeddings, e.g., ELMo by Salant et al., where better word embeddings can substantially benefit a model. However, it by no means implies attention is not useful, as it serves as a way to compose word semantics although it does not directly output that. We revised section 6.3 to include this comment on the interpretation of the visualization result.
 
 
 Q2. In Section 2, the neural net in NLP and attention mechanisms are introduced. But the descriptions are unsatisfactory. There is no formal definition or description of the model and the attention mechanism. It's still unclear how the attention mechanism is applied in the model. I would suggest the authors include a concise and formal introduction in the background part and include some formula.
@@ -96,7 +96,7 @@ A: Since we have utilized Unicode text encoding throughout the code base, the pr
 
 Q17, Add label to the color scale in Figure 3 (the caption mentions attention by just to avoid confusion). Same for Figure 7a (frequency to the vertical axis), Figure 8b, and Figure 9a-c.
 
-A: We've added caption "attention" to the color scale as well as the "frequency" captions to the histograms.
+A: We've added "attention" label to the color scale and the "frequency" label to the histograms.
 
 
 Q18, Add narration to the video and maybe include a 1-min self-contained demo of the system before illustrating the use cases in the video.
