@@ -5,9 +5,13 @@ The Pipeline view provides a direct visual representation of the three stages (e
 There are many ways to update the model to correct a prediction. The simplest approach is applying standard backpropagation and overfits to the example. However, without any constraint, the update step may alter the model in unexpected ways.
 % \shusen{what is the benefit of using mira?}
 Instead, we adopt the idea in \emph{margin-infused relaxed algorithm (MIRA)}~\cite{CrammerSinger2003}, where we regulate the optimization with the L2-norm of the parameter change. In the proposed tool, we obtain the target parameters by the following optimization:
+
 \begin{equation}
+\vspace{-1mm}
 \underset{\mathbf{W}'}{\mathrm{argmin}}( C \mathbb{J}(\mathbf{W}') + ||\mathbf{W}' - \mathbf{W_o}||^2)
+%\vspace{-0.5mm}
 \end{equation}
+
 where $\mathbb{J}(\mathbf{W})$ is the loss function of the neural network model, $\mathbf{W_o}$ is the original model's parameters taken as constant, $\mathbf{W}'$ is the updated parameters, and $C$ is the weighting term, which determines whether we intended to emphasize more on obtaining better fitting or deviating less from the original model. Due to the nonconvex nature of the neural networks, we use SGD to optimize the above combined loss function.
 %
 With this formulation, we try to find a good approximation to the newly assigned label, while still maintaining relatively small change with respect to the original model.
