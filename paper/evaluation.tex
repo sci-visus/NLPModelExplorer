@@ -1,17 +1,17 @@
 \section{Evaluation and Feedback}
 %The motivation for designing the proposed tool is the error analysis challenges faced by our long-term collaborators working on natural language inference research. During the entire design and development process, we worked closely with two NLP experts, and their constant evaluation and feedback have helped shape the tool we see today. 
 %
-As discussed previously, we have worked closely with NLP experts during the development of the tool. However, since these two NLP experts have been heavily involved in the design process, they may not be the best candidates for identifying potential issues of the tool due to familiarity.  To uncover the limitation and identify areas for improvement, we gathered a wider audience from either visualization (4 researchers, including 3 Ph.D.-level students and one postdoc researcher) or NLP backgrounds (5 Ph.D.-level students who are familiar with the concept of natural language inference and attention) for obtaining feedback for the tool.  
+As discussed previously, we have worked closely with NLP experts during the development of the tool. However, since these two NLP experts have been heavily involved in the design process, they may not be the best candidates for identifying potential issues of the tool due to familiarity.  To uncover the limitation and identify areas for improvement, we gathered a wider audience from either visualization (four researchers, including three Ph.D.-level students and one postdoc researcher) or NLP backgrounds (five Ph.D.-level students who are familiar with the concept of natural language inference and attention) for obtaining feedback for the tool.  
 
-With the goal to identify the potential interface design issues, we first conducted an informal demonstration-and-feedback session with the visualization group. We started by explaining the basic natural language inference concept. We then demonstrated the features of the tool in detail. After that, we answered questions and seek feedback.
+With the goal to identify the potential interface design issues, we first conducted an informal demonstration-and-feedback session with the visualization group. We started by explaining the basic natural language inference concept. We then demonstrated the features of the tool in detail. After that, we answered questions and sought feedback.
 %
 From this session, we have gathered complaints and suggestions on various aspects of the visual interface. Some of the identified issues include: (1) difficult to distinguish different types of predictions (distinct colors are added to the final version); (2) hard to recognize the ground truth label (we now use a green rectangle to indicate the ground truth); (3) lack of legends to understand the key elements in plots (legends are added). We address these interface issues before presenting the final version to the NLP group.
 
-We conduct an individual revaluation session with each participant from the NLP group, in which the participant is given 30 minutes to experiment with the tool after an overall feature demonstration. 
+We conducted an individual revaluation session with each participant from the NLP group, in which the participant was given 30 minutes to experiment with the tool after an overall feature demonstration. 
 %
-Since both the matrix and graph-based visual encodings are the most common attention representations used in the NLP literature, most participants can utilize them immediately and find the linked highlighting feature of the two views quite useful.
+Since both the matrix and graph-based visual encodings were the most common attention representations used in the NLP literature, most participants can utilize them immediately and find the linked highlighting feature of the two views quite useful.
 % 
-Once the participants familiarize with the tool, they often try to type two similar sentences and examine the attention and prediction. After that, they will modify some words, or negate the hypothesis sentence, and then check the attention and prediction again.
+Once the participants become familiar with the tool, they often try to type two similar sentences and examine the attention and prediction. After that, they will modify some words, or negate the hypothesis sentence, and then check the attention and prediction again.
 %
 Such a ``perturb and observe'' operation demonstrates the most fundamental exploration strategy and matches well to the perturbation-driven paradigm the proposed tool aims to support.
 
@@ -21,13 +21,13 @@ In the first example, he identifies a case where the wrong attention alignment p
 In the other example, he finds a sentence pair with the incorrect attention that produces a wrong prediction. 
 However, even after he forces the correct alignment, the prediction result remains incorrect. He believes observations such as these will provide valuable insights for him to interpret the model. 
 %
-Another participant comments that the ability to enable or disable model parameter update in the pipeline view is beneficial.
+Another participant comments that the ability to enable or disable the model parameter update in the pipeline view is beneficial.
 
 The participants also identify potential issues and places for improvement. 
 One participant wishes the pipeline view could provide more detailed information compared to the current aggregated histogram visualization. 
 Another participant suggests the possibility to examine multiple similar examples at a time (instead of one by one). 
 %
-Also, for the participants who do not focus on NLI research, understanding all the views at first can be a bit challenging. However, this issue can be addressed by the modular design, as the user can simply enable, only the sentence, attention, and prediction views.
+Also, for the participants who do not focus on NLI research, understanding all the views at first can be a bit challenging. However, this issue can be addressed by the modular design, as the user can simply enable only the sentence, attention, and prediction views.
 %
 Overall, all the participants believe the proposed tool is very convenient for conducting experiment and exploring various hypotheses, which is essential for building intuitions about the model.
 
