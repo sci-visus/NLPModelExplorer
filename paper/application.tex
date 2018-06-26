@@ -3,8 +3,8 @@
 % \shusen{A full case study that driven by the visualization task and the question associated with them}
 %In this section, we discuss application scenarios, in which the domain experts utilize the
 To illustrate how the proposed perturbation-driven exploration tool helps researchers interpret the neural network model,
-we present five interconnected application scenarios a domain expert may employ in their analysis workflow.
-The user can start the exploration by examining the stability of prediction (Scenario 1), from which they may identify the individual instances worth further investigation (Scenario 2, 3, 4). Alternatively, the user can begin with handcrafted common/extreme cases (Scenario 5) and continue from there.
+we present five interconnected application scenarios domain experts may employ in their analysis workflow.
+Users can start the exploration by examining the stability of prediction (Scenario 1), from which they may identify the individual instances worth further investigation (Scenario 2, 3, 4). Alternatively, users can begin with handcrafted common/extreme cases (Scenario 5) and continue from there.
 %we present five application scenarios
 %(first three roughly correspond to \textbf{T1-3}) gathered by the domain experts who integrated the proposed tool into their analysis workflow.
 
@@ -14,18 +14,18 @@ The user can start the exploration by examining the stability of prediction (Sce
  \includegraphics[width=1.0\linewidth]{predictStability}
  \vspace{-6mm}
  \caption{
-Prediction stability assessment. In (a)(b)(c), we estimate the overall prediction stability (regarding synonymous perturbation) for each type of predictions over the entire development set (10k examples). The user can drill down to individual examples by using the interface described in Fig.~\ref{fig:summaryView}. In (d), we illustrate a highly unstable prediction, where the original pair's prediction is near a decision boundary (i.e., the yellow circle is between \emph{entailment} and \emph{neutral}). In (e), we show another example of unstable predictions, in which the prediction changes drastically with a minor perturbation (see ($\mathbf{e_1}$)). }
+Prediction stability assessment. In (a)(b)(c), we estimate the overall prediction stability (regarding synonymous perturbation) for each type of prediction over the entire development set (10k examples). The user can drill down to individual examples by using the interface described in Fig.~\ref{fig:summaryView}. In (d), we illustrate a highly unstable prediction, where the original pair's prediction is near a decision boundary (i.e., the yellow circle is between \emph{entailment} and \emph{neutral}). In (e), we show another example of unstable predictions, in which the prediction changes drastically with a minor perturbation (see ($\mathbf{e_1}$)). }
 \label{fig:predictStability}
 \vspace{-3mm}
 \end{figure}
 
 \subsection{Scenario 1: Assess the Model Prediction Stability}
-The robustness of the prediction is often hard to evaluate. However, the prediction stability provides valuable information for the researchers to better understand the model.
+The robustness of the prediction is often hard to evaluate. However, the prediction stability provides valuable information for researchers to better understand the model.
 %
 In the proposed work, we approach the prediction robustness from a sensitivity analysis point of view. The stability of the prediction is measured by how often the predicted labels are altered after small perturbations are applied to the input.
 %
-Compared to other types of input (e.g., image), the perturbation of the natural language can be particularly tricky, as small alterations of words can drastically change the meaning of the sentence. As discussed in Section~\ref{sec:sentence}, we try to maintain the sentence semantic by replacing only words with their synonymous and only one word for each pair.
-As illustrated in Fig.~\ref{fig:predictStability}, by utilizing the proposed tool, the domain expert not only can examine a visual summary of the stability but also quickly dive into individual examples for a case-by-case analysis.
+Compared to other types of input (e.g., image), the perturbation of the natural language can be particularly tricky, as small alterations of words can drastically change the meaning of the sentence. As discussed in Section~\ref{sec:sentence}, we try to maintain the sentence semantic by replacing only words with their synonyms and only one word for each pair.
+As illustrated in Fig.~\ref{fig:predictStability}, by utilizing the proposed tool, the domain expert can not only examine a visual summary of the stability but also quickly dive into individual examples for a case-by-case analysis.
 
 In Fig.~\ref{fig:predictStability}(a)(b)(c), we compare the overall prediction stability (regarding synonymous perturbation) for all correct predictions in the development set (10k examples in total).
 %
@@ -68,13 +68,13 @@ Experiment with all configurations for the label reassignment optimization. As s
 \end{figure*}
 
 \subsection{Scenario 2: Examine the Decision-Making Process}
-The predicted label alone provides limited information. Often, domain experts want to know how the model arrives at a conclusion, and if the prediction is incorrect, where in the model the error occurs?
+The predicted label alone provides limited information. Often, domain experts want to know how the model arrives at a conclusion, and if the prediction is incorrect, where in the model the error occurs.
 Examining the decision-making process is not only instrumental in evaluating the model performance but also essential for hypothesizing improvement strategies for future models.
 %
 In the NLI model, the three stages (encoder, attention, classifier) work in synergy to produce the prediction.
 Therefore, making sense of the prediction involves understanding how different parts of the model affect the final prediction.
 
-In the previous section, we have noticed that a minor perturbation of the sentence may result in change of the final prediction (Fig.~\ref{fig:predictStability}(e)). Here, we want to make sense of what leads to the failed prediction. In this example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow''. The perturbed hypothesis \textbf{H2} replaces the word \textbf{pile} with \textbf{heap} in \textbf{H1}. This example should be rather straightforward for the model since there are only minor differences between the \textbf{P} and \textbf{H1}/\textbf{H2}.
+In the previous section, we have noticed that a minor perturbation of the sentence may result a change in the final prediction (Fig.~\ref{fig:predictStability}(e)). Here, we want to make sense of what leads to the failed prediction. In this example, the premise \textbf{P} is ``A very young child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow'', and the original hypothesis \textbf{H1} is ``A child in a red plaid coat and pink winter hat makes a snowball in a large \textbf{pile} of snow''. The perturbed hypothesis \textbf{H2} replaces the word \textbf{pile} with \textbf{heap} in \textbf{H1}. This example should be rather straightforward for the model since there are only minor differences between \textbf{P} and \textbf{H1}/\textbf{H2}.
 
 As illustrated in Fig.~\ref{fig:att2pred}(a), based on the graph attention visualization, we can see in the attention for (\textbf{P}, \textbf{H2}) pair that the words \textbf{pile} and \textbf{heap} are not well aligned.
 %
@@ -106,7 +106,7 @@ We have shown that the perfect alignment does not necessarily guarantee a correc
 On the flip side, we may produce the right predictions for the ``wrong'' reason (i.e., incorrect attention).
 %As illustrated in Fig.~\ref{fig:wrongAlignRightPred},
 For example, in the sentence pair (\textbf{P}: ``A couple is taking a break from bicycling'', \textbf{H}: ``sisters sit next to their bikes''), the words \textbf{take} and \textbf{next} should not align with each other,
-yet it still produces the correct label (\emph{neutral}).% (Fig.~\ref{fig:wrongAlignRightPred}(b)).
+yet the model still predict the correct label (\emph{neutral}).% (Fig.~\ref{fig:wrongAlignRightPred}(b)).
 
 %By looking into the model decision making process, we can assess whether the model is behaving as intended.
 %These situations demonstrate the important of understanding the model decision making process, we can assess whether the model is behaving as intended.
@@ -123,7 +123,7 @@ yet it still produces the correct label (\emph{neutral}).% (Fig.~\ref{fig:wrongA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Scenario 3: Update the Model to Correct a Prediction}
 %\subsection{Scenario 3: What Does It Take to Correct a Failed Prediction?}
-Up to here, we have employed perturbation for input to understand prediction robustness, and utilized the perturbation of attention (and input) to infer the model decision-making process. Both these perturbation operations rely on forward propagation in the pipeline and assume the model parameter remains unchanged.
+Up to here, we have employed perturbation for input to understand prediction robustness and utilized the perturbation of attention (and input) to infer the model decision-making process. Both these perturbation operations rely on forward propagation in the pipeline and assume the model parameter remains unchanged.
 %
 However, once we get a sense of how predictions are made and hypothesize about the cause of the failure in the case of a prediction error, it is natural to ask follow-up questions: What does it take to fix an incorrect prediction? And more importantly, what role does each of the three stages play in such a process? And, are they affecting the prediction differently?
 
@@ -132,7 +132,7 @@ Domain experts can obtain answers to these questions by utilizing the prediction
 We then visualize how much each stage of the model is changed through the distribution of differences between the two sets of parameters (see Fig.~\ref{fig:pipelineView}).
 
 To infer the role each stage of the pipeline plays, the proposed tool allows the parameter update to be enabled or disabled for each pipeline stage.
-The system also includes an automatic option to test all the possible configuration combinations. As illustrated in Fig.~\ref{fig:pipelineUpdate}, the ground truth for this sentence pair is \emph{neutral}. However, the model produces an incorrect label \emph{entailment}. The domain expert reassigns the prediction to \emph{neutral}, which triggers the prediction update optimization for $7$ different pipeline configurations. Four configurations are shown in Fig.~\ref{fig:pipelineUpdate}(a)(b)(c)(d). The updated predictions are illustrated as blue squares, and the arrowed lines highlight the corresponding pipeline configurations.
+The system also includes an automatic option to test all the possible configuration combinations. As illustrated in Fig.~\ref{fig:pipelineUpdate}, the ground truth for this sentence pair is \emph{neutral}. However, the model produces an incorrect label \emph{entailment}. The domain expert reassigns the prediction to \emph{neutral}, which triggers the prediction update optimization for seven different pipeline configurations. Four configurations are shown in Fig.~\ref{fig:pipelineUpdate}(a)(b)(c)(d). The updated predictions are illustrated as blue squares, and the arrowed lines highlight the corresponding pipeline configurations.
 
 Interestingly, all configurations except one are concentrated around the full \emph{neutral} prediction. Referring back to the pipeline visualization, we observe that the only configuration that failed to produce the correct label is the one for which we allow only updating of the attention stage of the model.
 %
@@ -142,7 +142,7 @@ Interestingly, all configurations except one are concentrated around the full \e
 %The domain experts comment that this observation is interesting and worth further investigation from the perspective of NLP research.
 %The domain experts find this observation very interesting and suggest a preliminary interpretation. They believe the attention provides a way to compose word semantics. Individual word semantics are yielded from the encoder and input embedding, while the composed semantics participate in classification layer. From this analysis, we can extrapolate that adjusting the word alignment affects only the composed semantics but has no effect on word semantics, which often plays a significant role in a good model (as supported by recent works in word embeddings, e.g., ELMo~\cite{salant2017contextualized}). Without proper semantics (in both encoder and classifier), only adjusting alignment is not sufficient to yield good model. 
 %
-The domain experts find this observation very interesting and suggest a preliminary interpretation. They believe the attention provides a way to compose word semantics. Individual word semantics are yielded from the encoder and input embedding, while the composed semantics participate in classification layer. From this analysis, we can extrapolate that the ultimate decision relies on the semantics (i.e., encodings and composed encodings in classifier). The encoder and classifier layer can swiftly adjust weights for word/composed semantics to correct prediction. But the attention layer, which only works on how individual words are aligned, affects the prediction less significantly. Recent works also support this observation in word embeddings, e.g., ELMo~\cite{salant2017contextualized}, where better word embeddings can substantially benefit a model. However, it by no means implies attention is not useful, as it serves as a way to compose word semantics.
+The domain experts find this observation very interesting and suggest a preliminary interpretation. They believe the attention provides a way to compose word semantics. Individual word semantics are yielded from the encoder and input embedding, whereas the composed semantics participate in the classification layer. From this analysis, we can extrapolate that the ultimate decision relies on the semantics (i.e., encodings and composed encodings in the classifier). The encoder and classifier layer can swiftly adjust weights for word/composed semantics to correct prediction. However, the attention layer, which only works on how individual words are aligned, affects the prediction less significantly. Recent works also support this observation in word embeddings, e.g., ELMo~\cite{salant2017contextualized}, where better word embeddings can substantially benefit a model. However, word embeddings by no means implies attention is not useful, because it serves as a way to compose word semantics.
 %To interpret the result, we need to carry out a case by case analysis, as the separation of the stages depends on the individual implementation.
 %In our case, the result indicates that the tunable parameters of the attention stage (the transformation before the alignment operation, see details in Appendix A) has less impact on the final prediction compared to the other two stages.
 %However, this result does not necessarily imply the limitation of attention mechanism as the core alignment computation does not have tunable parameters that can be modified by the proposed optimization.
@@ -175,14 +175,14 @@ In (b), by editing the attention and forcing the alignment of the two \textbf{gr
 The attention computation in the NLI model does not take the grammar structure of the sentences into consideration,
 yet the attention often highlights key elements of the sentence.
 Therefore, domain experts wish to understand whether attention alone is sufficient to capture sentence structure;
-and, more importantly, what kind of benefit the additional information from grammar parsing can help address the NLI challenge.
+and, more importantly, what kind of additional information from grammar parsing can help address the NLI challenge.
 
 In the proposed system, we overlay the sentence dependency tree with the attention, which enables researchers to conduct comparisons between attention and grammar structure.
-As illustrated in Fig.~\ref{fig:depTreeExample}(a), the prediction of the sentence pair (\textbf{P}:``A woman in a green jacket is drinking tea.'' \textbf{H}:``A woman is drinking green tea.'') is wrong. We can infer the cause by examining the attention, in which the word \textbf{green} in ``\textbf{green} jacket" is aligned to the \textbf{green} in ``\textbf{green} tea". Due to such an alignment, the model mistakenly believes the two \textbf{greens} are used to describe the same thing (therefore, predict \emph{entailment}).  However, as we examine the dependency tree, the two \textbf{greens} are attached to different words, i.e., \textbf{green} in \textbf{P} is attached to ``jacket'', whereas \textbf{green} in \textbf{H} is attached to ``tea''. Therefore, they should not be aligned to allow the classifier to make the right decision.
+As illustrated in Fig.~\ref{fig:depTreeExample}(a), the prediction of the sentence pair (\textbf{P}: ``A woman in a green jacket is drinking tea.'' \textbf{H}: ``A woman is drinking green tea.'') is wrong. We can infer the cause by examining the attention, in which the word \textbf{green} in ``\textbf{green} jacket" is aligned to the \textbf{green} in ``\textbf{green} tea". Due to such an alignment, the model mistakenly believes the two \textbf{greens} are used to describe the same thing (therefore, predict \emph{entailment}).  However, as we examine the dependency tree, the two \textbf{greens} are attached to different words, i.e., \textbf{green} in \textbf{P} is attached to ``jacket'', whereas \textbf{green} in \textbf{H} is attached to ``tea''. Therefore, they should not be aligned to allow the classifier to make the right decision.
 %
 This experiment demonstrates the potential benefit of including grammar structure in the alignment computation. %This stresses the importance of dependency tree in our tool.
 %
-And interestingly, as illustrated in Fig.~\ref{fig:depTreeExample}(b), by editing the attention and forcing the alignment of the two \textbf{greens} to be zero, the prediction label is corrected (\emph{neutral}).
+Interestingly, as illustrated in Fig.~\ref{fig:depTreeExample}(b), by editing the attention and forcing the alignment of the two \textbf{greens} to be zero, the prediction label is corrected (\emph{neutral}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Scenario 5: Handcrafted Example Exploration}
@@ -190,7 +190,7 @@ To test the limits of the model, domain experts often handcraft ``extreme'' exam
 %
 The researchers start with a set of experiments they plan to run, from which they will develop new hypotheses for further analysis.
 %
-In some way, we can think of such a process as a natural blend of all previously discussed scenarios. However, instead of having a specific goal in mind, the domain experts focus on probing around to uncover any interesting or out-of-the-ordinary behaviors in the model.
+We can think of such a process as a natural blend of all previously discussed scenarios. However, instead of having a specific goal in mind, the domain experts focus on probing around to uncover any interesting or out-of-the-ordinary behaviors in the model.
 %
 
 
