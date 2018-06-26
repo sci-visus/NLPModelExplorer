@@ -3,35 +3,35 @@
 %Identifying the analysis goals and the corresponding visualization tasks is the first significant step in designing a useful tool. 
 %In this section, we examine how domain experts normally approach the task of analyzing a model (i.e., assess its strength and weakness) and identify where and how an interactive visualization system can aid in such a process.
 %\shusen{
-The primary driving force for designing the proposed tool is the error analysis challenges faced by our long-term collaborators working on natural language inference research. During the entire design and development process, we worked closely with two NLP experts via weekly meetings in a period of roughly seven month, their constant evaluation and feedback have helped shape the tool we see today.
+The primary driving force for designing the proposed tool is the error analysis challenges faced by our long-term collaborators working on natural language inference research. During the entire design and development process, we worked closely with two NLP experts via weekly meetings over a period of roughly seven monthes. Their constant evaluation and feedback have helped shape the tool we see today.
 %}
 %Then, we distill the numerous discussions with domain experts into concrete tasks, which guide the design and implementation of the proposed tool.
 %During our long-term collaboration with two NLP experts, 
 During this period, we have conducted extensive discussions to understand the common approaches employed by researchers for assessing the behavior of a model.
 % as well as provide feedback on the various prototyping stages of the proposed visualization.%
-The predictive accuracy has its place as an objective evaluation metric to measure the overall effectiveness of the model; however, the accuracy number alone does not provide the full story.
+Predictive accuracy has its place as an objective evaluation metric to measure the overall effectiveness of the model; however, the accuracy number alone does not provide the full story.
 For example, the model may produce correct predictions for the ``wrong'' reasons (e.g., pick up an unintended pattern in the training data that cannot be generalized in real-word scenarios).
 %
 As a result, the domain experts rely on an exploration-centric approach to conduct error analysis and obtain intuition.
 %There is little one can learn when everything is behaving as expected, and therefore, observing how models make mistakes under various scenarios is at the center of such a process.
-The experts often start with simple examples, and then make minor perturbations (replace a word or phrase) to the input and observe the change in the prediction (and potential failures). This exercise helps the domain experts reason about the relationship between input elements and the predicted results. 
-For many NLP models, the attention information (see Section~\ref{sec:attention}) is essential to infer the mechanism of the model. Experts often print out the attention values or generate plots to visualize sentence alignment or compare attention values. As the experts explore more variation of similar examples, combined with their domain knowledge, they may develop hypotheses about the cause of failures, or ask additional questions that lead to further experimentation.
+The experts often start with simple examples and then make minor perturbations (replace a word or phrase) to the input and observe the change in the prediction (and potential failures). This exercise helps the domain experts reason about the relationship between input elements and the predicted results. 
+For many NLP models, the attention information (see Section~\ref{sec:attention}) is essential to infer the mechanism of the model. Experts often print out the attention values or generate plots to visualize sentence alignment or compare attention values. As the experts explore more variation of similar examples, combined with their domain knowledge, they may develop hypotheses about the cause of failures or ask additional questions that lead to further experimentation.
 
-In such an exploration workflow, NLP researchers often need to utilize multiple scripts and manually run all the experiments. The batch process based approach, is not only time consuming, but also hinders the flow of reasoning which rely on obtaining instantaneous feedbacks, and making many on-the-fly adjustments.
+In such an exploration workflow, NLP researchers often need to utilize multiple scripts and manually run all the experiments. The batch process approach is not only time consuming, but it also hinders the flow of reasoning that relies on obtaining instantaneous feedback and making many on-the-fly adjustments.
 %
-Therefore, the expert driven exploration process can greatly benefit from the introduction of an interactive visual exploration environment, where the researchers can easily express their hypotheses and obtain quick visual feedback of the results.
+Therefore, the expert-driven exploration process can greatly benefit from the introduction of an interactive visual exploration environment, where the researchers can easily express their hypotheses and obtain quick visual feedback of the results.
 %
-Moreover, by introducing new visual encodings and summarizations, we can drastically expand the ways domain experts interact with the model, enable exploration options that previously were not possible either due to tedious manual operation or the lack of communication channels.
+Moreover, by introducing new visual encodings and summarizations, we can drastically expand the ways domain experts interact with the model, enabling exploration options that previously were not possible either due to either tedious manual operation or the lack of communication channels.
 %
 %In such a highly exploratory process, the expert likely will have many ``what if'' type of questions (e.g., what if I make change to this word in the input, what if I force the words to align correctly in the attention), get responsive answers to these queries is essential to maintain the flow of reasoning.
 %\shusen{
 %As discussed previously, the perturbation-driven scheme is at the core 
 To support the exploratory workflow for analyzing NLI models,
-we design the proposed tool to address the following tasks based on the discussions with NLP experts.
+we design the proposed tool to address the following tasks based on the discussions with NLP experts;
 
 \vspace {-2mm}
 \begin{itemize}
-\item \textbf{T1}: Understand the stability of a prediction, i.e., how perturbations of the input affect the behavior of the model?
+\item \textbf{T1}: Understand the stability of a prediction, i.e., how do perturbations of the input affect the behavior of the model?
     
 \item \textbf{T2}: Examine the attention mechanism, i.e., what is the relationship between the input and the attention, and how does the attention affect the prediction?
     
@@ -39,7 +39,7 @@ we design the proposed tool to address the following tasks based on the discussi
 \end{itemize}
 \vspace {-2mm}
 
-In Section~\ref{sec:caseStudy}, we will illustrate how to utilize the proposed tool for these tasks (the application scenarios 1,2,3 corresponds to \textbf{T1-T3}, respectively).
+In Section~\ref{sec:caseStudy}, we will illustrate how to utilize the proposed tool for these tasks (the application scenarios 1, 2, 3 correspond to \textbf{T1-T3}, respectively).
 
 
 %\item To begin with, understanding how perturbation (e.g., replacing words with synonymous) of the input affects the prediction is the crucial part of error analysis. It not only measures the prediction sensitivity, but also helps reveal the potential source of the errors in the input (\textbf{T1}).
