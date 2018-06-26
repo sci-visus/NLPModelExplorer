@@ -4,11 +4,11 @@
 % (What is the high level motivation)
 % What is the obstacle for effectively apply machine learning model
 %Based on some stunning recent advances, neural networks based machine learning approaches have gained unprecedented popularity, and have been adopted in a wide variety of applications.
-Demonstrated by many recent successes, neural networks based machine learning approaches have garnered increasing popularity, and have been adopted in a wide variety of applications.
+As demonstrated by many recent successes, neural network-based machine learning approaches have garnered increasing popularity and have been adopted in a wide variety of applications.
 %
 However, researchers as well as practitioners often need to overcome many obstacles during the training, debugging, and tuning processes to realize the full potential of these models.
 %
-Interpreting the internal mechanism and analyzing how predictions are made is critical to both the design and deployment of a model.
+Interpreting the internal mechanism and analyzing how predictions are made are critical for both the design and deployment of a model.
 More importantly, the ability to pinpoint where and how an error is made and propose hypotheses for the cause of the failure is key to identifying the limitations of and improving upon existing models.
 However, providing meaningful answers to these questions is challenging and has been described as impossible by many.
 
@@ -25,7 +25,7 @@ For natural language, even though we can encode a word as a vector~\cite{Mikolov
 These restrictions call for new avenues for solving the interpretation challenges of natural language models, which motivates the proposed work.
 
 % Beside explore the internal states of the model, understand how different parts of the model work together and how one may affect one another is as or if not more important.
-Despite a number of recent advances, the majority of existing techniques study the model as an invariant object, where the model's behaviors are recorded and analyzed in an offline fashion.
+Despite a number of recent advances, most of existing techniques study the model as an invariant object, where the model's behaviors are recorded and analyzed in an offline fashion.
 %
 However, the exploratory nature of the model interpretation often leads to many \emph{``what if ...''} types of questions,
 such as, what if we perturbed the current input?
@@ -33,31 +33,31 @@ Will the prediction be stable?
 What if we change one of the critical internal states of the model?
 How would the modification affect the prediction?
 What if the current prediction is wrong?
-How and where could we apply minimal change to the model to produce the correct result? And how would it affect the internal state we care about? These types of queries form a natural way to gain understanding and develop hypotheses of the model mechanisms by \emph{interrogating} how the components of a model interact with each other in a dynamic setting.
+How and where could we apply minimal change to the model to produce the correct result? And how would it affect the internal state we care about? These types of queries form a natural way to gain an understanding and develop hypotheses of the model mechanisms by \emph{interrogating} how the components of a model interact with each other in a dynamic setting.
 Hypothetically, we can code specialized experiments for each of these scenarios.
 However, such a process is not only tedious but also ignores the iterative nature of the exploratory analysis. Often, these questions are not pre-determined.
 Instead, new exploration paths arise as we investigate and analyze previous observations.
 
-Here, we aim to provide immediate and informative answers to these \emph{``what if''} questions by combining the expressive power of visualization and direct online query/optimization of the neural network model. Instead of viewing the models as invariant objects, we approach the interpretability challenge by studying them in a dynamic environment. By employing a perturbation-driven scheme, we probe the internal states of the model and examine how changes in one part of the pipeline (the input, internal states, and output prediction, see Fig.~\ref{fig:modelPipeline}) affect others, which in turn provides a new perspective to address the model interpretation problem.
+Here, we aim to provide immediate and informative answers to these \emph{``what if''} questions by combining the expressive power of visualization and the direct online query/optimization of the neural network model. Instead of viewing the models as invariant objects, we approach the interpretability challenge by studying them in a dynamic environment. By employing a perturbation-driven scheme, we probe the internal states of the model and examine how changes in one part of the pipeline (the input, internal states, and output prediction, see Fig.~\ref{fig:modelPipeline}) affect others, which in turn provides a new perspective to address the model interpretation problem.
 
 We materialize the goal of the perturbation-driven exploration in an interactive visualization system for natural language inference models~\cite{Parikh2016}.
 %We implement our vision of the perturbation-driven exploration in an interactive visualization system for natural language inference models~\cite{Parikh2016}.
 However, the components of the visualization and the overall concept can be readily extended to other NLP tasks, such as question and answer, text summarization, etc.
 %
-In the simplest form, the inference task asks whether the
-relationship between \textbf{sentence A} and \textbf{sentence B}: (1) is \emph{entailment} (one can infer \textbf{B} from \textbf{A}), (2) \emph{contradiction} (\textbf{B} disagrees with \textbf{A}) or (3) is \emph{neutral} (\textbf{A} and \textbf{B} talk about different/unrelated things).
+In its simplest form, the inference task asks whether the
+relationship between \textbf{sentence A} and \textbf{sentence B}: is (1) \emph{entailment} (one can infer \textbf{B} from \textbf{A}), (2) \emph{contradiction} (\textbf{B} disagrees with \textbf{A}) or (3) \emph{neutral} (\textbf{A} and \textbf{B} talk about different/unrelated things).
 % we can infer the content of \textbf{sentence B} from \textbf{sentence A} (\emph{entail}), if they contradict with each other (\emph{contradiction}), or whether two sentences talk about different/unrelated things (\emph{neutral}).
-Natural language inference addresses the fundamental challenge of identifying semantic relationships between sentences, and is a core NLP task (see Section~\ref{sec:languageInference} for details).
+Natural language inference addresses the fundamental challenge of identifying semantic relationships between sentences and is a core NLP task (see Section~\ref{sec:languageInference} for details).
 
 One recent advance in neural natural language process models is the
 introduction of \emph{attention
   mechanisms}~\cite{bahdanau2014neural,VaswaniShazeerParmar2017}
 (Section~\ref{sec:attention}). Intuitively, attention asks which parts of the
-input are deemed more important for making a prediction. The attention is often represented via weights for individual words or pairs of words (i.e., the alignment between words in different sentences).
+input are deemed more important for making a prediction. Attention is often represented via weights for individual words or pairs of words (i.e., the alignment between words in different sentences).
 %
 %\shusen{seems repeated some of the previous points}
-There have been many speculations on how attention works in various models.
-The proposed tool introduces a perturbation-driven visual analytics enviroment, where the domain experts can study how changes in sentence input, attention, or prediction affect each other, which helps them develop deeper intuitive and alternative hypotheses.
+There have been many theories about how attention works in various models.
+The proposed tool introduces a perturbation-driven visual analytics environment, where the domain experts can study how changes in sentence input, attention, or prediction affect each other, which helps the experts develop deeper intuitive and alternative hypotheses.
 %we can perturb the attention and observer the change in the prediction, perturb the sentence input and observe the effects on the attention. And more importantly, we also allow the user to change prediction, where we apply a constrained optimization to find the least amount of parameter update to produce the user assign label.
 %Another word,
 %Such type of exploration is not only essential to interpret the language inference problem, but can also be generalized to other NLP model utilized the attention mechanisms.
