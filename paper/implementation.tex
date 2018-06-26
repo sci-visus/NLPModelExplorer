@@ -6,10 +6,10 @@ Just like a Python plotting library, the different pieces of the visualization c
 The individual components can also be combined in any configuration desired by users via a simple Python API to better fit into one's workflow.
 More importantly, the library-based design allows easy integration with the existing model implemented in Python.
 %
-To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction, accessing attention, to link the visualization to their NLP models (see the code example in \textbf{Appendix B}). 
+To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction and accessing attention, to link the visualization to their NLP models (see the code example in \textbf{Appendix B}). 
 
 %We design the tool with flexibility and extensibility in mind. One of the key objectives is to allow easy integration with the existing NLP workflow. Therefore, instead of implementing the tool as a standalone application, we encapsulate the visualization functionality as a Python library, in which the behavior of the visual interaction (e.g., once prediction button is pressed what should be the prediction result) is defined in Python using the existing model in the expert's workflow. Also, due to the separation between the visualization and the underlying model computation, we can readily adapt different models or the same model with a different configuration or training. 
 
 %
 In the proposed work, the NLI model is implemented in Python using \emph{pytorch}~\cite{PaszkeGrossChintala2017}.
-The visual interface is implemented in Javascript using \emph{D3.js} library , and a Python server act as the glue between the Javascript visualization and the \emph{pytorch} model.
+The visual interface is implemented in Javascript using \emph{D3.js} library, and a Python server acts as the glue between the Javascript visualization and the \emph{pytorch} model.
