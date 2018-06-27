@@ -8,6 +8,7 @@ Summary of major changes:
 - Clarified the domain experts' involvement at the beginning of section 4 and link the tasks with the application scenarios.
 - Revised section 5 to better explain the user interactions and add discussion on how to interpret the visual encodings.
 - Reworked the video, included a new introduction section and added a voiceover.
+- Corrected an inaccuracy in the model description (the Appendix A).
 
 ------------------------------- Reviewer 1 -------------------------------
 
