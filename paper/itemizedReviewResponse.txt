@@ -1,11 +1,11 @@
 Response to the reviews
 
-We greatly appreciate all reviewers' valuable comments. The summary of major changes is listed below. We have itemized the 44 questions/comments and answer each individually.
+We greatly appreciate all reviewers' valuable comments. The summary of major changes is listed below. We have itemized the 44 questions/comments and answered each individually.
 
 Summary of major changes:
 - Revised section 6 to better convey the relationship among the different scenarios and provide further clarification on the result observed in 6.3.
 - Revised the introduction to remove hyperbole words, clarify the NLP vs. CNN data modality comparison, and simplify the contribution list.
-- Clarified the domain experts' involvement at the beginning of section 4 and link the task with the application scenarios.
+- Clarified the domain experts' involvement at the beginning of section 4 and link the tasks with the application scenarios.
 - Revised section 5 to better explain the user interactions and add discussion on how to interpret the visual encodings.
 - Reworked the video, included a new introduction section and added a voiceover.
 
@@ -14,7 +14,7 @@ Summary of major changes:
 
 Q1. The usage scenarios also look interesting, especially the Scenario 3. Does the result to some extent suggest that the attention mechanism is not a very efficient component in this task? I expect the authors dig it further.
 
-A: The domain experts indeed find this observation very interesting and suggest a preliminary interpretation. They believe the attention provides a way to compose word semantics. Individual word semantics are yielded from the encoder and input embedding, while the composed semantics participate in classification layer. From the result from Scenario 3, we can extrapolate that the ultimate decision relies on the semantics (i.e., encodings and composed encodings in classifier). The encoder and classifier layer can swiftly adjust weights for word/composed semantics to correct prediction. But the attention layer, which only works on how individual words are aligned, affects the prediction less significantly. Recent works also support this observation in word embeddings, e.g., ELMo by Salant et al., where better word embeddings can substantially benefit a model. However, it by no means implies attention is not useful, as it serves as a way to compose word semantics although it does not directly output that. We revised section 6.3 to include this comment on the interpretation of the visualization result.
+A: The domain experts indeed find this observation very interesting and suggest a preliminary interpretation (which we included in the revised version). They believe the attention provides a way to compose word semantics. Individual word semantics are yielded from the encoder and input embedding, while the composed semantics participate in classification layer. From the result of Scenario 3, we can extrapolate that the ultimate decision relies on the semantics (i.e., encodings and composed encodings in classifier). The encoder and classifier layer can swiftly adjust weights for word/composed semantics to correct prediction. But the attention layer, which only works on how individual words are aligned, affects the prediction less significantly. Recent works also support this observation in word embeddings, e.g., ELMo by Salant et al., where better word embeddings can substantially benefit a model. However, it by no means implies attention is not useful, as it serves as a way to compose word semantics although it does not directly output that. We revised section 6.3 to include this comment on the interpretation of the visualization result.
 
 
 Q2. In Section 2, the neural net in NLP and attention mechanisms are introduced. But the descriptions are unsatisfactory. There is no formal definition or description of the model and the attention mechanism. It's still unclear how the attention mechanism is applied in the model. I would suggest the authors include a concise and formal introduction in the background part and include some formula.
