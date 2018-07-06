@@ -62,13 +62,13 @@ class sentenceComponent extends baseComponent {
                     ) {
                         this.clearDropdown(this.div + "srcInput");
                         this.clearDropdown(this.div + "targInput");
-
                         console.log("refresh the allSourceSens");
                     }
                 }
 
                 this.onReceiveCurrentPair();
                 this.oldPair = JSON.parse(JSON.stringify(pair));
+
                 break;
         }
     }
@@ -102,6 +102,8 @@ class sentenceComponent extends baseComponent {
 
     onReceiveCurrentPair() {
         var currentPair = this.data['currentPair']["sentences"];
+
+        this.clearPreviousPair();
         // console.log(this.data["currentPair"]["sentences"]);
 
         // if (currentPair[0].startsWith("<s>")) {
@@ -165,11 +167,17 @@ class sentenceComponent extends baseComponent {
         this.setData("currentPair", this.data["currentPair"]);
         // this.setData("groundTruthLabel", groundTruthLabel);
 
-        this.clearDropdown(this.div + "srcInput");
-        this.clearDropdown(this.div + "targInput");
+        this.clearPreviousPair();
+    }
 
-        // // this.setData("allSourceSens", [currentPair[0]]);
-        // this.setData("allTargetSens", [currentPair[1]]);
+    clearPreviousPair(){
+      this.clearDropdown(this.div + "srcInput");
+      this.clearDropdown(this.div + "targInput");
+
+      //reset allSens
+      let currentPair = this.data["currentPair"]["sentences"];
+      this.setData("allSourceSens", [currentPair[0]]);
+      this.setData("allTargetSens", [currentPair[1]]);
     }
 
     onUpdateCurrentPair() {
