@@ -146,7 +146,7 @@ class glayout {
     }
 }
 
-//////////////// config file reference /////////////////
+//////////////// config file example /////////////////
 
 // var config = {
 //     settings: {

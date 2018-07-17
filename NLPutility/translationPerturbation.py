@@ -3,6 +3,9 @@ from google.cloud import translate
 
 class translationPerturbation:
     def __init__(self, authFilePath='key/Paraphrasing-684a368e96ad.json'):
+        '''
+            Please provide your own google translation API key here 
+        '''
         self.translate_client = translate.Client.from_service_account_json(authFilePath)
 
     def perturbSentence(self, inputSentence):
