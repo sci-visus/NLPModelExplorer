@@ -5,9 +5,9 @@ The pipeline view provides a direct visual representation of the three stages (e
 There are many ways to update the model to correct a prediction. The simplest approach is applying standard backpropagation and overfits to the example. However, without any constraint, the update step may alter the model in unexpected ways.
 % \shusen{what is the benefit of using mira?}
 Instead, we adopt the idea in the \emph{margin-infused relaxed algorithm (MIRA)}~\cite{CrammerSinger2003}, where we regulate the optimization with the L2-norm of the parameter change. In the proposed tool, we obtain the target parameters by the following optimization:
-
+\vspace{-0.3mm}
 \begin{equation}
-\vspace{-1mm}
+\vspace{-1.2mm}
 \underset{\mathbf{W}'}{\mathrm{argmin}}( C \mathbb{J}(\mathbf{W}') + ||\mathbf{W}' - \mathbf{W_o}||^2)
 %\vspace{-0.5mm}
 \end{equation}
@@ -18,8 +18,8 @@ With this formulation, we try to find a good approximation to the newly assigned
 
 \begin{figure}[htbp]
 \centering
-\vspace{-2mm}
- \includegraphics[width=0.95\linewidth]{pipelineView}
+\vspace{-3mm}
+ \includegraphics[width=0.9\linewidth]{pipelineView}
  \vspace{-2mm}
  \caption{
 The pipeline view provides the visual representation of the three stages (encoder, attention, classifier) of the NLI model. 
