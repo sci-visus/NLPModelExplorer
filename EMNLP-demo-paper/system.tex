@@ -1,8 +1,8 @@
 
 \section{Visualization System}
-As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP models follow a similar encoder--attention--classifier structure. The attention stage provides a window to peek into the model decision making process. 
+As illustrated in Figure~\ref{fig:modelPipeline}, many recent end-to-end NLP models follow a similar encoder--attention--classifier structure. The attention stage provides a window to peek into the model decision-making process. 
 However, the static attention alone does not tell the whole story. 
-Our proposed system uses a perturbation-driven exploration strategy that allows the user manually or automatically perturb part of the pipeline and observe the changes downstream.
+Our proposed system uses a perturbation-driven exploration strategy that allows the user to manually or automatically perturb part of the pipeline and observe the changes downstream.
 %
 The system consists of several visualization components that can be selectively combined to form a functional interactive system for a given task. In the following section, we will cover some of the essential components; the usage of all components can be found in the accompanying video \href{https://www.youtube.com/watch?v=PKiM4i0oIuY}{link}.
 %such as a prediction summary statistics the entire development set, as well as a scheme to update the model based 
@@ -25,7 +25,7 @@ Due to the discrete nature of natural language, automatically perturbing a sente
 To reduce the potential semantic deviation, we allow for a straightforward perturbation method by replacing \emph{nouns} and \emph{verbs} by their synonyms in WordNet~\cite{Miller1995}. However, synonym replacement does not guarantee that the meaning of the sentence remains the same. Furthermore, WordNet often produces rare words or obscure usages that may lead to less meaningful sentences.
 %However, this method requires minimal computation and is easy to implement. 
 
-To improve the perturbation quality, we also allow for a translation-based paraphrasing technique similar to \citet{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages and then pivot back to English. Provided the translation produces good result (in our case, we use the Google cloud translation platform), we can obtain paraphrases of the original sentence (see Figure~\ref{fig:sentence}, where the drop-down menu shows some of the perturbed sentences).
+To improve the perturbation quality, we also allow for a translation-based paraphrasing technique similar to that proposed by \citet{mallinson2017paraphrasing}. Here, we translate the original English sentence into several other languages and then pivot back to English. Provided the translation produces a good result (in our case, we use the Google Cloud Translation Platform), we can obtain paraphrases of the original sentence (see Figure~\ref{fig:sentence}, where the drop-down menu shows some of the perturbed sentences).
 
 \begin{figure}[htbp]
 \centering
@@ -43,7 +43,7 @@ The prediction is encoded as a point in the barycentric coordinate system of the
 Efficient visual encoding for prediction is crucial for communicating the model behavior, and to fully support the input perturbation feature, the visual encoding should also allow multiple predictions to be shown in the same visualization.
 %
 
-For the natural language inference task, as illustrated in Figure~\ref{fig:prediction}, the predicted probabilities are encoded via a triangular barycentric coordinate system, where the vertices represent the three possible predictions (namely, \emph{entailment}, \emph{contradiction}, and \emph{neutral}). The prediction for the original unperturbed input is illustrated by a larger yellow circle, whereas the prediction of perturbed inputs is represented by smaller grey circles.
+For the natural language inference task, as illustrated in Figure~\ref{fig:prediction}, the predicted probabilities are encoded via a triangular barycentric coordinate system, where the vertices represent the three possible predictions (namely, \emph{entailment}, \emph{contradiction}, and \emph{neutral}). The prediction for the original unperturbed input is illustrated by a larger yellow circle, whereas the prediction of perturbed inputs is represented by smaller gray circles.
 
 A density contour of the prediction is computed to emphasize the highly cluttered areas and detect outliers.
 
@@ -57,7 +57,7 @@ Attention visualization. A bipartite graph encoding is adopted in the graph atte
 The user can edit the attention values via the pop-up interface illustrated in (c).
 We overlay the dependency tree ($a_1$) grammar structure to highlight important words and allow simplification of complex sentences (shown in the video).
 %
-For highly asymmetric attention, we utilized a zoomable hierarchical visual representation (d). The user can focus on the individual sentence by selecting the summary visualization.
+For highly asymmetric attention, we utilize a zoomable hierarchical visual representation (d). The user can focus on the individual sentence by selecting the summary visualization.
 }
 \vspace{-3mm}
 \label{fig:attentionVis}
@@ -82,9 +82,8 @@ However, when the text sequence becomes significantly longer, i.e., a full parag
 The initial setup cost and unnecessary learning curve are often the barriers to broad adaptation of a tool. 
 Therefore, instead of designing a visualization system as a monolithic standalone application, 
 we implement the proposed system as a Python library with modularity and ease of use in mind.
-The different pieces of the visualization (i.e., matrix-based attention encoding) can be accessed individually, 
-or combined with other components to fit one's work-flow via a simple API.
-More importantly, the library-based design allows easy integration with the existing model implemented in python.
+The different pieces of the visualization (i.e., matrix-based attention encoding) can be accessed individually or combined with other components to fit one's workflow via a simple API.
+More importantly, the library-based design allows easy integration with the existing model implemented in Python.
 %To create a visualization, users only need to import the library, create an instance of the visualization object, and specify a set of callback functions, such as generating a prediction, accessing attention, to link the visualization to their NLP models. 
 The code for creating an interactive exploration environment for a machine comprehension model is illustrated below.
 
