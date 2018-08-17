@@ -49,7 +49,7 @@ By examining the attention, we can see the word \emph{green} in ``\emph{green} j
 However, the model does not have access to the syntactic information and mistakenly assumes the two \emph{greens} modify the same thing.
 % (thus predict \emph{entailment}). 
 %
-To correct the mistake, we can edit the attention value and remove the align between these two "greens" (see (c)(b)).
+To correct the mistake, we can edit the attention value and remove the align between these two ``greens" (see (c)(b)).
 As expected, the prediction label is corrected (\emph{neutral}).
 
 \begin{figure*}[t]
@@ -96,13 +96,13 @@ The $p1$, $p2$ colored bars (\emph{white-red} colormap) illustrate the predicted
 In Figure~\ref{fig:MCexample}(a3), the sentence containing the answer exhibits good alignment with the question (e.g., ``Two'' with ``many'').
 %In (a3), we examine the sentence that contains the answer, which exhibits excellent alignment with the question (e.g., ``Two'' is aligned with ``many''). 
 %The spans of text with high probability are ``Two'' and ``No'' (highlight in orange), both align well with the word ``many''.
-Interestingly, the number "9" (in "Falcon 9") is also aligned with "many", which may lead to problems.
+Interestingly, the number ``9" (in ``Falcon 9") is also aligned with ``many", which may lead to problems.
 
 The user can explore the robustness of the model by examining how the prediction varies when the question is perturbed.
 %
-As illustrated in ($b1$, and $b2$), the perturbation removes the word "partial" in the original sentence, which leads the model to produce a different yet correct answer ("No"). Referring to ($a1$), we can see the word "No" exhibits the second highest probability for the original question.
+As illustrated in ($b1$, and $b2$), the perturbation removes the word ``partial" in the original sentence, which leads the model to produce a different yet correct answer (``No"). Referring to ($a1$), we can see the word ``No" exhibits the second highest probability for the original question.
 %
-The user can also manually edit the text. As shown in ($b3$), the model still produces the correct answer when changing the question from "how many" to "which".
+The user can also manually edit the text. As shown in ($b3$), the model still produces the correct answer when changing the question from ``how many" to ``which".
 %One possible explanation is that the word ``Two'' has a much higher \emph{att2} attention value compared to ``9'', which may contribute to the current outcome.
 
 %%% Local Variables:
