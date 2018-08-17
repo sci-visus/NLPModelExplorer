@@ -44,7 +44,7 @@ Here we give an example of how a wrong prediction can be corrected by editing at
 %Our system visualized the bidirectional attentions and their interaction with output distribution over labels.
 
 As illustrated in Fig.~\ref{fig:NLIexample}(a), the input sentence pair (P:``A woman in a green jacket is drinking tea.'' H:``A woman is drinking green tea.'') is predicted to be \emph{entailment}, which is incorrect.
-By examining the attention, we can see the word \emph{green} in ``\emph{green} jacket" is aligned to the \emph{green} in ``\emph{green} tea". However, these two \emph{greens} modify different nouns, which potentially leads to the wrong prediction. The grammatical structure is visually shown in the form of the dependency tree.
+By examining the attention, we can see the word \emph{green} in ``\emph{green} jacket" is aligned to the \emph{green} in ``\emph{green} tea." However, these two \emph{greens} modify different nouns, which potentially leads to the wrong prediction. The grammatical structure is visually shown in the form of the dependency tree.
 %i.e., \emph{green} in \textbf{P} is attached to ``jacket''.
 However, the model does not have access to the syntactic information and mistakenly assumes the two \emph{greens} modify the same thing.
 % (thus predict \emph{entailment}). 
