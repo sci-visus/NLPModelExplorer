@@ -66,10 +66,10 @@ For highly asymmetric attention, we utilize a zoomable hierarchical visual repre
 \subsection{Attention Visualization}
 As illustrated in Figures~\ref{fig:attentionVis}(a)(b), the most widely adopted visual encodings for attention are  bipartite graphs (a) and heatmaps (b). 
 %
-In the graph attention view (Fig.~\ref{fig:attentionVis}(a)), the edge thickness corresponds to the attention value of the word pairs. %The color of the rectangle text block encodes the sum of all edge values connected to it (darker shade of blues correspond to higher values).
+In the graph attention view (Figure~\ref{fig:attentionVis}(a)), the edge thickness corresponds to the attention value of the word pairs. %The color of the rectangle text block encodes the sum of all edge values connected to it (darker shade of blues correspond to higher values).
 The graph view is suitable for highlighting the most dominant alignments. However, the edges may become cluttered if multiple attention values are high. 
-The matrix attention view (Fig.~\ref{fig:attentionVis}(b)) resolves these issues, despite being more verbose and less efficient in highlighting the most dominant alignments. 
-We also enable the linkage between highlighted actions in both views (see Fig.~\ref{fig:attentionVis}(a)(b), where one alignment relationship is highlighted).
+The matrix attention view (Figure~\ref{fig:attentionVis}(b)) resolves these issues, despite being more verbose and less efficient in highlighting the most dominant alignments. 
+We also enable the linkage between highlighted actions in both views (see Figure~\ref{fig:attentionVis}(a)(b), where one alignment relationship is highlighted).
 
 We augment these standard visual encodings with grammar structure to address the challenge of long sentences.
 The text can be dynamically simplified based on the dependency tree (see Figure~\ref{fig:attentionVis}(a1)). We also show how the dependency information can potentially improve the prediction result in Section~\ref{sec:NLIexample}.
