@@ -22,7 +22,7 @@ By removing the ``wrong'' alignment in (b), the original prediction \emph{entail
 
 \section{Applications}
 We demonstrate the proposed visualization system on the decomposable attention network~\cite{parikh2016emnlp}
-for the NLI task and the BIDAF model~\cite{Seo2016} for the MC task.
+for the NLI task and the BIDAF model~\cite{seo2016bidirectional} for the MC task.
 
 \subsection{Natural Language Inference}
 \label{sec:NLIexample}
@@ -86,7 +86,7 @@ to a question sentence.
 %$s$ and $e$.
 The attention information is encoded as a bidirectional alignment (i.e., from context to question and vice versa). 
 %The key difference is how the question to context alignment is computed (see \cite{Seo2016} for more details).
-Here, we refer the context to question attention as \emph{att1} and the question to context attention as \emph{att2} (which is a vector instead of a matrix according to \citet{Seo2016}). In this demo, we apply a min max normalization for \emph{att2} after the softmax layer to better distinguish different attention values.
+Here, we refer the context to question attention as \emph{att1} and the question to context attention as \emph{att2} (which is a vector instead of a matrix according to \citet{seo2016bidirectional}). In this demo, we apply a min max normalization for \emph{att2} after the softmax layer to better distinguish different attention values.
 
 As illustrated in Figure~\ref{fig:MCexample}, we represent \emph{att2} as colored bars with a \emph{yellow-green-blue} colormap. Each rectangular bar corresponds to one sentence. The user can focus on individual sentences by clicking on the rectangular bar (see Figure~\ref{fig:MCexample}).
 %The proposed visualization help reveal the potential alignment issues in the machine comprehension model.
