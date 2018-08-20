@@ -189,7 +189,7 @@ class modelInterface:
             target = self.mapToToken(pair[1])
 
 
-    def predict(self, sentencePair):
+    def predict(self, sentencePair, hiddenStore):
         #map to token
         sourceSen = sentencePair[0]
         targetSen = sentencePair[1]
@@ -209,6 +209,14 @@ class modelInterface:
             self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
 
             y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
+            if hiddenStore:
+                print "source, target, encoding": word_vecs1, word_vecs2
+                ### store sentence encoding
+                if hiddenStore["senEncode"]:
+                    hiddenStore["senEncode"] = {}
+                else:
+                    hiddenStore["senEncode"][sourceSen] = word_vecs1
+                    hiddenStore["senEncode"][targetSen] = word_vecs2
 
             p = y_dist.exp()
             # print "prediction result:", p

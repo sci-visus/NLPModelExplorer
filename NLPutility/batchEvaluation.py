@@ -8,6 +8,7 @@
 '''
 from modelInterface import *
 from sentenceGenerator import *
+from hiddenStateRecorder import *
 import pickle
 import itertools
 
@@ -19,6 +20,9 @@ class batchEvaluation:
         self.srcFile = srcFile
         self.targFile = targFile
         self.labelFile = labelFile
+        ### store the computed hidden states
+        self.hiddenStore = hiddenStateRecorder()
+
         if saveFileName:
             self.saveFileName = saveFileName
 
@@ -52,6 +56,9 @@ class batchEvaluation:
     def setSentenceVerifyHook(self, verify):
         self.verify = verify
 
+    def saveHiddenEncoding(self, outputPath):
+        self.hiddenStore.save(outputPath)
+
     '''
         generate statistics and write to a JSON file
         store as hierarchy [origin]->[perturb pairs]
@@ -66,7 +73,7 @@ class batchEvaluation:
             - Prediction deviation (KL divergence) variance
 
     '''
-    def generateStatistic(self,outputPath):
+    def generateStatistic(self, outputPath):
         ## per original pair ##
         # self.storage["perturbErrorRatio"] = []
         ## self.storage["originPredCase"] = []
@@ -242,6 +249,8 @@ def main(args):
     print "finish load pkl ..."
     # evaluator.generateStatistic('../data/dev-set-statistic.json')
     evaluator.generateStatistic('../data/test-set-statistic.json')
+    ## store bson for the hidden encoding
+    evaluator.saveHiddenEncoding('../data/test-set-hidden.bson')
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))
