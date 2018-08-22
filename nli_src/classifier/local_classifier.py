@@ -58,7 +58,7 @@ class LocalClassifier(torch.nn.Module):
 				self.h[i].bias.data.copy_(c.h[i].bias.data)
 
 
-	def forward(self, sent1, sent2, att1, att2):
+	def forward(self, sent1, sent2, att1, att2, hiddenStore=None, source=None, target=None):
 		self.update_context()
 
 		attended2 = att1.bmm(sent2)
@@ -72,6 +72,12 @@ class LocalClassifier(torch.nn.Module):
 
 		flat_phi1 = phi1.sum(1)
 		flat_phi2 = phi2.sum(1)
+
+		if hiddenStore is not None:
+			print "flat_phi1", flat_phi1.size()
+			print "flat_phi2", flat_phi2.size()
+			hiddenStore.saveTagState("senEncoding", source, flat_phi1.data.numpy())
+			hiddenStore.saveTagState("senEncoding", target, flat_phi2.data.numpy())
 
 		phi = self.phi_joiner([flat_phi1, flat_phi2])
 		self.shared.out = self.h(phi)

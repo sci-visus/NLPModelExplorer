@@ -203,20 +203,19 @@ class modelInterface:
             word_vecs1 = self.embeddings(wv_idx1)
             word_vecs2 = self.embeddings(wv_idx2)
 
+            ### store word encoding ###
             if hiddenStore:
-                print "source, target, encoding:", word_vecs1, word_vecs2
-                print word_vecs1.size(), word_vecs2.size()
+                # print "source, target, encoding:", word_vecs1, word_vecs2
+                # print word_vecs1.size(), word_vecs2.size()
+                pass
                 ### store sentence encoding
-                # hiddenStore.saveTagState(sourceSen, word_vecs1.data.numpy(), "senEncoder")
-                # hiddenStore.saveTagState(targetSen, word_vecs2.data.numpy(), "senEncoder")
-
-                hiddenStore.saveTagState("senEncoder", sourceSen)
-                hiddenStore.saveTagState("senEncoder", targetSen)
+                # hiddenStore.saveTagState("senEncoder", sourceSen, word_vecs1.data.numpy())
+                # hiddenStore.saveTagState("senEncoder", targetSen, word_vecs2.data.numpy())
 
             # update network parameters
             self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
 
-            y_dist = self.pipeline.forward(word_vecs1, word_vecs2, hiddenStore)
+            y_dist = self.pipeline.forward(word_vecs1, word_vecs2, hiddenStore, sourceSen, targetSen)
 
             p = y_dist.exp()
             # print "prediction result:", p

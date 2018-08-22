@@ -10,31 +10,33 @@ from bson import dumps, loads
 class hiddenStateRecorder:
     def __init__(self):
         self.hiddenStore = {}
+
+        #### for appendTagState
         self.currentTag = {}
 
     '''
         record state corresponding to a string (word, sentence, label, tag)
         in the neural network for high-dimensional lookup
     '''
-    def saveTagState(self, stateName, tag, states=None):
-        if stateName not in self.hiddenStore:
-            self.hiddenStore[stateName] = {}
+    def saveTagState(self, stateType, tag, states=None):
+        if stateType not in self.hiddenStore:
+            self.hiddenStore[stateType] = {}
 
-        self.currentTag[stateName] = tag
-        if states:
-            self.hiddenStore[stateName][tag] = states
+        self.currentTag[stateType] = tag
+        if states is not None:
+            self.hiddenStore[stateType][tag] = states
+        exit()
 
     '''
         record the state when the corresponding tag can not be accessed
         in the same context, i.e., when the original sentence can not be
         accessed in the encoder layer.
     '''
-    def appendTagState(self, stateName, states):
-        if stateName in self.currentTag:
-            tag = self.currentTag[stateName]
-            self.hiddenStore[stateName][tag] = states
-        #test
-        exit()
+    def appendTagState(self, stateType, states):
+        if stateType in self.currentTag:
+            tag = self.currentTag[stateType]
+            self.hiddenStore[stateType][tag] = states
+
 
     def save(self, outputPath):
         with open(outputPath, 'w') as outfile:
