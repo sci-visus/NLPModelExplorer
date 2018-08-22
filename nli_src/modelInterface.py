@@ -204,7 +204,6 @@ class modelInterface:
             word_vecs2 = self.embeddings(wv_idx2)
 
             if hiddenStore:
-
                 print "source, target, encoding:", word_vecs1, word_vecs2
                 print word_vecs1.size(), word_vecs2.size()
                 ### store sentence encoding

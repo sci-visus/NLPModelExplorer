@@ -5,7 +5,7 @@ store the NLP model inner states during the evaluation process
 
 #### for baseline performance
 # from sklearn.neighbors import NearestNeighbors
-
+from bson import dumps, loads
 
 class hiddenStateRecorder:
     def __init__(self):
@@ -17,12 +17,12 @@ class hiddenStateRecorder:
         in the neural network for high-dimensional lookup
     '''
     def saveTagState(self, stateName, tag, states=None):
-        if stateName in self.hiddenStore:
+        if stateName not in self.hiddenStore:
             self.hiddenStore[stateName] = {}
-        else:
-            self.currentTag[stateName] = tag
-            if states:
-                self.hiddenStore[stateName][tag] = states
+
+        self.currentTag[stateName] = tag
+        if states:
+            self.hiddenStore[stateName][tag] = states
 
     '''
         record the state when the corresponding tag can not be accessed
@@ -37,9 +37,12 @@ class hiddenStateRecorder:
         exit()
 
     def save(self, outputPath):
-        import bson
         with open(outputPath, 'w') as outfile:
-            bson.dump(self.hiddenStore, outfile)
+            dumps(self.hiddenStore, outfile)
+
+    def load(self, inputPath):
+        with open(inputPath, 'w') as inputfile:
+            self.hiddenStore = loads(inputfile)
 
     def buildSearchIndex(self, stateName=None):
         if stateName == None:
@@ -47,11 +50,6 @@ class hiddenStateRecorder:
             pass
         else:
             store = self.hiddenStore[stateName]
-
-    def load(self, inputPath):
-        import bson
-        with open(inputPath, 'w') as outfile:
-            bson.load(self.hiddenStore, outfile)
 
     def neighborLookup(self, stateName, tag):
         # default baseline implementation

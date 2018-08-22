@@ -17,6 +17,8 @@ import itertools
 
 labels = ["entailment", "neutral", "contradiction"]
 
+
+############################## batch evaluation ################################
 class batchEvaluation:
     def __init__(self, srcFile, targFile, labelFile, saveFileName=None):
         #load input pair and grouth truth label
@@ -157,11 +159,7 @@ class batchEvaluation:
                 src_perb = self.perturb(src_orig)
 
                 # if self.verify(src_orig) and self.verify(targ_orig):
-
-                self.storage["origSrc"].append(src_orig)
-                self.storage["origTarg"].append(targ_orig)
-                self.storage["origLabel"].append(label_orig)
-                prediction = self.predict([src_orig,targ_orig])
+                prediction = self.predict([src_orig,targ_orig], self.hiddenStore)
 
 
     def generatePerturbedPrediction(self):
@@ -244,6 +242,8 @@ class batchEvaluation:
         with open(self.saveFileName, 'wb') as handle:
             pickle.dump(self.storage, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+
+##################################################################
 def main(args):
 
     #### model ####
@@ -277,6 +277,8 @@ def main(args):
     # evaluator.generateStatistic('../data/dev-set-statistic.json')
     # evaluator.generateStatistic('../data/test-set-statistic.json')
     ## store bson for the hidden encoding
+
+    evaluator.generateHiddenStates()
     evaluator.saveHiddenEncoding('../data/test-set-hidden.bson')
 
 if __name__ == '__main__':
