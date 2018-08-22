@@ -64,11 +64,15 @@ class Pipeline(torch.nn.Module):
 		self.classifier.init_weight_from(m.classifier)
 
 
-	def forward(self, sent1, sent2):
+	def forward(self, sent1, sent2, hiddenStore = None):
 		shared = self.shared
 		shared.input_enc1, shared.input_enc2 = self.encoder(sent1, sent2)
 		shared.att1, shared.att2 = self.attention(shared.input_enc1, shared.input_enc2)
 		shared.out = self.classifier(shared.input_enc1, shared.input_enc2, shared.att1, shared.att2)
+
+		if hiddenStore:
+			hiddenStore.appendTagState("senEncoder", shared.input_enc1.data.numpy())
+
 
 		# if there is any fwd pass hooks, execute them
 		if hasattr(self.opt, 'forward_hooks') and self.opt.forward_hooks != '':

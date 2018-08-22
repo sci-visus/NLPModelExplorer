@@ -6,7 +6,10 @@
         - model hooks
         - perturbation hooks
 '''
-from modelInterface import *
+import sys
+sys.path.insert(0, '..')
+
+from nli_src.modelInterface import *
 from sentenceGenerator import *
 from hiddenStateRecorder import *
 import pickle
@@ -37,6 +40,7 @@ class batchEvaluation:
                 self.generatePerturbedPrediction()
         #     self.storage = saveFile
         # perturbation type: only perturb target/ perturb all
+
 
     def setSentencePerturbationHook(self, perturb):
         self.perturb = perturb
@@ -138,6 +142,28 @@ class batchEvaluation:
         with open(outputPath, 'w') as outfile:
                 json.dump(self.jsonOut, outfile)
 
+
+    def generateHiddenStates(self):
+        num_lines = sum(1 for line in open(self.labelFile))
+        index = 0
+
+        for _, (src_orig, targ_orig, label_orig) in \
+            enumerate(itertools.izip(open(self.srcFile,'r'),
+            open(self.targFile,'r'),open(self.labelFile,'r'))):
+                # generate perturbation
+                # print index, src_orig, targ_orig, label_orig
+                label_orig = label_orig.rstrip('\n')
+                targ_perb = self.perturb(targ_orig)
+                src_perb = self.perturb(src_orig)
+
+                # if self.verify(src_orig) and self.verify(targ_orig):
+
+                self.storage["origSrc"].append(src_orig)
+                self.storage["origTarg"].append(targ_orig)
+                self.storage["origLabel"].append(label_orig)
+                prediction = self.predict([src_orig,targ_orig])
+
+
     def generatePerturbedPrediction(self):
         self.storage = {}
 
@@ -234,6 +260,7 @@ def main(args):
                            "../data/snli_1.0/label-test.txt",
                            "../data/test-pred-statistic.pkl" )
 
+
     ###### dev set ######
     # evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",
     #                        "../data/snli_1.0/targ-dev.txt",
@@ -245,10 +272,10 @@ def main(args):
     evaluator.setSentencePerturbationHook(gen.perturbSentence)
     # evaluator.setSentenceVerifyHook(gen.verifySentence)
 
-    evaluator.initialize()
-    print "finish load pkl ..."
+    # evaluator.initialize()
+    # print "finish load pkl ..."
     # evaluator.generateStatistic('../data/dev-set-statistic.json')
-    evaluator.generateStatistic('../data/test-set-statistic.json')
+    # evaluator.generateStatistic('../data/test-set-statistic.json')
     ## store bson for the hidden encoding
     evaluator.saveHiddenEncoding('../data/test-set-hidden.bson')
 

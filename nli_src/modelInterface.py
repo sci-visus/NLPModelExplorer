@@ -30,7 +30,6 @@ from eval import pick_label, evaluate
 from itertools import izip
 from overfit_to_ex import *
 
-
 class modelInterface:
     #setup model
     def __init__(self, wordDict, wordVec, model, encoder="proj", attention="local",
@@ -189,7 +188,7 @@ class modelInterface:
             target = self.mapToToken(pair[1])
 
 
-    def predict(self, sentencePair, hiddenStore):
+    def predict(self, sentencePair, hiddenStore=None):
         #map to token
         sourceSen = sentencePair[0]
         targetSen = sentencePair[1]
@@ -204,19 +203,21 @@ class modelInterface:
             word_vecs1 = self.embeddings(wv_idx1)
             word_vecs2 = self.embeddings(wv_idx2)
 
+            if hiddenStore:
+
+                print "source, target, encoding:", word_vecs1, word_vecs2
+                print word_vecs1.size(), word_vecs2.size()
+                ### store sentence encoding
+                # hiddenStore.saveTagState(sourceSen, word_vecs1.data.numpy(), "senEncoder")
+                # hiddenStore.saveTagState(targetSen, word_vecs2.data.numpy(), "senEncoder")
+
+                hiddenStore.saveTagState("senEncoder", sourceSen)
+                hiddenStore.saveTagState("senEncoder", targetSen)
+
             # update network parameters
-            # print source.shape[1], target.shape[1]
             self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
 
-            y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
-            if hiddenStore:
-                print "source, target, encoding": word_vecs1, word_vecs2
-                ### store sentence encoding
-                if hiddenStore["senEncode"]:
-                    hiddenStore["senEncode"] = {}
-                else:
-                    hiddenStore["senEncode"][sourceSen] = word_vecs1
-                    hiddenStore["senEncode"][targetSen] = word_vecs2
+            y_dist = self.pipeline.forward(word_vecs1, word_vecs2, hiddenStore)
 
             p = y_dist.exp()
             # print "prediction result:", p
