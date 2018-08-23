@@ -1,5 +1,10 @@
 from visModule import *
 
+from NLPutility import hiddenStateRecorder
+import pickle
+import sys
+sys.modules['hiddenStateRecorder'] = hiddenStateRecorder
+
 ############## specialized vis modules ################
 
 '''
@@ -63,6 +68,20 @@ exampleData = [
 class nlizeModule(visModule):
     def __init__(self, componentLayout):
         super(nlizeModule, self).__init__(componentLayout)
+        self.hiddenStore = None
+
+    #### temp ####
+    def latentStateLookup(self, sentence):
+
+        filename = "data//test-set-hidden.pkl"
+        if self.hiddenStore is None:
+            with open(filename, "rb") as handle:
+                self.hiddenStore = pickle.load(handle)
+
+        neighbors = self.hiddenStore.neighborLookup("senEncoding",sentence);
+        print "reference:", 'The woman is young .\n'
+        print "neighbors:", neighbors
+
 
     def initSetup(self):
         dataManager.setData("sentenceList", exampleData)

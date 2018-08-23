@@ -17,7 +17,6 @@ import itertools
 
 labels = ["entailment", "neutral", "contradiction"]
 
-
 ############################## batch evaluation ################################
 class batchEvaluation:
     def __init__(self, srcFile, targFile, labelFile, saveFileName=None):
@@ -162,8 +161,8 @@ class batchEvaluation:
 
                 # if self.verify(src_orig) and self.verify(targ_orig):
                 prediction = self.predict([src_orig,targ_orig], self.hiddenStore)
-                if index > 5:
-                    break
+                # if index > 5:
+                #     break
 
         self.hiddenStore.buildSearchIndex()
 
@@ -277,7 +276,6 @@ def main(args):
                            "../data/snli_1.0/targ-test.txt",
                            "../data/snli_1.0/label-test.txt",
                            "../data/test-pred-statistic.pkl" )
-
 
     ###### dev set ######
     # evaluator = batchEvaluation("../data/snli_1.0/src-dev.txt",

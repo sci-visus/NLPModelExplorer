@@ -18,6 +18,7 @@ var panelMetaInfo = {
     "AttentionSubMatrix": ["template_view", "attentionSubMatrixComponent"],
     'Summary': ['evaluation_view', 'evaluationComponent'],
     'Pipeline': ['template_view', 'pipelineComponent'],
+    'LatentRepresentation': ['latent_view', 'latentSpaceComponent'],
     "Paragraph": ['paragraph_view', 'paragraphComponenet']
 };
 
@@ -29,6 +30,7 @@ var objectMap = {
     sentenceComponent: sentenceComponent,
     evaluationComponent: evaluationComponent,
     pipelineComponent: pipelineComponent,
+    latentSpaceComponent: latentSpaceComponent,
 
     paragraphComponenet: paragraphComponenet,
     attentionAsymmetricComponent: attentionAsymmetricComponent,

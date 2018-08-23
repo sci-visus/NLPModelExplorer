@@ -76,11 +76,15 @@ class hiddenStateRecorder:
         ref = data[:,index]
         # print np.squeeze(np.array(np.matrix(data).T*np.matrix(ref).T))
         #euclidean distance
-        indices = np.argsort(np.linalg.norm(data-np.vstack(ref), axis=0))[0:k]
+        dist = np.linalg.norm(data-np.vstack(ref), axis=0)
+        indices = np.argsort(dist)[0:k]
         #cosine distance
         # indices = np.argsort(np.squeeze(np.array(np.matrix(data).T*np.matrix(ref).T)))
         indices = indices[0:k]
         # print indices
-        neighbors = [index2sen[ind] for ind in indices]
+        neighbors = {}
+        neighbors["sentence"] = [index2sen[ind] for ind in indices]
+        neighbors["distance"] = [dist[ind] for ind in indices]
+
         # print indices[0:20]
         return neighbors
