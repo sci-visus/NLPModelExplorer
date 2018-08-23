@@ -7,13 +7,17 @@ store the NLP model inner states during the evaluation process
 # from sklearn.neighbors import NearestNeighbors
 import bson
 import numpy as np
+import pickle
 
 class hiddenStateRecorder:
-    def __init__(self):
-        self.hiddenStore = {}
+    def __init__(self, filename=None):
 
+        self.hiddenStore = {}
         #### for appendTagState
         self.currentTag = {}
+
+        if filename:
+            self.load(filename)
 
     '''
         record state corresponding to a string (word, sentence, label, tag)
@@ -38,12 +42,14 @@ class hiddenStateRecorder:
             self.hiddenStore[stateType][tag] = states
 
     def save(self, outputPath):
-        with open(outputPath, 'w') as f:
-            f.write(bson.BSON.encode(self.hiddenStore))
+        with open(outputPath, 'wb') as f:
+            # f.write(bson.BSON.encode(self.hiddenStore))
+            pickle.dump(self.hiddenStore, f, protocol=pickle.HIGHEST_PROTOCOL)
 
     def load(self, inputPath):
-        with open(inputPath, 'w') as f:
-            self.hiddenStore = bson.decode_all(f.read())
+        with open(inputPath, 'rb') as f:
+            # self.hiddenStore = bson.decode_all(f.read())
+            self.hiddenStore = pickle.load(f)
 
     def buildSearchIndex(self, stateType=None):
         if stateType == None:
