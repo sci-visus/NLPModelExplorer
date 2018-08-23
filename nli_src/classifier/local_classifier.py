@@ -74,8 +74,8 @@ class LocalClassifier(torch.nn.Module):
 		flat_phi2 = phi2.sum(1)
 
 		if hiddenStore is not None:
-			print "flat_phi1", flat_phi1.size()
-			print "flat_phi2", flat_phi2.size()
+			# print "flat_phi1", flat_phi1.size()
+			# print "flat_phi2", flat_phi2.size()
 			hiddenStore.saveTagState("senEncoding", source, flat_phi1.data.numpy())
 			hiddenStore.saveTagState("senEncoding", target, flat_phi2.data.numpy())
 

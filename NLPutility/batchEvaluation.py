@@ -149,8 +149,7 @@ class batchEvaluation:
     def generateHiddenStates(self):
         num_lines = sum(1 for line in open(self.labelFile))
         index = 0
-
-        for index, (src_orig, targ_orig, label_orig) in \
+        for _, (src_orig, targ_orig, label_orig) in \
             enumerate(itertools.izip(open(self.srcFile,'r'),
             open(self.targFile,'r'),open(self.labelFile,'r'))):
                 # generate perturbation
@@ -163,6 +162,15 @@ class batchEvaluation:
                 prediction = self.predict([src_orig,targ_orig], self.hiddenStore)
                 # if index > 5:
                 #     break
+
+                index = index + 1
+                ####### test on small number of example #####
+                # if index > 100:
+                    # break
+                
+                # batch prediction
+                if index % 20 == 0:
+                    print "  processing:", str(float(index)/float(num_lines)*100.0), str(index)
 
         self.hiddenStore.buildSearchIndex()
 
