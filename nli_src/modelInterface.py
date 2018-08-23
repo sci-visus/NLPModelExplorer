@@ -209,8 +209,8 @@ class modelInterface:
                 # print word_vecs1.size(), word_vecs2.size()
                 pass
                 ### store sentence encoding
-                # hiddenStore.saveTagState("senEncoder", sourceSen, word_vecs1.data.numpy())
-                # hiddenStore.saveTagState("senEncoder", targetSen, word_vecs2.data.numpy())
+                # hiddenStore.saveTagState("wordEncoding", sourceSen, word_vecs1.data.numpy())
+                # hiddenStore.saveTagState("wordEncoding", targetSen, word_vecs2.data.numpy())
 
             # update network parameters
             self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])

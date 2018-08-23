@@ -63,7 +63,9 @@ class batchEvaluation:
         self.verify = verify
 
     def saveHiddenEncoding(self, outputPath):
-        self.hiddenStore.save(outputPath)
+        # self.hiddenStore.save(outputPath)
+        with open(outputPath, 'wb') as handle:
+            pickle.dump(self.hiddenStore, handle)
 
     '''
         generate statistics and write to a JSON file
@@ -149,7 +151,7 @@ class batchEvaluation:
         num_lines = sum(1 for line in open(self.labelFile))
         index = 0
 
-        for _, (src_orig, targ_orig, label_orig) in \
+        for index, (src_orig, targ_orig, label_orig) in \
             enumerate(itertools.izip(open(self.srcFile,'r'),
             open(self.targFile,'r'),open(self.labelFile,'r'))):
                 # generate perturbation
@@ -160,6 +162,10 @@ class batchEvaluation:
 
                 # if self.verify(src_orig) and self.verify(targ_orig):
                 prediction = self.predict([src_orig,targ_orig], self.hiddenStore)
+                if index > 5:
+                    break
+
+        self.hiddenStore.buildSearchIndex()
 
 
     def generatePerturbedPrediction(self):
@@ -244,7 +250,18 @@ class batchEvaluation:
 
 
 ##################################################################
+
+def test_hiddenStateRecorder(filename):
+    #load
+    with open(filename, "rb") as handle:
+        hiddenStore = pickle.load(handle)
+        neighbors = hiddenStore.neighborLookup("senEncoding", 'The woman is young .\n')
+        print neighbors
+
 def main(args):
+    ## test neighbor lookup if states are recorded
+    test_hiddenStateRecorder('../data/test-set-hidden.pkl')
+    exit()
 
     #### model ####
     model = modelInterface(
@@ -279,7 +296,7 @@ def main(args):
     ## store bson for the hidden encoding
 
     evaluator.generateHiddenStates()
-    evaluator.saveHiddenEncoding('../data/test-set-hidden.bson')
+    evaluator.saveHiddenEncoding('../data/test-set-hidden.pkl')
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))

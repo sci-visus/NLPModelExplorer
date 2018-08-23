@@ -2,9 +2,9 @@ pytorch
 nltk
 requests
 ujson
-bson
 google-cloud
 python-socketio
 eventlet
 pattern
 nltk
+pymongo
