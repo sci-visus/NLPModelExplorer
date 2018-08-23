@@ -63,8 +63,10 @@ class batchEvaluation:
 
     def saveHiddenEncoding(self, outputPath):
         # self.hiddenStore.save(outputPath)
-        with open(outputPath, 'wb') as handle:
-            pickle.dump(self.hiddenStore, handle)
+        # NLPutility.__module__ = "NLPutility"
+        self.hiddenStore.save(outputPath)
+        # with open(outputPath, 'wb') as handle:
+            # pickle.dump(self.hiddenStore, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     '''
         generate statistics and write to a JSON file
@@ -160,8 +162,8 @@ class batchEvaluation:
 
                 # if self.verify(src_orig) and self.verify(targ_orig):
                 prediction = self.predict([src_orig,targ_orig], self.hiddenStore)
-                # if index > 5:
-                #     break
+                if index > 5:
+                    break
 
                 index = index + 1
                 ####### test on small number of example #####
@@ -260,16 +262,15 @@ class batchEvaluation:
 
 def test_hiddenStateRecorder(filename):
     #load
-    with open(filename, "rb") as handle:
-        hiddenStore = pickle.load(handle)
-        neighbors = hiddenStore.neighborLookup("senEncoding", 'The woman is young .\n')
-        print "reference:", 'The woman is young .\n'
-        print "neighbors:", neighbors
+    hiddenStore = hiddenStateRecorder(filename)
+    neighbors = hiddenStore.neighborLookup("senEncoding", 'The woman is young .\n')
+    print "reference:", 'The woman is young .\n'
+    print "neighbors:", neighbors
 
 def main(args):
     ## test neighbor lookup if states are recorded
-    # test_hiddenStateRecorder('../data/test-set-hidden.pkl')
-    # exit()
+    test_hiddenStateRecorder('../data/test-set-hidden.pkl')
+    exit()
 
     #### model ####
     model = modelInterface(
