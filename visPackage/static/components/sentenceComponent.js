@@ -45,14 +45,14 @@ class sentenceComponent extends baseComponent {
 
     parseDataUpdate(msg) {
         super.parseDataUpdate(msg);
-        console.log(msg);
+        // console.log(msg);
 
         switch (msg['name']) {
             case "sentenceList":
                 this.onReceiveSentenceList();
                 break;
             case "currentPair":
-                console.log(msg, this.data["currentPair"]["sentences"]);
+                // console.log(msg, this.data["currentPair"]["sentences"]);
                 let pair = msg["data"]["data"]["sentences"];
                 if (this.oldPair) {
                     if (this.oldPair[0].split(" ").length !== pair[0].split(
@@ -170,14 +170,14 @@ class sentenceComponent extends baseComponent {
         this.clearPreviousPair();
     }
 
-    clearPreviousPair(){
-      this.clearDropdown(this.div + "srcInput");
-      this.clearDropdown(this.div + "targInput");
+    clearPreviousPair() {
+        this.clearDropdown(this.div + "srcInput");
+        this.clearDropdown(this.div + "targInput");
 
-      //reset allSens
-      let currentPair = this.data["currentPair"]["sentences"];
-      this.setData("allSourceSens", [currentPair[0]]);
-      this.setData("allTargetSens", [currentPair[1]]);
+        //reset allSens
+        let currentPair = this.data["currentPair"]["sentences"];
+        this.setData("allSourceSens", [currentPair[0]]);
+        this.setData("allTargetSens", [currentPair[1]]);
     }
 
     onUpdateCurrentPair() {

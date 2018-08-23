@@ -8,8 +8,8 @@ import sys
 sys.path.insert(0, '..')
 
 class sentenceGenerator:
-    # def __init__(self, train_dict='data/snli_1.0/snli_1.0.word.dict'):
-    def __init__(self, train_dict='../data/snli_1.0/snli_1.0.word.dict'):
+    def __init__(self, train_dict='data/snli_1.0/snli_1.0.word.dict'):
+    # def __init__(self, train_dict='../data/snli_1.0/snli_1.0.word.dict'):
         self.train_tokens = {}
         with open(train_dict, 'r+') as f:
             lines = f.readlines()

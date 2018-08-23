@@ -77,6 +77,7 @@ class hiddenStateRecorder:
         sen2index = self.hiddenStore[stateType]["sen2index"]
         index2sen = self.hiddenStore[stateType]["index2sen"]
 
+        # print "keys:", sen2index.keys()
         index = sen2index[tag]
         data = self.hiddenStore[stateType]["data"]
         ref = data[:,index]

@@ -72,11 +72,12 @@ class nlizeModule(visModule):
     #### temp ####
     def latentStateLookup(self, sentence):
         if sentence.startswith(u"<s>"):
-            sentence = sentence[4:]
-            print sentence
+            sentence = sentence[4:].encode('ascii','ignore')
+        if not sentence.endswith("\n"):
+            sentence = sentence + "\n"
         self.hiddenStore = hiddenStateRecorder("data/test-set-hidden.pkl")
         neighbors = self.hiddenStore.neighborLookup("senEncoding",sentence);
-        print "reference:", 'The woman is young .\n'
+        print "reference:", sentence
         print "neighbors:", neighbors
         return neighbors
 

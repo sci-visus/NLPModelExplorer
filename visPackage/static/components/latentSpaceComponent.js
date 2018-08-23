@@ -10,13 +10,14 @@ class latentSpaceComponent extends baseComponent {
             left: 10
         };
 
+        $(this.div + "container").parent().css("overflow-y", "scroll");
+
         this.tableEntry = null;
-        this.draw();
+        // this.draw();
     }
 
     parseDataUpdate(msg) {
         super.parseDataUpdate(msg);
-        // console.log(msg);
 
         switch (msg['name']) {
             case "currentPair":
@@ -30,21 +31,24 @@ class latentSpaceComponent extends baseComponent {
 
     parseFunctionReturn(msg) {
         super.parseFunctionReturn(msg);
-        switch (msg['name']) {
-            case 'neighborLookup':
-                this.handleNeighborLookup(msg['data']);
+
+        switch (msg['func']) {
+            case 'latentStateLookup':
+                this.handleNeighborLookup(msg['data']["data"]);
         }
     }
 
     handleNeighborLookup(neighbors) {
-        console.log(neighbors);
+        // console.log(neighbors);
         //convert dict to table
         let sens = neighbors["sentence"];
-        let dists = neighbors["distance"];
+        let maxDist = Math.max(...neighbors["distance"]);
+        let dists = neighbors["distance"].map(d => d / maxDist);
         this.tableEntry = [];
         for (var i = 0; i < sens.length; i++) {
-            this.tableEntry.push([dists[i], sens[i]]);
+            this.tableEntry.push([d3.format(".2f")(dists[i]), sens[i]]);
         }
+        // console.log(this.tableEntry);
         this.draw();
     }
 
@@ -55,12 +59,19 @@ class latentSpaceComponent extends baseComponent {
         var tbody = d3.select(this.div + "table").append('tbody');
         // console.log(thead, tbody);
         // append the header row
-        let columns = ["dist", "sentence"];
+        let columns = [{
+            "label": "dist",
+            "width": "15%"
+        }, {
+            "label": "sentence",
+            "width": "85%"
+        }];
         thead.append('tr')
             .selectAll('th')
             .data(columns).enter()
             .append('th')
-            .text(t => t);
+            .style("width", t => t.width)
+            .text(t => t.label);
 
         if (this.tableEntry) {
             let data = this.tableEntry;
@@ -86,8 +97,7 @@ class latentSpaceComponent extends baseComponent {
                 })
                 .enter()
                 .append('td')
-                .style("background-color", d => rgba(255, 255, 255, d.color *
-                    200))
+                // .style("background-color", d => d3.rgb(0, 0, 150, d.color))
                 .text(d => d.value);
         }
     }
