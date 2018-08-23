@@ -162,14 +162,14 @@ class batchEvaluation:
 
                 # if self.verify(src_orig) and self.verify(targ_orig):
                 prediction = self.predict([src_orig,targ_orig], self.hiddenStore)
-                if index > 5:
-                    break
+                # if index > 5:
+                    # break
 
                 index = index + 1
                 ####### test on small number of example #####
                 # if index > 100:
                     # break
-                
+
                 # batch prediction
                 if index % 20 == 0:
                     print "  processing:", str(float(index)/float(num_lines)*100.0), str(index)
@@ -269,8 +269,8 @@ def test_hiddenStateRecorder(filename):
 
 def main(args):
     ## test neighbor lookup if states are recorded
-    test_hiddenStateRecorder('../data/test-set-hidden.pkl')
-    exit()
+    # test_hiddenStateRecorder('../data/test-set-hidden.pkl')
+    # exit()
 
     #### model ####
     model = modelInterface(
