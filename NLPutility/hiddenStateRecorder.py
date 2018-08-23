@@ -54,22 +54,33 @@ class hiddenStateRecorder:
         size = len(store)
         print "build index for ", size, " sentence ..."
         data = self.hiddenStore[stateType]["data"] = np.zeros( (store[store.keys()[0]].size, size) )
-        sentence = self.hiddenStore[stateType]["sentence"] = {}
+        sen2index = self.hiddenStore[stateType]["sen2index"] = {}
+        index2sen = self.hiddenStore[stateType]["index2sen"] = []
 
         for index, key in enumerate(store.keys()):
             entry = store[key]
             # print entry
             data[:,index] = entry
-            sentence[key] = index
+            sen2index[key] = index
+            index2sen.append(key)
         # print "data:", data.shape
         # print "sentence:", sentence
 
     def neighborLookup(self, stateType, tag, k=20):
         # default baseline implementation
-        index = self.hiddenStore[stateType]["sentence"][tag]
+        sen2index = self.hiddenStore[stateType]["sen2index"]
+        index2sen = self.hiddenStore[stateType]["index2sen"]
+
+        index = sen2index[tag]
         data = self.hiddenStore[stateType]["data"]
         ref = data[:,index]
-        # print np.linalg.norm(data-np.vstack(ref), axis=0)
-        indices = np.argsort(np.linalg.norm(data-np.vstack(ref), axis=0))
+        # print np.squeeze(np.array(np.matrix(data).T*np.matrix(ref).T))
+        #euclidean distance
+        indices = np.argsort(np.linalg.norm(data-np.vstack(ref), axis=0))[0:k]
+        #cosine distance
+        # indices = np.argsort(np.squeeze(np.array(np.matrix(data).T*np.matrix(ref).T)))
+        indices = indices[0:k]
+        # print indices
+        neighbors = [index2sen[ind] for ind in indices]
         # print indices[0:20]
-        return indices[0:k]
+        return neighbors

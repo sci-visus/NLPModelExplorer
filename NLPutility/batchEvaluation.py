@@ -256,12 +256,13 @@ def test_hiddenStateRecorder(filename):
     with open(filename, "rb") as handle:
         hiddenStore = pickle.load(handle)
         neighbors = hiddenStore.neighborLookup("senEncoding", 'The woman is young .\n')
-        print neighbors
+        print "reference:", 'The woman is young .\n'
+        print "neighbors:", neighbors
 
 def main(args):
     ## test neighbor lookup if states are recorded
-    test_hiddenStateRecorder('../data/test-set-hidden.pkl')
-    exit()
+    # test_hiddenStateRecorder('../data/test-set-hidden.pkl')
+    # exit()
 
     #### model ####
     model = modelInterface(
