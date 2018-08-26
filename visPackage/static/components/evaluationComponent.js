@@ -126,8 +126,8 @@ class evaluationComponent extends baseComponent {
 
     setupUI() {
         let fileList = [
-            "data/dev-set-statistic.json"
-            // , "data/test-set-statistic.json"
+            // "data/dev-set-statistic.json",
+            "data/test-set-statistic.json"
         ]
         d3.select(this.div + "selectData")
             .selectAll('option')
