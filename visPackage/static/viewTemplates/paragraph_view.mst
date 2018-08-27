@@ -18,13 +18,8 @@
 
     <div class="form-group">
         <label>Paragraph</label>
-        <!--button id= "{{id}}answer" type="button" class="btn btn-secondary btn-sm margin-left:10px">Answer</button-->
-        <!--button id= "{{id}}aggAnswer" type="button" class="btn btn-secondary btn-sm margin-left:10px">Aggregated Answer</button-->
-        <!-- <textarea id="{{id}}src" class="form-control" style="height:140px"></textarea> -->
-        <div id="{{id}}src" style="overflow:scroll; height:140px; border: 1px solid #ced4da; border-radius: .25rem; padding: .375rem .75rem;">
-        <!--div class="input-group-append float-right" id="{{id}}srcInput">
-            <button class="btn btn-outline-secondary" id="{{id}}perturbSource">Perturb</button>
-        </div-->
+        <textarea id="{{id}}src" class="form-control" style="height:140px"></textarea>
+        <!-- <div id="{{id}}src" style="overflow:scroll; height:140px; border: 1px solid #ced4da; border-radius: .25rem; padding: .375rem .75rem;"> -->
     </div>
 
     <div class="form-group">

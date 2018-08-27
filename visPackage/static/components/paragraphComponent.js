@@ -4,6 +4,8 @@ class paragraphComponenet extends sentenceComponent {
         this.subscribeDatabyNames(["prediction", "allPairsPrediction"]);
         //init
         this.callFunc("initSetup");
+
+        this.textareaHighlight = true;
     }
 
     parseDataUpdate(msg) {
@@ -22,11 +24,16 @@ class paragraphComponenet extends sentenceComponent {
                 break;
         }
     }
-    
+
     onUpdateCurrentPair() {
-        var currentPair = [d3.select(this.div + "src").text(),
+        var currentPair = [
+            //d3.select(this.div + "src").text(),
+            d3.select(this.div + "src").property("value"),
             d3.select(this.div + "targ").property("value")
         ];
+        //update local source and target
+        this.source = currentPair[0];
+        this.target = currentPair[1];
         this.data["currentPair"]["sentences"] = currentPair;
         this.setData("currentPair", this.data["currentPair"]);
     }
@@ -77,16 +84,22 @@ class paragraphComponenet extends sentenceComponent {
         // console.log(answer);
         d3.select(this.div + "pred").property("value", answer);
 
-        let prob = new Array(this.predP1.length).fill(0);
-
-        for (let i = indexS; i < indexE + 1; i++) {
-            prob[i] = 1.0;
+        if (this.textareaHighlight) {
+            $(this.div + "src").highlightWithinTextarea({
+                highlight: answer, //
+                className: 'yellow'
+            });
+        } else {
+            //using div instead of textarea for highlight
+            let prob = new Array(this.predP1.length).fill(0);
+            for (let i = indexS; i < indexE + 1; i++) {
+                prob[i] = 1.0;
+            }
+            // console.log(indexS, indexE, prob);
+            let coloredSrc = this.colorSentenceByValue(this.source, prob,
+                "yellow");
+            d3.select(this.div + "src").html(coloredSrc);
         }
-        // console.log(indexS, indexE, prob);
-
-        let coloredSrc = this.colorSentenceByValue(this.source, prob,
-            "yellow");
-        d3.select(this.div + "src").html(coloredSrc);
     }
 
     showAggregatedPrediction() {
