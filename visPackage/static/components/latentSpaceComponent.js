@@ -13,7 +13,14 @@ class latentSpaceComponent extends baseComponent {
         $(this.div + "container").parent().css("overflow-y", "scroll");
 
         this.tableEntry = null;
-        // this.draw();
+
+        d3.select(this.div + "refresh").on("click", d => {
+            this.callFunc("latentStateLookup", {
+                "sentence": this.data["currentPair"][
+                    "sentences"
+                ][1]
+            });
+        });
     }
 
     parseDataUpdate(msg) {
@@ -21,11 +28,12 @@ class latentSpaceComponent extends baseComponent {
 
         switch (msg['name']) {
             case "currentPair":
-                this.callFunc("latentStateLookup", {
-                    "sentence": this.data["currentPair"][
-                        "sentences"
-                    ][0]
-                });
+                break;
+                // this.callFunc("latentStateLookup", {
+                //     "sentence": this.data["currentPair"][
+                //         "sentences"
+                //     ][0]
+                // });
         }
     }
 
@@ -41,12 +49,17 @@ class latentSpaceComponent extends baseComponent {
     handleNeighborLookup(neighbors) {
         // console.log(neighbors);
         //convert dict to table
+        if (Object.keys(neighbors).length === 0)
+            return;
+
         let sens = neighbors["sentence"];
+        let pred = neighbors["prediction"]
         let maxDist = Math.max(...neighbors["distance"]);
         let dists = neighbors["distance"].map(d => d / maxDist);
         this.tableEntry = [];
         for (var i = 0; i < sens.length; i++) {
-            this.tableEntry.push([d3.format(".2f")(dists[i]), sens[i]]);
+            this.tableEntry.push([d3.format(".2f")(dists[i]), sens[i], pred[
+                i]]);
         }
         // console.log(this.tableEntry);
         this.draw();
@@ -91,13 +104,16 @@ class latentSpaceComponent extends baseComponent {
                         return {
                             column: column,
                             value: entry,
-                            color: row[0]
+                            pred: row[2]
                         };
                     });
                 })
                 .enter()
                 .append('td')
-                // .style("background-color", d => d3.rgb(0, 0, 150, d.color))
+                .style("background-color", d => {
+                    if (d.pred)
+                        return "lightgreen";
+                })
                 .text(d => d.value);
         }
     }

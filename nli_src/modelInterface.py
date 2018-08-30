@@ -188,7 +188,7 @@ class modelInterface:
             target = self.mapToToken(pair[1])
 
 
-    def predict(self, sentencePair, hiddenStore=None):
+    def predict(self, sentencePair):
         #map to token
         sourceSen = sentencePair[0]
         targetSen = sentencePair[1]
@@ -203,24 +203,16 @@ class modelInterface:
             word_vecs1 = self.embeddings(wv_idx1)
             word_vecs2 = self.embeddings(wv_idx2)
 
-            ### store word encoding ###
-            if hiddenStore:
-                # print "source, target, encoding:", word_vecs1, word_vecs2
-                # print word_vecs1.size(), word_vecs2.size()
-                pass
-                ### store sentence encoding
-                # hiddenStore.saveTagState("wordEncoding", sourceSen, word_vecs1.data.numpy())
-                # hiddenStore.saveTagState("wordEncoding", targetSen, word_vecs2.data.numpy())
-
             # update network parameters
             self.pipeline.update_context([0], 1, source.shape[1], target.shape[1])
 
-            y_dist = self.pipeline.forward(word_vecs1, word_vecs2, hiddenStore, sourceSen, targetSen)
+            y_dist = self.pipeline.forward(word_vecs1, word_vecs2)
 
             p = y_dist.exp()
             # print "prediction result:", p
             # pred = dict()
             pred = p.data.numpy()
+
             # pred["entail"] = p[0]
             # pred["neutral"] = p[1]
             # pred["contradict"] = p[2]
@@ -341,6 +333,14 @@ class modelInterface:
         # self.pipeline = Pipeline(self.opt, self.shared)
         return pred
 
+
+    def layerValues(self, layerName):
+        attr = None
+        try:
+            attr = getattr(self.shared, layerName).data.numpy()
+        except:
+            print "Don't have layer info for:", layerName
+        return attr
 
     def pipelineStatistic(self, infoType="mira"):
 

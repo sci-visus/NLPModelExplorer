@@ -66,16 +66,17 @@ exampleData = [
 class nlizeModule(visModule):
     def __init__(self, componentLayout):
         super(nlizeModule, self).__init__(componentLayout)
-        # self.hiddenStore = hiddenStateRecorder()
-        self.hiddenStore = None
+        self.hiddenStore = hiddenStateRecorder()
+        # self.hiddenStore = None
+        # self.hiddenStore = hiddenStateRecorder("data/test-set-hidden.pkl")
 
     #### temp ####
     def latentStateLookup(self, sentence):
-        if sentence.startswith(u"<s>"):
-            sentence = sentence[4:].encode('ascii','ignore')
-        if not sentence.endswith("\n"):
-            sentence = sentence + "\n"
-        self.hiddenStore = hiddenStateRecorder("data/test-set-hidden.pkl")
+        # if sentence.startswith(u"<s>"):
+        #     sentence = sentence[4:].encode('ascii','ignore')
+        # if not sentence.endswith("\n"):
+        #     sentence = sentence + "\n"
+
         neighbors = self.hiddenStore.neighborLookup("senEncoding",sentence);
         print "reference:", sentence
         print "neighbors:", neighbors
@@ -122,6 +123,10 @@ class nlizeModule(visModule):
 
     def setAttentionHook(self, callback):
         self.attentionHook = callback
+
+    # access the layer activation value
+    def setLayerHook(self, callback):
+        self.layerHook = callback
 
     def setPredictionUpdateHook(self, callback):
         self.predictionUpdateHook = callback
@@ -188,10 +193,14 @@ class nlizeModule(visModule):
 
     def predict(self):
         sentencePair = dataManager.getData("currentPair")['sentences']
+        predictionResult = None
+
         predictionResult = self.predictionHook(sentencePair)
+
         dataManager.setData("prediction", predictionResult)
         #use raw attention
         attentionMatrix = self.attentionHook("score1")
+
         # print attentionMatrix
         dataManager.setData("attention", attentionMatrix)
         return True
@@ -202,9 +211,6 @@ class nlizeModule(visModule):
         pred = self.attentionUpdateHook(sentencePair, att_soft1, att_soft2)
         # print pred
         dataManager.setData("prediction", pred)
-
-        #update other predictions if available
-        # self.predictAll()
         return True
 
     def attention(self):
@@ -217,6 +223,9 @@ class nlizeModule(visModule):
         return True
 
     def predictAll(self):
+
+        self.hiddenStore.clear()
+
         allSourceSens = None
         allTargetSens = None
         sentencePair = dataManager.getData("currentPair")['sentences']
@@ -241,20 +250,30 @@ class nlizeModule(visModule):
         allPred = 0
         labels = ["entailment", "neutral", "contradiction"]
         groundTruth = dataManager.getData("currentPair")['label']
+
         for i, source in enumerate(allSourceSens):
             for j, target in enumerate(allTargetSens):
                 ######### only one perturbation is allow in each pair #######
                 if i==0 or j==0:
                     predResult = self.predictionHook([source, target])
+                    isCorrect = True
                     if groundTruth != labels[np.argmax(predResult)]:
                         wrongPred = wrongPred + 1
+                        isCorrect = False
                     allPred = allPred + 1
                     allPairsPrediction[i,j,:] = predResult
+
+                    # self.hiddenStore.saveTagState("senEncoding", source, self.layerHook("flat_phi1"))
+                    #### TODO FIXME #### only target sentence are stored
+                    self.hiddenStore.saveTagState("senEncoding", target, self.layerHook("flat_phi2"))
+                    self.hiddenStore.saveDictEntry(target, isCorrect)
                     # allPairsPrediction[j,i,:] = predResult
         # print allPairsPrediction
         print "##### ratio:", 1.0-float(wrongPred)/float(allPred), wrongPred, allPred
         dataManager.setData("allPairsPrediction", allPairsPrediction)
         # dataManager.setData("allAttention", allAttention)
+        self.hiddenStore.buildSearchIndex("senEncoding")
+
         return True
 
     def reloadModel(self):
