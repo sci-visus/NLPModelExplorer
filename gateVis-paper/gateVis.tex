@@ -1,0 +1,106 @@
+% ---------------------------------------------------------------------------
+% Author guideline and sample document for EG publication using LaTeX2e input
+% D.Fellner, v1.13, Jul 31, 2008
+
+\documentclass{egpubl}
+\usepackage{eurovis2018, amsmath, amssymb}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+%\Full_EuroVis
+% --- for  Annual CONFERENCE
+%\ConferenceSubmission   % uncomment for Conference submission
+%\ConferencePaper        % uncomment for (final) Conference Paper
+% \STAR                   % uncomment for STAR contribution
+% \Tutorial               % uncomment for Tutorial contribution
+% \ShortPresentation      % uncomment for (final) Short Conference Presentation
+% \Areas                  % uncomment for Areas contribution
+% \MedicalPrize           % uncomment for Medical Prize contribution
+% \Education              % uncomment for Education contribution
+%
+% --- for  CGF Journal
+% \JournalSubmission    % uncomment for submission to Computer Graphics Forum
+% \JournalPaper         % uncomment for final version of Journal Paper
+%
+% --- for  CGF Journal: special issue
+% \SpecialIssueSubmission    % uncomment for submission to Computer Graphics Forum, special issue
+\SpecialIssuePaper         % uncomment for final version of Journal Paper, special issue
+%
+% --- for  EG Workshop Proceedings
+% \WsSubmission    % uncomment for submission to EG Workshop
+% \WsPaper         % uncomment for final version of EG Workshop contribution
+%
+ % \electronicVersion % can be used both for the printed and electronic version
+
+% !! *please* don't change anything above
+% !! unless you REALLY know what you are doing
+% ------------------------------------------------------------------------
+
+% for including postscript figures
+% mind: package option 'draft' will replace PS figure by a filname within a frame
+\ifpdf \usepackage[pdftex]{graphicx} \pdfcompresslevel=9
+\else \usepackage[dvips]{graphicx} \fi
+
+\PrintedOrElectronic
+
+% prepare for electronic version of your document
+\usepackage{t1enc,dfadobe}
+\usepackage{amsmath,amssymb}
+\usepackage{egweblnk}
+\usepackage{cite}
+
+%additional packages
+\usepackage{algorithmic}
+\usepackage[tight,footnotesize]{subfigure}
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage[pdftex,dvipsnames]{xcolor}  % Coloured text etc.
+
+\usepackage{algorithmic}
+
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+ \newtheorem{lemma}{Lemma}[section]
+%% \newtheorem{remark}{Remark}[section]
+% \newtheorem{remark}[lemma]{Remark}
+\newtheorem{theorem}[lemma]{Theorem}
+ \newtheorem{corollary}[lemma]{Corollary}
+% \newtheorem{conjecture}[lemma]{Conjecture}
+% \newtheorem{proposition}[lemma]{Proposition}
+ \newtheorem{definition}[lemma]{Definition}
+ \newtheorem{algorithm}[lemma]{Algorithm}
+
+\graphicspath{{figs/}{pictures/}{images/}{./}} % where to search for the images
+
+% For backwards compatibility to old LaTeX type font selection.
+% Uncomment if your document adheres to LaTeX2e recommendations.
+% \let\rm=\rmfamily    \let\sf=\sffamily    \let\tt=\ttfamily
+% \let\it=\itshape     \let\sl=\slshape     \let\sc=\scshape
+% \let\bf=\bfseries
+
+% end of prologue
+% ---------------------------------------------------------------------
+% EG author guidelines plus sample file for EG publication using LaTeX2e input
+% D.Fellner, v1.17, Sep 23, 2010
+
+\newcommand{\tao}[1]{\textcolor{magenta}{[Tao: #1]}}
+\newcommand{\shusen}[1]{\textcolor{red}{[Shusen: #1]}}
+\newcommand{\zhimin}[1]{\textcolor{cyan}{[Zhimin: #1]}}
+
+\title{What is Remembered? Understand the Memory Mechanisms in Recurrent Neural Network Models}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The, recently several visualization work has focused on visualizing the recurrent neural network such as the long-short term memory (LSTM) network
+\end{abstract}
+
+\input{intro}
+
+\bibliographystyle{eg-alpha-doi}
+\bibliography{egbibsample}
+\end{document}
