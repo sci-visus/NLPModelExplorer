@@ -32,6 +32,7 @@ visLayout = {
 #     "column":[{"row":["Summary", "Sentence", "Prediction"]},
 #             {"row":["AttentionGraph", "AttentionMatrix"]}]
 #     }
+
 #setup interface
 modelVis = nlizeModule(visLayout)
 

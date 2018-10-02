@@ -192,8 +192,8 @@ class predictionComponent extends baseComponent {
                 this.onUpdateAllPairPrediction();
                 break;
             case "currentPair":
-                this.clear();
-                // console.log(this.data['currentPair']);
+                this.clearUI();
+                console.log(this.data['currentPair']['sentences']);
                 this.onUpdateGroundTruth(this.data['currentPair']["label"]);
                 break;
             case "predictionUpdate":
@@ -206,7 +206,7 @@ class predictionComponent extends baseComponent {
         }
     }
 
-    clear() {
+    clearUI() {
         if (this.svg) {
             // this.onUpdateGroundTruth("");
             this.svg.select(this.div + "overlay").remove();
@@ -297,7 +297,7 @@ class predictionComponent extends baseComponent {
     }
 
     onUpdateGroundTruth(label) {
-        console.log(label);
+        // console.log(label);
         if (label === "neutral") {
             this.Neutral.style("fill", "lightgreen");
             this.Contradiction.style("fill", "none");
@@ -335,6 +335,7 @@ class predictionComponent extends baseComponent {
     }
 
     onUpdateAllPairPrediction() {
+
         var data = [];
         var allPairsPrediction = this.data["allPairsPrediction"].slice(0);
         // allPairsPrediction = allPairsPrediction.reverse();
@@ -342,16 +343,16 @@ class predictionComponent extends baseComponent {
 
         //the euclidean coordinate data
         var dataXY = [];
-        for (var i = 0; i < allPairsPrediction.length; i++)
-            for (var j = 0; j < allPairsPrediction[i].length; j++) {
-                if (i === 0 || j === 0) {
-                    data.push(allPairsPrediction[i][j].concat([i, j]));
-                    let d = allPairsPrediction[i][j];
-                    let x = d[1] * 112 + d[2] * 0 + d[0] * 224;
-                    let y = d[1] * 0 + d[2] * 194 + d[0] * 194;
-                    dataXY.push([x, y]);
-                }
+        for (var i = 0; i < allPairsPrediction.length; i++) //per source
+            for (var j = 0; j < allPairsPrediction[i].length; j++) { // per target
+            if (i === 0 || j === 0) {
+                data.push(allPairsPrediction[i][j].concat([i, j]));
+                let d = allPairsPrediction[i][j];
+                let x = d[1] * 112 + d[2] * 0 + d[0] * 224;
+                let y = d[1] * 0 + d[2] * 194 + d[0] * 194;
+                dataXY.push([x, y]);
             }
+        }
 
         // console.log(data);
         this.drawDensityOverlay(dataXY)
@@ -359,7 +360,6 @@ class predictionComponent extends baseComponent {
     }
 
     updatePredictDisplay(data) {
-
         // console.log(this.data);
         // neutral, Contradiction, Entailment
         // Entailment, neutral, contradiction
@@ -411,33 +411,39 @@ class predictionComponent extends baseComponent {
                 .on("mouseout", function(d) {
 
                 })
-                //   .style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
+                //.style("opacity", (d,i)=>{if (i==0) return "1.0"; else return "0.5";})
                 .on("click", (d, i) => {
                     // console.log(d);
-                    if (this.data["allSourceSens"] !== undefined) {
-                        var source, target;
-                        if (this.data["allSourceSens"])
-                            source = this.data["allSourceSens"][d[3]];
-                        else
-                            source = this.data["currentPair"][0];
-
-                        if (this.data["allTargetSens"])
-                            target = this.data["allTargetSens"][d[4]];
-                        else
-                            target = this.data["currentPair"][1];
-                        this.data["currentPair"]["sentences"] = [
-                            source,
-                            target
+                    var source, target;
+                    if (this.data["allSourceSens"])
+                        source = this.data["allSourceSens"][d[3]];
+                    else
+                        source = this.data["currentPair"]["sentences"][
+                            0
                         ];
-                        //update the pair
-                        // console.log("update pair/att", this.data[
-                        // "allSourceSens"]);
-                        this.setData("currentPair", this.data[
-                            "currentPair"]);
 
-                        //then update the current attention
-                        this.callFunc("attention");
-                    }
+                    if (this.data["allTargetSens"])
+                        target = this.data["allTargetSens"][d[4]];
+                    else
+                        target = this.data["currentPair"]["sentences"][
+                            1
+                        ];
+
+                    console.log("currentPair", source, target, this.data[
+                        "currentPair"]["sentences"]);
+                    this.data["currentPair"]["sentences"] = [
+                        source,
+                        target
+                    ];
+                    //update the pair
+                    // console.log("update pair/att", this.data[
+                    // "allSourceSens"]);
+                    this.setData("currentPair", this.data[
+                        "currentPair"]);
+
+                    //then update the current attention
+                    this.callFunc("attention");
+
                 })
                 .call(d3.drag()
                     .on("start", this.dragstarted.bind(this))
@@ -445,7 +451,6 @@ class predictionComponent extends baseComponent {
                     .on("end", this.dragended.bind(this)));
         }
     }
-
 
     //triangle range: 224, 194
     drawDensityOverlay(dataPoints) {
@@ -616,7 +621,6 @@ class predictionComponent extends baseComponent {
             this.reassignedPred = undefined;
         }
     }
-
 
     drawCurrentAssignedPred() {
         if (this.reassignedPred) {

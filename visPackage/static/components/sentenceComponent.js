@@ -52,8 +52,8 @@ class sentenceComponent extends baseComponent {
                 this.onReceiveSentenceList();
                 break;
             case "currentPair":
-                // console.log(msg, this.data["currentPair"]["sentences"]);
                 let pair = msg["data"]["data"]["sentences"];
+                // console.log("sentenceComponent:", pair);
                 if (this.oldPair) {
                     if (this.oldPair[0].split(" ").length !== pair[0].split(
                             " ").length ||
@@ -62,13 +62,12 @@ class sentenceComponent extends baseComponent {
                     ) {
                         this.clearDropdown(this.div + "srcInput");
                         this.clearDropdown(this.div + "targInput");
-                        console.log("refresh the allSourceSens");
+                        // console.log("refresh the allSourceSens");
                     }
                 }
 
                 this.onReceiveCurrentPair();
                 this.oldPair = JSON.parse(JSON.stringify(pair));
-
                 break;
         }
     }
@@ -103,22 +102,6 @@ class sentenceComponent extends baseComponent {
     onReceiveCurrentPair() {
         var currentPair = this.data['currentPair']["sentences"];
 
-        this.clearPreviousPair();
-        // console.log(this.data["currentPair"]["sentences"]);
-
-        // if (currentPair[0].startsWith("<s>")) {
-        //     this.source = currentPair[0].substring(4);
-        //     this.target = currentPair[1].substring(4);
-        //     if (this.data["allTargetSens"])
-        //         this.orig_source = this.data["allTargetSens"][0].substring(
-        //             4);
-        //
-        // } else {
-        //     this.source = currentPair[0];
-        //     this.target = currentPair[1];
-        //     if (this.data["allTargetSens"])
-        //         this.orig_source = this.data["allTargetSens"][0];
-        // }
         this.source = currentPair[0].substring(4);
         this.target = currentPair[1].substring(4);
 
@@ -142,6 +125,7 @@ class sentenceComponent extends baseComponent {
                 className: 'blue'
             });
         }
+        // console.log(currentPair);
     }
 
     onChangeOriginalPair() {
@@ -190,6 +174,7 @@ class sentenceComponent extends baseComponent {
     }
 
     updatePerturbedSentences(sentences) {
+        //sentences[0] is the unperturbed sentence
         if (this.data["currentPair"]["sentences"][0] === "<s> " + sentences[
                 0]) {
             this.setData("allSourceSens", sentences.map(d => "<s> " + d));
