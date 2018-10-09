@@ -1,3 +1,4 @@
+# Before create the virtual enviroment, instead of using localhost, 127.0.0.1, change to 0.0.0.0
 
 FROM python:2.7
 # install all packages
