@@ -1,6 +1,8 @@
 from visPackage import MCModule
 from bidaf_src import bidafModelInterface
-from NLPutility import translationPerturbation
+# translation perturbation require googleclound key
+# from NLPutility import translationPerturbation
+from NLPutility import sentenceGenerator
 
 #initialize machine comprehension model
 model = bidafModelInterface(
@@ -8,7 +10,7 @@ model = bidafModelInterface(
     wordVec="data/bidaf/glove.hdf5",
     model="data/bidaf/bidaf_clip5_20.ema")
 
-gen = translationPerturbation()
+gen = sentenceGenerator()
 
 # visualization components
 # attention is linked to paragraph

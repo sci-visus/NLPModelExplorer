@@ -3,6 +3,20 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#data
+*.hdf5
+*.txt
+*.jar
+
+#latex
+*.out
+*.pdf
+*.out
+*.aux
+*.bbl
+*.blg
+*.synctex.gz
+
 # C extensions
 *.so
 

@@ -89,8 +89,8 @@ class attentionAsymmetricComponent extends attentionComponent {
 
         if (srcIndex >= 0 && targIndex >= 0) {
             let linkIndex = srcIndex * this.subMat[0].length + targIndex;
-            console.log(linkIndex, this.svg.select("#paraSenLink" +
-                linkIndex));
+            // console.log(linkIndex, this.svg.select("#paraSenLink" +
+            // linkIndex));
             this.svg.select("#paraSenLink" + linkIndex)
                 .style("stroke", "orange");
             // .attr("stroke-width", 10)
