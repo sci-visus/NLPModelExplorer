@@ -18,15 +18,15 @@ gen = sentenceGenerator()
 dep = dependencyTree()
 
 #visualization components
-visLayout = {
-    "column":[{"row":["Summary", "Sentence", "LatentRepresentation"]},
-            {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
-    }
-
 # visLayout = {
-#     "column":[{"row":["Summary", "Sentence", "Pipeline"]},
+#     "column":[{"row":["Summary", "Sentence", "LatentRepresentation"]},
 #             {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
 #     }
+
+visLayout = {
+    "column":[{"row":["Summary", "Sentence", "Pipeline"]},
+            {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
+    }
 
 # visLayout = {
 #     "column":[{"row":["Summary", "Sentence", "Prediction"]},
