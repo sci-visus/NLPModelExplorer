@@ -379,7 +379,17 @@ class attentionMatrixComponent extends attentionComponent {
             this.src_dep.collapse(i);
         }
 
-        this.collapse_Animation(orientation);
+        //diable animation, directly draw (shusen)
+        this.draw();
+        //update dependency tree position
+        this.srcWords = this.collapSenBySet(this.sen2words(this.data[
+            "currentPair"]["sentences"][0]), this.srcIndexMaskSet);
+        this.targWords = this.collapSenBySet(this.sen2words(this.data[
+            "currentPair"]["sentences"][1]), this.targIndexMaskSet);
+        this.computeWordPosition(this.srcWords, this.targWords);
+        this.drawDepTree();
+
+        // this.collapse_Animation(orientation);
     }
 
     highlight(opt, row, col) {

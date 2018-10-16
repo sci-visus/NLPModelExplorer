@@ -44,7 +44,6 @@ modelVis.setAttentionUpdateHook(model.updateAttention)
 modelVis.setReloadModelCallback(model.reloadModel)
 
 modelVis.setPipelineStatisticHook(model.pipelineStatistic)
-
 modelVis.setSentencePerturbationHook(gen.perturbSentence)
 modelVis.setSentenceParserHook(dep.getDependencyTree)
 

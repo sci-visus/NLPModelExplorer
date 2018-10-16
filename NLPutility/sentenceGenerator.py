@@ -16,9 +16,8 @@ class sentenceGenerator:
             for l in lines:
                 toks = l.split()
                 self.train_tokens[toks[0]] = 1
-
         ### perturb one sentence to preload the nltk ####
-        self.perturbSentence("Who am I.")
+        # self.perturbSentence("Who am I.")
         # print "angele:", "angele" in self.train_tokens.keys()
         # print "token count:", len(self.train_tokens.keys())
 
@@ -74,7 +73,6 @@ class sentenceGenerator:
                     ## remove the lemma itself
                     lemma_map[lemma] = [l for l in lemma_map[lemma] if l != lemma]
         # print lemma_map
-
 
         orig_list = [i[0] for i in pos_tags]
         result_list = []
