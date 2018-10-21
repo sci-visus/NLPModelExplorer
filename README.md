@@ -27,3 +27,11 @@ The MC model is based on the BiDAF implementation.
  - Start the server:  
    `python NLIexampleVis.py`
  - Then open the browser at http://localhost:5050/
+
+### 4. Docker 
+ - pull docker image
+  `docker pull dockerzhimin/nlpvis`
+ - run docker image
+   `docker run -d -p 5050:5050 dockerzhimin/nlpvis`
+ - Open browser
+   `localhost:5050`
