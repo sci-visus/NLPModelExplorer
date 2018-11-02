@@ -53,10 +53,10 @@ class sentenceComponent extends baseComponent {
                 break;
             case "currentPair":
                 let pair = msg["data"]["data"]["sentences"];
-                // console.log("sentenceComponent:", pair);
+                console.log("sentenceComponent:", pair);
                 if (this.oldPair) {
                     if (this.oldPair[0].split(" ").length !== pair[0].split(
-                            " ").length ||
+                            " ").length &&
                         this.oldPair[1].split(" ").length !== pair[1].split(
                             " ").length
                     ) {

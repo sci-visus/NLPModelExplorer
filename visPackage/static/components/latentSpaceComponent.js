@@ -23,6 +23,7 @@ class latentSpaceComponent extends baseComponent {
 
         switch (msg['name']) {
             case "currentPair":
+                this.clear();
                 break;
                 // this.callFunc("latentStateLookup", {
                 //     "sentence": this.data["currentPair"][
@@ -72,6 +73,10 @@ class latentSpaceComponent extends baseComponent {
         }
         // console.log(this.tableEntry);
         this.draw();
+    }
+
+    clear() {
+        d3.select(this.div + "table").selectAll("*").remove();
     }
 
     draw() {
