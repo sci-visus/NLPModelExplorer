@@ -270,10 +270,9 @@ class nlizeModule(visModule):
                     self.hiddenStore.saveDictEntry(target, isCorrect)
         # print allPairsPrediction
         print "##### ratio:", 1.0-float(wrongPred)/float(allPred), wrongPred, allPred
-        dataManager.setData("allPairsPrediction", allPairsPrediction)
         # dataManager.setData("allAttention", allAttention)
         self.hiddenStore.buildSearchIndex("senEncoding")
-
+        dataManager.setData("allPairsPrediction", allPairsPrediction)
         return True
 
     def reloadModel(self):
