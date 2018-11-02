@@ -1,7 +1,7 @@
 ## FIXME fix the import ###
 from visPackage.nlizeModule import nlizeModule
 from nli_src import modelInterface
-# from NLPutility import translationPerturbation
+from NLPutility import translationPerturbation
 from NLPutility import sentenceGenerator
 from NLPutility import dependencyTree
 
@@ -11,22 +11,22 @@ model = modelInterface(
     wordVec="data/glove.hdf5", model="data/local_300_parikh")
 
 #sentence perturbation
-# gen = translationPerturbation()
-gen = sentenceGenerator()
+gen = translationPerturbation()
+# gen = sentenceGenerator()
 
 #dependency parsing
 dep = dependencyTree()
 
 #visualization components
-# visLayout = {
-#     "column":[{"row":["Summary", "Sentence", "LatentRepresentation"]},
-#             {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
-#     }
-
 visLayout = {
-    "column":[{"row":["Summary", "Sentence", "Pipeline"]},
+    "column":[{"row":["Summary", "Sentence", "LatentRepresentation"]},
             {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
     }
+
+# visLayout = {
+#     "column":[{"row":["Summary", "Sentence", "Pipeline"]},
+#             {"row":["AttentionGraph", "AttentionMatrix", "Prediction"]}]
+#     }
 
 # visLayout = {
 #     "column":[{"row":["Summary", "Sentence", "Prediction"]},
@@ -38,10 +38,10 @@ modelVis = nlizeModule(visLayout)
 
 modelVis.setPredictionHook(model.predict)
 modelVis.setAttentionHook(model.attention)
-modelVis.setLayerHook(model.layerValues)
 modelVis.setPredictionUpdateHook(model.updatePrediction)
 modelVis.setAttentionUpdateHook(model.updateAttention)
 modelVis.setReloadModelCallback(model.reloadModel)
+modelVis.setLayerHook(model.layerValues)
 
 modelVis.setPipelineStatisticHook(model.pipelineStatistic)
 modelVis.setSentencePerturbationHook(gen.perturbSentence)

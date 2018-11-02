@@ -67,6 +67,7 @@ class nlizeModule(visModule):
     def __init__(self, componentLayout):
         super(nlizeModule, self).__init__(componentLayout)
         self.hiddenStore = hiddenStateRecorder()
+        self.layerHook = None
         # self.hiddenStore = None
         # self.hiddenStore = hiddenStateRecorder("data/test-set-hidden.pkl")
 
@@ -267,7 +268,6 @@ class nlizeModule(visModule):
                     #### TODO FIXME #### only target sentence are stored
                     self.hiddenStore.saveTagState("senEncoding", target, self.layerHook("flat_phi2"))
                     self.hiddenStore.saveDictEntry(target, isCorrect)
-                    # allPairsPrediction[j,i,:] = predResult
         # print allPairsPrediction
         print "##### ratio:", 1.0-float(wrongPred)/float(allPred), wrongPred, allPred
         dataManager.setData("allPairsPrediction", allPairsPrediction)

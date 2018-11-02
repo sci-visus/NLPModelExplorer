@@ -63,6 +63,10 @@ class sentenceComponent extends baseComponent {
                         this.clearDropdown(this.div + "srcInput");
                         this.clearDropdown(this.div + "targInput");
                         // console.log("refresh the allSourceSens");
+                        //reset perturbed sentences
+                        this.data["allSourceSens"] = undefined;
+                        this.data["allTargetSens"] = undefined;
+                        // console.log("refresh the allSourceSens");
                     }
                 }
 
