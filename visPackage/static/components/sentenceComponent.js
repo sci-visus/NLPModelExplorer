@@ -64,9 +64,12 @@ class sentenceComponent extends baseComponent {
                         this.clearDropdown(this.div + "targInput");
                         // console.log("refresh the allSourceSens");
                         //reset perturbed sentences
+                        // this.setData("allSourceSens", undefined);
+                        // this.setData("allTargetSens", undefined);
                         this.data["allSourceSens"] = undefined;
                         this.data["allTargetSens"] = undefined;
-                        // console.log("refresh the allSourceSens");
+
+                        console.log("refresh the allSourceSens");
                     }
                 }
 
@@ -120,12 +123,23 @@ class sentenceComponent extends baseComponent {
                     currentPair[0].substring(4)), //
                 className: 'blue'
             });
+        } else {
+            $(this.div + "src").highlightWithinTextarea({
+                highlight: "", //
+                className: 'blue'
+            });
         }
+        // console.log("----------", this.data["allSourceSens"]);
         if (this.data["allTargetSens"]) {
             $(this.div + "targ").highlightWithinTextarea({
                 highlight: this.getSentenceDiff(
                     this.data["allTargetSens"][0].substring(4),
                     currentPair[1].substring(4)), //
+                className: 'blue'
+            });
+        } else {
+            $(this.div + "targ").highlightWithinTextarea({
+                highlight: "", //
                 className: 'blue'
             });
         }

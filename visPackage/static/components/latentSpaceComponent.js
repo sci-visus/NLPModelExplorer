@@ -23,7 +23,6 @@ class latentSpaceComponent extends baseComponent {
 
         switch (msg['name']) {
             case "currentPair":
-                this.clear();
                 break;
                 // this.callFunc("latentStateLookup", {
                 //     "sentence": this.data["currentPair"][
@@ -32,6 +31,7 @@ class latentSpaceComponent extends baseComponent {
                 // });
                 //FIXME only for hypothesis sentence
             case "allPairsPrediction":
+                this.clear();
                 //trigger lookup
                 this.triggerLookup();
                 break;
